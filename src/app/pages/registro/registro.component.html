@@ -1,0 +1,156 @@
+<section class="login-wrapper">
+  <div class="card border border-primary shadow-lg rounded-4 login-card">
+    <div class="card-body p-4 p-md-5">
+      <div class="text-center">
+        <!-- Logo -->
+        <img src="/assets/logonegro.png" alt="Logo" class="logo mb-4" />
+      </div>
+      <h3 class="mb-3 text-center fw-bold">Registro</h3>
+
+      <!-- Mensaje de error -->
+      <ngb-alert
+        *ngIf="errorMessage"
+        type="danger"
+        (closed)="errorMessage = ''"
+        class="mb-3"
+      >
+        {{ errorMessage }}
+      </ngb-alert>
+
+      <form [formGroup]="registroForm" (ngSubmit)="onSubmit()" class="mt-4">
+        <!-- Nombre -->
+        <div class="mb-3 form-floating">
+          <input
+            type="text"
+            class="form-control"
+            id="nombre"
+            formControlName="nombre"
+            placeholder="Nombre Completo"
+          />
+          <label for="nombre">Nombre Completo</label>
+          <div *ngIf="registroForm.get('nombre')?.invalid && registroForm.get('nombre')?.touched" class="text-danger">
+            Solo se permiten letras y espacios.
+          </div>
+        </div>
+
+        <!-- Cédula -->
+        <div class="mb-3 form-floating">
+          <input
+            type="text"
+            class="form-control"
+            id="cedula"
+            formControlName="cedula"
+            placeholder="Cédula"
+            maxlength="10"
+            (input)="limitCedulaLength()"
+          />
+          <label for="cedula">Cédula</label>
+          <div *ngIf="registroForm.get('cedula')?.invalid && registroForm.get('cedula')?.touched" class="text-danger">
+            La cédula debe tener exactamente 10 dígitos.
+          </div>
+        </div>
+
+        <!-- Correo -->
+        <div class="mb-3 form-floating">
+          <input
+            type="email"
+            class="form-control"
+            id="correo"
+            formControlName="correo"
+            placeholder="Correo electrónico"
+          />
+          <label for="correo">Correo electrónico</label>
+          <div *ngIf="registroForm.get('correo')?.invalid && registroForm.get('correo')?.touched" class="text-danger">
+            Por favor, introduce un correo electrónico válido.
+          </div>
+        </div>
+
+        <!-- Contraseña -->
+        <div class="mb-3 position-relative form-floating">
+          <input
+            [type]="showPassword ? 'text' : 'password'"
+            class="form-control"
+            id="contrasena"
+            formControlName="contrasena"
+            placeholder="Contraseña"
+          />
+          <label for="contrasena">Contraseña</label>
+          <button
+            type="button"
+            class="toggle-password btn btn-link position-absolute end-5 top-5 h-100"
+            (click)="togglePasswordVisibility()"
+          >
+            <i class="bi" [ngClass]="showPassword ? 'bi-eye-slash' : 'bi-eye'"></i>
+          </button>
+          <div *ngIf="registroForm.get('contrasena')?.invalid && registroForm.get('contrasena')?.touched" class="text-danger">
+            La contraseña es obligatoria.
+          </div>
+        </div>
+
+        <!-- Género -->
+        <div class="mb-3 form-floating">
+          <select
+            class="form-select"
+            id="genero"
+            formControlName="genero"
+          >
+            <option value="" disabled selected></option>
+            <option value="masculino">Masculino</option>
+            <option value="femenino">Femenino</option>
+            <option value="otro">Otro</option>
+          </select>
+          <label for="genero">Género</label>
+          <div *ngIf="registroForm.get('genero')?.invalid && registroForm.get('genero')?.touched" class="text-danger">
+            Selecciona un género.
+          </div>
+        </div>
+
+        <!-- Fecha de nacimiento -->
+        <div class="mb-3 form-floating">
+          <input
+            type="date"
+            class="form-control"
+            id="fechaNacimiento"
+            formControlName="fechaNacimiento"
+            placeholder="Selecciona tu fecha de nacimiento"
+          />
+          <label for="fechaNacimiento">Fecha de nacimiento</label>
+          <div *ngIf="registroForm.get('fechaNacimiento')?.invalid && registroForm.get('fechaNacimiento')?.touched" class="text-danger">
+            Selecciona tu fecha de nacimiento.
+          </div>
+        </div>
+
+        <!-- Términos -->
+        <div class="form-check mb-3">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            id="acceptTerms"
+            formControlName="acceptTerms"
+          />
+          <label class="form-check-label" for="acceptTerms">
+            Acepto los <a href="../../assets/politicas.html" target="_blank">Términos y Condiciones</a>
+          </label>
+          <div *ngIf="registroForm.get('acceptTerms')?.invalid && registroForm.get('acceptTerms')?.touched" class="text-danger">
+            Debes aceptar los términos y condiciones.
+          </div>
+        </div>
+
+        <!-- Botón -->
+        <div class="d-grid">
+          <button class="btn btn-primary btn-lg" type="submit">
+            Registrarse
+          </button>
+        </div>
+      </form>
+
+      <!-- Ir al Login -->
+      <div class="mt-3 text-center">
+        ¿Ya tienes cuenta?
+        <a [routerLink]="['/login']" class="text-decoration-none fw-bold text-primary">
+          Inicia sesión
+        </a>
+      </div>
+    </div>
+  </div>
+</section>

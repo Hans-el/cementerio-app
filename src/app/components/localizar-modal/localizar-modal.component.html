@@ -1,0 +1,39 @@
+<div class="modal-header">
+  <h4 class="modal-title">Localizar Bóveda</h4>
+  <button type="button" class="close" aria-label="Cerrar" (click)="activeModal.dismiss()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <p><strong>Cédula del Propietario</strong></p>
+  <input
+    type="text"
+    class="form-control"
+    placeholder="Ej: 12345678"
+    [(ngModel)]="cedula">
+  <small class="form-text text-muted">
+    Ingrese la cédula del propietario para localizar su bóveda
+  </small>
+  <div class="mt-2">
+    <small>Para pruebas, use:</small><br>
+    <small>12345678, 87654321, 11223344, 44332211, 55667788</small>
+  </div>
+
+  <!-- Mostrar resultado de la búsqueda -->
+  <div *ngIf="resultadoBusqueda && resultadoBusqueda.length > 0" class="mt-3 alert alert-success">
+    <p><strong>Bóveda(s) encontrada(s):</strong></p>
+    <div *ngFor="let nicho of resultadoBusqueda">
+      <p>Sector: {{ nicho.sector }}, Número: {{ nicho.numero }}</p>
+      <p>Estado: {{ nicho.estado }}</p>
+      <hr *ngIf="resultadoBusqueda.length > 1">
+    </div>
+  </div>
+  <!-- Mostrar mensaje de error -->
+  <div *ngIf="mensajeError" class="mt-3 alert alert-danger">
+    {{ mensajeError }}
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-outline-secondary" (click)="activeModal.dismiss()">Cerrar</button>
+  <button type="button" class="btn btn-primary" (click)="buscar()">Buscar</button>
+</div>

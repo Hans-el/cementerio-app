@@ -1,0 +1,56 @@
+<div class="container-fluid">
+  <div class="row">
+    <app-sidebar></app-sidebar>
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 main-content">
+      <div class="map-container">
+        <h2 class="text-center mb-4">Mapa Digital del Cementerio - Bóvedas</h2>
+        <p class="text-center mb-5">Haga clic en cualquier bóveda para más información</p>
+        <div class="legend mb-4">
+          <div class="legend-item ocupada"><span></span> Ocupada</div>
+          <div class="legend-item disponible"><span></span> Disponible | En venta</div>          
+          <div class="legend-item reservada"><span></span> Reservada</div>
+        </div>
+        <div class="sectores-container">
+          @for (sector of sectores | keyvalue; track sector.key) {
+            <div class="sector">
+              <h3>{{ sector.key }}</h3>
+              <div class="nichos-grid">
+                @for (nicho of sector.value; track nicho.id) {
+                  <div
+                    class="nicho"
+                    [class]="getNichoClass(nicho)"
+                    (click)="onNichoClick(nicho, nichoModal)"
+                    data-bs-toggle="modal"
+                  >
+                    {{ nicho.numero }}
+                  </div>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- Modal para mostrar información del nicho -->
+<ng-template #nichoModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Información del Nicho</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body">
+    @if (selectedNicho) {
+      <p><strong>Sector:</strong> {{ selectedNicho.sector }}</p>
+      <p><strong>Número:</strong> {{ selectedNicho.numero }}</p>
+      <p><strong>Estado:</strong> {{ selectedNicho.estado }}</p>
+      @if (selectedNicho.fallecidoId) {
+        <p><strong>ID del Fallecido:</strong> {{ selectedNicho.fallecidoId }}</p>
+      }
+    }
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="modal.close('Close click')">Cerrar</button>
+  </div>
+</ng-template>

@@ -1,0 +1,73 @@
+<section class="login-wrapper">
+  <div class="card border border-primary shadow-lg rounded-4 login-card">
+    <div class="card-body p-4 p-md-5">
+      <div class="text-center">
+        <!-- Logo -->
+        <img src="assets/logonegro.png" alt="Logo" class="logo mb-4" />
+      </div>
+      <h3 class="mb-3 text-center fw-bold">Iniciar Sesión</h3>
+
+      
+
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="mt-4">
+        <!-- Cédula -->
+        <div class="mb-3 form-floating">
+          <input
+            type="text"
+            class="form-control"
+            id="cedula"
+            formControlName="cedula"
+            placeholder="Cédula"
+          />
+          <label for="cedula">Cédula</label>
+          <div *ngIf="loginForm.get('cedula')?.invalid && loginForm.get('cedula')?.touched" class="text-danger">
+            La cédula es obligatoria.
+          </div>
+        </div>
+
+        <!-- Contraseña con icono -->
+        <div class="mb-3 position-relative form-floating">
+          <input
+            [type]="showPassword ? 'text' : 'password'"
+            class="form-control"
+            id="contrasena"
+            formControlName="contrasena"
+            placeholder="Contraseña"
+          />
+          <label for="contrasena">Contraseña</label>
+          <button
+            type="button"
+            class="toggle-password btn btn-link position-absolute end-5 top-5 h-100"
+            (click)="togglePasswordVisibility()"
+          >
+            <i class="bi" [ngClass]="showPassword ? 'bi-eye-slash' : 'bi-eye'"></i>
+          </button>
+          <div *ngIf="loginForm.get('contrasena')?.invalid && loginForm.get('contrasena')?.touched" class="text-danger">
+            La contraseña es obligatoria.
+          </div>
+        </div>
+
+        <!-- Recordarme -->
+        <div class="form-check mb-3">
+          <input type="checkbox" class="form-check-input" id="rememberMe" formControlName="rememberMe" />
+          <label class="form-check-label" for="rememberMe">Recordarme</label>
+        </div>
+
+        <!-- Botón -->
+        <div class="d-grid">
+          <button class="btn btn-primary btn-lg" type="submit">
+            Iniciar Sesión
+          </button>
+        </div>
+      </form>
+
+      <!-- Registro -->
+      <div class="mt-3 text-center">
+        ¿No tienes cuenta?
+        <a [routerLink]="['/registro']" class="text-decoration-none fw-bold text-primary">
+          Registrarse gratis
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
