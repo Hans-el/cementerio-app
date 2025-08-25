@@ -1,0 +1,78 @@
+.modal-header {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.modal-subtitle {
+  font-size: 0.9rem;
+  color: #6c757d;
+  margin-bottom: 1rem;
+}
+
+.filter-section select {
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 5px;
+  border: 1px solid #ced4da;
+}
+
+.disponibilidad-card {
+  border: 1px solid #e9ecef;
+  border-radius: 10px;
+  padding: 1.25rem;
+  background-color: #f8f9fa;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.disponibilidad-card .card-title {
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+}
+
+.disponibilidad-card .badge {
+  font-size: 0.8rem;
+}
+
+.disponibilidad-card .precio {
+  font-weight: bold;
+  color: #2d5a3d;
+  margin: 0.5rem 0;
+}
+
+.disponibilidad-card .capacidad {
+  font-size: 0.9rem;
+  margin: 0.5rem 0;
+}
+
+.disponibilidad-card .caracteristicas-title {
+  font-size: 0.9rem;
+  margin: 0.5rem 0;
+}
+
+.disponibilidad-card .caracteristicas-list {
+  padding-left: 1.25rem;
+  margin: 0.5rem 0;
+}
+
+.disponibilidad-card .caracteristicas-list li {
+  font-size: 0.9rem;
+  color: #495057;
+}
+
+.btn-reservar {
+  background-color: #2d5a3d;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  flex: 1;
+}
+
+.btn-agendar {
+  background-color: white;
+  color: #2d5a3d;
+  border: 1px solid #2d5a3d;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  flex: 1;
+}

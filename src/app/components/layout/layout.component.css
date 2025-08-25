@@ -1,0 +1,72 @@
+.d-flex {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+  position: relative;
+
+}
+
+/* --- Sidebar Desktop --- */
+.sidebar-container {
+  transition: all 0.3s ease;
+}
+
+.sidebar-expanded {
+  width: 250px;
+}
+
+.sidebar-collapsed {
+  width: 70px;
+}
+
+/* --- Sidebar Mobile (Overlay) --- */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  z-index: 1050;
+  /* sobre el contenido */
+  width: 0;
+  background: #fff;
+  /* o tu color */
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
+  transition: width 0.3s ease;
+
+}
+
+.overlay.active {
+  width: 250px;
+  /* ancho cuando se abre */
+}
+
+/* --- Contenido principal --- */
+.main-content {
+  flex-grow: 1;
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+/* Ajustes móviles */
+@media (max-width: 768px) {
+
+  .sidebar-expanded,
+  .sidebar-collapsed {
+    width: 0 !important;
+    /* no empujan el contenido */
+  }
+
+  .main-content {
+    width: 100%;
+    /* ocupa toda la pantalla */
+  }
+
+  /* Botón hamburguesa */
+  .toggle-btn {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    z-index: 1100;
+    /* encima de todo */
+  }
+}

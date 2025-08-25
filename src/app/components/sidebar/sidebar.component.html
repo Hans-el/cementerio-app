@@ -1,51 +1,92 @@
 <div class="sidebar" [ngClass]="{ 'collapsed': isCollapsed() }">
   <div class="sidebar-header">
-    <button class="toggle-btn" (click)="toggleSidebar()">
-      <i class="bi bi-list"></i>
-    </button>
-    <span *ngIf="!isCollapsed()" class="sidebar-title">Cementerio Colón</span>
-  </div>
-  <ul class="sidebar-menu">
-    <li>
-      <a routerLink="/inicio" routerLinkActive="active">
-        <i class="bi bi-house-door"></i>
-        <span *ngIf="!isCollapsed()">Inicio</span>
-      </a>
-    </li>
-    <li>
-      <a (click)="openLocalizarModal()" style="cursor: pointer;">
-        <i class="bi bi-geo-alt"></i>
-        <span *ngIf="!isCollapsed()">Localizar</span>
-      </a>
-    </li>
-    <li>
-      <a routerLink="/disponibilidad" routerLinkActive="active">
-        <i class="bi bi-calendar-check"></i>
-        <span *ngIf="!isCollapsed()">Disponibilidad</span>
-      </a>
-    </li>
-    <li>
-      <a routerLink="/contacto" routerLinkActive="active">
-        <i class="bi bi-envelope"></i>
-        <span *ngIf="!isCollapsed()">Contactarse</span>
-      </a>
-    </li>
-    <!-- Sección de perfil -->
-  <div class="profile-section">
-    <div ngbDropdown container="body" placement="top-right">
-      <button ngbDropdownToggle class="profile-btn d-flex align-items-center p-2 text-white bg-transparent border-0">
-        <i class="bi bi-person-circle me-2"></i>
-        <span *ngIf="!isCollapsed()">Perfil</span>
-      </button>
-      <div ngbDropdownMenu class="dropdown-menu-dark rounded-3 shadow-lg border-0">
-        <button ngbDropdownItem class="dropdown-item" routerLink="/inicio/perfil">
-          <i class="bi bi-gear me-2"></i> Configuración
-        </button>
-        <button ngbDropdownItem class="dropdown-item" (click)="logout()">
-          <i class="bi bi-box-arrow-right me-2"></i> Cerrar Sesión
-        </button>
+    <div class="logo-section">
+      <div class="logo">
+        <img src="assets/faviconblanco.png" alt="Logo Cementerio Colón" *ngIf="!isCollapsed(); else collapsedLogo">
+        <ng-template #collapsedLogo>
+          <img src="assets/faviconblanco.png" alt="Logo Cementerio Colón" class="collapsed-logo">
+        </ng-template>
+      </div>
+      <div class="title-section" *ngIf="!isCollapsed()">
+        <h5>Cementerio Colón</h5>
+        <small>Servicios y Gestión</small>
       </div>
     </div>
+    <button class="toggle-btn" (click)="toggleSidebar()">
+      <i class="bi " [ngClass]="{'bi-arrow-bar-left': !isCollapsed(), 'bi-arrow-bar-right': isCollapsed()}"></i>
+    </button>
   </div>
-  </ul>
+
+  <div class="sidebar-nav">
+    <p class="nav-title">MENÚ</p>
+    <ul class="nav-list">
+      <!-- Opciones del menú -->
+      <li class="nav-item">
+        <a routerLink="/mapa" routerLinkActive="active" class="nav-link">
+          <i class="bi bi-map"></i>
+          <span>Mapa</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a (click)="openLocalizarModal()" class="nav-link">
+          <i class="bi bi-geo-alt"></i>
+          <span>Localizar</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a (click)="openDisponibilidadModal()" class="nav-link">
+          <i class="bi bi-calendar-check"></i>
+          <span>Disponibilidad</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a routerLink="/contacto" routerLinkActive="active" class="nav-link">
+          <i class="bi bi-person-lines-fill"></i>
+          <span>Contactarse</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <div class="sidebar-nav">
+    <p class="nav-title" *ngIf="userRole === 'admin'">ADMIN</p>
+    <ul class="nav-list">
+      <!-- Este es para el administrador, puesto para la administracion sencill -->
+      <li class="nav-item" *ngIf="userRole === 'admin'">
+        <a routerLink="/inicio" routerLinkActive="active" class="nav-link">
+          <i class="bi bi-building"></i>
+          <span>Administracion</span>
+        </a>
+      </li>
+      <!-- Este es para el administrador, en donde se podrá agregar más bóvedas -->
+      <li class="nav-item" *ngIf="userRole === 'admin'">
+        <a (click)="editarBovedas()" class="nav-link">
+          <i class="bi bi-pencil"></i>
+          <span>Gestión de Bóvedas</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+
+
+  <div class="sidebar-footer" ngbDropdown>
+    <div class="user-section d-flex align-items-center p-2" *ngIf="!isCollapsed()" ngbDropdownToggle id="userDropdown">
+      <div class="user-avatar me-2">
+        <i class="bi bi-person"></i>
+      </div>
+      <div class="user-info" *ngIf="!isCollapsed()">
+        <p class="user-name mb-0">Mi perfil</p>
+        <!-- Aqui obtendremos el rol actual de usuario para mostrarlo en la pagina-->
+        <p class="user-role mb-0">Hola, {{ userRole }}</p>
+      </div>
+    </div>
+    <div class="dropdown-menu" aria-labelledby="userDropdown" ngbDropdownMenu>
+      <a class="dropdown-item" href="/perfil">Configuración</a>
+      <div class="dropdown-divider"></div>
+      <a class="dropdown-item" (click)="logout()">Cerrar Sesión</a>
+    </div>
+  </div>
 </div>

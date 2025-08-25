@@ -7,6 +7,9 @@
   align-items: center;
   justify-content: center;
   padding: 1rem;
+    /* Agregamos un filtro oscuro para mejorar la legibilidad */
+  background-color: rgba(0, 0, 0, 0.5);
+  background-blend-mode: darken;
 }
 
 /* Card */

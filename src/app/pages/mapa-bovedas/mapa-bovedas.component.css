@@ -1,0 +1,9 @@
+.mapa-container {
+  height: auto; /* 56px es el alto del navbar, ajusta según tu diseño */
+  overflow: auto;
+}
+.mapa-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}

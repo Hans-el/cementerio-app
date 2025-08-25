@@ -1,1 +1,59 @@
-<p>disponibilidad-modal works!</p>
+<div class="modal-header">
+  <h4 class="modal-title">Disponibilidad de Espacios</h4>
+  
+  <p class="modal-subtitle">Explora nuestros diferentes tipos de espacios disponibles</p>
+  <button type="button" class="btn-close" aria-label="Close" (click)="activeModal.dismiss()"></button>
+</div>
+<div class="modal-body">
+  <!-- Filtro -->
+  <div class="filter-section mb-4">
+    <select class="form-select" [(ngModel)]="tipoSeleccionado" (change)="filtrarPorTipo(tipoSeleccionado)">
+      <option value="todos">Todos</option>
+      <option *ngFor="let tipo of tiposDisponibles" [value]="tipo.id">{{ tipo.nombre }}</option>
+    </select>
+  </div>
+
+  <!-- Tarjetas de tipos disponibles -->
+  <div class="row">
+    @for (tipo of tiposDisponibles; track tipo.id) {
+      <div class="col-md-6 mb-4">
+        <div class="card disponibilidad-card">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-start">
+              <div>
+                <h5 class="card-title">
+                  @if (tipo.id === 'familiar') { <i class="bi bi-calendar-check"></i> } @else if (tipo.id === 'premium') { <i class="bi bi-calendar-check"></i> } @else if (tipo.id === 'infantil') { <i class="bi bi-calendar-check"></i> } @else { <i class="bi bi-calendar-check"></i> }
+                  {{ tipo.nombre }}
+                </h5>
+                <p class="card-text">{{ tipo.disponibles }} disponibles</p>
+              </div>
+              <span class="badge bg-success">{{ tipo.disponibles }}</span>
+            </div>
+            <p class="precio">{{ tipo.precio }}</p>
+            <p class="capacidad"><strong>Capacidad:</strong> {{ tipo.capacidad }}</p>
+            <p class="caracteristicas-title"><strong>Características:</strong></p>
+            <ul class="caracteristicas-list">
+              @for (caracteristica of tipo.caracteristicas; track caracteristica) {
+                <li>{{ caracteristica }}</li>
+              }
+            </ul>
+            <div class="d-flex gap-2 mt-3">
+              <button class="btn btn-reservar" (click)="reservar({
+                id: tipo.id,
+                cedulaPropietario: '',
+                nombrePropietario: '',
+                sector: '',
+                numero: '',
+                estado: 'disponible'
+              })">Reservar</button>
+              <button class="btn btn-agendar">📅 Agendar Visita</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-secondary" (click)="activeModal.close('Close click')">Cerrar</button>
+</div>

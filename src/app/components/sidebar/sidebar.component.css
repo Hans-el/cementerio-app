@@ -1,24 +1,67 @@
 .sidebar {
-  width: 250px;
+  width: 280px;
   height: 100vh;
   background-color: #2d5a3d;
   color: white;
-  transition: all 0.3s;
   position: fixed;
   left: 0;
   top: 0;
   z-index: 1000;
+  transition: width 0.3s ease;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .sidebar.collapsed {
-  width: 70px;
+  width: 90px;
 }
 
 .sidebar-header {
   padding: 1rem;
   display: flex;
+  flex-direction: column;
   align-items: center;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.logo-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.5rem;
+  width: 100%;
+  
+}
+
+.logo img {
+  width: 100px;
+  height: 60px;
+  object-fit: contain;
+  
+}
+
+.collapsed-logo {
+  width: 60px;
+  height: 40px;
+  padding: auto;
+}
+
+.title-section {
+  display: flex;
+  flex-direction: column;
+  margin-left: 0.75rem;
+}
+
+.title-section h5 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+
+.title-section small {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .toggle-btn {
@@ -27,53 +70,131 @@
   color: white;
   font-size: 1.2rem;
   cursor: pointer;
+  align-self: flex-end;
+  margin-top: 0.5rem;
 }
 
-.sidebar-title {
-  margin-left: 0.5rem;
-  font-weight: bold;
-}
-
-.sidebar-menu {
-  list-style: none;
+.sidebar-nav {
   padding: 1rem 0;
+  flex: 1;
+  
+}
+
+.nav-title {
+  padding: 0 1.5rem;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.7);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.5rem;
+}
+
+.nav-list {
+  list-style: none;
+  padding: 0;
   margin: 0;
 }
 
-.sidebar-menu li a {
-  color: white;
-  text-decoration: none;
-  display: flex;
-  align-items: center;
-  padding: 0.75rem 1rem;
+.nav-item {
+  margin: 0.25rem 0;
 }
 
-.sidebar-menu li a.active {
+.nav-link {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1.5rem;
+  color: white;
+  text-decoration: none;
+  transition: background-color 0.2s;
+}
+
+.nav-link:hover {
   background-color: rgba(255, 255, 255, 0.1);
 }
 
-.sidebar-menu li a i {
-  margin-right: 0.75rem;
-  font-size: 1.1rem;
+.nav-link.active {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-left: 3px solid #a0d911;
 }
 
-.sidebar-menu li a span {
+.nav-link i {
+  font-size: 1.2rem;
+  margin-right: 1rem;
+  min-width: 24px;
+  text-align: center;
+}
+
+.nav-link span {
   white-space: nowrap;
 }
 
+.sidebar.collapsed .nav-link span {
+  display: none;
+}
 
-.profile-section {
+.sidebar.collapsed .nav-link {
+  justify-content: center;
+  padding: 0.75rem 0;
+}
+
+.sidebar-footer {
   padding: 1rem;
-  margin-top: auto;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.profile-btn {
-  width: 100%;
-  text-align: left;
-  padding: 0.5rem 1rem;
-  border-radius: 20px;
+.user-section {
+  display: flex;
+  align-items: center;
 }
 
-.profile-btn:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+.user-avatar i {
+  font-size: 1.75rem;
 }
+
+.user-info {
+  margin-left: 0.75rem;
+}
+
+.user-name {
+  margin: 0;
+  font-weight: bold;
+}
+
+.user-role {
+  margin: 0;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.sidebar.collapsed .user-info {
+  display: none;
+}
+
+
+/* Estilos del menu de perfil */
+
+.sidebar-footer {
+  position: relative;
+}
+
+.sidebar-footer .dropdown-menu {
+  position: absolute;
+  width: 180px;
+  background-color: #343a40;
+  
+  border: none;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  z-index: 1050;
+}
+
+.sidebar-footer .dropdown-item {
+  color: #adb5bd !important;
+  cursor: pointer;
+  
+}
+
+.sidebar-footer .dropdown-item:hover {
+  background-color: #495057;
+  color: white !important;
+}
+

@@ -1,0 +1,18 @@
+
+
+.card {
+  border-radius: 10px;
+}
+
+.btn-success {
+  background-color: #225d41;
+  border-color: #225d41;
+}
+
+.btn-success:hover {
+  background-color: #1b4a34;
+}
+
+textarea {
+  min-height: 80px;
+}

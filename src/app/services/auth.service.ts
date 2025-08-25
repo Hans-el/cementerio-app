@@ -34,17 +34,47 @@ export class AuthService {
     return this.http.get(`${this.apiUrl}/usuarios`, { headers });
   }
 
+  // Método para cerrar sesión, eliminando el token del almacenamiento local
   logout(): void {
     localStorage.removeItem('token');
-    localStorage.removeItem('rememberedCedula');
-    localStorage.removeItem('rememberedContrasena');
-    localStorage.removeItem('rememberMe');
+    localStorage.removeItem('userRole');
   }
 
   // Método para verificar si el usuario está autenticado
   isAuthenticated(): boolean {
     const token = localStorage.getItem('token');
     return !!token; // Devuelve true si hay un token, false en caso contrario
+  }
+
+  // Método para verificar si el usuario es administrador
+  isLoggedIn(): boolean {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      return false;
+    }
+
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload.rol === 'admin';
+    } catch (e) {
+      return false;
+    }
+  }
+
+
+  // Método para obtener el rol del usuario desde el token
+  getUserRole(): string {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      return 'Invitado'; // Valor por defecto si no hay token
+    }
+
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload.rol || 'Invitado'; // Retorna el rol o 'Invitado' si no existe. De igual forma podrá ver el mapa.
+    } catch (e) {
+      return 'Invitado';
+    }
   }
 
 

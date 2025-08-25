@@ -1,1 +1,80 @@
-<p>perfil works!</p>
+<div class="container py-4">
+    <h3 class="fw-bold text-success">Configuración de Perfil</h3>
+    <p class="text-muted">Actualiza tu información personal y datos de facturación</p>
+
+    <!-- Tabs -->
+    <ul ngbNav #nav="ngbNav" [(activeId)]="activeTab" class="nav-tabs mb-3">
+        <li [ngbNavItem]="1">
+            <a ngbNavLink><i class="bi bi-person"></i> Datos Personales</a>
+            <ng-template ngbNavContent>
+                <!-- Card de Datos Personales -->
+                <div class="card shadow-sm border-0">
+                    <div class="card-body">
+                        <h5><i class="bi bi-person-lines-fill me-2"></i> Información Personal</h5>
+                        <p class="text-muted">Mantén actualizada tu información de contacto</p>
+
+                        <form (ngSubmit)="guardarCambios()">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">Nombre Completo</label>
+                                    <input type="text" class="form-control" [(ngModel)]="perfil.nombre" name="nombre"
+                                        placeholder="Ingresa tu nombre completo">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Cédula</label>
+                                    <input type="text" class="form-control" [(ngModel)]="perfil.cedula" name="cedula"
+                                        placeholder="Número de cédula">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label"><i class="bi bi-envelope me-1"></i>Email</label>
+                                    <input type="email" class="form-control" [(ngModel)]="perfil.email" name="email"
+                                        placeholder="correo@ejemplo.com">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label"><i class="bi bi-telephone me-1"></i>Teléfono</label>
+                                    <input type="text" class="form-control" [(ngModel)]="perfil.telefono"
+                                        name="telefono" placeholder="0987654321">
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label"><i class="bi bi-geo-alt me-1"></i>Dirección</label>
+                                    <textarea class="form-control" [(ngModel)]="perfil.direccion" name="direccion"
+                                        placeholder="Dirección completa de residencia"></textarea>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Contacto de Emergencia</label>
+                                    <input type="text" class="form-control" [(ngModel)]="perfil.contactoEmergencia"
+                                        name="contactoEmergencia" placeholder="Nombre del contacto">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Teléfono de Emergencia</label>
+                                    <input type="text" class="form-control" [(ngModel)]="perfil.telefonoEmergencia"
+                                        name="telefonoEmergencia" placeholder="0987654321">
+                                </div>
+                            </div>
+
+                            <div class="mt-4 text-end">
+                                <button class="btn btn-success px-4" type="submit">Guardar Cambios</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </ng-template>
+        </li>
+
+        <li [ngbNavItem]="2">
+            <a ngbNavLink><i class="bi bi-credit-card"></i> Facturación</a>
+            <ng-template ngbNavContent>
+                <div class="card shadow-sm border-0">
+                    <br>
+                    <div class="card-body">
+                        <h5><i class="bi me-2"></i>Módulo en Desarrollo</h5>
+                        <p class="text-muted">Próximamente podrás adquirir <strong>un espacio en el cementerio</strong> con un par de clics.</p>
+                        <!-- Aquí luego agregamos inputs de facturación -->
+                    </div>
+                </div>
+            </ng-template>
+        </li>
+    </ul>
+
+    <div [ngbNavOutlet]="nav"></div>
+</div>

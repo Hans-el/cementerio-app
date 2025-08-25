@@ -1,0 +1,20 @@
+<div class="d-flex h-100">
+  <!-- Botón Hamburguesa solo en móviles -->
+  
+  <!-- Sidebar -->
+  <div 
+    class="sidebar-container" 
+    [ngClass]="{
+      'sidebar-expanded': !isSidebarCollapsed, 
+      'sidebar-collapsed': isSidebarCollapsed, 
+    }"
+    [class.active]="!isSidebarCollapsed && isMobile"
+  >
+    <app-sidebar (sidebarStateChange)="onSidebarStateChange($event)"></app-sidebar>
+  </div>
+
+  <!-- Contenido dinámico -->
+  <div class="flex-grow-1 main-content">
+    <router-outlet></router-outlet>
+  </div>
+</div>
