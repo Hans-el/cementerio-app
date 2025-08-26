@@ -56,14 +56,14 @@
       <!-- Este es para el administrador, puesto para la administracion sencill -->
       <li class="nav-item" *ngIf="userRole === 'admin'">
         <a routerLink="/inicio" routerLinkActive="active" class="nav-link">
-          <i class="bi bi-building"></i>
+          <i class="bi bi-gear"></i>
           <span>Administracion</span>
         </a>
       </li>
       <!-- Este es para el administrador, en donde se podrá agregar más bóvedas -->
       <li class="nav-item" *ngIf="userRole === 'admin'">
         <a (click)="editarBovedas()" class="nav-link">
-          <i class="bi bi-pencil"></i>
+          <i class="bi bi-pencil-square"></i>
           <span>Gestión de Bóvedas</span>
         </a>
       </li>
@@ -84,9 +84,9 @@
       </div>
     </div>
     <div class="dropdown-menu" aria-labelledby="userDropdown" ngbDropdownMenu>
-      <a class="dropdown-item" href="/perfil">Configuración</a>
-      <div class="dropdown-divider"></div>
-      <a class="dropdown-item" (click)="logout()">Cerrar Sesión</a>
+        <a class="dropdown-item  bi-gear" href="/perfil"> Configuración</a>
+        <div class="dropdown-divider"></div>
+        <a class="dropdown-item bi-arrow-right" (click)="logout()">  Cerrar Sesión</a>
     </div>
   </div>
 </div>

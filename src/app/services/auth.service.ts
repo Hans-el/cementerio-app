@@ -17,7 +17,7 @@ export class AuthService {
 
   // Método para registrar un nuevo usuario
   register(userData: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/usuarios/registrar`, userData);
+    return this.http.post(`${this.apiUrl}/auth/registrar`, userData);
   }
 
   // Método para solicitar un enlace de recuperación de contraseña. //Esto se implementará en versiones posteriores
