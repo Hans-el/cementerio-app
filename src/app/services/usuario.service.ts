@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs'; 
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +12,7 @@ export class UsuarioService {
 
   constructor(private http: HttpClient) { }
 
-    // Obtener usuario por ID
+  // Obtener usuario por ID
   getUsuario(id: number): Observable<any> {
     return this.http.get(`${this.apiUrl}/${id}`);
   }
@@ -21,5 +21,14 @@ export class UsuarioService {
   updateUsuario(id: number, data: any): Observable<any> {
     return this.http.put(`${this.apiUrl}/${id}`, data);
   }
+  // Método para obtener todos los usuarios (ejemplo de ruta protegida)
+  getUsuarios(): Observable<any> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+    return this.http.get(`${this.apiUrl}/usuarios`, { headers });
+  }
+
 
 }

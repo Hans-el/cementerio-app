@@ -1,9 +1,28 @@
 import { Injectable } from '@angular/core';
 import { Nicho } from '../models/nicho/nicho.module';
 import { of, Observable } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { AuthService } from './auth.service';
 
 @Injectable({ providedIn: 'root' })
 export class NichosService {
+ private apiUrl = 'http://localhost:3000/api/nichos';
+
+  constructor(private http: HttpClient, private authService: AuthService) {}
+
+  getNichos(): Observable<any> {
+    return this.http.get(this.apiUrl, { headers: this.authService.getHeaders() });
+  }
+
+  getNichosDisponibles(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/disponibles`, { headers: this.authService.getHeaders() });
+  }
+
+  createNicho(nichoData: any): Observable<any> {
+    return this.http.post(this.apiUrl, nichoData, { headers: this.authService.getHeaders() });
+  }
+
+  // Por ahora usamos datos simulados. 
   private sectores: { [key: string]: Nicho[] } = {
     A: [
       { id: 'A1', cedulaPropietario: '12345678', nombrePropietario: 'Juan Pérez', sector: 'A', numero: '1', estado: 'disponible' },

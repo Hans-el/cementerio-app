@@ -12,18 +12,19 @@ export class AuthService {
 
   // Método para iniciar sesión
   login(cedula: string, contrasena: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/auth/login`, { cedula, contrasena });
+    return this.http.post(`${this.apiUrl}/usuarios/login`, { cedula, contrasena });
   }
 
   // Método para registrar un nuevo usuario
   register(userData: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/auth/registrar`, userData);
+    return this.http.post(`${this.apiUrl}/usuarios/registrar`, userData);
   }
 
-  // Método para solicitar un enlace de recuperación de contraseña. //Esto se implementará en versiones posteriores
+  /* Método para solicitar un enlace de recuperación de contraseña. //Esto se implementará en versiones posteriores con Nodemailer.
   requestPasswordReset(email: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/forgot-password`, { email });
   }
+    */
 
   // Método para obtener todos los usuarios (ejemplo de ruta protegida)
   getUsuarios(): Observable<any> {
@@ -45,6 +46,12 @@ export class AuthService {
     const token = localStorage.getItem('token');
     return !!token; // Devuelve true si hay un token, false en caso contrario
   }
+
+   // Método para verificar si el usuario es administrador (mas sencillo y practico)
+  isAdmin(): boolean {
+    return this.getUserRole() === 'admin';
+  }
+
 
   // Método para verificar si el usuario es administrador
   isLoggedIn(): boolean {
@@ -78,4 +85,16 @@ export class AuthService {
   }
 
 
+  // Método para obtener el token
+  getToken(): string | null {
+    return localStorage.getItem('token');
+  }
+  // Método para obtener los headers con el token
+  getHeaders(): HttpHeaders {
+    const token = this.getToken();
+    return new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+  }
 }

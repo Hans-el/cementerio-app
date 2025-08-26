@@ -6,6 +6,7 @@ import { NgbAlertModule } from '@ng-bootstrap/ng-bootstrap';
 import Swal from 'sweetalert2';
 import { ApiService } from '../../services/api.service';
 import moment from 'moment';
+import { AuthService } from '../../services/auth.service';
 
 
 @Component({
@@ -22,7 +23,7 @@ export class RegistroComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private apiService: ApiService,
+    private authService: AuthService,
     private router: Router
   ) {
     this.registroForm = this.fb.group({
@@ -118,7 +119,7 @@ export class RegistroComponent implements OnInit {
     };
 
     // Mandamos los datos al servicio de API para registrar el usuario
-    this.apiService.register(userData).subscribe(
+    this.authService.register(userData).subscribe(
       (response) => {
         Swal.fire({
           title: 'Registro exitoso!',

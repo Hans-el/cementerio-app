@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { ApiService } from '../../services/api.service';
+import { AuthService } from '../../services/auth.service';
 import Swal from 'sweetalert2';
 import { NgbAlertModule } from '@ng-bootstrap/ng-bootstrap';
 import { CommonModule } from '@angular/common';
@@ -10,7 +10,7 @@ import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, NgbAlertModule, RouterModule ],
+  imports: [CommonModule, ReactiveFormsModule, NgbAlertModule, RouterModule],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
@@ -21,7 +21,7 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private apiService: ApiService,
+    private authService: AuthService,
     private router: Router
 
   ) {
@@ -54,9 +54,11 @@ export class LoginComponent implements OnInit {
     if (this.loginForm.valid) {
       const { cedula, contrasena, rememberMe } = this.loginForm.value;
 
-      this.apiService.login(cedula, contrasena).subscribe(
+      this.authService.login(cedula, contrasena).subscribe(
         (response: any) => {
           localStorage.setItem('token', response.token);
+          this.authService.getUserRole(); // Guarda el rol en localStorage
+
 
           if (rememberMe) {
             localStorage.setItem('rememberedCedula', cedula);
