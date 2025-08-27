@@ -106,7 +106,7 @@ export class RegistroComponent implements OnInit {
       });
       return;
     }
-
+ 
     // Creamos el objeto de datos del usuario
     const userData = {
       nombre: this.registroForm.get('nombre')?.value,
@@ -119,7 +119,7 @@ export class RegistroComponent implements OnInit {
     };
 
     // Mandamos los datos al servicio de API para registrar el usuario
-    this.authService.register(userData).subscribe(
+    this.authService.registrar(userData).subscribe(
       (response) => {
         Swal.fire({
           title: 'Registro exitoso!',
@@ -131,6 +131,7 @@ export class RegistroComponent implements OnInit {
         }).then(() => {
           this.router.navigate(['/login']);
         });
+        console.log('Usuario registrado:', response);
       },
       (error) => {
         let errorMessage = 'Error al registrar usuario.';

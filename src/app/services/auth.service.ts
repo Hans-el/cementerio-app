@@ -1,23 +1,24 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { ApiService } from './api.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:3000/api'; // Asegúrate de que esta URL coincida con la de tu servidor backend
+  private apiUrl = 'http://localhost:3000/api'; 
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, apiService: ApiService) { }
 
   // Método para iniciar sesión
   login(cedula: string, contrasena: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/usuarios/login`, { cedula, contrasena });
+    return this.http.post(`${this.apiUrl}/auth/login`, { cedula, contrasena });
   }
 
   // Método para registrar un nuevo usuario
-  register(userData: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/usuarios/registrar`, userData);
+  registrar(userData: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/auth/registrar`, userData);
   }
 
   /* Método para solicitar un enlace de recuperación de contraseña. //Esto se implementará en versiones posteriores con Nodemailer.
