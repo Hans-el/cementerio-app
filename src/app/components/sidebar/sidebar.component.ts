@@ -10,6 +10,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { LocalizarModalComponent } from '../localizar-modal/localizar-modal.component';
 import { DisponibilidadModalComponent } from '../disponibilidad-modal/disponibilidad-modal.component';
 import { GestionBovedasComponent } from '../gestion-bovedas/gestion-bovedas.component';
+import { UsuarioService } from '../../services/usuario.service';
 
 
 @Component({
@@ -21,12 +22,19 @@ import { GestionBovedasComponent } from '../gestion-bovedas/gestion-bovedas.comp
 })
 export class SidebarComponent implements OnInit {
   userRole: string = 'Invitado'; // Valor por defecto
+  //userName: string = localStorage.getItem('userName') || 'Invitado'; //con la finalidad de saber el nombre del user actual.
 
   isCollapsed = signal(false);
   @Output() sidebarStateChange = new EventEmitter<boolean>();
 
 
-  constructor(private authService: AuthService, private router: Router, private modalService: NgbModal) { }
+  constructor(private authService: AuthService, 
+    private router: Router, 
+    private modalService: NgbModal,
+    private usuarioService: UsuarioService //con la finalidad de saber el nombre del user actual.
+  ) { }
+
+
   toggleSidebar() {
     this.isCollapsed.update(value => !value);
     this.sidebarStateChange.emit(this.isCollapsed());
@@ -35,6 +43,15 @@ export class SidebarComponent implements OnInit {
   ngOnInit(): void {
     this.userRole = this.authService.getUserRole(); // Obtiene el rol al inicializar
   }
+  /*
+  // Obtener el nombre del usuario actual para mostrarlo en el sidebar
+  getUsername() {
+    this.usuarioService.getNombreUsuario().subscribe(
+      (response: any) => {
+        this.userName = response.nombre; 
+        localStorage.setItem('userName', this.userName); // Guarda el nombre en localStorage
+      });
+  }*/
 
 
   openLocalizarModal() {

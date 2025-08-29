@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NichosService } from '../../services/nicho.service';
-import { Nicho } from '../../models/nicho/nicho.module';
+import { Nicho } from '../../models/nicho.model';
 import { SidebarComponent } from '../../components/sidebar/sidebar.component';
 import { NgbModal, NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { NichoSeleccionadoService } from '../../services/nicho-seleccionado.service';

@@ -6,7 +6,6 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 // Servicio para manejar operaciones relacionadas con usuarios
-// Como actualizar perfil, obtener detalles de usuario, etc.
 export class UsuarioService {
   private apiUrl = 'http://localhost:3000/api/usuarios'; // Ajusta según tu backend
 

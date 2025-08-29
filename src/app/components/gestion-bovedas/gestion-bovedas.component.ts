@@ -4,7 +4,7 @@ import { NichosService } from '../../services/nicho.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { NichoSeleccionadoService } from '../../services/nicho-seleccionado.service';
-import { Nicho } from '../../models/nicho/nicho.module';
+import { Nicho } from '../../models/nicho.model'
 
 @Component({
   selector: 'app-gestion-bovedas',

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Nicho } from '../models/nicho/nicho.module';
+import { Nicho } from '../models/nicho.model';
 import { signal } from '@angular/core';
 
 

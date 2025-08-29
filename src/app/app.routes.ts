@@ -20,7 +20,7 @@ export const routes: Routes = [
             { path: 'mapa', component: MapaBovedasComponent }, 
             { path: 'inicio', component: InicioComponent , /*canActivate: [adminGuard]*/ }, //Solo los admins pueden ver el inicio, ya que es la gestion de bovedas 
             { path: 'contacto', component: ContactoComponent },
-            { path: 'perfil', component: PerfilComponent, canActivate: [authGuard] }, //no puede acceder si no está autenticado, es decir, no podrá editar sus datos ya que no está logueado
+            { path: 'perfil', component: PerfilComponent }, //no puede acceder si no está autenticado, es decir, no podrá editar sus datos ya que no está logueado
 
         ]
     }, 

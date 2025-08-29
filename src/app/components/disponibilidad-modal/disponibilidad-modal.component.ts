@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { NichosService } from '../../services/nicho.service';
-import { Nicho } from '../../models/nicho/nicho.module';
+import { Nicho } from '../../models/nicho.model';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
