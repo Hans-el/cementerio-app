@@ -1,9 +1,24 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+
+interface MensajeContacto { //Esta interfaz también está creada en model/contacto 
+  nombre: string;
+  email: string;
+  telefono: string;
+  asunto: string;
+  mensaje: string;
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class ContactoService {
+  private apiUrl = 'http://localhost:3000/api/contacto  '; //la url del backend
 
-  constructor() { }
+  constructor(private http: HttpClient) {}
+
+  enviarMensaje(data: MensajeContacto): Observable<any> {
+    return this.http.post(this.apiUrl, data);
+  }
 }

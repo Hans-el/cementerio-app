@@ -1,41 +1,60 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import Swal from 'sweetalert2';
-import { SidebarComponent } from '../../components/sidebar/sidebar.component';
+import { ContactoService } from '../../services/contacto.service';
 
 @Component({
-  selector: 'app-contact',
+  selector: 'app-contacto',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, SidebarComponent],
-  templateUrl: './contacto.component.html',  
+  imports: [CommonModule, FormsModule, HttpClientModule],
+  templateUrl: './contacto.component.html',
   styleUrls: ['./contacto.component.css']
 })
 export class ContactoComponent {
-  contactForm: any;
+  formData = {
+    nombre: '',
+    email: '',
+    telefono: '',
+    asunto: '',
+    mensaje: ''
+  };
 
-  constructor(private fb: FormBuilder) {
-    this.contactForm = this.fb.group({
-      nombre: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      telefono: [''],
-      asunto: [''],
-      mensaje: ['', Validators.required]
-    });
-  }
+  mensajeEnviado: string | null = null;
+  error: string | null = null;
 
-  onSubmit() {
-    if (this.contactForm.valid) {
-      console.log('Formulario enviado:', this.contactForm.value);
-      Swal.fire({
-        title: '¡Mensaje enviado!',
-        text: 'Gracias por contactarnos, nos pondremos en contacto contigo pronto.',
-        icon: 'success',
-        confirmButtonText: 'Aceptar'
+
+  constructor(private contactoService: ContactoService) { }
+
+  enviarMensaje() {
+    this.mensajeEnviado = null;
+    this.error = null;
+
+    this.contactoService.enviarMensaje(this.formData)
+      .subscribe({
+        next: (res: any) => {
+          Swal.fire({
+            title: 'Enviado!',
+            text: 'Correo enviado exitosamente.',
+            timerProgressBar: true,
+            timer: 3000,
+            icon: 'success',
+            confirmButtonText: 'OK'
+          });
+          this.mensajeEnviado = res.mensaje;
+          this.formData = { nombre: '', email: '', telefono: '', asunto: '', mensaje: '' }; // Limpiar formulario
+        },
+        error: (err) => {
+          this.error = 'Error al enviar el mensaje. Inténtalo de nuevo.';
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: this.error,
+            confirmButtonText: 'Aceptar'
+          });
+          console.error(err);
+        }
       });
-      this.contactForm.reset();
-    } else {
-      alert('Por favor completa los campos obligatorios.');
-    }
   }
 }
