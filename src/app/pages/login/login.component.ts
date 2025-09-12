@@ -58,7 +58,7 @@ export class LoginComponent implements OnInit {
         (response: any) => {
           localStorage.setItem('token', response.token);
           this.authService.getUserRole(); // Guarda el rol en localStorage
-
+          // Si el usuario eligió "Recuérdame", guarda sus credenciales en localStorage
 
           if (rememberMe) {
             localStorage.setItem('rememberedCedula', cedula);

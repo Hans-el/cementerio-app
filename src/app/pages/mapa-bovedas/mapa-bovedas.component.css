@@ -1,6 +1,7 @@
 .mapa-container {
   height: auto; /* 56px es el alto del navbar, ajusta según tu diseño */
-  overflow: auto;
+  overflow: auto; /* Permite scroll si la imagen es más grande que el contenedor */
+  border: 2px solid #ccc; /* Borde para destacar el contenedor */
 }
 .mapa-container img {
   width: 100%;
