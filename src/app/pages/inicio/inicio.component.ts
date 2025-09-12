@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgbDropdownModule, NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
+import { GestionBovedasComponent } from '../../components/gestion-bovedas/gestion-bovedas.component';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 interface Boveda {
   codigo: string;
@@ -20,6 +22,8 @@ interface Boveda {
   styleUrls: ['./inicio.component.scss']
 })
 export class InicioComponent {
+  constructor(private modalService: NgbModal) {}
+
   bovedas: Boveda[] = [
     { codigo: 'B-01-A', ubicacion: 'Sector A / Fila 1', sector: 'A', capacidad: 2, estado: 'Disponible', actualizado: '2025-08-01' },
     { codigo: 'B-01-B', ubicacion: 'Sector A / Fila 1', sector: 'A', capacidad: 2, estado: 'Ocupada', actualizado: '2025-08-15' },
@@ -55,6 +59,11 @@ export class InicioComponent {
     return this.bovedas.filter(b => b.estado === 'Inactiva').length;
   }
 
+  editarBovedas() {
+    this.modalService.open(GestionBovedasComponent, { centered: true, size: 'md' });
+  }
+
+  
   // Filtrar bóvedas según los filtros seleccionados
   get bovedasFiltradas(): Boveda[] {
     return this.bovedas.filter(boveda => {
