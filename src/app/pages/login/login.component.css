@@ -17,8 +17,8 @@
   width: 100%;
   max-width: 420px;
   background-color: rgba(255, 255, 255, 0.95);
-  border: 2px solid #007bff;
-  border-radius: 20px;
+  border: 8px solid #2d5a3d;
+  /* border-radius: 20px;  No hace falta ser definido ya que tiene rounded-4 en el html */
 }
 
 /* Logo */
@@ -52,13 +52,13 @@
 /* Botón */
 .btn-primary {
   border-radius: 12px;
-  background-color: #083a63;
+  background-color: #2d5a3d;
   border: none;
   font-weight: bold;
 }
 
 .btn-primary:hover {
-  background-color: #00509e;
+  background-color: #1f9749;
 }
 
 /* Responsivo */

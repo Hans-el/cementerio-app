@@ -25,7 +25,7 @@ export class NichosService {
   // Por ahora usamos datos simulados. 
   private sectores: { [key: string]: Nicho[] } = {
     A: [
-      { id: 'A1', cedulaPropietario: '12345678', nombrePropietario: 'Juan Pérez', sector: 'A', numero: '1', estado: 'disponible' },
+      { id: 'A1', cedulaPropietario: '1234567890', nombrePropietario: 'Juan Pérez', sector: 'A', numero: '1', estado: 'disponible' },
       { id: 'A2', cedulaPropietario: '87654321', nombrePropietario: 'María López', sector: 'A', numero: '2', estado: 'ocupado' },
       { id: 'A3', cedulaPropietario: '11223344', nombrePropietario: 'Carlos Ramírez', sector: 'A', numero: '3', estado: 'reservado' },
       { id: 'A4', cedulaPropietario: '44332211', nombrePropietario: 'Ana Gómez', sector: 'A', numero: '4', estado: 'reservado' },
@@ -100,7 +100,7 @@ export class NichosService {
       { id: 'B21', cedulaPropietario: '', nombrePropietario: '', sector: 'B', numero: '21', estado: 'ocupado' },
       { id: 'B22', cedulaPropietario: '', nombrePropietario: '', sector: 'B', numero: '22', estado: 'disponible' },
       { id: 'B23', cedulaPropietario: '', nombrePropietario: '', sector: 'B', numero: '23', estado: 'reservado' },
-      { id: 'B24', cedulaPropietario: '1316623030', nombrePropietario: 'Hansel Alcívar', sector: 'C', numero: '24', estado: 'reservado' }
+      { id: 'B24', cedulaPropietario: '1316623030', nombrePropietario: 'Hansel Alcívar', sector: 'C', numero: '24', estado: 'disponible' }
     ],
     D: [
       { id: 'B1', cedulaPropietario: '', nombrePropietario: '', sector: 'B', numero: '1', estado: 'disponible' },
@@ -126,7 +126,7 @@ export class NichosService {
       { id: 'B21', cedulaPropietario: '', nombrePropietario: '', sector: 'B', numero: '21', estado: 'ocupado' },
       { id: 'B22', cedulaPropietario: '', nombrePropietario: '', sector: 'B', numero: '22', estado: 'disponible' },
       { id: 'B23', cedulaPropietario: '', nombrePropietario: '', sector: 'B', numero: '23', estado: 'reservado' },
-      { id: 'B24', cedulaPropietario: '1316623030', nombrePropietario: 'Hansel Alcívar', sector: 'D', numero: '24', estado: 'reservado' }
+      { id: 'B24', cedulaPropietario: '1316623030', nombrePropietario: 'Hansel Alcívar', sector: 'D', numero: '24', estado: 'ocupado' }
     ],
     E: [
       { id: 'B1', cedulaPropietario: '', nombrePropietario: '', sector: 'B', numero: '1', estado: 'disponible' },

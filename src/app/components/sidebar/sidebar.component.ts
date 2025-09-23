@@ -79,7 +79,7 @@ export class SidebarComponent implements OnInit {
       icon: 'success',
       confirmButtonText: 'OK'
     }).then(() => {
-      localStorage.removeItem('token');
+      // localStorage.removeItem('token');  *NOTA: No hace falta porque ya lo hace el authService.logout(). Se pone a manera de entendimiento*
       this.router.navigate(['/login']);
     });
   }
