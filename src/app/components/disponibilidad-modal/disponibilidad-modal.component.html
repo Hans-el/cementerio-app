@@ -1,7 +1,6 @@
 <div class="modal-header">
-  <h4 class="modal-title">Disponibilidad de Espacios</h4>
+  <h4 class="modal-title mb-1 ms-2">Disponibilidad de Espacios</h4>
   
-  <p class="modal-subtitle">Explora nuestros diferentes tipos de espacios disponibles</p>
   <button type="button" class="btn-close" aria-label="Close" (click)="activeModal.dismiss()"></button>
 </div>
 <div class="modal-body">
@@ -38,7 +37,7 @@
               }
             </ul>
             <div class="d-flex gap-2 mt-3">
-              <button class="btn btn-reservar" (click)="reservar({
+              <button class="btn btn-outline-success fw-bold w-50" (click)="reservar({
                 id: tipo.id,
                 cedulaPropietario: '',
                 nombrePropietario: '',
@@ -46,7 +45,7 @@
                 numero: '',
                 estado: 'disponible'
               })">Reservar</button>
-              <button class="btn btn-agendar">📅 Agendar Visita</button>
+              <button class="btn btn-outline-warning fw-bold w-50">Contactarse</button>
             </div>
           </div>
         </div>
@@ -55,5 +54,5 @@
   </div>
 </div>
 <div class="modal-footer">
-  <button type="button" class="btn btn-secondary" (click)="activeModal.close('Close click')">Cerrar</button>
+  <button type="button" class="btn btn-outline-danger fw-bold" (click)="activeModal.close('Close click')">Cerrar</button>
 </div>

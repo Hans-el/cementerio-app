@@ -59,7 +59,7 @@
   color: #495057;
 }
 
-.btn-reservar {
+.btn-success {
   background-color: #2d5a3d;
   color: white;
   border: none;
@@ -69,9 +69,7 @@
 }
 
 .btn-agendar {
-  background-color: white;
-  color: #2d5a3d;
-  border: 1px solid #2d5a3d;
+ 
   padding: 0.5rem 1rem;
   border-radius: 5px;
   flex: 1;

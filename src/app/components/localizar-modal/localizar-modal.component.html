@@ -1,24 +1,18 @@
 <!-- modal-localizar-boveda.component.html -->
-<div class="modal-header border-0 pb-0 ">
-  <button type="button" class="btn-close me-2" aria-label="Cerrar" (click)="activeModal.dismiss()"></button>
+<div class="modal-header border-0 pb-0">
   <h5 class="modal-title fw-semibold">
-    <i class="bi bi-search me-2 "></i>Localizar Bóveda
+    <i class="bi bi-search me-2"></i>Localizar Bóveda
   </h5>
+  <button type="button" class="btn-close ms-auto" aria-label="Cerrar" (click)="activeModal.dismiss()"></button>
 </div>
+
 <div class="modal-body">
   <div class="mb-4">
     <label class="form-label fw-semibold">Cédula del Propietario</label>
-    <input
-      type="text"
-      class="form-control"
-      placeholder="Ej: 1234567890"
-      [(ngModel)]="cedula"
-      (input)="validarCedula()"
-      [ngClass]="{'is-invalid': cedulaInvalida}"
-      aria-label="Cédula del propietario"
-      aria-describedby="ayudaCedula"
-      maxLength="10"
-    >
+    <!-- Input con validación, es decir, validamos que la cédula tenga 10 dígitos -->
+    <input type="text" class="form-control" placeholder="Ej: 1234567890" [(ngModel)]="cedula" (input)="validarCedula()"
+      [ngClass]="{'is-invalid': cedulaInvalida}" aria-label="Cédula del propietario" aria-describedby="ayudaCedula"
+      maxLength="10">
     <div *ngIf="cedulaInvalida" class="invalid-feedback">
       La cédula debe tener 10 dígitos numéricos.
     </div>
@@ -28,12 +22,13 @@
   </div>
 
   <!-- Botones juntos -->
-  <div class="d-flex justify-content-start gap-2 p-2 mb-4">
-    <button type="button" class="btn btn-outline-secondary" (click)="activeModal.dismiss()">Cerrar</button>
-    <button type="button" class="btn btn-success" (click)="buscar()" [disabled]="cargando || cedulaInvalida">
+   <!-- Este formato es para todos los botones -->
+  <div class="d-flex mb-4 gap-2 justify-content-center">
+    <button type="button" class="btn btn-outline-success fw-bold w-50" (click)="buscar()" [disabled]="cargando || cedulaInvalida">
       <span *ngIf="cargando" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
       Buscar
     </button>
+    <button type="button" class="btn btn-outline-danger fw-bold w-50" (click)="activeModal.dismiss()">Cerrar</button>
   </div>
 
   <!-- Spinner de carga -->
@@ -74,6 +69,7 @@
 
   <!-- Mensaje informativo para el usuario -->
   <div *ngIf="!cargando && !resultadoBusqueda?.length && !mensajeError" class="text-muted small mt-2">
-    <p class="mb-0">Si no encuentra su bóveda, tenga paciencia, los datos están siendo actualizados. En caso de no disponer, <a (click)="openDisponibilidadModal()" class="link-secondary">adquiera una</a>.</p>
+    <p class="mb-0">Si no encuentra su bóveda, tenga paciencia, los datos están siendo actualizados. En caso de no
+      disponer, <a (click)="openDisponibilidadModal()" class="link-secondary">adquiera una</a>.</p>
   </div>
 </div>
