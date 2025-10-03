@@ -17,6 +17,9 @@ export class GestionBovedasComponent {
   cedula: string = '';
   resultadoBusqueda: Nicho[] | null = null; // Resultado de la búsqueda
   mensajeError: string | null = null; // Mensaje de error si no se encuentra nada
+  cedulaInvalida: boolean = false; //para validar que la cédula tenga 10 dígitos
+  cargando: boolean = false; // Indicador de carga para mejor UX
+
 
 
   constructor(
@@ -25,6 +28,10 @@ export class GestionBovedasComponent {
     private nichoSeleccionadoService: NichoSeleccionadoService
   ) { }
 
+  validarCedula(): void {
+    // Permite que el usuario escriba, pero marca como inválido si no son 10 dígitos
+    this.cedulaInvalida = this.cedula.length > 0 && !/^\d{10}$/.test(this.cedula);
+  }
   buscar() {
     this.mensajeError = null;
     this.resultadoBusqueda = null;
@@ -33,6 +40,9 @@ export class GestionBovedasComponent {
       this.mensajeError = 'Por favor, ingrese una cédula.';
       return;
     }
+
+
+    this.cargando = false; // Iniciar carga
 
     this.nichosService.buscarPorCedula(this.cedula).subscribe({
       next: (nichos) => {
@@ -50,7 +60,7 @@ export class GestionBovedasComponent {
     });
   }
 
-  Anadir():void {}
-  
-  Editar():void {}
+  Anadir(): void { }
+
+  Editar(): void { }
 }

@@ -1,34 +1,63 @@
-<div class="modal-header">
-  <h4 class="modal-title">Gestionar Bóvedas</h4>
-  <button type="button" class="close" aria-label="Cerrar" (click)="activeModal.dismiss()">
-    <span aria-hidden="true">&times;</span>
-  </button>
+<div class="modal-header border-0 pb-0">
+  <h5 class="modal-title fw-semibold">
+    <i class="bi bi-pencil me-2"></i>Gestionar Bóveda
+  </h5>
+  <button type="button" class="btn-close ms-auto" aria-label="Cerrar" (click)="activeModal.dismiss()"></button>
 </div>
-<div class="modal-body">
-  <div class="modal-footer justify-content-center">
-    <button type="button" class="btn btn-primary bg-blend-color" (click)="Anadir()">Añadir</button>
-    <button type="button" class="btn btn-primary" (click)="Editar()">Editar</button>
-    <button type="button" class="btn btn-outline-secondary" (click)="activeModal.dismiss()">Cerrar</button>
-  </div>
-  <p><strong>Cédula del Propietario</strong></p>
-  <input type="text" class="form-control" placeholder="Ej: 12345678" [(ngModel)]="cedula">
-  <small class="form-text text-muted">
-    Ingrese la cédula del propietario para <strong>gestionar</strong> su bóveda/nicho
-  </small>
-  <button type="button" class="btn btn-primary" (click)="buscar()">Buscar</button>
 
+<div class="modal-body">
+  <div class="modal-footer mb-2 gap-2 justify-content-center">
+    <button type="button" class="btn btn-outline-success fw-bold w-50" (click)="Anadir()">Añadir</button>
+    <button type="button" class="btn btn-outline-primary fw-bold w-50" (click)="Editar()">Editar</button>
+  </div>
+  <div class="mb-4">
+    <label class="form-label fw-semibold">Cédula del Propietario</label>
+    <!-- Input con validación, es decir, validamos que la cédula tenga 10 dígitos -->
+    <input type="text" class="form-control" placeholder="Ej: 1234567890" [(ngModel)]="cedula" (input)="validarCedula()"
+      [ngClass]="{'is-invalid': cedulaInvalida}" aria-label="Cédula del propietario" aria-describedby="ayudaCedula"
+      maxLength="10">
+    <div *ngIf="cedulaInvalida" class="invalid-feedback">
+      La cédula debe tener 10 dígitos numéricos.
+    </div>
+    <small id="ayudaCedula" class="form-text text-muted">
+      Ingrese la cédula del propietario para gestionar su bóveda
+    </small>
+  </div>
+
+  <!-- Botón -->
+  <!-- Este formato es para todos los botones -->
+  <div class="d-flex mb-4 gap-2 justify-content-center">
+    <button type="button" class="btn btn-outline-success fw-bold w-50" (click)="buscar()"
+      [disabled]="cargando || cedulaInvalida">
+      <span *ngIf="cargando" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+      Buscar
+    </button>
+    <button type="button" class="btn btn-outline-danger fw-bold w-50" (click)="activeModal.dismiss()">Cerrar</button>
+  </div>
 
   <!-- Mostrar resultado de la búsqueda -->
-  <div *ngIf="resultadoBusqueda && resultadoBusqueda.length > 0" class="mt-3 alert alert-success">
-    <p><strong>Bóveda(s) encontrada(s):</strong></p>
-    <div *ngFor="let nicho of resultadoBusqueda">
-      <p>Sector: {{ nicho.sector }}, Número: {{ nicho.numero }}</p>
-      <p>Estado: {{ nicho.estado }}</p>
-      <hr *ngIf="resultadoBusqueda.length > 1">
+  <div *ngIf="resultadoBusqueda && resultadoBusqueda.length > 0 && !cargando" class="mt-2">
+    <p class="fw-semibold mb-2">Bóveda(s) encontrada(s):</p>
+    <div *ngFor="let nicho of resultadoBusqueda" class="card mb-2">
+      <div class="card-body p-3">
+        <p class="mb-1"><strong>Sector:</strong> {{ nicho.sector }}</p>
+        <p class="mb-1"><strong>Número:</strong> {{ nicho.numero }}</p>
+        <p class="mb-0">
+          <strong>Estado:</strong>
+          <span [ngClass]="{
+            'text-success': nicho.estado === 'disponible',
+            'text-danger': nicho.estado === 'ocupado',
+            'text-warning': nicho.estado === 'reservado',
+            'text-secondary': nicho.estado !== 'disponible' && nicho.estado !== 'ocupado' && nicho.estado !== 'reservado'
+          }">
+            {{ nicho.estado }}
+          </span>
+        </p>
+      </div>
+    </div>
+    <!-- Mensaje de error en caso de no encontrar la bóveda -->
+    <div *ngIf="mensajeError && !cargando" class="alert alert-danger d-flex align-items-center p-2 my-2">
+      <i class="bi bi-exclamation-triangle-fill me-2"></i>
+      <div class="small">{{ mensajeError }}</div>
     </div>
   </div>
-  <!-- Mostrar mensaje de error -->
-  <div *ngIf="mensajeError" class="mt-3 alert alert-danger">
-    {{ mensajeError }}
-  </div>
-</div>

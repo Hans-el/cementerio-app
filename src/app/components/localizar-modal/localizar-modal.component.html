@@ -1,4 +1,3 @@
-<!-- modal-localizar-boveda.component.html -->
 <div class="modal-header border-0 pb-0">
   <h5 class="modal-title fw-semibold">
     <i class="bi bi-search me-2"></i>Localizar Bóveda
@@ -7,24 +6,27 @@
 </div>
 
 <div class="modal-body">
-  <div class="mb-4">
-    <label class="form-label fw-semibold">Cédula del Propietario</label>
-    <!-- Input con validación, es decir, validamos que la cédula tenga 10 dígitos -->
-    <input type="text" class="form-control" placeholder="Ej: 1234567890" [(ngModel)]="cedula" (input)="validarCedula()"
-      [ngClass]="{'is-invalid': cedulaInvalida}" aria-label="Cédula del propietario" aria-describedby="ayudaCedula"
-      maxLength="10">
-    <div *ngIf="cedulaInvalida" class="invalid-feedback">
-      La cédula debe tener 10 dígitos numéricos.
+  <div class="modal-footer mb-2 gap-2 justify-content-center">
+    <div class="mb-4 w-100">
+      <label class="form-label fw-semibold">Cédula del Propietario</label>
+      <!-- Input con validación 1o numeros, es decir, validamos que solo se permitan 10 números como máximo -->
+      <input type="text" class="form-control" placeholder="Ej: 1234567890" [(ngModel)]="cedula"
+        (input)="validarCedula()" [ngClass]="{'is-invalid': cedulaInvalida}" aria-label="Cédula del propietario"
+        aria-describedby="ayudaCedula" maxLength="10">
+      <div *ngIf="cedulaInvalida" class="invalid-feedback">
+        La cédula debe tener 10 dígitos numéricos.
+      </div>
+      <small id="ayudaCedula" class="form-text text-muted">
+        Ingrese la cédula del propietario para localizar su espacio.
+      </small>
     </div>
-    <small id="ayudaCedula" class="form-text text-muted">
-      Ingrese la cédula del propietario para localizar su bóveda
-    </small>
   </div>
 
   <!-- Botones juntos -->
-   <!-- Este formato es para todos los botones -->
+  <!-- Este formato es para todos los botones -->
   <div class="d-flex mb-4 gap-2 justify-content-center">
-    <button type="button" class="btn btn-outline-success fw-bold w-50" (click)="buscar()" [disabled]="cargando || cedulaInvalida">
+    <button type="button" class="btn btn-outline-success fw-bold w-50" (click)="buscar()"
+      [disabled]="cargando || cedulaInvalida">
       <span *ngIf="cargando" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
       Buscar
     </button>
@@ -57,6 +59,8 @@
             {{ nicho.estado }}
           </span>
         </p>
+        <!-- Mostamos imagen del lugar-->
+
       </div>
     </div>
   </div>

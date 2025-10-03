@@ -1,99 +1,149 @@
-<div class="container my-5">
+<div class="container my-4 mx-auto">
   <!-- Badges de resumen -->
-  <div class="d-flex gap-3 mb-4">
-    <div class="card text-center p-3" style="width: 120px;">
-      <h5>Total</h5>
-      <h3 class="text-success">{{ totalBovedas }}</h3>
-    </div>
-    <div class="card text-center p-3" style="width: 120px;">
-      <h5>Disponibles</h5>
-      <h3 class="text-success">{{ disponibles }}</h3>
-    </div>
-    <div class="card text-center p-3" style="width: 120px;">
-      <h5>Ocupadas</h5>
-      <h3 class="text-danger">{{ ocupadas }}</h3>
-    </div>
-    <div class="card text-center p-3" style="width: 120px;">
-      <h5>Mantenimiento</h5>
-      <h3 class="text-warning">{{ mantenimiento }}</h3>
-    </div>
-    <div class="card text-center p-3" style="width: 120px;">
-      <h5>Inactivas</h5>
-      <h3 class="text-secondary">{{ inactivas }}</h3>
-    </div>
-    <button class="btn btn-success ms-auto" (click)="editarBovedas()">
-      <i class="bi bi-pencil-square nav-icon"></i>
-      <span class="nav-text ms-3">Gestión de Bóvedas</span>
-    </button>
-  </div>
+  <!-- Usamos Bootstrap para el diseño y estilos. Con esto logramos que queden cuadritos centrados  -->
 
-  <!-- Filtros -->
-  <div class="card mb-4 p-3">
-    <div class="row g-3">
-      <div class="col-md-6">
-        <input type="text" class="form-control" placeholder="Buscar por código, ubicación o sector"
-          [(ngModel)]="filtros.busqueda" />
-      </div>
-      <div class="col-md-3">
-        <select class="form-select" [(ngModel)]="filtros.estado">
-          <option>Todos los estados</option>
-          <option>Disponible</option>
-          <option>Ocupada</option>
-          <option>Mantenimiento</option>
-        </select>
-      </div>
-      <div class="col-md-3">
-        <select class="form-select" [(ngModel)]="filtros.sector">
-          <option>Todos los sectores</option>
-          <option>A</option>
-          <option>B</option>
-          <option>C</option>
-          <option>D</option>
-
-          <!-- Si el cementerio crece añadimos más sectores -->
-        </select>
+  <div class="row g-3 mb-4 align-items-center">
+    <div class="col-6 col-sm-4 col-md-2">
+      <div class="card text-center p-2 h-100">
+        <h6 class="mb-1">Total</h6>
+        <h4 class="text-success mb-0">{{ totalBovedas }}</h4>
       </div>
     </div>
-  </div>
+    <div class="col-6 col-sm-4 col-md-2">
+      <div class="card text-center p-2 h-100">
+        <h6 class="mb-1">Disponibles</h6>
+        <h4 class="text-success mb-0">{{ disponibles }}</h4>
+      </div>
+    </div>
+    <div class="col-6 col-sm-4 col-md-2">
+      <div class="card text-center p-2 h-100">
+        <h6 class="mb-1">Ocupadas</h6>
+        <h4 class="text-danger mb-0">{{ ocupadas }}</h4>
+      </div>
+    </div>
+    <div class="col-6 col-sm-4 col-md-2">
+      <div class="card text-center p-2 h-100">
+        <h6 class="mb-1">Mantenimiento</h6>
+        <h4 class="text-warning mb-0">{{ mantenimiento }}</h4>
+      </div>
+    </div>
+    <div class="col-6 col-sm-4 col-md-2">
+      <div class="card text-center p-2 h-100">
+        <h6 class="mb-1">Inactivas</h6>
+        <h4 class="text-secondary mb-0">{{ inactivas }}</h4>
+      </div>
+    </div>
+    <div class="col-md-2 d-flex justify-content-md-end mt-3 mt-md-0">
+      <button class="btn btn-success w-100 w-md-auto" (click)="editarBovedas()">
+        <i class="bi bi-pencil-square nav-icon"></i>
+        <span class="nav-text ms-2 d-none d-sm-inline">Gestión de Bóvedas</span>
+      </button>
+    </div>
 
-  <!-- Tabla de bóvedas -->
-  <div class="card">
-    <div class="table-responsive">
-      <table class="table table-hover mb-0">
-        <thead class="table-light">
-          <tr>
-            <th>Código</th>
-            <th>Ubicación</th>
-            <th>Sector</th>
-            <th>Capacidad</th>
-            <th>Estado</th>
-            <th>Actualizado</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let boveda of bovedasFiltradas">
-            <td>{{ boveda.codigo }}</td>
-            <td>{{ boveda.ubicacion }}</td>
-            <td>{{ boveda.sector }}</td>
-            <td>{{ boveda.capacidad }}</td>
-            <td>
-              <span [class]="getEstadoClass(boveda.estado)">
-                {{ boveda.estado }}
-              </span>
-            </td>
-            <td>{{ boveda.actualizado }}</td>
-            <td>
-              <button class="btn btn-sm btn-outline-primary me-2">
-                <i class="bi bi-pencil-square"></i> Editar
-              </button>
-              <button class="btn btn-sm btn-outline-danger">
-                <i class="bi bi-trash"></i> Eliminar
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+    <!-- Filtros -->
+    <div class="card mb-4 p-3">
+      <div class="row g-3">
+        <div class="col-md-6">
+          <input type="text" class="form-control" placeholder="Buscar por código, ubicación o sector"
+            [(ngModel)]="filtros.busqueda" />
+        </div>
+        <div class="col-md-3">
+          <select class="form-select" [(ngModel)]="filtros.estado">
+            <option>Todos los estados</option>
+            <option>Disponible</option>
+            <option>Ocupada</option>
+            <option>Mantenimiento</option>
+          </select>
+        </div>
+        <div class="col-md-3">
+          <select class="form-select" [(ngModel)]="filtros.sector">
+            <!-- Aquí están todos los sectores-->
+            <option>Todos los sectores</option>
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+            <option>4</option>
+            <option>5</option>
+            <option>6</option>
+            <option>7</option>
+            <option>8</option>
+            <option>9</option>
+            <option>10</option>
+            <option>11</option>
+            <option>12</option>
+            <option>13</option>
+            <option>14</option>
+            <option>15</option>
+            <option>16</option>
+            <option>17</option>
+            <option>18</option>
+            <option>19</option>
+            <option>20</option>
+            <option>21</option>
+            <option>22</option>
+            <option>23</option>
+            <option>24</option>
+            <option>25</option>
+            <option>26</option>
+            <option>27</option>
+            <option>28</option>
+            <option>29</option>
+            <option>30</option>
+            <option>31</option>
+            <option>32</option>
+            <option>33</option>
+            <option>34</option>
+            <option>35</option>
+            <option>36</option>
+            <option>37</option>
+            <option>38</option>
+            <option>39</option>
+            <option>40</option>
+
+            <!-- Si el cementerio crece añadimos más sectores, pero por ahora dejamos así -->
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabla de bóvedas -->
+    <div class="card">
+      <div class="table-responsive my-2">
+        <table class="table table-hover mb-0">
+          <thead class="table-light">
+            <tr>
+              <th>Código</th>
+              <th>Localizar</th>
+              <th>Sector</th>
+              <th>Capacidad</th>
+              <th>Estado</th>
+              <th>Actualizado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let boveda of bovedasFiltradas">
+              <td>{{ boveda.codigo }}</td>
+              <td>{{ boveda.ubicacion }}</td>
+              <td>{{ boveda.sector }}</td>
+              <td>{{ boveda.capacidad }}</td>
+              <td>
+                <span [class]="getEstadoClass(boveda.estado)">
+                  {{ boveda.estado }}
+                </span>
+              </td>
+              <td>{{ boveda.actualizado }}</td>
+              <td>
+                <button class="btn btn-sm btn-outline-primary me-2">
+                  <i class="bi bi-pencil-square"></i> Editar
+                </button>
+                <button class="btn btn-sm btn-outline-danger">
+                  <i class="bi bi-trash"></i> Eliminar
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
-</div>
