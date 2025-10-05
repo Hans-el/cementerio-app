@@ -1,0 +1,65 @@
+<!-- este modal es para añadir una boveda, este debe ser utilizado para crear una nueva boveda en el sistema,
+  es decir, todos los campos de aqui deben estar definidos en la tabla bovedas de la abse de datos. Aunque algunos sean opcionales -->
+<div class="modal-header border-0 pb-0">
+    <h5 class="modal-title fw-semibold">
+        <i class="bi bi-search me-2"></i>Añadir Bóveda
+    </h5>
+    <button type="button" class="btn-close ms-auto" aria-label="Cerrar" (click)="activeModal.dismiss()"></button>
+</div>
+
+<div class="modal-body">
+    <div class="modal-footer mb-2 gap-2 justify-content-center">
+        <div class="mb-4 w-100 fw-semibold">
+
+            <form>
+                <div class="mb-3">
+                    <label class="form-label">Numeración o Código</label>
+                    <input type="text" class="form-control" [(ngModel)]="nuevaBoveda.codigo" name="codigo" required>
+                </div>
+                <!-- ajustar segun la base de datos que me de el señor
+    <div class="mb-3">
+      <label class="form-label">Ubicación</label>
+      <input type="text" class="form-control" [(ngModel)]="nuevaBoveda.ubicacion" name="ubicacion" required>
+    </div>
+    -->
+                <div class="mb-3"> <!-- le ponemos que solo acepten 10 digitos--> 
+                    <label class="form-label">Cédula Propietario</label>
+                    <input type="text" class="form-control" [(ngModel)]="nuevaBoveda.cedulaPropietario" name="cedulaPropietario" required maxlength="10">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Sector</label>
+                    <select class="form-select" [(ngModel)]="nuevaBoveda.sector" name="sector" required>
+                        <option *ngFor="let sector of sectores" [value]="sector">{{ sector }}</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Capacidad</label>
+                    <input type="number" class="form-control" [(ngModel)]="nuevaBoveda.capacidad" name="capacidad"
+                        min="1" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Estado</label>
+                    <select class="form-select" [(ngModel)]="nuevaBoveda.estado" name="estado" required>
+                        <option>Disponible</option>
+                        <option>Ocupada</option>
+                        <option>Mantenimiento</option>
+                        <option>Inactiva</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Observaciones</label>
+                    <input type="text" class="form-control" [(ngModel)]="nuevaBoveda.observaciones" name="observaciones" maxlength="150">
+                </div>
+                <!-- La fecha de actualización se puede poner automática al momento de guardar, pero la dejamos aquí por si acaso -->
+                <div class="mb-3">
+                    <label class="form-label">Fecha de Actualización</label>
+                    <input type="date" class="form-control" [(ngModel)]="nuevaBoveda.actualizado" name="actualizado" required>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-outline-danger fw-bold" (click)="activeModal.dismiss()">Cancelar</button>
+    <button type="button" class="btn btn-outline-success fw-bold " (click)="guardarNuevaBoveda()">Guardar</button>
+</div>

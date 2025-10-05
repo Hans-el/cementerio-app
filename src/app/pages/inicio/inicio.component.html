@@ -33,10 +33,10 @@
         <h4 class="text-secondary mb-0">{{ inactivas }}</h4>
       </div>
     </div>
-    <div class="col-md-2 d-flex justify-content-md-end mt-3 mt-md-0">
-      <button class="btn btn-success w-100 w-md-auto" (click)="editarBovedas()">
+    <div class="col-md-2 d-flex justify-content-md-end mt-3">
+      <button class="btn btn-outline-success fw-bold w-100 w-md-auto" (click)="editarBovedas()">
         <i class="bi bi-pencil-square nav-icon"></i>
-        <span class="nav-text ms-2 d-none d-sm-inline">Gestión de Bóvedas</span>
+        <span class="nav-text ms-2 d-none d-sm-inline">Gestionar Bóvedas</span>
       </button>
     </div>
 
@@ -44,11 +44,11 @@
     <div class="card mb-4 p-3">
       <div class="row g-3">
         <div class="col-md-6">
-          <input type="text" class="form-control" placeholder="Buscar por código, ubicación o sector"
+          <input type="text" class="form-control" placeholder="Buscar por numeración, código, cédula o sector"
             [(ngModel)]="filtros.busqueda" />
         </div>
         <div class="col-md-3">
-          <select class="form-select" [(ngModel)]="filtros.estado">
+          <select class="form-select fw-semibold" [(ngModel)]="filtros.estado">
             <option>Todos los estados</option>
             <option>Disponible</option>
             <option>Ocupada</option>
@@ -56,7 +56,7 @@
           </select>
         </div>
         <div class="col-md-3">
-          <select class="form-select" [(ngModel)]="filtros.sector">
+          <select class="form-select fw-semibold" [(ngModel)]="filtros.sector">
             <!-- Aquí están todos los sectores-->
             <option>Todos los sectores</option>
             <option>1</option>
@@ -112,7 +112,7 @@
         <table class="table table-hover mb-0">
           <thead class="table-light">
             <tr>
-              <th>Código</th>
+              <th>Numeración [Código]</th>
               <th>Localizar</th>
               <th>Sector</th>
               <th>Capacidad</th>
@@ -122,7 +122,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let boveda of bovedasFiltradas">
+            <tr *ngFor="let boveda of bovedasFiltradas"> <!-- Recorremos las bóvedas filtradas -->
               <td>{{ boveda.codigo }}</td>
               <td>{{ boveda.ubicacion }}</td>
               <td>{{ boveda.sector }}</td>
@@ -134,10 +134,10 @@
               </td>
               <td>{{ boveda.actualizado }}</td>
               <td>
-                <button class="btn btn-sm btn-outline-primary me-2">
+                <button class="btn btn-sm btn-outline-primary me-2 fw-semibold" (click)="abrirModalEditar(boveda)">
                   <i class="bi bi-pencil-square"></i> Editar
                 </button>
-                <button class="btn btn-sm btn-outline-danger">
+                <button class="btn btn-sm btn-outline-danger me-2 fw-semibold" (click)="eliminarBoveda(boveda)">
                   <i class="bi bi-trash"></i> Eliminar
                 </button>
               </td>

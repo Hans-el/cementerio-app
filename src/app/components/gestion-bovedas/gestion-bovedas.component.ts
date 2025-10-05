@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NichosService } from '../../services/nicho.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { NichoSeleccionadoService } from '../../services/nicho-seleccionado.service';
 import { Nicho } from '../../models/nicho.model'
+import { AnadirBovedaComponent } from '../anadir-boveda/anadir-boveda.component';
 
 @Component({
   selector: 'app-gestion-bovedas',
@@ -24,6 +25,7 @@ export class GestionBovedasComponent {
 
   constructor(
     public activeModal: NgbActiveModal,
+    private modalService: NgbModal,
     private nichosService: NichosService,
     private nichoSeleccionadoService: NichoSeleccionadoService
   ) { }
@@ -59,8 +61,15 @@ export class GestionBovedasComponent {
       }
     });
   }
+  //Abrimos el modal de añadir bóvedas
+  abrirModalAnadir(): void {
+    const modalRef = this.modalService.open(AnadirBovedaComponent);
+    modalRef.componentInstance.guardar.subscribe((nuevaBoveda: any) => {
+      // Aquí puedes manejar la lógica para añadir la bóveda, por ejemplo:
+      console.log('Nueva bóveda añadida:', nuevaBoveda);
+      // Si tienes un servicio para guardar en la base de datos, llámalo aquí.
+    });
+  }
 
-  Anadir(): void { }
 
-  Editar(): void { }
 }
