@@ -11,6 +11,6 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideHttpClient(),
     { provide: NgbModalConfig, useValue: { animation: true, backdrop: 'static' } },
-
-  ],
+  // Inyectar un interceptor de http que añada el token de autenticación a las solicitudes salientes
+  ]
 };

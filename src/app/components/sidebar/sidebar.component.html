@@ -76,22 +76,26 @@
   </div>
   <br>
 
-  <!-- Footer del sidebar -->
-  <div class="sidebar-footer" ngbDropdown>
-    <div class="user-section d-flex align-items-center p-4" ngbDropdownToggle id="userDropdown">
-      <div class="user-avatar me-2">
-        <i class="bi bi-person"></i>
+    <!-- Footer del sidebar -->
+    <div class="sidebar-footer" ngbDropdown>
+      <div class="user-section d-flex align-items-center p-3 mx-2" ngbDropdownToggle id="userDropdown">
+        <div class="user-avatar me-2">
+          <i class="bi bi-person"></i>
+        </div>
+        <div class="user-info"> 
+          <p class="user-name mb-0">Mi perfil</p>
+          <!-- Aqui obtendremos el rol actual de usuario para mostrarlo en el sidebar--> 
+          <p class="user-role mb-0">Hola, {{ userRole }} </p> 
+        </div>
       </div>
-      <div class="user-info"> 
-        <p class="user-name mb-0">Mi perfil</p>
-        <!-- Aqui obtendremos el rol actual de usuario para mostrarlo en el sidebar-->
-        <p class="user-role mb-0">Hola, {{ userRole }} </p> <!-- Implementar el nombre de usuario despues.{{ userName }}  -->
+      <!-- Inicio del menú desplegable -->
+      <div class="dropdown-menu" aria-labelledby="userDropdown" ngbDropdownMenu>
+        <a class="dropdown-item  bi-gear-fill fw-semibold" href="/perfil"> Configuración</a>
+        <a class="dropdown-item  bi-pencil-square fw-semibold" href="/"> Editar perfil</a>
+        <a class="dropdown-item  bi-lock fw-semibold" href="/"> Cambiar contraseña</a>
+        <div class="dropdown-divider"></div>
+        <a class="dropdown-item bi- fw-bold" (click)="logout()"> Cerrar Sesión</a>
       </div>
-    </div>
-    <div class="dropdown-menu" aria-labelledby="userDropdown" ngbDropdownMenu>
-      <a class="dropdown-item  bi-gear-fill" href="/perfil"> Configuración</a>
-      <div class="dropdown-divider"></div>
-      <a class="dropdown-item bi-arrow-right" (click)="logout()"> Cerrar Sesión</a>
+      <!-- Fin del menu desplegable -->
     </div>
   </div>
-</div>

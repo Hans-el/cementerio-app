@@ -79,9 +79,26 @@ Con esto logramos que sea más fácil de usar en pantallas pequeñas */
 
 }
 
+/* Estilo para el área del usuario (hover y diseño) */
 .user-section {
-  cursor: pointer;
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  transition: background-color 0.2s;
+  margin: 0.5rem 0;
+  
 }
+
+.user-section:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+/* Icono de flecha para indicar que es un dropdown */
+.user-section::after {
+  content: '\F282'; /* Icono de chevrón down de Bootstrap Icons (Unicode) */
+  font-family: "bootstrap-icons" !important;
+  margin-left: auto;
+  font-size: 0.8rem;
+}
+
 
 .user-avatar i {
   font-size: 1.5rem;
@@ -97,38 +114,24 @@ Con esto logramos que sea más fácil de usar en pantallas pequeñas */
   color: rgba(255, 255, 255, 0.7);
 }
 
+/* Estilo del menú desplegable */
 .dropdown-menu {
+  background-color: #0c5224; /* Mismo color que el sidebar */
+  border: none;
+  border-radius: 6px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 0.25rem 0;
+  min-width: 200px;
   position: absolute;
   left: 1rem;
   right: 1rem;
-  background-color: #343a40;
-  border: none;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-  z-index: 1050;
-  /* Asegura que el dropdown aparezca sobre otros elementos */
   transform: translate3d(0, 0, 0);
-  /* Ayuda a que el dropdown se muestre correctamente */
+  z-index: 1050;
+  overflow: hidden;
 }
 
-.dropdown-item {
-  color: #adb5bd;
-  padding: 0.5rem 1rem;
-}
 
-.dropdown-item:hover {
-  background-color: #495057;
-  color: white;
-}
 
-.dropdown-menu::before {
-  content: '';
-  position: absolute;
-  top: -10px;
-  left: 20px;
-  border-width: 0 10px 10px 10px;
-  border-style: solid;
-  border-color: transparent transparent #343a40 transparent;
-}
 
 .btn-toggle-sidebar {
   z-index: 1050;
@@ -140,4 +143,77 @@ Con esto logramos que sea más fácil de usar en pantallas pequeñas */
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+/* ======== FOOTER / DROPUP MINIMALISTA ======== */
+.sidebar-footer {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0.5rem 0;
+}
+
+/* Área del usuario (botón toggle del menú) */
+.user-section {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.user-section:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+/* Ícono de perfil */
+.user-avatar i {
+  font-size: 1.5rem;
+  margin-right: 0.75rem;
+}
+
+/* Texto del usuario */
+.user-name {
+  margin: 0;
+  font-weight: 500;
+}
+
+.user-role {
+  margin: 0;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Icono flecha hacia arriba (dropup) */
+.user-section::after {
+  content: '\F286'; /* Bootstrap Icon chevron-up */
+  font-family: "bootstrap-icons";
+  margin-left: auto;
+  font-size: 0.8rem;
+}
+
+/* Menú desplegable (dropup) */
+.dropdown-menu {
+  background-color: #2d5a3d; /* mismo tono que el sidebar */
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  padding: 0.25rem 0;
+  min-width: 180px;
+}
+
+/* Items del menú */
+.dropdown-item {
+  color: rgba(255, 255, 255, 0.9);
+  padding: 0.5rem 1.25rem;
+  font-size: 0.9rem;
+  transition: background-color 0.2s ease;
+}
+
+.dropdown-item:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+/* Separador del menú */
+.dropdown-divider {
+  border-color: rgba(255, 255, 255, 0.1);
 }

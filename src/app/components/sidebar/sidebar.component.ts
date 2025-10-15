@@ -22,6 +22,8 @@ export class SidebarComponent implements OnInit {
   userName: string = ''; // Nombre del usuario para mostrar en el sidebar
   isCollapsed = false; // Estado del sidebar
   isMobile = false; // Estado para dispositivos móviles
+  hover: boolean = false;
+
 
 
   constructor(
