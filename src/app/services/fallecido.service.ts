@@ -1,3 +1,4 @@
+// Este está siendo usado por el componente difuntos en el sidebar. 
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';

@@ -22,9 +22,10 @@
       <input type="text" class="form-control" [(ngModel)]="nuevaBoveda.ubicacion" name="ubicacion" required>
     </div>
     -->
-                <div class="mb-3"> <!-- le ponemos que solo acepten 10 digitos--> 
+                <div class="mb-3"> <!-- le ponemos que solo acepten 10 digitos-->
                     <label class="form-label">Cédula Propietario</label>
-                    <input type="text" class="form-control" [(ngModel)]="nuevaBoveda.cedulaPropietario" name="cedulaPropietario" required maxlength="10">
+                    <input type="text" class="form-control" [(ngModel)]="nuevaBoveda.cedulaPropietario"
+                        name="cedulaPropietario" required maxlength="10">
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Sector</label>
@@ -48,12 +49,14 @@
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Observaciones</label>
-                    <input type="text" class="form-control" [(ngModel)]="nuevaBoveda.observaciones" name="observaciones" maxlength="150">
+                    <input type="text" class="form-control" [(ngModel)]="nuevaBoveda.observaciones" name="observaciones"
+                        maxlength="150">
                 </div>
                 <!-- La fecha de actualización se puede poner automática al momento de guardar, pero la dejamos aquí por si acaso -->
                 <div class="mb-3">
                     <label class="form-label">Fecha de Actualización</label>
-                    <input type="date" class="form-control" [(ngModel)]="nuevaBoveda.actualizado" name="actualizado" required>
+                    <input type="date" class="form-control" [(ngModel)]="nuevaBoveda.actualizado" name="actualizado"
+                        required>
                 </div>
             </form>
         </div>

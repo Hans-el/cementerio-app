@@ -1,0 +1,79 @@
+<!-- reusamos codigo de bovedas para lograr uniformidad en las interfaces-->
+<div class="container my-4 mx-auto"> <!-- lo mismo que el inicio de bovedas-->
+  <!-- Badges de resumen -->
+  <div class="row g-3 mb-4 align-items-center">
+    <div class="col-6 col-sm-4 col-md-2">
+      <div class="card text-center p-2 h-100">
+        <h6 class="mb-1">Total</h6>
+        <h4 class="text-success mb-0">{{ totalDifuntos }}</h4>
+      </div>
+    </div>
+    <div class="col-md-2 d-flex justify-content-md-end mt-3">
+      <button class="btn btn-outline-success fw-bold w-100 w-md-auto" (click)="abrirModalAnadirDifunto()">
+        <i class="bi bi-pencil-square nav-icon"></i>
+        <span class="nav-text ms-2 d-none d-sm-inline">Gestionar Difuntos</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Filtros -->
+  <div class="card mb-4 p-3">
+    <div class="row g-3">
+      <div class="col-md-6">
+        <input type="text" class="form-control" placeholder="Buscar por nombre o cédula"
+          [(ngModel)]="filtros.busqueda" />
+      </div>
+      <div class="col-md-3">
+        <select class="form-select fw-semibold" [(ngModel)]="filtros.genero">
+          <option>Todos</option>
+          <option>Masculino</option>
+          <option>Femenino</option>
+          <option>Otro</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabla de difuntos -->
+  <div class="card">
+    <div class="table-responsive my-2">
+      <table class="table table-hover mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>ID</th>
+            <th>Nombre Completo</th>
+            <th>Cédula</th>
+            <th>Género</th>
+            <th>Fecha Nacimiento</th>
+            <th>Fecha Fallecimiento</th>
+            <th>Causa</th>
+            <th>Observaciones</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- usamos ng-container para agrupar los elementos -->
+          <tr *ngFor="let difunto of difuntosFiltrados">
+            <td>{{ difunto.id }}</td>
+            <td>{{ difunto.nombreCompleto }}</td>
+            <td>{{ difunto.cedula }}</td>
+            <td>{{ difunto.genero }}</td>
+            <td>{{ difunto.fechaNacimiento }}</td>
+            <td>{{ difunto.fechaFallecimiento }}</td>
+            <td>{{ difunto.causaFallecimiento }}</td>
+            <td>{{ difunto.observaciones }}</td>
+            <td>
+              <button class="btn btn-sm btn-outline-primary me-2 fw-semibold"
+                (click)="abrirModalEditarDifunto(difunto)">
+                <i class="bi bi-pencil-square"></i> Editar
+              </button>
+              <button class="btn btn-sm btn-outline-danger fw-semibold">
+                <i class="bi bi-trash"></i> Eliminar
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

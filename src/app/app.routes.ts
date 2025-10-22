@@ -8,6 +8,7 @@ import { authGuard } from './guards/auth.guard';
 import { MapaBovedasComponent } from './pages/mapa-bovedas/mapa-bovedas.component';
 import { LayoutComponent } from './components/layout/layout.component';
 import { adminGuard } from './guards/admin.guard';
+import { InicioDifuntosComponent } from './pages/inicio-difuntos/inicio-difuntos.component';
 
 
 export const routes: Routes = [
@@ -19,8 +20,9 @@ export const routes: Routes = [
         path: '', component: LayoutComponent, children: [
             { path: 'mapa', component: MapaBovedasComponent }, 
             { path: 'inicio', component: InicioComponent , /*canActivate: [adminGuard]*/ }, //Solo los admins pueden ver el inicio, ya que es la gestion de bovedas 
-            { path: 'contacto', component: ContactoComponent },
-            { path: 'perfil', component: PerfilComponent }, //no puede acceder si no está autenticado, es decir, no podrá editar sus datos ya que no está logueado
+            { path: 'difuntos', component: InicioDifuntosComponent }, // componente para la gestion de difuntos
+            { path: 'contacto', component: ContactoComponent }, // para contactarse con la administracion del cementerio
+            { path: 'perfil', component: PerfilComponent }, //no puede acceder si no está autenticado, es decir, no podrá editar sus datos ya que no está logueado (si es que quiero usar el authGuard)
 
         ]
     }, 

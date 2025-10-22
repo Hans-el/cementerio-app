@@ -61,8 +61,14 @@
       <ul class="nav-list list-unstyled mb-0">
         <li class="nav-item">
           <a routerLink="/inicio" routerLinkActive="active" class="nav-link d-flex align-items-center px-3 py-2">
-            <i class="bi bi-gear-fill nav-icon"></i>
-            <span class="nav-text ms-3">Administración</span>
+            <i class="bi bi-building-fill-gear nav-icon"></i>
+            <span class="nav-text ms-3">Bóvedas / Nichos</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="/difuntos" routerLinkActive="active" class="nav-link d-flex align-items-center px-3 py-2">
+            <i class="bi bi-person-vcard nav-icon"></i>
+            <span class="nav-text ms-3">Difuntos</span>
           </a>
         </li>
         <li class="nav-item">
@@ -91,10 +97,10 @@
       <!-- Inicio del menú desplegable -->
       <div class="dropdown-menu" aria-labelledby="userDropdown" ngbDropdownMenu>
         <a class="dropdown-item  bi-gear-fill fw-semibold" href="/perfil"> Configuración</a>
-        <a class="dropdown-item  bi-pencil-square fw-semibold" href="/"> Editar perfil</a>
+        <a class="dropdown-item  bi-person-gear fw-semibold" href="/"> Editar perfil</a>
         <a class="dropdown-item  bi-lock fw-semibold" href="/"> Cambiar contraseña</a>
         <div class="dropdown-divider"></div>
-        <a class="dropdown-item bi- fw-bold" (click)="logout()"> Cerrar Sesión</a>
+        <a class="dropdown-item bi-arrow-bar-right fw-bold" (click)="logout()"> Cerrar Sesión</a>
       </div>
       <!-- Fin del menu desplegable -->
     </div>
