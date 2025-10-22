@@ -10,7 +10,7 @@ import { LayoutComponent } from './components/layout/layout.component';
 import { adminGuard } from './guards/admin.guard';
 import { InicioDifuntosComponent } from './pages/inicio-difuntos/inicio-difuntos.component';
 
-
+//rutas de la aplicación
 export const routes: Routes = [
     { path: '', redirectTo: '/login', pathMatch: 'full' },
     { path: 'login', component: LoginComponent },
@@ -19,14 +19,10 @@ export const routes: Routes = [
         //Definimos el layout, que es el sidebar, y dentro van las rutas hijas, es decir, todas las rutas que van a tener el sidebar.
         path: '', component: LayoutComponent, children: [
             { path: 'mapa', component: MapaBovedasComponent }, 
-            { path: 'inicio', component: InicioComponent , /*canActivate: [adminGuard]*/ }, //Solo los admins pueden ver el inicio, ya que es la gestion de bovedas 
-            { path: 'difuntos', component: InicioDifuntosComponent }, // componente para la gestion de difuntos
+            { path: 'inicio', component: InicioComponent , canActivate: [adminGuard]}, //Gestión de bovedas. Uso guardia de admin para que solo el admin pueda acceder.
+            { path: 'difuntos', component: InicioDifuntosComponent,  canActivate: [adminGuard] }, //Gestión de difuntos. Se usa también la guardia de admin.
             { path: 'contacto', component: ContactoComponent }, // para contactarse con la administracion del cementerio
             { path: 'perfil', component: PerfilComponent }, //no puede acceder si no está autenticado, es decir, no podrá editar sus datos ya que no está logueado (si es que quiero usar el authGuard)
-
         ]
     }, 
-
-
-
 ];

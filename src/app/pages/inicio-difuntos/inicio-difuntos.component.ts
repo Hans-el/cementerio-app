@@ -4,6 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Difunto } from '../../models/difunto.model';
 import { GestionDifuntosComponent } from '../../components/gestion-difuntos/gestion-difuntos.component';
+import { EditarDifuntoComponent } from '../../components/editar-difunto/editar-difunto.component';
+import { FallecidoService } from '../../services/fallecido.service';
 
 @Component({
   selector: 'app-inicio-difuntos',
@@ -24,7 +26,12 @@ export class InicioDifuntosComponent {
     genero: 'Todos',
   };
 
-  constructor(private modalService: NgbModal) { }
+  constructor(private modalService: NgbModal, private fallecidoService: FallecidoService
+  ) { }
+
+
+  //cargar difuntos desde el servicio, es decir, desde el backend
+
 
   // Filtrar difuntos según los filtros seleccionados
   get difuntosFiltrados(): Difunto[] {
@@ -53,7 +60,7 @@ export class InicioDifuntosComponent {
 
   // Función para abrir el modal de editar difunto
   abrirModalEditarDifunto(difunto: Difunto) {
-    const modalRef = this.modalService.open(GestionDifuntosComponent);
+    const modalRef = this.modalService.open(EditarDifuntoComponent); //abrimos el modal de editar difunto, como en el componente de editar bovedas.
     modalRef.componentInstance.difunto = { ...difunto }; // Pasamos una copia del difunto a editar
     modalRef.componentInstance.guardar.subscribe((difuntoEditado: Difunto) => { // Actualizamos el difunto en la lista
       const index = this.difuntos.findIndex(d => d.id === difuntoEditado.id); // Buscamos el índice del difunto editado

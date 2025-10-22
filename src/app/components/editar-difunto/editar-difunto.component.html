@@ -1,0 +1,133 @@
+<!-- Modal para editar un difunto existente -->
+<div class="modal-header border-0 pb-0">
+  <h5 class="modal-title fw-semibold bi bi-pencil-square my-1"> Editar Difunto</h5>
+  <button type="button" class="btn-close" aria-label="Cerrar" (click)="activeModal.dismiss()"></button>
+</div>
+
+<div class="modal-body">
+  <div class="modal-body justify-content-center w-100 p-2">
+    <form>
+      <!-- ID del difunto (solo lectura) -->
+      <div class="mb-2">
+        <label class="form-label fw-semibold">ID</label>
+        <input
+          type="text"
+          class="form-control text-muted"
+          [(ngModel)]="difunto.id"
+          name="id"
+          readonly
+        />
+      </div>
+
+      <!-- Nombre completo -->
+      <div class="mb-2">
+        <label class="form-label fw-semibold">Nombre Completo</label>
+        <input
+          type="text"
+          class="form-control"
+          [(ngModel)]="difunto.nombreCompleto"
+          name="nombreCompleto"
+          placeholder="Ej: Juan Pérez"
+        />
+      </div>
+
+      <!-- Cédula -->
+      <div class="mb-2">
+        <label class="form-label fw-semibold">Cédula</label>
+        <input
+          type="text"
+          class="form-control"
+          [(ngModel)]="difunto.cedula"
+          name="cedula"
+          placeholder="Ej: 1234567890"
+          maxlength="10"
+        />
+      </div>
+
+      <!-- Género -->
+      <div class="mb-2">
+        <label class="form-label fw-semibold">Género</label>
+        <select class="form-select" [(ngModel)]="difunto.genero" name="genero">
+          <option value="">Seleccione...</option>
+          <option value="Masculino">Masculino</option>
+          <option value="Femenino">Femenino</option>
+        </select>
+      </div>
+
+      <!-- Fecha de nacimiento -->
+      <div class="mb-2">
+        <label class="form-label fw-semibold">Fecha de Nacimiento</label>
+        <input
+          type="date"
+          class="form-control"
+          [(ngModel)]="difunto.fechaNacimiento"
+          name="fechaNacimiento"
+        />
+      </div>
+
+      <!-- Fecha de fallecimiento -->
+      <div class="mb-2">
+        <label class="form-label fw-semibold">Fecha de Fallecimiento</label>
+        <input
+          type="date"
+          class="form-control"
+          [(ngModel)]="difunto.fechaFallecimiento"
+          name="fechaFallecimiento"
+        />
+      </div>
+
+      <!-- Causa -->
+      <div class="mb-2">
+        <label class="form-label fw-semibold">Causa del Fallecimiento</label>
+        <input
+          type="text"
+          class="form-control"
+          [(ngModel)]="difunto.causa"
+          name="causa"
+          placeholder="Ej: Causa natural"
+        />
+      </div>
+
+      <!-- Observaciones -->
+      <div class="mb-2">
+        <label class="form-label fw-semibold">Observaciones</label>
+        <textarea
+          class="form-control"
+          [(ngModel)]="difunto.observaciones"
+          name="observaciones"
+          rows="2"
+          placeholder="Notas adicionales..."
+        ></textarea>
+      </div>
+
+      <!-- Asignar bóveda -->
+      <div class="mb-2">
+        <label class="form-label fw-semibold">Asignar Bóveda</label>
+        <select class="form-select" [(ngModel)]="difunto.bovedaId" name="bovedaId">
+          <option value="">Sin asignar</option>
+          <option *ngFor="let boveda of listaBovedas" [value]="boveda.id">
+            {{ boveda.codigo }} - {{ boveda.sector }}
+          </option>
+        </select>
+        <small class="text-muted">Opcional. Puede dejarse vacío.</small>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="modal-footer">
+  <button
+    type="button"
+    class="btn btn-outline-danger fw-bold"
+    (click)="activeModal.dismiss()"
+  >
+    Cancelar
+  </button>
+  <button
+    type="button"
+    class="btn btn-outline-success fw-bold"
+    (click)="guardarCambios()"
+  >
+    Guardar cambios
+  </button>
+</div>
