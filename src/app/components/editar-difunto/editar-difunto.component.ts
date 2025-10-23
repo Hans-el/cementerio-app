@@ -29,7 +29,6 @@ export class EditarDifuntoComponent {
 
   cargarBovedas(): void {
     this.cargandoBovedas = true;
-
     this.nichoService.getNichos().subscribe({
       next: (data) => {
         this.listaBovedas = data;

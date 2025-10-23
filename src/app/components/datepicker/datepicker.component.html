@@ -1,0 +1,28 @@
+<!-- Plantilla Datepicker sacada de la documentacion oficial de ng-bootstrap -->
+<p>
+  Este datepicker utiliza una plantilla de pie de página que se presenta dentro del datepicker. Los botones de hoy y cerrar se utilizan como un
+  ejemplo.
+</p>
+
+<form class="row row-cols-sm-auto">
+	<div class="col-12">
+		<div class="input-group">
+			<input
+				class="form-control"
+				placeholder="yyyy-mm-dd"
+				name="dp"
+				[(ngModel)]="model"
+				ngbDatepicker
+				[footerTemplate]="footerTemplate"
+				#d="ngbDatepicker"
+			/>
+			<button class="btn btn-outline-secondary bi bi-calendar3" (click)="d.toggle()" type="button"></button>
+		</div>
+	</div>
+</form>
+
+<ng-template #footerTemplate>
+	<hr class="my-0" />
+	<button class="btn btn-primary btn-sm m-2 float-start" (click)="model = today; d.close()">Today</button>
+	<button class="btn btn-secondary btn-sm m-2 float-end" (click)="d.close()">Close</button>
+</ng-template>

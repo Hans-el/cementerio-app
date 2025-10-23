@@ -1,16 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { NgbAlertModule } from '@ng-bootstrap/ng-bootstrap';
 import Swal from 'sweetalert2';
 import { AuthService } from '../../services/auth.service';
 import moment from 'moment';
+import { DatepickerComponent } from '../../components/datepicker/datepicker.component'; //Para el componente de datepicker que creamos 
 
 @Component({
   selector: 'app-registro',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, NgbAlertModule, RouterModule],
+  imports: [ReactiveFormsModule, FormsModule, CommonModule, NgbAlertModule, RouterModule, DatepickerComponent],
   templateUrl: './registro.component.html',
   styleUrls: ['./registro.component.css']
 })
@@ -18,6 +19,7 @@ export class RegistroComponent implements OnInit {
   registroForm: FormGroup;
   showPassword: boolean = false;
   errorMessage: string = '';
+  model: any; // Para el datepicker
 
   constructor(
     private fb: FormBuilder,
@@ -41,7 +43,7 @@ export class RegistroComponent implements OnInit {
     this.showPassword = !this.showPassword;
   }
 
-  // función que me la proporcionó mi pana Anderson
+  // Función de validar cédula matemáticamente. Me la proporcionó el compañero Anderson.
   public validar_cedula(cedula: string) {
     // Créditos: Victor Diaz De La Gasca.
     // Autor: Adrián Egüez
