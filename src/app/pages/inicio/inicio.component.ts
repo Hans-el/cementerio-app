@@ -1,142 +1,206 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgbDropdownModule, NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
-import { GestionBovedasComponent } from '../../components/gestion-bovedas/gestion-bovedas.component';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { EditarBovedasComponent } from '../../components/editar-bovedas/editar-bovedas.component';
 import Swal from 'sweetalert2';
 
-interface Boveda {
-  codigo: string;
-  ubicacion: string;
-  sector: string;
-  capacidad: number;
-  estado: 'Disponible' | 'Ocupada' | 'Mantenimiento' | 'Inactiva';
-  actualizado: string;
-}
+import { Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+
+import { OcupacionesService } from '../../services/ocupaciones.service';
+import { SectoresService } from '../../services/sectores.service';
+import { ManzanasService } from '../../services/manzanas.service';
 
 @Component({
-  selector: 'app-gestion-bovedas',
+  selector: 'app-inicio',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgbDropdownModule, NgbPaginationModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    NgbDropdownModule,
+    NgbPaginationModule
+  ],
   templateUrl: './inicio.component.html',
   styleUrls: ['./inicio.component.scss']
 })
-export class InicioComponent {
-  constructor(private modalService: NgbModal) {}
+export class InicioComponent implements OnInit {
 
-  bovedas: Boveda[] = [
-    { codigo: 'B-01-A', ubicacion: 'Sector A / Fila 1', sector: '1', capacidad: 2, estado: 'Disponible', actualizado: '2025-08-01' },
-    { codigo: 'B-01-B', ubicacion: 'Sector A / Fila 1', sector: '1', capacidad: 2, estado: 'Ocupada', actualizado: '2025-08-15' },
-    { codigo: 'B-02-A', ubicacion: 'Sector B / Fila 2', sector: '2', capacidad: 1, estado: 'Mantenimiento', actualizado: '2025-07-20' },
-    { codigo: 'B-03-A', ubicacion: 'Sector B / Fila 3', sector: '2', capacidad: 1, estado: 'Disponible', actualizado: '2025-08-28' },
-    { codigo: 'B-04-A', ubicacion: 'Sector C / Fila 1', sector: '3', capacidad: 3, estado: 'Disponible', actualizado: '2025-08-01' },
-    { codigo: 'B-04-B', ubicacion: 'Sector C / Fila 1', sector: '3', capacidad: 3, estado: 'Ocupada', actualizado: '2025-08-15' },
-    { codigo: 'B-05-A', ubicacion: 'Sector D / Fila 2', sector: '4', capacidad: 1, estado: 'Mantenimiento', actualizado: '2025-07-20' },
-    { codigo: 'B-06-A', ubicacion: 'Sector D / Fila 3', sector: '4', capacidad: 1, estado: 'Disponible', actualizado: '2025-08-28' },
-    { codigo: 'B-07-A', ubicacion: 'Sector E / Fila 1', sector: '5', capacidad: 2, estado: 'Disponible', actualizado: '2025-08-01' },
-    { codigo: 'B-07-B', ubicacion: 'Sector E / Fila 1', sector: '5', capacidad: 2, estado: 'Ocupada', actualizado: '2025-08-15' },
-    { codigo: 'B-08-A', ubicacion: 'Sector F / Fila 2', sector: '6', capacidad: 1, estado: 'Mantenimiento', actualizado: '2025-07-20' },
-    { codigo: 'B-09-A', ubicacion: 'Sector F / Fila 3', sector: '6', capacidad: 1, estado: 'Disponible', actualizado: '2025-08-28' },
-    { codigo: 'B-10-A', ubicacion: 'Sector G / Fila 1', sector: '7', capacidad: 2, estado: 'Disponible', actualizado: '2025-08-01' },
-    { codigo: 'B-10-B', ubicacion: 'Sector G / Fila 1', sector: '7', capacidad: 2, estado: 'Ocupada', actualizado: '2025-08-15' },
-    { codigo: 'B-11-A', ubicacion: 'Sector H / Fila 2', sector: '8', capacidad: 1, estado: 'Mantenimiento', actualizado: '2025-07-20' },
-    { codigo: 'B-12-A', ubicacion: 'Sector H / Fila 3', sector: '8', capacidad: 1, estado: 'Disponible', actualizado: '2025-08-28' },
-    { codigo: 'B-13-A', ubicacion: 'Sector I / Fila 1', sector: '9', capacidad: 2, estado: 'Disponible', actualizado: '2025-08-01' },
-    { codigo: 'B-13-B', ubicacion: 'Sector I / Fila 1', sector: '9', capacidad: 2, estado: 'Ocupada', actualizado: '2025-08-15' },
-    { codigo: 'B-14-A', ubicacion: 'Sector J / Fila 2', sector: '10', capacidad: 1, estado: 'Mantenimiento', actualizado: '2025-07-20' },
-    { codigo: 'B-15-A', ubicacion: 'Sector J / Fila 3', sector: '10', capacidad: 1, estado: 'Disponible', actualizado: '2025-08-28' },
-    { codigo: 'B-16-A', ubicacion: 'Sector K / Fila 1', sector: '11', capacidad: 2, estado: 'Disponible', actualizado: '2025-08-01' },
-    { codigo: 'B-16-B', ubicacion: 'Sector K / Fila 1', sector: '11', capacidad: 2, estado: 'Ocupada', actualizado: '2025-08-15' },
-  ];
+  // ===============================
+  // DATA
+  // ===============================
+  ocupaciones: any[] = [];
+  sectores: any[] = [];
+  manzanas: any[] = [];
 
+  loading = false;
+
+  // ===============================
+  // FILTROS
+  // ===============================
   filtros = {
-    estado: 'Todos los estados',
-    sector: 'Todos los sectores',
     busqueda: '',
+    sector: '',
+    manzana: ''
   };
 
-  // Contadores para los badges
-  get totalBovedas(): number {
-    return this.bovedas.length;
+  // ===============================
+  // AUTOCOMPLETE
+  // ===============================
+  busqueda$ = new Subject<string>();
+  sugerencias: any[] = [];
+  mostrarSugerencias = false;
+
+  // ===============================
+  // PAGINACIÓN
+  // ===============================
+  page = 1;
+  limit = 30;
+
+  constructor(
+    private ocupacionesService: OcupacionesService,
+    private sectoresService: SectoresService,
+    private manzanasService: ManzanasService
+  ) { }
+
+  // ===============================
+  // INIT
+  // ===============================
+  ngOnInit(): void {
+    this.cargarSectores(); // para cargar los sectores al iniciar, ya está hecho
+    this.cargarOcupaciones();
+
+    this.busqueda$
+      .pipe(
+        debounceTime(400),
+        distinctUntilChanged()
+      )
+      .subscribe(valor => {
+        if (valor.length < 2) {
+          this.sugerencias = [];
+          this.mostrarSugerencias = false;
+          return;
+        }
+
+        this.ocupacionesService.autocomplete(valor)
+          .subscribe(data => {
+            this.sugerencias = data;
+            this.mostrarSugerencias = true;
+          });
+      });
   }
 
-  get disponibles(): number {
-    return this.bovedas.filter(b => b.estado === 'Disponible').length;
-  }
 
-  get ocupadas(): number {
-    return this.bovedas.filter(b => b.estado === 'Ocupada').length;
-  }
-
-  get mantenimiento(): number {
-    return this.bovedas.filter(b => b.estado === 'Mantenimiento').length;
-  }
-
-  get inactivas(): number {
-    return this.bovedas.filter(b => b.estado === 'Inactiva').length;
-  }
-
-  editarBovedas() {
-    this.modalService.open(GestionBovedasComponent, { centered: true, size: 'md' });
-  }
-
-  
-  // Filtrar bóvedas según los filtros seleccionados
-  get bovedasFiltradas(): Boveda[] {
-    return this.bovedas.filter(boveda => {
-      const coincideEstado = this.filtros.estado === 'Todos los estados' || boveda.estado === this.filtros.estado;
-      const coincideSector = this.filtros.sector === 'Todos los sectores' || boveda.sector === this.filtros.sector;
-      const coincideBusqueda =
-        boveda.codigo.toLowerCase().includes(this.filtros.busqueda.toLowerCase()) ||
-        boveda.ubicacion.toLowerCase().includes(this.filtros.busqueda.toLowerCase()) ||
-        boveda.sector.toLowerCase().includes(this.filtros.busqueda.toLowerCase());
-      return coincideEstado && coincideSector && coincideBusqueda;
-    });
-  }
-
-  // Obtener clase CSS según el estado
-  getEstadoClass(estado: string): string {
-    switch (estado) {
-      case 'Disponible': return 'badge bg-success';
-      case 'Ocupada': return 'badge bg-danger';
-      case 'Mantenimiento': return 'badge bg-warning text-dark';
-      case 'Inactiva': return 'badge bg-secondary';
-      default: return 'badge bg-light text-dark';
-    }
-  }
-
-  // Función para abrir el modal de edición
-  abrirModalEditar(boveda: any) {
-    const modalRef = this.modalService.open(EditarBovedasComponent);
-    modalRef.componentInstance.boveda = { ...boveda };
-
-    modalRef.componentInstance.guardar.subscribe((bovedaEditada: any) => {
-      const index = this.bovedas.findIndex(b => b.codigo === bovedaEditada.codigo);
-      if (index !== -1) {
-        this.bovedas[index] = bovedaEditada;
+  // Carga los sectores desde el servicio SectoresService y los asigna a la propiedad 'sectores'.
+  // ya está hecho
+  cargarSectores() {
+    this.sectoresService.obtenerSectores().subscribe({
+      next: (data) => {
+        console.log('Sectores cargados:', data);
+        this.sectores = data;
+      },
+      error: (err) => {
+        console.error('Error cargando sectores', err);
       }
     });
   }
-// usamos las alertas de swal para que se vea mejor al momento de eliminar
-  eliminarBoveda(boveda: any) {
+
+  // Carga las manzanas desde el servicio ManzanasService y los asigna a la propiedad 'manzanas'.
+  // no está hecho aun del todo (pendiente de implementar el servicio)
+  cargarManzanas(idSector: number): void {
+    (this.manzanasService as any).getManzanasBySector(idSector).subscribe({
+      next: (data: any) => this.manzanas = data,
+      error: () => Swal.fire('Error', 'No se pudieron cargar las manzanas', 'error')
+    });
+  }
+
+  cargarOcupaciones(): void {
+    this.loading = true;
+
+    this.ocupacionesService.getOcupacionesActivas(this.page)
+      .subscribe({
+        next: data => {
+          this.ocupaciones = data;
+          this.loading = false;
+        },
+        error: () => {
+          this.loading = false;
+          Swal.fire('Error', 'No se pudieron cargar las ocupaciones', 'error');
+        }
+      });
+  }
+
+  // ===============================
+  // FILTROS
+  // ===============================
+  buscar(): void {
+    this.loading = true;
+
+    this.ocupacionesService.buscarOcupaciones({
+      busqueda: this.filtros.busqueda,
+      sector: this.filtros.sector,
+      manzana: this.filtros.manzana
+    }).subscribe({
+      next: data => {
+        this.ocupaciones = data;
+        this.loading = false;
+      },
+      error: () => {
+        this.loading = false;
+        Swal.fire('Error', 'Error al aplicar los filtros', 'error');
+      }
+    });
+  }
+
+  onBuscarChange(valor: string): void {
+    this.busqueda$.next(valor);
+  }
+
+  onSectorChange(): void {
+    if (!this.filtros.sector) {
+      this.manzanas = [];
+      this.filtros.manzana = '';
+      this.buscar();
+      return;
+    }
+
+    this.cargarManzanas(Number(this.filtros.sector));
+    this.buscar();
+  }
+
+  seleccionarSugerencia(texto: string): void {
+    this.filtros.busqueda = texto;
+    this.mostrarSugerencias = false;
+    this.buscar();
+  }
+
+  // ===============================
+  // CONTADORES
+  // ===============================
+  get total(): number {
+    return this.ocupaciones.length;
+  }
+
+  get ocupadas(): number {
+    return this.ocupaciones.length;
+  }
+
+  // ===============================
+  // ACCIONES
+  // ===============================
+  eliminar(ocupacion: any): void {
     Swal.fire({
-      title: '¿Eliminar bóveda?',
-      text: `¿Está seguro de que desea eliminar la bóveda ${boveda.codigo}? Esta acción no se puede deshacer.`,
+      title: '¿Eliminar ocupación?',
+      text: `Ocupación de ${ocupacion.nombre_fallecido}`,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Eliminar',
       cancelButtonText: 'Cancelar'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.bovedas = this.bovedas.filter(b => b.codigo !== boveda.codigo);
-        Swal.fire(
-          'Eliminada',
-          `La bóveda ${boveda.codigo} ha sido eliminada.`,
-          'success'
-        );
-      }
+    }).then(() => {
+      Swal.fire(
+        'Pendiente',
+        'La eliminación se realizará desde el backend',
+        'info'
+      );
     });
   }
 }

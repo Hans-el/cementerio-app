@@ -8,9 +8,9 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class ApiService {
-  private apiUrl = 'http://localhost:3000/'; 
+  private apiUrl = 'http://localhost:3000/';
 
-   constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getHeaders(token?: string) {
     let headers = new HttpHeaders({
@@ -21,7 +21,8 @@ export class ApiService {
     }
     return headers;
   }
-
+  // Todos los servicios apuntan a este servicio base para hacer las solicitudes HTTP.
+  // Es como el punto central para manejar las peticiones a la API backend.
   get(endpoint: string, token?: string) {
     return this.http.get(`${this.apiUrl}/${endpoint}`, { headers: this.getHeaders(token) });
   }
@@ -38,5 +39,5 @@ export class ApiService {
     return this.http.delete(`${this.apiUrl}/${endpoint}`, { headers: this.getHeaders(token) });
   }
 
-  
+
 }

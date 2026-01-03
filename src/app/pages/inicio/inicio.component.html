@@ -1,149 +1,144 @@
-<div class="container my-4 mx-auto"> <!-- mx-auto para que se ajuste automaticamente a la pantalla de manera horizontal-->
-  <!-- Badges de resumen -->
-  <!-- Usamos Bootstrap para el diseño y estilos. Con esto logramos que queden cuadritos centrados  -->
-
-  <div class="row g-3 mb-4 align-items-center">
-    <div class="col-6 col-sm-4 col-md-2">
+<div class="container my-4 mx-auto">
+  <!-- =======================
+       CARDS RESUMEN
+  ======================== -->
+  <div class="row g-3 mb-4">
+    <div class="col-6 col-md-2">
       <div class="card text-center p-2 h-100">
         <h6 class="mb-1">Total</h6>
-        <h4 class="text-success mb-0">{{ totalBovedas }}</h4>
+        <h4 class="text-primary mb-0">{{ total }}</h4>
       </div>
     </div>
-    <div class="col-6 col-sm-4 col-md-2">
-      <div class="card text-center p-2 h-100">
-        <h6 class="mb-1">Disponibles</h6>
-        <h4 class="text-success mb-0">{{ disponibles }}</h4>
-      </div>
-    </div>
-    <div class="col-6 col-sm-4 col-md-2">
+
+    <div class="col-6 col-md-2">
       <div class="card text-center p-2 h-100">
         <h6 class="mb-1">Ocupadas</h6>
         <h4 class="text-danger mb-0">{{ ocupadas }}</h4>
       </div>
     </div>
-    <div class="col-6 col-sm-4 col-md-2">
-      <div class="card text-center p-2 h-100">
-        <h6 class="mb-1">Mantenimiento</h6>
-        <h4 class="text-warning mb-0">{{ mantenimiento }}</h4>
-      </div>
-    </div>
-    <div class="col-6 col-sm-4 col-md-2">
-      <div class="card text-center p-2 h-100">
-        <h6 class="mb-1">Inactivas</h6>
-        <h4 class="text-secondary mb-0">{{ inactivas }}</h4>
-      </div>
-    </div>
-    <div class="col-md-2 d-flex justify-content-md-end mt-3">
-      <button class="btn btn-outline-success fw-bold w-100 w-md-auto" (click)="editarBovedas()">
-        <i class="bi bi-pencil-square nav-icon"></i>
-        <span class="nav-text ms-2 d-none d-sm-inline">Gestionar Bóvedas</span>
-      </button>
-    </div>
+  </div>
 
-    <!-- Filtros -->
-    <div class="card mb-4 p-3">
-      <div class="row g-3">
-        <div class="col-md-6">
-          <input type="text" class="form-control" placeholder="Buscar por numeración, código, cédula o sector"
-            [(ngModel)]="filtros.busqueda" />
-        </div>
-        <div class="col-md-3">
-          <select class="form-select fw-semibold" [(ngModel)]="filtros.estado">
-            <option>Todos los estados</option>
-            <option>Disponible</option>
-            <option>Ocupada</option>
-            <option>Mantenimiento</option>
-          </select>
-        </div>
-        <div class="col-md-3">
-          <select class="form-select fw-semibold" [(ngModel)]="filtros.sector">
-            <!-- Aquí están todos los sectores-->
-            <option>Todos los sectores</option>
-            <option>1</option>
-            <option>2</option>
-            <option>3</option>
-            <option>4</option>
-            <option>5</option>
-            <option>6</option>
-            <option>7</option>
-            <option>8</option>
-            <option>9</option>
-            <option>10</option>
-            <option>11</option>
-            <option>12</option>
-            <option>13</option>
-            <option>14</option>
-            <option>15</option>
-            <option>16</option>
-            <option>17</option>
-            <option>18</option>
-            <option>19</option>
-            <option>20</option>
-            <option>21</option>
-            <option>22</option>
-            <option>23</option>
-            <option>24</option>
-            <option>25</option>
-            <option>26</option>
-            <option>27</option>
-            <option>28</option>
-            <option>29</option>
-            <option>30</option>
-            <option>31</option>
-            <option>32</option>
-            <option>33</option>
-            <option>34</option>
-            <option>35</option>
-            <option>36</option>
-            <option>37</option>
-            <option>38</option>
-            <option>39</option>
-            <option>40</option>
+  <!-- =======================
+       FILTROS + BUSCADOR
+  ======================== -->
+  <div class="card mb-4 p-3">
+    <div class="row g-3 align-items-end">
+      <!-- BUSCADOR -->
+      <div class="col-md-6 position-relative">
+        <label class="form-label fw-semibold">Buscar</label>
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Código (01.02.03) o nombre del fallecido"
+          [(ngModel)]="filtros.busqueda"
+          (ngModelChange)="onBuscarChange($event)"
+        />
 
-            <!-- Si el cementerio crece añadimos más sectores, pero por ahora dejamos así -->
-          </select>
-        </div>
+        <!-- AUTOCOMPLETE -->
+        <ul
+          class="list-group position-absolute w-100 shadow"
+          *ngIf="mostrarSugerencias"
+          style="z-index: 1000"
+        >
+          <li
+            class="list-group-item list-group-item-action"
+            *ngFor="let s of sugerencias"
+            (click)="
+              seleccionarSugerencia(s.codigo_ubicacion || s.nombre_fallecido)
+            "
+          >
+            <strong>{{ s.codigo_ubicacion }}</strong>
+            <span class="text-muted ms-2">{{ s.nombre_fallecido }}</span>
+          </li>
+        </ul>
       </div>
-    </div>
 
-    <!-- Tabla de bóvedas -->
-    <div class="card">
-      <div class="table-responsive my-2">
-        <table class="table table-hover mb-0">
-          <thead class="table-light">
-            <tr>
-              <th>Numeración [Código]</th>
-              <th>Localizar</th>
-              <th>Sector</th>
-              <th>Capacidad</th>
-              <th>Estado</th>
-              <th>Actualizado</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let boveda of bovedasFiltradas"> <!-- Recorremos las bóvedas filtradas -->
-              <td>{{ boveda.codigo }}</td>
-              <td>{{ boveda.ubicacion }}</td>
-              <td>{{ boveda.sector }}</td>
-              <td>{{ boveda.capacidad }}</td>
-              <td>
-                <span [class]="getEstadoClass(boveda.estado)">
-                  {{ boveda.estado }}
-                </span>
-              </td>
-              <td>{{ boveda.actualizado }}</td>
-              <td>
-                <button class="btn btn-sm btn-outline-primary me-2 fw-semibold" (click)="abrirModalEditar(boveda)">
-                  <i class="bi bi-pencil-square"></i> Editar
-                </button>
-                <button class="btn btn-sm btn-outline-danger me-2 fw-semibold" (click)="eliminarBoveda(boveda)">
-                  <i class="bi bi-trash"></i> Eliminar
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+      <!-- SECTOR -->
+      <div class="col-md-3">
+        <label class="form-label fw-semibold">Sector</label>
+        <select
+          class="form-select"
+          [(ngModel)]="filtros.sector"
+          (change)="onSectorChange()"
+        >
+          <option value="">Todos los sectores</option>
+          <option *ngFor="let s of sectores" [value]="s.id_sector">
+            {{ s.codigo }} - {{ s.nombre }}
+          </option>
+        </select>
+      </div>
+
+      <!-- MANZANA -->
+      <div class="col-md-3">
+        <label class="form-label fw-semibold">Manzana</label>
+        <select
+          class="form-select"
+          [(ngModel)]="filtros.manzana"
+          (change)="buscar()"
+          [disabled]="!manzanas.length"
+        >
+          <option value="">Todas las manzanas</option>
+          <option *ngFor="let m of manzanas" [value]="m.id_manzana">
+            {{ m.numero_manzana }}
+          </option>
+        </select>
       </div>
     </div>
   </div>
+
+  <!-- =======================
+       TABLA
+  ======================== -->
+  <div class="card">
+    <div class="table-responsive my-2">
+      <table class="table table-hover mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>Código</th>
+            <th>Sector</th>
+            <th>Manzana</th>
+            <th>Bloque</th>
+            <th>Espacio</th>
+            <th>Tipo</th>
+            <th>Fallecido</th>
+            <th>Inhumación</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let o of ocupaciones">
+            <td class="fw-semibold">{{ o.codigo_ubicacion }}</td>
+            <td>{{ o.sector_nombre }}</td>
+            <td>{{ o.manzana }}</td>
+            <td>{{ o.bloque }}</td>
+            <td>{{ o.numero_espacio }}</td>
+            <td>{{ o.tipo_bloque }}</td>
+            <td>{{ o.nombre_fallecido }}</td>
+            <td>{{ o.fecha_inhumacion | date : "yyyy-MM-dd" }}</td>
+            <td>
+              <button
+                class="btn btn-sm btn-outline-danger"
+                (click)="eliminar(o)"
+              >
+                <i class="bi bi-trash"></i>
+              </button>
+            </td>
+          </tr>
+
+          <tr *ngIf="!ocupaciones.length && !loading">
+            <td colspan="9" class="text-center text-muted py-4">
+              No se encontraron resultados
+            </td>
+          </tr>
+
+          <tr *ngIf="loading">
+            <td colspan="9" class="text-center py-4">
+              <div class="spinner-border text-success"></div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
