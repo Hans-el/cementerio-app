@@ -4,12 +4,10 @@ import { FormsModule } from '@angular/forms';
 import { NgbDropdownModule, NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 import Swal from 'sweetalert2';
 
-import { Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
-
 import { OcupacionesService } from '../../services/ocupaciones.service';
 import { SectoresService } from '../../services/sectores.service';
 import { ManzanasService } from '../../services/manzanas.service';
+import { BloquesService } from '../../services/bloques.service';
 
 @Component({
   selector: 'app-inicio',
@@ -31,6 +29,7 @@ export class InicioComponent implements OnInit {
   ocupaciones: any[] = [];
   sectores: any[] = [];
   manzanas: any[] = [];
+  bloques: any[] = [];
 
   loading = false;
 
@@ -39,106 +38,101 @@ export class InicioComponent implements OnInit {
   // ===============================
   filtros = {
     busqueda: '',
-    sector: '',
-    manzana: ''
+    sector: null as number | null,
+    manzana: null as number | null
   };
-
-  // ===============================
-  // AUTOCOMPLETE
-  // ===============================
-  busqueda$ = new Subject<string>();
-  sugerencias: any[] = [];
-  mostrarSugerencias = false;
 
   // ===============================
   // PAGINACIÓN
   // ===============================
   page = 1;
-  limit = 30;
+  limit = 50;
 
   constructor(
     private ocupacionesService: OcupacionesService,
     private sectoresService: SectoresService,
-    private manzanasService: ManzanasService
+    private manzanasService: ManzanasService,
+    private bloquesService: BloquesService
   ) { }
 
   // ===============================
   // INIT
   // ===============================
   ngOnInit(): void {
-    this.cargarSectores(); // para cargar los sectores al iniciar, ya está hecho
+    this.cargarSectores();
     this.cargarOcupaciones();
-
-    this.busqueda$
-      .pipe(
-        debounceTime(400),
-        distinctUntilChanged()
-      )
-      .subscribe(valor => {
-        if (valor.length < 2) {
-          this.sugerencias = [];
-          this.mostrarSugerencias = false;
-          return;
-        }
-
-        this.ocupacionesService.autocomplete(valor)
-          .subscribe(data => {
-            this.sugerencias = data;
-            this.mostrarSugerencias = true;
-          });
-      });
   }
 
-
-  // Carga los sectores desde el servicio SectoresService y los asigna a la propiedad 'sectores'.
-  // ya está hecho
-  cargarSectores() {
+  // ===============================
+  // CARGAS BASE
+  // ===============================
+  cargarSectores(): void {
     this.sectoresService.obtenerSectores().subscribe({
-      next: (data) => {
-        console.log('Sectores cargados:', data);
+      next: data => {
         this.sectores = data;
       },
-      error: (err) => {
-        console.error('Error cargando sectores', err);
+      error: () => {
+        Swal.fire('Error', 'No se pudieron cargar los sectores', 'error');
       }
     });
   }
 
-  // Carga las manzanas desde el servicio ManzanasService y los asigna a la propiedad 'manzanas'.
-  // no está hecho aun del todo (pendiente de implementar el servicio)
   cargarManzanas(idSector: number): void {
-    (this.manzanasService as any).getManzanasBySector(idSector).subscribe({
-      next: (data: any) => this.manzanas = data,
-      error: () => Swal.fire('Error', 'No se pudieron cargar las manzanas', 'error')
+    this.manzanasService.getManzanasBySector(idSector).subscribe({
+      next: data => {
+        this.manzanas = data;
+      },
+      error: () => {
+        Swal.fire('Error', 'No se pudieron cargar las manzanas', 'error');
+      }
     });
   }
 
   cargarOcupaciones(): void {
     this.loading = true;
 
-    this.ocupacionesService.getOcupacionesActivas(this.page)
-      .subscribe({
-        next: data => {
-          this.ocupaciones = data;
-          this.loading = false;
-        },
-        error: () => {
-          this.loading = false;
-          Swal.fire('Error', 'No se pudieron cargar las ocupaciones', 'error');
-        }
-      });
+    this.ocupacionesService.getOcupacionesActivas(this.page).subscribe({
+      next: data => {
+        this.ocupaciones = data;
+        this.loading = false;
+      },
+      error: () => {
+        this.loading = false;
+        Swal.fire('Error', 'No se pudieron cargar las ocupaciones', 'error');
+      }
+    });
   }
 
   // ===============================
-  // FILTROS
+  // BUSCADOR TEXTO
   // ===============================
-  buscar(): void {
+  buscarTexto(): void {
+    if (!this.filtros.busqueda || this.filtros.busqueda.length < 2) {
+      this.cargarOcupaciones();
+      return;
+    }
+    this.loading = true;
+    this.ocupacionesService.buscarOcupaciones(this.filtros.busqueda).subscribe({
+      next: data => {
+        this.ocupaciones = data;
+        this.loading = false;
+      },
+      error: () => {
+        this.loading = false;
+        Swal.fire('Error', 'Error en la búsqueda', 'error');
+      }
+    });
+  }
+
+  // ===============================
+  // FILTROS REALES
+  // ===============================
+  aplicarFiltros(): void {
     this.loading = true;
 
-    this.ocupacionesService.buscarOcupaciones({
-      busqueda: this.filtros.busqueda,
-      sector: this.filtros.sector,
-      manzana: this.filtros.manzana
+    this.ocupacionesService.filtrarOcupaciones({
+      sector: this.filtros.sector ?? undefined,
+      manzana: this.filtros.manzana ?? undefined
     }).subscribe({
       next: data => {
         this.ocupaciones = data;
@@ -146,46 +140,49 @@ export class InicioComponent implements OnInit {
       },
       error: () => {
         this.loading = false;
-        Swal.fire('Error', 'Error al aplicar los filtros', 'error');
+        Swal.fire('Error', 'Error al aplicar filtros', 'error');
       }
     });
-  }
-
-  onBuscarChange(valor: string): void {
-    this.busqueda$.next(valor);
   }
 
   onSectorChange(): void {
     if (!this.filtros.sector) {
       this.manzanas = [];
-      this.filtros.manzana = '';
-      this.buscar();
+      this.filtros.manzana = null;
+      this.cargarOcupaciones();
       return;
     }
 
-    this.cargarManzanas(Number(this.filtros.sector));
-    this.buscar();
+    this.cargarManzanas(this.filtros.sector);
+    this.aplicarFiltros();
   }
 
-  seleccionarSugerencia(texto: string): void {
-    this.filtros.busqueda = texto;
-    this.mostrarSugerencias = false;
-    this.buscar();
+  onManzanaChange(): void {
+    this.aplicarFiltros();
   }
 
   // ===============================
-  // CONTADORES
+  // CONTADORES DE LOS BADGES ((falta corregir para que se acualizen respectivamente los numeros reales))
   // ===============================
   get total(): number {
     return this.ocupaciones.length;
   }
 
   get ocupadas(): number {
+    return this.disponible;
+  }
+
+  get mantenimiento(): number {
+    return this.ocupaciones.length;
+  }
+  get disponible(): number {
+    return this.ocupaciones.length;
+  }
+  get clausuradas(): number {
     return this.ocupaciones.length;
   }
 
-  // ===============================
-  // ACCIONES
+
   // ===============================
   eliminar(ocupacion: any): void {
     Swal.fire({
@@ -202,5 +199,14 @@ export class InicioComponent implements OnInit {
         'info'
       );
     });
+  }
+
+  //editar registro, debemos ajustarlo al backend para que se actulice los datos en la base de datos
+  editar(ocupacion: any): void {
+    Swal.fire(
+      'Pendiente',
+      'La edición se realizará desde el backend',
+      'info'
+    );
   }
 }

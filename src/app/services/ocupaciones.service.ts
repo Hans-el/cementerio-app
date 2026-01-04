@@ -12,26 +12,49 @@ export class OcupacionesService {
 
   constructor(private http: HttpClient) { }
 
-
-  // Obtener ocupaciones activas con paginación
+  /** 1. Ocupaciones activas (paginadas) */
   getOcupacionesActivas(page: number = 1): Observable<any[]> {
-    const params = new HttpParams().set('page', page);
+    const params = new HttpParams().set('page', page.toString());
     return this.http.get<any[]>(`${this.apiUrl}/activas`, { params });
   }
-  //Para el buscador 
-  buscarOcupaciones(filtros: { busqueda?: string; sector?: string; manzana?: string }) {
-    let params = new HttpParams();
-    if (filtros.busqueda) params = params.set('busqueda', filtros.busqueda);
-    if (filtros.sector) params = params.set('sector', filtros.sector);
-    if (filtros.manzana) params = params.set('manzana', filtros.manzana);
 
-    return this.http.get<any[]>(`${this.apiUrl}/ocupaciones/buscar`, { params });
+  /** 2. Búsqueda general (código, sector, fallecido) */
+  buscarOcupaciones(q: string): Observable<any[]> {
+    const params = new HttpParams().set('q', q);
+    return this.http.get<any[]>(`${this.apiUrl}/activas/buscar`, { params });
   }
-  //Autocomplete para el buscador, mejora la experiencia del usuario
-  autocomplete(q: string) {
+
+  /** 3. Filtros dinámicos (sector, manzana, bloque, tipo) */
+  filtrarOcupaciones(filtros: {
+    sector?: number;
+    manzana?: number;
+    bloque?: number;
+    tipo_bloque?: string;
+  }): Observable<any[]> {
+    // Construir los parámetros de consulta
+    // según los filtros proporcionados. Es decir, solo incluir
+    // los filtros que no sean nulos o indefinidos.
+    let params = new HttpParams();
+
+    if (filtros.sector !== undefined) {
+      params = params.set('sector', filtros.sector.toString());
+    }
+
+    if (filtros.manzana !== undefined) {
+      params = params.set('manzana', filtros.manzana.toString());
+    }
+
+    if (filtros.bloque !== undefined) {
+      params = params.set('bloque', filtros.bloque.toString());
+    }
+
+    if (filtros.tipo_bloque) {
+      params = params.set('tipo_bloque', filtros.tipo_bloque);
+    }
+
     return this.http.get<any[]>(
-      `${this.apiUrl}/ocupaciones/autocomplete?q=${q}`
+      `${this.apiUrl}/activas/filtrar`,
+      { params }
     );
   }
-
 }

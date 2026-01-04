@@ -2,25 +2,37 @@
   <!-- =======================
        CARDS RESUMEN
   ======================== -->
-  <div class="row g-3 mb-4">
+  <p class="h5 fw-semibold mb-3">Resumen</p>
+
+  <div class="row g-5 mb-3">
     <div class="col-6 col-md-2">
       <div class="card text-center p-2 h-100">
         <h6 class="mb-1">Total</h6>
-        <h4 class="text-primary mb-0">{{ total }}</h4>
+        <h4 class="text-success mb-0">{{ total }}</h4>
+      </div>
+    </div>
+    <div class="col-6 col-md-2">
+      <div class="card text-center p-2 h-100">
+        <h6 class="mb-1">Ocupadas</h6>
+        <h4 class="text-seccondary mb-0">{{ ocupadas }}</h4>
       </div>
     </div>
 
     <div class="col-6 col-md-2">
       <div class="card text-center p-2 h-100">
-        <h6 class="mb-1">Ocupadas</h6>
-        <h4 class="text-danger mb-0">{{ ocupadas }}</h4>
+        <h6 class="mb-1">Mantenimiento</h6>
+        <h4 class="text-warning mb-0">{{ mantenimiento }}</h4>
+      </div>
+    </div>
+    <div class="col-6 col-md-2">
+      <div class="card text-center p-2 h-100">
+        <h6 class="mb-1">Clausuradas</h6>
+        <h4 class="text-danger mb-0">{{ clausuradas }}</h4>
       </div>
     </div>
   </div>
 
-  <!-- =======================
-       FILTROS + BUSCADOR
-  ======================== -->
+  <!--  FILTROS + BUSCADOR -->
   <div class="card mb-4 p-3">
     <div class="row g-3 align-items-end">
       <!-- BUSCADOR -->
@@ -31,26 +43,8 @@
           class="form-control"
           placeholder="Código (01.02.03) o nombre del fallecido"
           [(ngModel)]="filtros.busqueda"
-          (ngModelChange)="onBuscarChange($event)"
+          (ngModelChange)="onSectorChange()"
         />
-
-        <!-- AUTOCOMPLETE -->
-        <ul
-          class="list-group position-absolute w-100 shadow"
-          *ngIf="mostrarSugerencias"
-          style="z-index: 1000"
-        >
-          <li
-            class="list-group-item list-group-item-action"
-            *ngFor="let s of sugerencias"
-            (click)="
-              seleccionarSugerencia(s.codigo_ubicacion || s.nombre_fallecido)
-            "
-          >
-            <strong>{{ s.codigo_ubicacion }}</strong>
-            <span class="text-muted ms-2">{{ s.nombre_fallecido }}</span>
-          </li>
-        </ul>
       </div>
 
       <!-- SECTOR -->
@@ -63,7 +57,7 @@
         >
           <option value="">Todos los sectores</option>
           <option *ngFor="let s of sectores" [value]="s.id_sector">
-            {{ s.codigo }} - {{ s.nombre }}
+            0{{ s.codigo }}: {{ s.nombre }}
           </option>
         </select>
       </div>
@@ -74,7 +68,7 @@
         <select
           class="form-select"
           [(ngModel)]="filtros.manzana"
-          (change)="buscar()"
+          (change)="onManzanaChange()"
           [disabled]="!manzanas.length"
         >
           <option value="">Todas las manzanas</option>
@@ -101,7 +95,7 @@
             <th>Espacio</th>
             <th>Tipo</th>
             <th>Fallecido</th>
-            <th>Inhumación</th>
+            <th>Fallecimiento</th>
             <th>Acciones</th>
           </tr>
         </thead>
@@ -109,16 +103,23 @@
         <tbody>
           <tr *ngFor="let o of ocupaciones">
             <td class="fw-semibold">{{ o.codigo_ubicacion }}</td>
-            <td>{{ o.sector_nombre }}</td>
+            <td>0{{ o.sector_codigo }}</td>
             <td>{{ o.manzana }}</td>
             <td>{{ o.bloque }}</td>
             <td>{{ o.numero_espacio }}</td>
             <td>{{ o.tipo_bloque }}</td>
             <td>{{ o.nombre_fallecido }}</td>
-            <td>{{ o.fecha_inhumacion | date : "yyyy-MM-dd" }}</td>
+            <td>{{ o.fecha_fallecimiento | date : "yyyy-MM-dd" }}</td>
+            <!-- Botones para eliminar y editar -->
             <td>
               <button
-                class="btn btn-sm btn-outline-danger"
+                class="btn btn-m btn-outline-primary my-1"
+                (click)="editar(o)"
+              >
+                <i class="bi bi-pencil"></i>
+              </button>
+              <button
+                class="btn btn-m btn-outline-danger mx-1"
                 (click)="eliminar(o)"
               >
                 <i class="bi bi-trash"></i>

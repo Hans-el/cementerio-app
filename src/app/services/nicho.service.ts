@@ -6,9 +6,9 @@ import { AuthService } from './auth.service';
 
 @Injectable({ providedIn: 'root' })
 export class NichosService {
- private apiUrl = 'http://localhost:3000/api/nichos';
+  private apiUrl = 'http://localhost:3000/api/nichos';
 
-  constructor(private http: HttpClient, private authService: AuthService) {}
+  constructor(private http: HttpClient, private authService: AuthService) { }
 
   getNichos(): Observable<any> {
     return this.http.get(this.apiUrl, { headers: this.authService.getHeaders() });
