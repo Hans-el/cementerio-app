@@ -12,28 +12,23 @@ export class OcupacionesService {
 
   constructor(private http: HttpClient) { }
 
-  /** 1. Ocupaciones activas (paginadas) */
-  getOcupacionesActivas(page: number = 1): Observable<any[]> {
+  /** 1. Todas las ocupaciones, no solo las activas (paginadas) */
+  getOcupaciones(page: number = 1): Observable<any[]> {
     const params = new HttpParams().set('page', page.toString());
-    return this.http.get<any[]>(`${this.apiUrl}/activas`, { params });
+    return this.http.get<any[]>(`${this.apiUrl}`, { params });
   }
 
-  /** 2. Búsqueda general (código, sector, fallecido) */
   buscarOcupaciones(q: string): Observable<any[]> {
     const params = new HttpParams().set('q', q);
-    return this.http.get<any[]>(`${this.apiUrl}/activas/buscar`, { params });
+    return this.http.get<any[]>(`${this.apiUrl}/buscar`, { params });
   }
 
-  /** 3. Filtros dinámicos (sector, manzana, bloque, tipo) */
   filtrarOcupaciones(filtros: {
     sector?: number;
     manzana?: number;
     bloque?: number;
     tipo_bloque?: string;
   }): Observable<any[]> {
-    // Construir los parámetros de consulta
-    // según los filtros proporcionados. Es decir, solo incluir
-    // los filtros que no sean nulos o indefinidos.
     let params = new HttpParams();
 
     if (filtros.sector !== undefined) {
@@ -52,9 +47,6 @@ export class OcupacionesService {
       params = params.set('tipo_bloque', filtros.tipo_bloque);
     }
 
-    return this.http.get<any[]>(
-      `${this.apiUrl}/activas/filtrar`,
-      { params }
-    );
+    return this.http.get<any[]>(`${this.apiUrl}/filtrar`, { params });
   }
 }

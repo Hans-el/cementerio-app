@@ -32,6 +32,7 @@ export class InicioComponent implements OnInit {
   sectores: any[] = [];
   manzanas: any[] = [];
   bloques: any[] = [];
+  resumenEstados: any[] = [];
   loading = false;
 
   // ===============================
@@ -44,9 +45,8 @@ export class InicioComponent implements OnInit {
     bloque: null as number | null
   };
 
-  // ===============================
+
   // PAGINACIÓN
-  // ===============================
   page = 1;
   limit = 50;
 
@@ -58,17 +58,15 @@ export class InicioComponent implements OnInit {
     private modalService: NgbModal
   ) { }
 
-  // ===============================
-  // INIT
-  // ===============================
   ngOnInit(): void {
     this.cargarSectores();
     this.cargarOcupaciones();
+    this.cargarResumenEstados();
+
   }
 
-  // ===============================
-  // CARGAS BASE
-  // ===============================
+
+  // CARGAS BASE DE LOS DATOS
   cargarSectores(): void {
     this.sectoresService.obtenerSectores().subscribe({
       next: data => {
@@ -96,17 +94,17 @@ export class InicioComponent implements OnInit {
     this.bloquesService.getBloquesByManzanaAndSector(idManzana, idSector).subscribe({
       next: data => {
         this.bloques = data;
+        this.filtros.bloque = null; // Reinicia el filtro de bloque al cambiar de manzana
       },
       error: () => {
         Swal.fire('Error', 'No se pudieron cargar los bloques', 'error');
       }
     });
   }
-
+  //aca cargamos las ocupaciones activas, usando la funcion creada en ocupaciones.service.ts
   cargarOcupaciones(): void {
     this.loading = true;
-
-    this.ocupacionesService.getOcupacionesActivas(this.page).subscribe({
+    this.ocupacionesService.getOcupaciones(this.page).subscribe({
       next: data => {
         this.ocupaciones = data;
         this.loading = false;
@@ -114,6 +112,17 @@ export class InicioComponent implements OnInit {
       error: () => {
         this.loading = false;
         Swal.fire('Error', 'No se pudieron cargar las ocupaciones', 'error');
+      }
+    });
+  }
+  // nueva funcion para cargar el resumen de estados de los bloques, para los cards de resumen en inicio.component.html
+  cargarResumenEstados(): void {
+    this.bloquesService.getResumenEstadosBloques().subscribe({
+      next: data => {
+        this.resumenEstados = data;
+      },
+      error: () => {
+        Swal.fire('Error', 'No se pudo cargar el resumen de estados', 'error');
       }
     });
   }
@@ -139,9 +148,7 @@ export class InicioComponent implements OnInit {
     });
   }
 
-  // ===============================
-  // FILTROS REALES
-  // ===============================
+  // FILTROS DINÁMICOS
   aplicarFiltros(): void {
     this.loading = true;
 
@@ -161,7 +168,7 @@ export class InicioComponent implements OnInit {
     });
   }
 
-
+  // Función para manejar el cambio de sector
   onSectorChange(): void {
     if (!this.filtros.sector) {
       this.manzanas = [];
@@ -169,11 +176,10 @@ export class InicioComponent implements OnInit {
       this.cargarOcupaciones();
       return;
     }
-
     this.cargarManzanas(this.filtros.sector);
     this.aplicarFiltros();
   }
-
+  // Función para manejar el cambio de manzana
   onManzanaChange(): void {
     if (!this.filtros.manzana || !this.filtros.sector) {
       this.bloques = [];
@@ -181,7 +187,6 @@ export class InicioComponent implements OnInit {
       this.aplicarFiltros();
       return;
     }
-
     this.cargarBloques(this.filtros.manzana, this.filtros.sector);
     this.aplicarFiltros();
   }
@@ -192,32 +197,38 @@ export class InicioComponent implements OnInit {
   }
 
 
-  // ===============================
+
   // CONTADORES DE LOS BADGES ((falta corregir para que se acualizen respectivamente los numeros reales))
   // ===============================
+  // Métodos get para los cards de resumen
   get total(): number {
-    return this.ocupaciones.length;
+    return this.resumenEstados.reduce((sum, estado) => sum + estado.cantidad, 0);
+  }
+
+  get disponibles(): number {
+    const estado = this.resumenEstados.find(e => e.estado === 'DISPONIBLE');
+    return estado ? estado.cantidad : 0;
   }
 
   get ocupadas(): number {
-    return this.disponible;
+    const estado = this.resumenEstados.find(e => e.estado === 'OCUPADO');
+    return estado ? estado.cantidad : 0;
   }
 
   get mantenimiento(): number {
-    return this.ocupaciones.length;
+    const estado = this.resumenEstados.find(e => e.estado === 'MANTENIMIENTO');
+    return estado ? estado.cantidad : 0;
   }
-  get disponible(): number {
-    return this.ocupaciones.length;
-  }
+
   get clausuradas(): number {
-    return this.ocupaciones.length;
+    const estado = this.resumenEstados.find(e => e.estado === 'CLAUSURADO');
+    return estado ? estado.cantidad : 0;
   }
 
-  editarBovedas() {
-    this.modalService.open(GestionBovedasComponent, { centered: true, size: 'md' });
-  }
 
-  // ===============================
+
+
+
   eliminar(ocupacion: any): void {
     Swal.fire({
       title: '¿Eliminar ocupación?',

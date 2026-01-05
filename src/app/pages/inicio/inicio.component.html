@@ -13,17 +13,23 @@
     </div>
     <div class="col-6 col-md-2">
       <div class="card text-center p-2 h-100">
+        <h6 class="mb-1">Parcial</h6>
+        <h4 class="text-warning mb-0">{{ disponibles }}</h4>
+      </div>
+    </div>
+    <div class="col-6 col-md-2">
+      <div class="card text-center p-2 h-100">
         <h6 class="mb-1">Ocupadas</h6>
-        <h4 class="text-seccondary mb-0">{{ ocupadas }}</h4>
+        <h4 class="text-dark mb-0">{{ ocupadas }}</h4>
       </div>
     </div>
 
-    <div class="col-6 col-md-2">
+    <!-- <div class="col-6 col-md-2">
       <div class="card text-center p-2 h-100">
         <h6 class="mb-1">Mantenimiento</h6>
         <h4 class="text-warning mb-0">{{ mantenimiento }}</h4>
       </div>
-    </div>
+    </div> -->
     <div class="col-6 col-md-2">
       <div class="card text-center p-2 h-100">
         <h6 class="mb-1">Clausuradas</h6>
@@ -57,7 +63,7 @@
         >
           <option value="">Todos los sectores</option>
           <option *ngFor="let s of sectores" [value]="s.id_sector">
-            0{{ s.codigo }}: {{ s.nombre }}
+            0{{ s.codigo }}
           </option>
         </select>
       </div>
@@ -77,6 +83,7 @@
           </option>
         </select>
       </div>
+      <!-- BLOQUE -->
       <div class="col-md-2">
         <label class="form-label fw-semibold">Bloque</label>
         <select
@@ -127,17 +134,16 @@
             <!-- Botones para eliminar y editar -->
             <td>
               <button
-                class="btn btn-sm btn-outline-primary my-1 fw-semibold"
+                class="btn btn-m btn-warning my-1 fw-semibold"
                 (click)="editar(o)"
               >
                 Editar
                 <i class="bi bi-pencil"></i>
               </button>
               <button
-                class="btn btn-sm btn-outline-danger mx-1 fw-semibold"
+                class="btn btn-m btn-danger mx-1 fw-semibold"
                 (click)="eliminar(o)"
               >
-                Eliminar
                 <i class="bi bi-trash"></i>
               </button>
             </td>

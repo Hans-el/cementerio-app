@@ -1,72 +1,96 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { Difunto } from '../../models/difunto.model';
 import { GestionDifuntosComponent } from '../../components/gestion-difuntos/gestion-difuntos.component';
 import { EditarDifuntoComponent } from '../../components/editar-difunto/editar-difunto.component';
 import { FallecidoService } from '../../services/fallecido.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-inicio-difuntos',
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './inicio-difuntos.component.html',
-  styleUrl: './inicio-difuntos.component.css'
+  styleUrls: ['./inicio-difuntos.component.css']
 })
-export class InicioDifuntosComponent {
-  // Datos de ejemplo de difuntos. Luego los debemos conectar con el backend.
-  difuntos: Difunto[] = [
-    { id: 1, nombreCompleto: 'Juan Pérez García', cedula: '1234567890', genero: 'Masculino', fechaNacimiento: '1950-05-15', fechaFallecimiento: '2020-10-20', causaFallecimiento: 'Enfermedad', observaciones: 'Ninguna' },
-    { id: 2, nombreCompleto: 'María López Martínez', cedula: '0987654321', genero: 'Femenino', fechaNacimiento: '1965-08-25', fechaFallecimiento: '2022-03-12', causaFallecimiento: 'Accidente', observaciones: 'Familiar notificado' },
-
-  ];
+export class InicioDifuntosComponent implements OnInit {
+  difuntos: any[] = [];
+  loading = false;
   filtros = {
     busqueda: '',
     genero: 'Todos',
   };
 
-  constructor(private modalService: NgbModal, private fallecidoService: FallecidoService
+  constructor(
+    private modalService: NgbModal,
+    private fallecidoService: FallecidoService
   ) { }
 
+  ngOnInit(): void {
+    this.cargarDifuntos();
+  }
 
-  //cargar difuntos desde el servicio, es decir, desde el backend
-
+  cargarDifuntos(): void {
+    this.loading = true;
+    this.fallecidoService.getFallecidos().subscribe({
+      next: (data) => {
+        this.difuntos = data;
+        this.loading = false;
+      },
+      error: () => {
+        this.loading = false;
+        Swal.fire('Error', 'No se pudieron cargar los difuntos', 'error');
+      }
+    });
+  }
 
   // Filtrar difuntos según los filtros seleccionados
-  get difuntosFiltrados(): Difunto[] {
+  get difuntosFiltrados(): any[] {
     return this.difuntos.filter(difunto => {
       const coincideBusqueda =
-        difunto.nombreCompleto.toLowerCase().includes(this.filtros.busqueda.toLowerCase()) ||
-        difunto.cedula.includes(this.filtros.busqueda);
+        difunto.nombre_completo.toLowerCase().includes(this.filtros.busqueda.toLowerCase()) ||
+        difunto.fecha_fallecimiento_raw.includes(this.filtros.busqueda);
       const coincideGenero = this.filtros.genero === 'Todos' || difunto.genero === this.filtros.genero;
-      return coincideBusqueda && coincideGenero;
+      return coincideBusqueda && (this.filtros.genero === 'Todos' ? true : coincideGenero);
     });
   }
 
   // Contadores de difuntos para mayor claridad en la UI
   get totalDifuntos(): number {
-    return this.difuntos.length;
+    return this.difuntosFiltrados.length;
   }
 
   // Función para abrir el modal de añadir difunto
   abrirModalAnadirDifunto() {
     const modalRef = this.modalService.open(GestionDifuntosComponent);
-    modalRef.componentInstance.guardar.subscribe((nuevoDifunto: Difunto) => {
-      nuevoDifunto.id = this.difuntos.length > 0 ? Math.max(...this.difuntos.map(d => d.id)) + 1 : 1; // Con esto asignamos un ID único
-      this.difuntos.push(nuevoDifunto); // Añadimos el nuevo difunto a la lista
+    modalRef.componentInstance.guardar.subscribe((nuevoDifunto: any) => {
+      this.fallecidoService.createFallecido(nuevoDifunto).subscribe({
+        next: (response) => {
+          Swal.fire('Éxito', 'Difunto registrado correctamente', 'success');
+          this.cargarDifuntos(); // Recargar la lista de difuntos
+        },
+        error: () => {
+          Swal.fire('Error', 'Error al registrar el difunto', 'error');
+        }
+      });
     });
   }
 
   // Función para abrir el modal de editar difunto
-  abrirModalEditarDifunto(difunto: Difunto) {
-    const modalRef = this.modalService.open(EditarDifuntoComponent); //abrimos el modal de editar difunto, como en el componente de editar bovedas.
-    modalRef.componentInstance.difunto = { ...difunto }; // Pasamos una copia del difunto a editar
-    modalRef.componentInstance.guardar.subscribe((difuntoEditado: Difunto) => { // Actualizamos el difunto en la lista
-      const index = this.difuntos.findIndex(d => d.id === difuntoEditado.id); // Buscamos el índice del difunto editado
-      if (index !== -1) { // Si lo encontramos, actualizamos la información
-        this.difuntos[index] = difuntoEditado; // Actualizamos el difunto en la lista
-      }
+  abrirModalEditarDifunto(difunto: any) {
+    const modalRef = this.modalService.open(EditarDifuntoComponent);
+    modalRef.componentInstance.difunto = { ...difunto };
+    modalRef.componentInstance.guardar.subscribe((difuntoEditado: any) => {
+      this.fallecidoService.updateFallecido(difuntoEditado.id_fallecido, difuntoEditado).subscribe({
+        next: (response) => {
+          Swal.fire('Éxito', 'Difunto actualizado correctamente', 'success');
+          this.cargarDifuntos(); // Recargar la lista de difuntos
+        },
+        error: () => {
+          Swal.fire('Error', 'Error al actualizar el difunto', 'error');
+        }
+      });
     });
   }
 }

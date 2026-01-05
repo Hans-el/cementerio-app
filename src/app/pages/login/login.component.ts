@@ -84,7 +84,7 @@ export class LoginComponent implements OnInit {
         (error) => {
           Swal.fire({
             title: 'Error!',
-            text: 'Cédula o contraseña incorrectos.',
+            text: 'Credenciales inválidas. Por favor, intenta de nuevo.',
             timerProgressBar: true,
             timer: 2200,
             icon: 'error',
