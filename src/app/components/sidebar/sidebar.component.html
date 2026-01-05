@@ -1,17 +1,34 @@
 <!-- Botón hamburguesa para móviles -->
 <button
   class="btn btn-toggle-sidebar d-md-none position-fixed top-0 start-0 m-3 z-index-1050"
-  (click)="toggleSidebar()">
+  (click)="toggleSidebar()"
+>
   <i class="bi bi-list fs-4"></i>
 </button>
 
 <!-- Sidebar -->
-<div class="sidebar bg-custom-dark text-white" [class.sidebar-collapsed]="isCollapsed && isMobile"
-  style="width: 280px; height: 100vh; position: fixed; left: 0; top: 0; z-index: 1000; transition: transform 0.3s ease;">
+<div
+  class="sidebar bg-custom-dark text-white"
+  [class.sidebar-collapsed]="isCollapsed && isMobile"
+  style="
+    width: 280px;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 1000;
+    transition: transform 0.3s ease;
+  "
+>
   <div class="sidebar-header p-3">
     <div class="d-flex align-items-center">
       <div class="logo me-3">
-        <img src="assets/faviconblanco.png" alt="Logo Cementerio Colón" class="d-inline-block align-top" width="70">
+        <img
+          src="assets/faviconblanco.png"
+          alt="Logo Cementerio Colón"
+          class="d-inline-block align-top"
+          width="70"
+        />
       </div>
       <div class="logo-text">
         <h4 class="mb-0">Cementerio de Colón</h4>
@@ -19,32 +36,46 @@
       </div>
     </div>
   </div>
-  <br>
+  <br />
 
   <div class="sidebar-content">
     <div class="sidebar-nav px-2">
       <p class="nav-title px-3 text-uppercase text-white small">Navegación</p>
       <ul class="nav-list list-unstyled mb-0">
         <li class="nav-item">
-          <a routerLink="/mapa" routerLinkActive="active" class="nav-link d-flex align-items-center px-3 py-2">
+          <a
+            routerLink="/mapa"
+            routerLinkActive="active"
+            class="nav-link d-flex align-items-center px-3 py-2"
+          >
             <i class="bi bi-map nav-icon"></i>
             <span class="nav-text ms-3">Mapa</span>
           </a>
         </li>
         <li class="nav-item">
-          <a (click)="openLocalizarModal()" class="nav-link d-flex align-items-center px-3 py-2">
+          <a
+            (click)="openLocalizarModal()"
+            class="nav-link d-flex align-items-center px-3 py-2"
+          >
             <i class="bi bi-geo-alt nav-icon"></i>
             <span class="nav-text ms-3">Localizar</span>
           </a>
         </li>
         <li class="nav-item">
-          <a (click)="openDisponibilidadModal()" class="nav-link d-flex align-items-center px-3 py-2">
+          <a
+            (click)="openDisponibilidadModal()"
+            class="nav-link d-flex align-items-center px-3 py-2"
+          >
             <i class="bi bi-calendar-check nav-icon"></i>
             <span class="nav-text ms-3">Disponibilidad</span>
           </a>
         </li>
         <li class="nav-item">
-          <a routerLink="/contacto" routerLinkActive="active" class="nav-link d-flex align-items-center px-3 py-2">
+          <a
+            routerLink="/contacto"
+            routerLinkActive="active"
+            class="nav-link d-flex align-items-center px-3 py-2"
+          >
             <i class="bi bi-person-lines-fill nav-icon"></i>
             <span class="nav-text ms-3">Contactarse</span>
           </a>
@@ -52,27 +83,40 @@
       </ul>
     </div>
 
-    <br>
-    <br>
-    
+    <br />
+    <br />
+
     <!-- Menú de administrador -->
     <div class="sidebar-nav px-2" *ngIf="userRole === 'admin'">
-      <p class="nav-title px-3 text-uppercase text-white small">Administración</p>
+      <p class="nav-title px-3 text-uppercase text-white small">
+        Administración
+      </p>
       <ul class="nav-list list-unstyled mb-0">
         <li class="nav-item">
-          <a routerLink="/inicio" routerLinkActive="active" class="nav-link d-flex align-items-center px-3 py-2">
+          <a
+            routerLink="/inicio"
+            routerLinkActive="active"
+            class="nav-link d-flex align-items-center px-3 py-2"
+          >
             <i class="bi bi-building-fill-gear nav-icon"></i>
             <span class="nav-text ms-3">Bóvedas / Nichos</span>
           </a>
         </li>
         <li class="nav-item">
-          <a routerLink="/difuntos" routerLinkActive="active" class="nav-link d-flex align-items-center px-3 py-2">
+          <a
+            routerLink="/difuntos"
+            routerLinkActive="active"
+            class="nav-link d-flex align-items-center px-3 py-2"
+          >
             <i class="bi bi-person-vcard nav-icon"></i>
             <span class="nav-text ms-3">Difuntos</span>
           </a>
         </li>
         <li class="nav-item">
-          <a (click)="editarBovedas()" class="nav-link d-flex align-items-center px-3 py-2">
+          <a
+            (click)="editarBovedas()"
+            class="nav-link d-flex align-items-center px-3 py-2"
+          >
             <i class="bi bi-pencil-square nav-icon"></i>
             <span class="nav-text ms-3">Gestión de Bóvedas</span>
           </a>
@@ -80,28 +124,40 @@
       </ul>
     </div>
   </div>
-  <br>
+  <br />
 
-    <!-- Footer del sidebar -->
-    <div class="sidebar-footer" ngbDropdown>
-      <div class="user-section d-flex align-items-center p-3 mx-2" ngbDropdownToggle id="userDropdown">
-        <div class="user-avatar me-2">
-          <i class="bi bi-person"></i>
-        </div>
-        <div class="user-info"> 
-          <p class="user-name mb-0">Mi perfil</p>
-          <!-- Aqui obtendremos el rol actual de usuario para mostrarlo en el sidebar--> 
-          <p class="user-role mb-0">Hola, {{ userRole }} </p> 
-        </div>
+  <!-- Footer del sidebar -->
+  <div class="sidebar-footer" ngbDropdown>
+    <div
+      class="user-section d-flex align-items-center p-3 mx-2"
+      ngbDropdownToggle
+      id="userDropdown"
+    >
+      <div class="user-avatar me-2">
+        <i class="bi bi-person"></i>
       </div>
-      <!-- Inicio del menú desplegable -->
-      <div class="dropdown-menu" aria-labelledby="userDropdown" ngbDropdownMenu>
-        <a class="dropdown-item  bi-gear-fill fw-semibold" href="/perfil"> Configuración</a>
-        <a class="dropdown-item  bi-person-gear fw-semibold" href="/"> Editar perfil</a>
-        <a class="dropdown-item  bi-lock fw-semibold" href="/"> Cambiar contraseña</a>
-        <div class="dropdown-divider"></div>
-        <a class="dropdown-item bi-arrow-bar-right fw-bold" (click)="logout()"> Cerrar Sesión</a>
+      <div class="user-info">
+        <p class="user-name mb-0">Mi perfil</p>
+        <!-- Aqui obtendremos el rol actual de usuario para mostrarlo en el sidebar-->
+        <p class="user-role mb-0">Hola, {{ userRole }}</p>
       </div>
-      <!-- Fin del menu desplegable -->
     </div>
+    <!-- Inicio del menú desplegable -->
+    <div class="dropdown-menu" aria-labelledby="userDropdown" ngbDropdownMenu>
+      <a class="dropdown-item bi-gear-fill fw-semibold" href="/perfil">
+        Configuración</a
+      >
+      <a class="dropdown-item bi-person-gear fw-semibold" href="/">
+        Editar perfil</a
+      >
+      <a class="dropdown-item bi-lock fw-semibold" href="/">
+        Cambiar contraseña</a
+      >
+      <div class="dropdown-divider"></div>
+      <a class="dropdown-item bi-arrow-bar-right fw-bold" (click)="logout()">
+        Cerrar Sesión</a
+      >
+    </div>
+    <!-- Fin del menu desplegable -->
   </div>
+</div>

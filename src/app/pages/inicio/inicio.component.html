@@ -72,8 +72,22 @@
           [disabled]="!manzanas.length"
         >
           <option value="">Todas las manzanas</option>
-          <option *ngFor="let m of manzanas" [value]="m.id_manzana">
+          <option *ngFor="let m of manzanas" [value]="m.numero_manzana">
             {{ m.numero_manzana }}
+          </option>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <label class="form-label fw-semibold">Bloque</label>
+        <select
+          class="form-select"
+          [(ngModel)]="filtros.bloque"
+          (change)="onBloqueChange()"
+          [disabled]="!bloques.length"
+        >
+          <option value="">Todos los bloques</option>
+          <option *ngFor="let b of bloques" [value]="b.numero_bloque">
+            {{ b.numero_bloque }}
           </option>
         </select>
       </div>
@@ -84,9 +98,9 @@
        TABLA
   ======================== -->
   <div class="card">
-    <div class="table-responsive my-2">
-      <table class="table table-hover mb-0">
-        <thead class="table-light">
+    <div class="table-responsive my-3">
+      <table class="table table-hover mb-0 align-middle">
+        <thead class="table-light text-center">
           <tr>
             <th>Código</th>
             <th>Sector</th>
@@ -100,7 +114,7 @@
           </tr>
         </thead>
 
-        <tbody>
+        <tbody class="text-center">
           <tr *ngFor="let o of ocupaciones">
             <td class="fw-semibold">{{ o.codigo_ubicacion }}</td>
             <td>0{{ o.sector_codigo }}</td>
@@ -113,15 +127,17 @@
             <!-- Botones para eliminar y editar -->
             <td>
               <button
-                class="btn btn-m btn-outline-primary my-1"
+                class="btn btn-sm btn-outline-primary my-1 fw-semibold"
                 (click)="editar(o)"
               >
+                Editar
                 <i class="bi bi-pencil"></i>
               </button>
               <button
-                class="btn btn-m btn-outline-danger mx-1"
+                class="btn btn-sm btn-outline-danger mx-1 fw-semibold"
                 (click)="eliminar(o)"
               >
+                Eliminar
                 <i class="bi bi-trash"></i>
               </button>
             </td>

@@ -3,11 +3,13 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgbDropdownModule, NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 import Swal from 'sweetalert2';
-
+import { EditarBovedasComponent } from '../../components/editar-bovedas/editar-bovedas.component';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { OcupacionesService } from '../../services/ocupaciones.service';
 import { SectoresService } from '../../services/sectores.service';
 import { ManzanasService } from '../../services/manzanas.service';
 import { BloquesService } from '../../services/bloques.service';
+import { GestionBovedasComponent } from '../../components/gestion-bovedas/gestion-bovedas.component';
 
 @Component({
   selector: 'app-inicio',
@@ -30,7 +32,6 @@ export class InicioComponent implements OnInit {
   sectores: any[] = [];
   manzanas: any[] = [];
   bloques: any[] = [];
-
   loading = false;
 
   // ===============================
@@ -39,7 +40,8 @@ export class InicioComponent implements OnInit {
   filtros = {
     busqueda: '',
     sector: null as number | null,
-    manzana: null as number | null
+    manzana: null as number | null,
+    bloque: null as number | null
   };
 
   // ===============================
@@ -52,7 +54,8 @@ export class InicioComponent implements OnInit {
     private ocupacionesService: OcupacionesService,
     private sectoresService: SectoresService,
     private manzanasService: ManzanasService,
-    private bloquesService: BloquesService
+    private bloquesService: BloquesService,
+    private modalService: NgbModal
   ) { }
 
   // ===============================
@@ -76,14 +79,26 @@ export class InicioComponent implements OnInit {
       }
     });
   }
-
+  //aca cargamos las manzanas. Esto debe estar igual a la funcion del backend en controllers/manzanaController.js [La ultima funcion creada]
   cargarManzanas(idSector: number): void {
-    this.manzanasService.getManzanasBySector(idSector).subscribe({
+    this.manzanasService.getManzanasBySectorCodigo(idSector).subscribe({
       next: data => {
         this.manzanas = data;
       },
       error: () => {
         Swal.fire('Error', 'No se pudieron cargar las manzanas', 'error');
+      }
+    });
+  }
+  //aca cargamos los bloques segun la manzana y el sector seleccionado, usando la nueva funcion creada en bloques.service.ts.
+  // recordemos que usamos numero_manzana para los filtros en el componente inicio.component.html, no id_manzana
+  cargarBloques(idManzana: number, idSector: number): void {
+    this.bloquesService.getBloquesByManzanaAndSector(idManzana, idSector).subscribe({
+      next: data => {
+        this.bloques = data;
+      },
+      error: () => {
+        Swal.fire('Error', 'No se pudieron cargar los bloques', 'error');
       }
     });
   }
@@ -132,7 +147,8 @@ export class InicioComponent implements OnInit {
 
     this.ocupacionesService.filtrarOcupaciones({
       sector: this.filtros.sector ?? undefined,
-      manzana: this.filtros.manzana ?? undefined
+      manzana: this.filtros.manzana ?? undefined,
+      bloque: this.filtros.bloque ?? undefined
     }).subscribe({
       next: data => {
         this.ocupaciones = data;
@@ -144,6 +160,7 @@ export class InicioComponent implements OnInit {
       }
     });
   }
+
 
   onSectorChange(): void {
     if (!this.filtros.sector) {
@@ -158,8 +175,22 @@ export class InicioComponent implements OnInit {
   }
 
   onManzanaChange(): void {
+    if (!this.filtros.manzana || !this.filtros.sector) {
+      this.bloques = [];
+      this.filtros.bloque = null;
+      this.aplicarFiltros();
+      return;
+    }
+
+    this.cargarBloques(this.filtros.manzana, this.filtros.sector);
     this.aplicarFiltros();
   }
+
+  // Función para manejar el cambio de bloque
+  onBloqueChange(): void {
+    this.aplicarFiltros();
+  }
+
 
   // ===============================
   // CONTADORES DE LOS BADGES ((falta corregir para que se acualizen respectivamente los numeros reales))
@@ -182,6 +213,9 @@ export class InicioComponent implements OnInit {
     return this.ocupaciones.length;
   }
 
+  editarBovedas() {
+    this.modalService.open(GestionBovedasComponent, { centered: true, size: 'md' });
+  }
 
   // ===============================
   eliminar(ocupacion: any): void {

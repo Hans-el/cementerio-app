@@ -18,5 +18,10 @@ export class BloquesService {
   getBloquesByManzana(idManzana: number) {
     return this.http.get<any[]>(`${this.apiUrl}/manzana/${idManzana}`);
   }
+  //para obtener los bloques filtrados por manzana y sector, como en el componente inicio.component.ts
+  getBloquesByManzanaAndSector(idManzana: number, idSector: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/manzana/${idManzana}/sector/${idSector}`);
+  }
+
 
 }

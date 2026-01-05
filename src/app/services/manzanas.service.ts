@@ -24,7 +24,7 @@ export class ManzanasService {
    * Obtener manzanas filtradas por sector
    * @param idSector ID del sector seleccionado
    */
-  getManzanasBySector(idSector: number): Observable<any[]> {
+  getManzanasBySectorCodigo(idSector: number): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/sector/${idSector}`);
   }
 
