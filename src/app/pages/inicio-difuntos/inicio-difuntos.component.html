@@ -3,7 +3,7 @@
   <!-- Badges de resumen -->
   <p class="h5 fw-semibold mb-3">Resumen</p>
 
-  <div class="row g-3 mb-4 align-items-center">
+  <div class="row g-5 mb-3">
     <div class="col-6 col-md-2">
       <div class="card text-center p-2 h-100">
         <h6 class="mb-1">Total</h6>
@@ -25,13 +25,15 @@
   <!-- Filtros + búsqueda -->
   <div class="card mb-4 p-3">
     <div class="row g-3 align-items-end">
+      <!-- BUSCADOR -->
       <div class="col-md-6">
+        <label class="form-label fw-semibold">Buscar</label>
         <input
           type="text"
           class="form-control"
-          placeholder="Buscar por nombre o cédula"
+          placeholder="Nombre del fallecido"
           [(ngModel)]="filtros.busqueda"
-          (ngModelChange)="cargarDifuntos()"
+          (ngModelChange)="ngOnInit()"
         />
       </div>
     </div>
@@ -39,25 +41,24 @@
 
   <!-- Tabla de difuntos -->
   <div class="card">
-    <div class="table-responsive my-2">
-      <table class="table table-hover mb-0">
+    <div class="table-responsive my-3">
+      <table class="table table-hover mb-0 align-middle">
         <thead class="table-light text-center">
           <tr>
-            <!-- <th>ID</th> -->
+            <th>Código</th>
             <th>Nombre Completo</th>
-            <!-- <th>Cédula</th> -->
             <th>Fecha Fallecimiento</th>
-            <th>Fecha Inhumacion</th>
-            <th>Fecha Exhumacion</th>
+            <th>Fecha Inhumación</th>
+            <th>Fecha Exhumación</th>
             <th>Observaciones</th>
             <th>Acciones</th>
           </tr>
         </thead>
         <tbody class="text-center">
           <tr *ngFor="let difunto of difuntosFiltrados">
-            <!-- <td>{{ difunto.id_fallecido }}</td> -->
+            <td class="fw-semibold">{{ difunto.codigo_bloque || "N/A" }}</td>
             <td>{{ difunto.nombre_completo }}</td>
-            <td>{{ difunto.fecha_fallecimiento_raw || "N/A" }}</td>
+            <td>{{ difunto.fecha_fallecimiento | date }}</td>
             <td>{{ difunto.fecha_inhumacion | date }}</td>
             <td>{{ difunto.fecha_exhumacion | date }}</td>
             <td>{{ difunto.observaciones || "N/A" }}</td>
@@ -66,7 +67,6 @@
                 class="btn btn-m btn-warning my-1 fw-semibold"
                 (click)="abrirModalEditarDifunto(difunto)"
               >
-                Editar
                 <i class="bi bi-pencil"></i>
               </button>
               <button class="btn btn-m btn-danger mx-1 fw-semibold">
@@ -75,12 +75,12 @@
             </td>
           </tr>
           <tr *ngIf="!difuntosFiltrados.length && !loading">
-            <td colspan="6" class="text-center text-muted py-4">
+            <td colspan="7" class="text-center text-muted py-4">
               No se encontraron resultados
             </td>
           </tr>
           <tr *ngIf="loading">
-            <td colspan="6" class="text-center py-4">
+            <td colspan="7" class="text-center py-4">
               <div class="spinner-border text-success"></div>
             </td>
           </tr>
