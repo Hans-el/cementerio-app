@@ -34,8 +34,8 @@ export class SidebarComponent implements OnInit {
 
 
 
-  @HostListener('window:resize', ['$event'])
-  checkIfMobile() {
+  @HostListener('window:resize')
+  checkIfMobile(event?: Event) {
     this.isMobile = window.innerWidth <= 768;
     if (this.isMobile) {
       this.isCollapsed = true;
