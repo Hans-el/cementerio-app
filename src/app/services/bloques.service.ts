@@ -12,15 +12,12 @@ export class BloquesService {
   private apiUrl = 'http://localhost:3000/api/bloques';
 
   getBloques() {
-    // Aquí iría la lógica para obtener los bloques desde la API
+    return this.http.get<any[]>(this.apiUrl);
   }
-  //para obtener los bloques filtrados por manzana, 
-  getBloquesByManzana(idManzana: number) {
+
+  //para obtener los bloques por id de manzana, ya que cada id de manzana tiene un sector asociadado, no es necesario pasar el id del sector
+  getBloquesByManzanaId(idManzana: number): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/manzana/${idManzana}`);
-  }
-  //para obtener los bloques filtrados por manzana y sector, como en el componente inicio.component.ts
-  getBloquesByManzanaAndSector(idManzana: number, idSector: number): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/manzana/${idManzana}/sector/${idSector}`);
   }
   //nueva funcion para obtener el resumen de estados de los bloques, para los cards de resumen en inicio.component.html
   getResumenEstadosBloques(): Observable<any[]> {

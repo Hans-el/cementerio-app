@@ -10,6 +10,7 @@ import { SectoresService } from '../../services/sectores.service';
 import { ManzanasService } from '../../services/manzanas.service';
 import { BloquesService } from '../../services/bloques.service';
 import { GestionBovedasComponent } from '../../components/gestion-bovedas/gestion-bovedas.component';
+import { Ocupacion } from '../../models/ocupacion.model';
 
 @Component({
   selector: 'app-inicio',
@@ -28,7 +29,7 @@ export class InicioComponent implements OnInit {
   // ===============================
   // DATA
   // ===============================
-  ocupaciones: any[] = [];
+  ocupaciones: Ocupacion[] = [];
   sectores: any[] = [];
   manzanas: any[] = [];
   bloques: any[] = [];
@@ -68,7 +69,7 @@ export class InicioComponent implements OnInit {
 
   // CARGAS BASE DE LOS DATOS
   cargarSectores(): void {
-    this.sectoresService.obtenerSectores().subscribe({
+    this.sectoresService.getSectores().subscribe({
       next: data => {
         this.sectores = data;
       },
@@ -90,17 +91,19 @@ export class InicioComponent implements OnInit {
   }
   //aca cargamos los bloques segun la manzana y el sector seleccionado, usando la nueva funcion creada en bloques.service.ts.
   // recordemos que usamos numero_manzana para los filtros en el componente inicio.component.html, no id_manzana
-  cargarBloques(idManzana: number, idSector: number): void {
-    this.bloquesService.getBloquesByManzanaAndSector(idManzana, idSector).subscribe({
+  cargarBloques(idManzana: number): void {
+    this.bloquesService.getBloquesByManzanaId(idManzana).subscribe({
       next: data => {
-        this.bloques = data;
-        this.filtros.bloque = null; // Reinicia el filtro de bloque al cambiar de manzana
+        this.bloques = data; // Asegúrate de que `data` sea un arreglo válido
+        console.log('Bloques cargados:', this.bloques); // Depuración
       },
-      error: () => {
+      error: (error) => {
+        console.error('Error al cargar bloques:', error);
         Swal.fire('Error', 'No se pudieron cargar los bloques', 'error');
       }
     });
   }
+
   //aca cargamos las ocupaciones activas, usando la funcion creada en ocupaciones.service.ts
   cargarOcupaciones(): void {
     this.loading = true;
@@ -153,9 +156,9 @@ export class InicioComponent implements OnInit {
     this.loading = true;
 
     this.ocupacionesService.filtrarOcupaciones({
-      sector: this.filtros.sector ?? undefined,
-      manzana: this.filtros.manzana ?? undefined,
-      bloque: this.filtros.bloque ?? undefined
+      sector: this.filtros.sector?.toString(),
+      manzana: this.filtros.manzana?.toString(),
+      bloque: this.filtros.bloque?.toString()
     }).subscribe({
       next: data => {
         this.ocupaciones = data;
@@ -168,33 +171,48 @@ export class InicioComponent implements OnInit {
     });
   }
 
+
   // Función para manejar el cambio de sector
   onSectorChange(): void {
+    this.filtros.manzana = null;
+    this.filtros.bloque = null;
+    this.manzanas = [];
+    this.bloques = [];
+
     if (!this.filtros.sector) {
-      this.manzanas = [];
-      this.filtros.manzana = null;
       this.cargarOcupaciones();
       return;
     }
+
     this.cargarManzanas(this.filtros.sector);
     this.aplicarFiltros();
   }
+
   // Función para manejar el cambio de manzana
   onManzanaChange(): void {
-    if (!this.filtros.manzana || !this.filtros.sector) {
-      this.bloques = [];
-      this.filtros.bloque = null;
+    this.filtros.bloque = null;
+    this.bloques = [];
+
+    if (!this.filtros.manzana) {
       this.aplicarFiltros();
       return;
     }
-    this.cargarBloques(this.filtros.manzana, this.filtros.sector);
-    this.aplicarFiltros();
+    // Obtener el id_manzana correspondiente al número de manzana seleccionado
+    const manzanaSeleccionada = this.manzanas.find(m => m.numero_manzana === this.filtros.manzana);
+    if (manzanaSeleccionada) {
+      this.cargarBloques(manzanaSeleccionada.id_manzana);
+    } else {
+      this.aplicarFiltros();
+    }
   }
+
+
 
   // Función para manejar el cambio de bloque
   onBloqueChange(): void {
     this.aplicarFiltros();
   }
+
 
 
 

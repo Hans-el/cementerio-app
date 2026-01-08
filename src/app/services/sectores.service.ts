@@ -13,7 +13,7 @@ export class SectoresService {
 
   constructor(private http: HttpClient) { }
 
-  obtenerSectores(): Observable<Sector[]> {
+  getSectores(): Observable<Sector[]> {
     return this.http.get<Sector[]>(this.apiUrl);
   }
 }
