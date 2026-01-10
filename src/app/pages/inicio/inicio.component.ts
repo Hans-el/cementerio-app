@@ -238,10 +238,14 @@ export class InicioComponent implements OnInit {
   }
 
 
-
   // Función para manejar el cambio de bloque
   onBloqueChange(): void {
     this.aplicarFiltros();
+  }
+
+  //para abrir el modal de gestionar bloque
+  editarBovedas() {
+    this.modalService.open(GestionBovedasComponent, { centered: true, size: 'md' });
   }
 
 
