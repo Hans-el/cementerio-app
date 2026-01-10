@@ -8,7 +8,7 @@ import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { LocalizarModalComponent } from '../localizar-modal/localizar-modal.component';
 import { DisponibilidadModalComponent } from '../disponibilidad-modal/disponibilidad-modal.component';
-import { GestionBovedasComponent } from '../gestion-bovedas/gestion-bovedas.component';
+import { GestionBovedasComponent } from '../gestion-bloques/gestion-bovedas.component';
 
 @Component({
   selector: 'app-sidebar',

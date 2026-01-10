@@ -7,14 +7,50 @@
 <div class="modal-body">
   <form>
     <div class="form-group">
-      <label for="id_bloque">ID del Bloque:</label>
-      <input
-        type="number"
+      <label for="sector">Sector:</label>
+      <select
+        class="form-control"
+        [(ngModel)]="nuevoEspacio.id_sector"
+        name="sector"
+        (change)="onSectorChange()"
+        required
+      >
+        <option value="" disabled selected>Selecciona un sector</option>
+        <option *ngFor="let sector of sectores" [value]="sector.id_sector">
+          {{ sector.codigo }} - {{ sector.nombre }}
+        </option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="manzana">Manzana:</label>
+      <select
+        class="form-control"
+        [(ngModel)]="nuevoEspacio.id_manzana"
+        name="manzana"
+        (change)="onManzanaChange()"
+        [disabled]="!nuevoEspacio.id_sector"
+        required
+      >
+        <option value="" disabled selected>Selecciona una manzana</option>
+        <option *ngFor="let manzana of manzanas" [value]="manzana.id_manzana">
+          {{ manzana.numero_manzana }}
+        </option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="bloque">Bloque:</label>
+      <select
         class="form-control"
         [(ngModel)]="nuevoEspacio.id_bloque"
-        name="id_bloque"
+        name="bloque"
+        [disabled]="!nuevoEspacio.id_manzana"
         required
-      />
+      >
+        <option value="" disabled selected>Selecciona un bloque</option>
+        <option *ngFor="let bloque of bloques" [value]="bloque.id_bloque">
+          Bloque {{ bloque.numero_bloque }}
+        </option>
+      </select>
     </div>
     <div class="form-group">
       <label for="cantidad_espacios">Cantidad de Espacios:</label>
@@ -34,9 +70,6 @@
         name="tipo_espacio"
         required
       >
-        <option value="" disabled selected>
-          Selecciona un tipo de espacio
-        </option>
         <option
           *ngFor="let tipo of tiposEspacio"
           [value]="tipo.id_tipo_espacio"

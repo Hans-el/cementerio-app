@@ -9,7 +9,7 @@ import { OcupacionesService } from '../../services/ocupaciones.service';
 import { SectoresService } from '../../services/sectores.service';
 import { ManzanasService } from '../../services/manzanas.service';
 import { BloquesService } from '../../services/bloques.service';
-import { GestionBovedasComponent } from '../../components/gestion-bovedas/gestion-bovedas.component';
+import { GestionBovedasComponent } from '../../components/gestion-bloques/gestion-bovedas.component';
 import { Ocupacion } from '../../models/ocupacion.model';
 
 @Component({
