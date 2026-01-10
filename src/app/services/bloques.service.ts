@@ -14,6 +14,15 @@ export class BloquesService {
   getBloques(): Observable<any[]> {
     return this.http.get<any[]>(this.apiUrl);
   }
+  //este lo uso para el modal de añadir difunto
+  getBloquesid(idManzana?: number): Observable<any[]> {
+    const params: any = {};
+    if (idManzana) {
+      params.id_manzana = idManzana;
+    }
+    return this.http.get<any[]>(this.apiUrl, { params });
+  }
+
 
   // Obtener bloques por ID de manzana
   getBloquesByManzanaId(idManzana: number): Observable<any[]> {

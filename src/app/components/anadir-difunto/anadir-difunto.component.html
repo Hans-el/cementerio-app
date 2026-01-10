@@ -1,53 +1,106 @@
-<!-- este modal es para añadir una boveda, este debe ser utilizado para crear una nueva boveda en el sistema,
-  es decir, todos los campos de aqui deben estar definidos en la tabla bovedas de la abse de datos. Aunque algunos sean opcionales -->
-<div class="modal-header border-0 pb-0">
-  <h5 class="modal-title fw-semibold">
-    <i class="bi bi-person-plus me-2"></i> Añadir Difunto
-  </h5>
+<div class="modal-header">
+  <h4 class="modal-title">Añadir Difunto</h4>
   <button
     type="button"
-    class="btn-close ms-auto"
-    aria-label="Cerrar"
+    class="close"
+    aria-label="Close"
     (click)="activeModal.dismiss()"
-  ></button>
+  >
+    <span aria-hidden="true">&times;</span>
+  </button>
 </div>
 
 <div class="modal-body">
-  <form class="fw-semibold">
-    <div class="mb-3">
-      <label class="form-label">Nombre Completo</label>
+  <form #difuntoForm="ngForm">
+    <!-- Datos del difunto -->
+    <div class="form-group">
+      <label for="nombre_completo">Nombre Completo:</label>
       <input
         type="text"
+        id="nombre_completo"
         class="form-control"
-        [(ngModel)]="difunto.nombre_completo"
+        [(ngModel)]="nuevoDifunto.nombre_completo"
         name="nombre_completo"
         required
-        maxlength="100"
-        placeholder="Ej. Juan Pérez Andrade"
       />
     </div>
 
-    <div class="col-md-6 mb-3">
-      <label class="form-label">Fecha de Fallecimiento</label>
+    <div class="form-group">
+      <label for="fecha_fallecimiento">Fecha de Fallecimiento:</label>
       <input
         type="date"
+        id="fecha_fallecimiento"
         class="form-control"
-        [(ngModel)]="difunto.fecha_fallecimiento"
+        [(ngModel)]="nuevoDifunto.fecha_fallecimiento"
         name="fecha_fallecimiento"
-        required
       />
     </div>
 
-    <div class="mb-3">
-      <label class="form-label">Observaciones</label>
-      <textarea
+    <!-- Selectores para ubicación -->
+    <div class="form-group">
+      <label for="sector">Sector:</label>
+      <select
+        id="sector"
         class="form-control"
-        [(ngModel)]="difunto.observaciones"
-        name="observaciones"
-        rows="2"
-        maxlength="200"
-        placeholder="Información adicional..."
-      ></textarea>
+        [(ngModel)]="selectedSector"
+        name="sector"
+        (change)="onSectorChange()"
+      >
+        <option value="" disabled selected>Selecciona un sector</option>
+        <option *ngFor="let sector of sectores" [value]="sector.id_sector">
+          {{ sector.codigo }}
+        </option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="manzana">Manzana:</label>
+      <select
+        id="manzana"
+        class="form-control"
+        [(ngModel)]="selectedManzana"
+        name="manzana"
+        (change)="onManzanaChange()"
+        [disabled]="!selectedSector"
+      >
+        <option value="" disabled selected>Selecciona una manzana</option>
+        <option *ngFor="let manzana of manzanas" [value]="manzana.id_manzana">
+          {{ manzana.numero_manzana }}
+        </option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="bloque">Bloque:</label>
+      <select
+        id="bloque"
+        class="form-control"
+        [(ngModel)]="selectedBloque"
+        name="bloque"
+        (change)="onBloqueChange()"
+        [disabled]="!selectedManzana"
+      >
+        <option value="" disabled selected>Selecciona un bloque</option>
+        <option *ngFor="let bloque of bloques" [value]="bloque.id_bloque">
+          {{ bloque.numero_bloque }}
+        </option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="espacio">Espacio:</label>
+      <select
+        id="espacio"
+        class="form-control"
+        [(ngModel)]="nuevoDifunto.id_espacio"
+        name="espacio"
+        [disabled]="!selectedBloque"
+      >
+        <option value="" disabled selected>Selecciona un espacio</option>
+        <option *ngFor="let espacio of espacios" [value]="espacio.id_espacio">
+          {{ espacio.tipo_espacio }} - {{ espacio.numero_espacio }}
+        </option>
+      </select>
     </div>
   </form>
 </div>
@@ -55,16 +108,12 @@
 <div class="modal-footer">
   <button
     type="button"
-    class="btn btn-outline-danger fw-bold"
+    class="btn btn-secondary"
     (click)="activeModal.dismiss()"
   >
     Cancelar
   </button>
-  <button
-    type="button"
-    class="btn btn-outline-success fw-bold"
-    (click)="guardarNuevoDifunto()"
-  >
+  <button type="button" class="btn btn-primary" (click)="onSubmit()">
     Guardar
   </button>
 </div>
