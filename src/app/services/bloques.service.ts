@@ -34,4 +34,20 @@ export class BloquesService {
   getResumenEstadosBloques(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/resumen-estados`);
   }
+  // Crear nuevo bloque
+  createBloque(data: {
+    id_manzana: number;
+    numero_bloque: number;
+    cantidad_espacios: number;
+    id_tipo_espacio: number;
+    observaciones?: string;
+  }): Observable<any> {
+    return this.http.post<any>(this.apiUrl, data);
+  }
+  // Actualizar bloque para añadir mas espacios por si algun dia se quiere ampliar
+  anadirEspacios(idBloque: number, espacios: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/${idBloque}/espacios`, espacios);
+  }
+
+
 }

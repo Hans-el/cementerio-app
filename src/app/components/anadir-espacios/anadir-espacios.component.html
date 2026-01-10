@@ -1,0 +1,61 @@
+<div class="modal-header">
+  <h4 class="modal-title">Añadir Espacios a Bloque</h4>
+  <button type="button" class="close" (click)="activeModal.dismiss()">
+    &times;
+  </button>
+</div>
+<div class="modal-body">
+  <form>
+    <div class="form-group">
+      <label for="id_bloque">ID del Bloque:</label>
+      <input
+        type="number"
+        class="form-control"
+        [(ngModel)]="nuevoEspacio.id_bloque"
+        name="id_bloque"
+        required
+      />
+    </div>
+    <div class="form-group">
+      <label for="cantidad_espacios">Cantidad de Espacios:</label>
+      <input
+        type="number"
+        class="form-control"
+        [(ngModel)]="nuevoEspacio.cantidad_espacios"
+        name="cantidad_espacios"
+        required
+      />
+    </div>
+    <div class="form-group">
+      <label for="tipo_espacio">Tipo de Espacio:</label>
+      <select
+        class="form-control"
+        [(ngModel)]="nuevoEspacio.id_tipo_espacio"
+        name="tipo_espacio"
+        required
+      >
+        <option value="" disabled selected>
+          Selecciona un tipo de espacio
+        </option>
+        <option
+          *ngFor="let tipo of tiposEspacio"
+          [value]="tipo.id_tipo_espacio"
+        >
+          {{ tipo.nombre }}
+        </option>
+      </select>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button
+    type="button"
+    class="btn btn-secondary"
+    (click)="activeModal.dismiss()"
+  >
+    Cancelar
+  </button>
+  <button type="button" class="btn btn-primary" (click)="onSubmit()">
+    Guardar
+  </button>
+</div>

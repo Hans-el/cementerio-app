@@ -1,0 +1,98 @@
+<div class="modal-header">
+  <h4 class="modal-title">Añadir Bloque</h4>
+  <button type="button" class="close" (click)="activeModal.dismiss()">
+    &times;
+  </button>
+</div>
+<div class="modal-body">
+  <form>
+    <div class="form-group">
+      <label for="sector">Sector:</label>
+      <select
+        class="form-control"
+        [(ngModel)]="nuevoBloque.id_sector"
+        name="sector"
+        (change)="onSectorChange()"
+        required
+      >
+        <option value="" disabled selected>Selecciona un sector</option>
+        <option *ngFor="let sector of sectores" [value]="sector.id_sector">
+          {{ sector.codigo }} - {{ sector.nombre }}
+        </option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="manzana">Manzana:</label>
+      <select
+        class="form-control"
+        [(ngModel)]="nuevoBloque.id_manzana"
+        name="manzana"
+        (change)="onManzanaChange()"
+        [disabled]="!nuevoBloque.id_sector"
+        required
+      >
+        <option value="" disabled selected>Selecciona una manzana</option>
+        <option *ngFor="let manzana of manzanas" [value]="manzana.id_manzana">
+          {{ manzana.numero_manzana }}
+        </option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="numero_bloque">Número de Bloque:</label>
+      <input
+        type="number"
+        class="form-control"
+        [(ngModel)]="nuevoBloque.numero_bloque"
+        name="numero_bloque"
+        required
+        readonly
+      />
+    </div>
+    <div class="form-group">
+      <label for="cantidad_espacios">Cantidad de Espacios:</label>
+      <input
+        type="number"
+        class="form-control"
+        [(ngModel)]="nuevoBloque.cantidad_espacios"
+        name="cantidad_espacios"
+        required
+      />
+    </div>
+    <div class="form-group">
+      <label for="tipo_espacio">Tipo de Espacio:</label>
+      <select
+        class="form-control"
+        [(ngModel)]="nuevoBloque.id_tipo_espacio"
+        name="tipo_espacio"
+        required
+      >
+        <option
+          *ngFor="let tipo of tiposEspacio"
+          [value]="tipo.id_tipo_espacio"
+        >
+          {{ tipo.nombre }}
+        </option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="observaciones">Observaciones:</label>
+      <textarea
+        class="form-control"
+        [(ngModel)]="nuevoBloque.observaciones"
+        name="observaciones"
+      ></textarea>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button
+    type="button"
+    class="btn btn-secondary"
+    (click)="activeModal.dismiss()"
+  >
+    Cancelar
+  </button>
+  <button type="button" class="btn btn-primary" (click)="onSubmit()">
+    Guardar
+  </button>
+</div>

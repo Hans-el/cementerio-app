@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { NichoSeleccionadoService } from '../../services/nicho-seleccionado.service';
 import { Nicho } from '../../models/nicho.model'
-import { AnadirBovedaComponent } from '../anadir-boveda/anadir-boveda.component';
+import { AnadirBovedaComponent } from '../anadir-bloque/anadir-boveda.component';
 
 @Component({
   selector: 'app-gestion-bovedas',

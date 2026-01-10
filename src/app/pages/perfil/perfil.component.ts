@@ -31,9 +31,9 @@ export class PerfilComponent implements OnInit {
       nombre: ['', Validators.required],
       cedula: ['', Validators.required],
       correo: ['', [Validators.required, Validators.email]],
-      telefono: [''],
-      direccion: [''],
-      contactoEmergencia: [''],
+      telefono: ['', Validators.required],
+      direccion: ['', Validators.required],
+      contactoEmergencia: ['',],
       telefonoEmergencia: ['']
     });
 
@@ -69,6 +69,20 @@ export class PerfilComponent implements OnInit {
     }
 
     // Con esto enviamos los valores del formulario al backend clicqueando en guardar cambios.
+    // Usaremos swal para confirmar si realmente quiere guardar los cambios
+    Swal.fire({
+      title: '¿Guardar cambios?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, guardar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.updatePerfil();
+      }
+    });
+  }
+  updatePerfil(): void {
     this.perfilService.updatePerfil(this.userId, this.perfilForm.value).subscribe({
       next: () => {
         Swal.fire('Éxito', 'Perfil actualizado correctamente', 'success');
