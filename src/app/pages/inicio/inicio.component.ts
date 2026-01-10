@@ -48,8 +48,9 @@ export class InicioComponent implements OnInit {
 
 
   // PAGINACIÓN
-  page = 1;
-  limit = 50;
+  page: number = 1;
+  limit: number = 50;
+  totalOcupaciones: number = 0;
 
   constructor(
     private ocupacionesService: OcupacionesService,
@@ -63,6 +64,8 @@ export class InicioComponent implements OnInit {
     this.cargarSectores();
     this.cargarOcupaciones();
     this.cargarResumenEstados();
+    this.obtenerTotalOcupaciones(); // Función para obtener el total de ocupaciones
+
 
   }
 
@@ -80,7 +83,7 @@ export class InicioComponent implements OnInit {
   }
   //aca cargamos las manzanas. Esto debe estar igual a la funcion del backend en controllers/manzanaController.js [La ultima funcion creada]
   cargarManzanas(idSector: number): void {
-    this.manzanasService.getManzanasBySectorCodigo(idSector).subscribe({
+    this.manzanasService.getManzanasBySectorCodigo(idSector.toString()).subscribe({
       next: data => {
         this.manzanas = data;
       },
@@ -107,7 +110,7 @@ export class InicioComponent implements OnInit {
   //aca cargamos las ocupaciones activas, usando la funcion creada en ocupaciones.service.ts
   cargarOcupaciones(): void {
     this.loading = true;
-    this.ocupacionesService.getOcupaciones(this.page).subscribe({
+    this.ocupacionesService.getOcupaciones(this.page, this.limit).subscribe({
       next: data => {
         this.ocupaciones = data;
         this.loading = false;
@@ -117,6 +120,34 @@ export class InicioComponent implements OnInit {
         Swal.fire('Error', 'No se pudieron cargar las ocupaciones', 'error');
       }
     });
+  }
+  // Función para obtener el total de ocupaciones
+  obtenerTotalOcupaciones(): void {
+    this.ocupacionesService.getTotalOcupaciones().subscribe({
+      next: total => {
+        this.totalOcupaciones = total;
+      },
+      error: () => {
+        console.error('Error al obtener el total de ocupaciones');
+      }
+    });
+  }
+
+  // Función para ir a la página anterior
+  paginaAnterior(): void {
+    if (this.page > 1) {
+      this.page--;
+      this.cargarOcupaciones();
+    }
+  }
+
+  // Función para ir a la página siguiente
+  siguientePagina(): void {
+    const totalPages = Math.ceil(this.totalOcupaciones / this.limit);
+    if (this.page < totalPages) {
+      this.page++;
+      this.cargarOcupaciones();
+    }
   }
   // nueva funcion para cargar el resumen de estados de los bloques, para los cards de resumen en inicio.component.html
   cargarResumenEstados(): void {

@@ -12,25 +12,32 @@ export class FallecidoService {
 
   constructor(private http: HttpClient, private authService: AuthService) { }
 
-  // Obtener todos los fallecidos 
-  getFallecidos(): Observable<any[]> {
-    return this.http.get<any[]>(this.apiUrl);
+
+  getFallecidos(page = 1, limit = 50): Observable<{ data: any[], total: number, page: number, limit: number, totalPages: number }> {
+    const params = new HttpParams()
+      .set('page', page.toString())
+      .set('limit', limit.toString());
+
+    return this.http.get<any>(this.apiUrl, { params });
   }
 
-  // Buscar fallecidos por nombre unicamente
+
+
+  getTotalFallecidos(): Observable<{ total: number }> {
+    return this.http.get<{ total: number }>(`${this.apiUrl}/total`);
+  }
+
   buscarFallecidos(q: string): Observable<any[]> {
-    const params = new HttpParams().set('q', q);
-    return this.http.get<any[]>(`${this.apiUrl}/buscar`, { params });
+    return this.http.get<any[]>(`${this.apiUrl}/buscar`, {
+      params: { q }
+    });
   }
 
-  // Agregar un nuevo fallecido
-  createFallecido(fallecido: any): Observable<any> {
-    return this.http.post(this.apiUrl, fallecido);
+  crearFallecido(data: any): Observable<any> {
+    return this.http.post(this.apiUrl, data);
   }
 
-  // Actualizar un fallecido existente
-  updateFallecido(idFallecido: number, fallecido: any): Observable<any> {
-    return this.http.put(`${this.apiUrl}/${idFallecido}`, fallecido);
+  actualizarFallecido(id: number, data: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/${id}`, data);
   }
-
 }

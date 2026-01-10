@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { Manzana } from '../models/manzana.model';
 
 
 @Injectable({
@@ -11,22 +12,37 @@ export class ManzanasService {
 
 
   constructor(private http: HttpClient) { }
-
   /**
    * Obtener todas las manzanas
-   * (para un listado general por si llegaramos a necesitarlo)
    */
-  getManzanas(): Observable<any[]> {
-    return this.http.get<any[]>(this.apiUrl);
+  getManzanas(): Observable<Manzana[]> {
+    return this.http.get<Manzana[]>(this.apiUrl);
   }
 
   /**
-   * Obtener manzanas filtradas por sector
-   * @param idSector ID del sector seleccionado
+   * Obtener manzanas por sector
+   * (para filtros y selects encadenados)
    */
-  getManzanasBySectorCodigo(idSector: number): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/sector/${idSector}`);
+  getManzanasBySector(idSector: number): Observable<Manzana[]> {
+    const params = new HttpParams()
+      .set('id_sector', idSector.toString());
+
+    return this.http.get<Manzana[]>(this.apiUrl, { params });
+  }
+  getManzanasBySectorCodigo(idSector: string): Observable<Manzana[]> {
+    const params = new HttpParams()
+      .set('codigo_sector', idSector);
+    return this.http.get<Manzana[]>(this.apiUrl, { params });
   }
 
-
+  /**
+   * Crear nueva manzana
+   */
+  createManzana(data: {
+    id_sector: number;
+    numero_manzana: number;
+    descripcion?: string;
+  }): Observable<any> {
+    return this.http.post<any>(this.apiUrl, data);
+  }
 }

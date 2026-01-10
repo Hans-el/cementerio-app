@@ -3,33 +3,36 @@
        CARDS RESUMEN
   ======================== -->
   <p class="h5 fw-semibold mb-3">Resumen</p>
-
   <div class="row g-5 mb-3">
     <div class="col-6 col-md-2">
       <div class="card text-center p-2 h-100">
-        <h6 class="mb-1">Total</h6>
+        <h6 class="mb-1">TOTAL LOTES</h6>
         <h4 class="text-success mb-0">{{ total }}</h4>
+        <!-- FALTA CORREGIR-->
       </div>
     </div>
 
     <div class="col-6 col-md-2">
       <div class="card text-center p-2 h-100">
-        <h6 class="mb-1">Disponibles</h6>
+        <h6 class="mb-1">BÓVEDAS</h6>
         <h4 class="text-warning mb-0">{{ disponibles }}</h4>
+        <!-- FALTA CORREGIR-->
       </div>
     </div>
 
     <div class="col-6 col-md-2">
       <div class="card text-center p-2 h-100">
-        <h6 class="mb-1">Ocupadas</h6>
+        <h6 class="mb-1">NICHOS</h6>
         <h4 class="text-dark mb-0">{{ ocupadas }}</h4>
+        <!-- FALTA CORREGIR-->
       </div>
     </div>
 
     <div class="col-6 col-md-2">
       <div class="card text-center p-2 h-100">
-        <h6 class="mb-1">Clausuradas</h6>
+        <h6 class="mb-1">CRUZ</h6>
         <h4 class="text-danger mb-0">{{ clausuradas }}</h4>
+        <!-- FALTA CORREGIR-->
       </div>
     </div>
   </div>
@@ -112,8 +115,8 @@
             <th>Sector</th>
             <th>Manzana</th>
             <th>Bloque</th>
-            <th>Espacio</th>
             <th>Tipo</th>
+            <th>Espacio</th>
             <th>Fallecido</th>
             <th>Fecha Fallecimiento</th>
             <th>Acciones</th>
@@ -122,19 +125,19 @@
 
         <tbody class="text-center">
           <tr *ngFor="let o of ocupaciones">
-            <td class="fw-semibold">{{ o.codigo }}</td>
-            <td>{{ "0" + o.sector }}</td>
+            <td class="fw-semibold">{{ o.codigo_bloque }}</td>
+            <td>{{ "0" + o.sector_cementerio }}</td>
             <td>{{ o.manzana }}</td>
-            <td>{{ o.bloque }}</td>
-            <td>{{ o.espacio }}</td>
-            <td>{{ o.tipo }}</td>
-            <!-- SI UN FALLECIDO TIENE COMO NOMBRE "S/N" LE ASIGNAMOS  -- -->
+            <td>{{ o.bloque_lote }}</td>
+            <td>{{ o.tipo_ubicacion }}</td>
+            <td>{{ o.numero }}</td>
+            <!-- SI UN FALLECIDO TIENE COMO NOMBRE "S/N" LE ASIGNAMOS  -->
             <td>
               {{
-                o.fallecido
-                  ? o.fallecido === "S/N"
+                o.nombre_fallecido
+                  ? o.nombre_fallecido === "S/N"
                     ? "--"
-                    : o.fallecido
+                    : o.nombre_fallecido
                   : "--"
               }}
             </td>
@@ -177,5 +180,23 @@
         </tbody>
       </table>
     </div>
+  </div>
+  <!-- Paginación -->
+  <div class="d-flex justify-content-center mt-3">
+    <nav aria-label="Page navigation">
+      <ul class="pagination">
+        <li class="page-item" [class.disabled]="page === 1">
+          <button class="btn bt-" (click)="paginaAnterior()">Anterior</button>
+        </li>
+        <li class="page-item">
+          <span class="page-link">Página {{ page }} </span>
+        </li>
+        <li class="page-item">
+          <button class="page-link" (click)="siguientePagina()">
+            Siguiente
+          </button>
+        </li>
+      </ul>
+    </nav>
   </div>
 </div>

@@ -17,6 +17,12 @@ import Swal from 'sweetalert2';
 export class InicioDifuntosComponent implements OnInit {
   difuntos: any[] = [];
   loading = false;
+  currentPage = 1; // Página actual
+  itemsPerPage = 50; // Ítems por página
+  totalItems = 0; // Total de ítems
+  totalPages = 0; // Total de páginas
+
+  // Filtros
   filtros = {
     busqueda: '',
   };
@@ -30,11 +36,14 @@ export class InicioDifuntosComponent implements OnInit {
     this.cargarDifuntos(); // Cargar difuntos al iniciar el componente, lo usamos para el buscador
   }
 
-  cargarDifuntos(): void {
+  cargarDifuntos(page = 1): void {
     this.loading = true;
-    this.fallecidoService.getFallecidos().subscribe({
-      next: (data) => {
-        this.difuntos = data;
+    this.fallecidoService.getFallecidos(page, this.itemsPerPage).subscribe({
+      next: (response) => {
+        this.difuntos = response.data.filter(difunto => difunto.nombre_completo !== "S/N");
+        this.totalItems = response.total;
+        this.currentPage = response.page;
+        this.totalPages = response.totalPages;
         this.loading = false;
       },
       error: () => {
@@ -43,6 +52,13 @@ export class InicioDifuntosComponent implements OnInit {
       }
     });
   }
+  // Método para cambiar de página
+  cambiarPagina(page: number): void {
+    if (page >= 1 && page <= this.totalPages) {
+      this.cargarDifuntos(page);
+    }
+  }
+
 
   get difuntosFiltrados(): any[] {
     if (!this.filtros.busqueda) {
@@ -54,14 +70,14 @@ export class InicioDifuntosComponent implements OnInit {
     );
   }
 
-  get totalDifuntos(): number {
+  get getFallecidos(): number {
     return this.difuntosFiltrados.length;
   }
 
   abrirModalAnadirDifunto() {
     const modalRef = this.modalService.open(GestionDifuntosComponent);
     modalRef.componentInstance.guardar.subscribe((nuevoDifunto: any) => {
-      this.fallecidoService.createFallecido(nuevoDifunto).subscribe({
+      this.fallecidoService.crearFallecido(nuevoDifunto).subscribe({
         next: (response) => {
           Swal.fire('Éxito', 'Difunto registrado correctamente', 'success');
           this.cargarDifuntos();
@@ -75,17 +91,20 @@ export class InicioDifuntosComponent implements OnInit {
 
   abrirModalEditarDifunto(difunto: any) {
     const modalRef = this.modalService.open(EditarDifuntoComponent);
-    modalRef.componentInstance.difunto = { ...difunto };
-    modalRef.componentInstance.guardar.subscribe((difuntoEditado: any) => {
-      this.fallecidoService.updateFallecido(difuntoEditado.id_fallecido, difuntoEditado).subscribe({
-        next: (response) => {
-          Swal.fire('Éxito', 'Difunto actualizado correctamente', 'success');
-          this.cargarDifuntos();
-        },
-        error: () => {
-          Swal.fire('Error', 'Error al actualizar el difunto', 'error');
+    modalRef.componentInstance.difunto = { ...difunto }; // Pasa una copia del objeto
+
+    // Escuchar cuando se cierre el modal para recargar los datos
+    modalRef.result.then(
+      (result) => {
+        if (result) {
+          this.cargarDifuntos(this.currentPage); // Recargar la lista si se guardaron cambios
         }
-      });
-    });
+      },
+      (reason) => {
+        // Manejar cancelación si es necesario
+      }
+    );
   }
+
+
 }

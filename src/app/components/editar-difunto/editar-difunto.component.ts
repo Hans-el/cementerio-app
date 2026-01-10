@@ -1,10 +1,10 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { Fallecido } from '../../models/fallecido.models';
 import { FallecidoService } from '../../services/fallecido.service';
 import Swal from 'sweetalert2';
-import { NichosService } from '../../services/nicho.service'; //con la finalidad de traer los sectores desde la base de datos
 
 
 @Component({
@@ -12,47 +12,34 @@ import { NichosService } from '../../services/nicho.service'; //con la finalidad
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './editar-difunto.component.html',
-  styleUrl: './editar-difunto.component.css'
+  styleUrls: ['./editar-difunto.component.css']
 })
 export class EditarDifuntoComponent {
-  @Input() difunto: any;
-  @Output() guardar = new EventEmitter<any>(); // Un evento para guardar los cambios
-  cargandoBovedas = false;
-  listaBovedas: any[] = [];
-
+  @Input() fallecido: Fallecido = {
+    id_fallecido: 0,
+    nombre_completo: '',
+    fecha_fallecimiento: null,
+    fecha_fallecimiento_raw: '',
+    fecha_inhumacion: null,
+    fecha_exhumacion: null,
+    observaciones: null
+  };
 
   constructor(
     public activeModal: NgbActiveModal,
-    private fallecidoService: FallecidoService,
-    private nichoService: NichosService
+    private fallecidoService: FallecidoService
   ) { }
 
-  cargarBovedas(): void {
-    this.cargandoBovedas = true;
-    this.nichoService.getNichos().subscribe({
-      next: (data) => {
-        this.listaBovedas = data;
-        this.cargandoBovedas = false;
+  guardarCambios(): void {
+    // Llamar directamente al servicio para actualizarlo
+    this.fallecidoService.actualizarFallecido(this.fallecido.id_fallecido, this.fallecido).subscribe({
+      next: (response) => {
+        Swal.fire('Éxito', 'Fallecido actualizado correctamente', 'success');
+        this.activeModal.close(true); // Cerrar el modal y notificar éxito
       },
-      error: (err) => {
-        console.error('Error al cargar bóvedas:', err);
-        this.cargandoBovedas = false;
+      error: () => {
+        Swal.fire('Error', 'Error al actualizar el fallecido', 'error');
       }
     });
   }
-    guardarCambios() {
-      Swal.fire({
-        title: '¿Guardar cambios?',
-        text: "¿Desea guardar los cambios realizados?",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Sí, guardar',
-        cancelButtonText: 'Cancelar'
-      }).then((result) => {
-        if (result.isConfirmed) {
-          this.guardar.emit(this.difunto);
-          // this.activeModal.close(); //cerramos el modal automaticamente al guardar.
-        }
-      });
-    }
-  }
+}

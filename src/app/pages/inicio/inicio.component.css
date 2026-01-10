@@ -9,3 +9,13 @@
   padding: 5px 10px;
   font-size: 0.8rem;
 }
+/* Estilos para la paginación */
+.pagination {
+  .page-item {
+    &.disabled {
+      pointer-events: none;
+      opacity: 0.6;
+    }
+  }
+}
+

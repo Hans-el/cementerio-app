@@ -1,12 +1,14 @@
 // esto se usa en el componente html de inicio 
-// Esta interfaz es para definir la estructura de una ocupación
+// Esta interfaz es para definir la estructura de una ocupación 
+// Es decir, son los datos corretos de nuestra pantalla de inicio. 
+//ESTO SE USA EN LA PAGINA INICIO
 export interface Ocupacion {
-    codigo: string;
-    sector: number;
+    codigo_bloque: string;
+    sector_cementerio: number;
     manzana: number;
-    bloque: number;
-    espacio: number;
-    tipo: string;
-    fallecido: string;
+    tipo_ubicacion: string;
+    bloque_lote: number;
+    numero: number;
+    nombre_fallecido: string;
     fecha_fallecimiento: string | null;
 }

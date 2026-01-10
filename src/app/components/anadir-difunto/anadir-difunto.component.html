@@ -1,69 +1,70 @@
 <!-- este modal es para añadir una boveda, este debe ser utilizado para crear una nueva boveda en el sistema,
   es decir, todos los campos de aqui deben estar definidos en la tabla bovedas de la abse de datos. Aunque algunos sean opcionales -->
 <div class="modal-header border-0 pb-0">
-    <h5 class="modal-title fw-semibold">
-        <i class="bi bi-person-plus me-2"></i> Añadir Difunto
-    </h5>
-    <button type="button" class="btn-close ms-auto" aria-label="Cerrar" (click)="activeModal.dismiss()"></button>
+  <h5 class="modal-title fw-semibold">
+    <i class="bi bi-person-plus me-2"></i> Añadir Difunto
+  </h5>
+  <button
+    type="button"
+    class="btn-close ms-auto"
+    aria-label="Cerrar"
+    (click)="activeModal.dismiss()"
+  ></button>
 </div>
 
 <div class="modal-body">
-    <form class="fw-semibold">
-        <div class="mb-3">
-            <label class="form-label">Nombre Completo</label>
-            <input type="text" class="form-control" [(ngModel)]="difunto.nombreCompleto" name="nombreCompleto"
-                required maxlength="100" placeholder="Ej. Juan Pérez Andrade" />
-        </div>
+  <form class="fw-semibold">
+    <div class="mb-3">
+      <label class="form-label">Nombre Completo</label>
+      <input
+        type="text"
+        class="form-control"
+        [(ngModel)]="difunto.nombre_completo"
+        name="nombre_completo"
+        required
+        maxlength="100"
+        placeholder="Ej. Juan Pérez Andrade"
+      />
+    </div>
 
-        <div class="mb-3">
-            <label class="form-label">Cédula</label>
-            <input type="text" class="form-control" [(ngModel)]="difunto.cedula" name="cedula" required
-                maxlength="10" pattern="^[0-9]{10}$" placeholder="Ej. 1312345678" />
-        </div>
+    <div class="col-md-6 mb-3">
+      <label class="form-label">Fecha de Fallecimiento</label>
+      <input
+        type="date"
+        class="form-control"
+        [(ngModel)]="difunto.fecha_fallecimiento"
+        name="fecha_fallecimiento"
+        required
+      />
+    </div>
 
-        <div class="mb-3">
-            <label class="form-label">Género</label>
-            <select class="form-select" [(ngModel)]="difunto.genero" name="genero" required>
-                <option value="" disabled selected>Seleccione...</option>
-                <option>Masculino</option>
-                <option>Femenino</option>
-                <option>Otro</option>
-            </select>
-        </div>
-
-        <div class="row">
-            <div class="col-md-6 mb-3">
-                <label class="form-label">Fecha de Nacimiento</label>
-                <input type="date" class="form-control" [(ngModel)]="difunto.fechaNacimiento"
-                    name="fechaNacimiento" required />
-            </div>
-
-            <div class="col-md-6 mb-3">
-                <label class="form-label">Fecha de Fallecimiento</label>
-                <input type="date" class="form-control" [(ngModel)]="difunto.fechaFallecimiento"
-                    name="fechaFallecimiento" required />
-            </div>
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label">Causa del Fallecimiento</label>
-            <input type="text" class="form-control" [(ngModel)]="difunto.causaFallecimiento"
-                name="causaFallecimiento" maxlength="100" placeholder="Ej. Causa natural, accidente, etc." />
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label">Observaciones</label>
-            <textarea class="form-control" [(ngModel)]="difunto.observaciones" name="observaciones" rows="2"
-                maxlength="200" placeholder="Información adicional..."></textarea>
-        </div>
-    </form>
+    <div class="mb-3">
+      <label class="form-label">Observaciones</label>
+      <textarea
+        class="form-control"
+        [(ngModel)]="difunto.observaciones"
+        name="observaciones"
+        rows="2"
+        maxlength="200"
+        placeholder="Información adicional..."
+      ></textarea>
+    </div>
+  </form>
 </div>
 
 <div class="modal-footer">
-    <button type="button" class="btn btn-outline-danger fw-bold" (click)="activeModal.dismiss()">
-        Cancelar
-    </button>
-    <button type="button" class="btn btn-outline-success fw-bold" (click)="guardarNuevoDifunto()">
-        Guardar
-    </button>
+  <button
+    type="button"
+    class="btn btn-outline-danger fw-bold"
+    (click)="activeModal.dismiss()"
+  >
+    Cancelar
+  </button>
+  <button
+    type="button"
+    class="btn btn-outline-success fw-bold"
+    (click)="guardarNuevoDifunto()"
+  >
+    Guardar
+  </button>
 </div>

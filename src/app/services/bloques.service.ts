@@ -6,23 +6,23 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class BloquesService {
+  private apiUrl = 'http://localhost:3000/api/bloques';
 
   constructor(private http: HttpClient) { }
 
-  private apiUrl = 'http://localhost:3000/api/bloques';
-
-  getBloques() {
+  // Obtener todos los bloques
+  getBloques(): Observable<any[]> {
     return this.http.get<any[]>(this.apiUrl);
   }
 
-  //para obtener los bloques por id de manzana, ya que cada id de manzana tiene un sector asociadado, no es necesario pasar el id del sector
+  // Obtener bloques por ID de manzana
   getBloquesByManzanaId(idManzana: number): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/manzana/${idManzana}`);
+    const params = new HttpParams().set('id_manzana', idManzana.toString());
+    return this.http.get<any[]>(this.apiUrl, { params });
   }
-  //nueva funcion para obtener el resumen de estados de los bloques, para los cards de resumen en inicio.component.html
+
+  // Obtener resumen de estados de los bloques (asegúrate de que esta ruta exista en el backend)
   getResumenEstadosBloques(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/resumen-estados`);
   }
-
-
 }

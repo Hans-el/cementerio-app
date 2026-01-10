@@ -7,7 +7,7 @@
     <div class="col-6 col-md-2">
       <div class="card text-center p-2 h-100">
         <h6 class="mb-1">Total</h6>
-        <h4 class="text-success mb-0">{{ totalDifuntos }}</h4>
+        <h4 class="text-success mb-0">{{ getFallecidos }}</h4>
       </div>
     </div>
 
@@ -43,7 +43,7 @@
   <!-- Tabla de difuntos -->
   <div class="card">
     <div class="table-responsive my-3">
-      <table class="table table-hover mb-0 align-middle">
+      <table class="table table-hover align-middle">
         <thead class="table-light text-center">
           <tr>
             <th>Código</th>
@@ -56,17 +56,36 @@
           </tr>
         </thead>
         <tbody class="text-center">
-          <tr *ngFor="let difunto of difuntosFiltrados">
-            <td class="fw-semibold">{{ difunto.codigo_bloque || "N/A" }}</td>
-            <td>{{ difunto.nombre_completo }}</td>
-            <td>{{ difunto.fecha_fallecimiento | date }}</td>
-            <td>{{ difunto.fecha_inhumacion | date }}</td>
-            <td>{{ difunto.fecha_exhumacion | date }}</td>
-            <td>{{ difunto.observaciones || "N/A" }}</td>
+          <tr *ngFor="let fallecido of difuntosFiltrados">
+            <td class="fw-semibold">{{ fallecido.codigo_bloque }}</td>
+            <td>{{ fallecido.nombre_completo }}</td>
+            <td>
+              {{
+                fallecido.fecha_fallecimiento
+                  ? (fallecido.fecha_fallecimiento | date)
+                  : "--"
+              }}
+            </td>
+            <!-- mostramos lam misma que la de fallecimiento, hay que darle formato -->
+            <td>
+              {{
+                fallecido.fecha_inhumacion
+                  ? (fallecido.fecha_fallecimiento | date)
+                  : fallecido.fecha_fallecimiento
+              }}
+            </td>
+            <td>
+              {{
+                fallecido.fecha_exhumacion
+                  ? (fallecido.fecha_exhumacion | date)
+                  : "--"
+              }}
+            </td>
+            <td>{{ fallecido.observaciones || "--" }}</td>
             <td>
               <button
                 class="btn btn-m btn-warning my-1 fw-semibold"
-                (click)="abrirModalEditarDifunto(difunto)"
+                (click)="abrirModalEditarDifunto(fallecido)"
               >
                 <i class="bi bi-pencil"></i>
               </button>
@@ -88,5 +107,20 @@
         </tbody>
       </table>
     </div>
+  </div>
+  <div class="pagination-controls">
+    <button
+      (click)="cambiarPagina(currentPage - 1)"
+      [disabled]="currentPage === 1"
+    >
+      Anterior
+    </button>
+    <span> Página {{ currentPage }} de {{ totalPages }} </span>
+    <button
+      (click)="cambiarPagina(currentPage + 1)"
+      [disabled]="currentPage === totalPages"
+    >
+      Siguiente
+    </button>
   </div>
 </div>

@@ -2,8 +2,9 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { } from '@angular/forms';
 import Swal from 'sweetalert2';
-import { Difunto } from '../../models/difunto.model';
+import { Fallecido } from '../../models/fallecido.models';
 
 
 @Component({
@@ -14,15 +15,13 @@ import { Difunto } from '../../models/difunto.model';
   styleUrl: './anadir-difunto.component.css'
 })
 export class AnadirDifuntoComponent {
-  @Output() guardar = new EventEmitter<Difunto>();
-  difunto: Difunto = {
-    id: 0,
-    nombreCompleto: '',
-    cedula: '',
-    genero: 'Masculino',
-    fechaNacimiento: '',
-    fechaFallecimiento: '',
-    causaFallecimiento: '',
+  @Output() guardar = new EventEmitter<Fallecido>();
+  difunto: Fallecido = {
+    id_fallecido: 0,
+    nombre_completo: '',
+    fecha_inhumacion: '',
+    fecha_exhumacion: '',
+    fecha_fallecimiento: '',
     observaciones: ''
   };
 
@@ -30,11 +29,9 @@ export class AnadirDifuntoComponent {
 
   guardarNuevoDifunto() {
     if (
-      !this.difunto.nombreCompleto ||
-      !this.difunto.cedula ||
-      !this.difunto.genero ||
-      !this.difunto.fechaNacimiento ||
-      !this.difunto.fechaFallecimiento
+      !this.difunto.nombre_completo ||
+      !this.difunto.fecha_fallecimiento
+
     ) {
       Swal.fire({
         icon: 'warning',
