@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AnadirEspaciosComponent } from './anadir-espacios.component';
+import { EditarEspaciosComponent } from './editar-espacios.component';
 
-describe('AnadirEspaciosComponent', () => {
-  let component: AnadirEspaciosComponent;
-  let fixture: ComponentFixture<AnadirEspaciosComponent>;
+describe('EditarEspaciosComponent', () => {
+  let component: EditarEspaciosComponent;
+  let fixture: ComponentFixture<EditarEspaciosComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AnadirEspaciosComponent]
+      imports: [EditarEspaciosComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(AnadirEspaciosComponent);
+    fixture = TestBed.createComponent(EditarEspaciosComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

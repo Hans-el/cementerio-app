@@ -6,40 +6,44 @@ import { SectoresService } from '../../services/sectores.service';
 import { ManzanasService } from '../../services/manzanas.service';
 import { BloquesService } from '../../services/bloques.service';
 import Swal from 'sweetalert2';
+import { EspacioService } from '../../services/espacio.service';
+
 
 @Component({
-  selector: 'app-anadir-espacios',
+  selector: 'app-editar-espacios',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: './anadir-espacios.component.html',
-  styleUrl: './anadir-espacios.component.css'
+  templateUrl: './editar-espacios.component.html',
+  styleUrl: './editar-espacios.component.css'
 })
-export class AnadirEspaciosComponent implements OnInit {
-  nuevoEspacio: any = {
+export class EditarEspaciosComponent implements OnInit {
+  espacioEdit: any = {
     id_sector: null,
     id_manzana: null,
     id_bloque: null,
+  };
+  nuevosEspacios: any = {
     cantidad_espacios: null,
-    id_tipo_espacio: 1, // Valor por defecto, por ejemplo, "Bóveda"
+    id_tipo_espacio: 1,
   };
 
   sectores: any[] = [];
   manzanas: any[] = [];
   bloques: any[] = [];
-  //Solo contemplamos las dos opciones porque cruz ya no lo permite según el señor
+  espacios: any[] = [];
   tiposEspacio: any[] = [
-    { id_tipo_espacio: 1, nombre: 'Bóveda' },
-    { id_tipo_espacio: 2, nombre: 'Nicho' },
+    { id_tipo_espacio: 1, nombre: 'BOVEDA' },
+    { id_tipo_espacio: 2, nombre: 'NICHO' },
   ];
 
-
-  constructor(public activeModal: NgbActiveModal,
+  constructor(
+    public activeModal: NgbActiveModal,
     private sectoresService: SectoresService,
     private manzanasService: ManzanasService,
-    private bloquesService: BloquesService
+    private bloquesService: BloquesService,
+    private espacioService: EspacioService,
   ) { }
 
-  // Al inicializar el componente, cargamos los sectores disponibles
   ngOnInit(): void {
     this.cargarSectores();
   }
@@ -56,11 +60,11 @@ export class AnadirEspaciosComponent implements OnInit {
   }
 
   onSectorChange(): void {
-    if (!this.nuevoEspacio.id_sector) return;
-    this.manzanasService.getManzanasid(this.nuevoEspacio.id_sector).subscribe({
+    if (!this.espacioEdit.id_sector) return;
+    this.manzanasService.getManzanasid(this.espacioEdit.id_sector).subscribe({
       next: (manzanas) => {
         this.manzanas = manzanas;
-        this.nuevoEspacio.id_manzana = null;
+        this.espacioEdit.id_manzana = null;
         this.bloques = [];
       },
       error: () => {
@@ -70,11 +74,12 @@ export class AnadirEspaciosComponent implements OnInit {
   }
 
   onManzanaChange(): void {
-    if (!this.nuevoEspacio.id_manzana) return;
-    this.bloquesService.getBloquesid(this.nuevoEspacio.id_manzana).subscribe({
+    if (!this.espacioEdit.id_manzana) return;
+    this.bloquesService.getBloquesid(this.espacioEdit.id_manzana).subscribe({
       next: (bloques) => {
         this.bloques = bloques;
-        this.nuevoEspacio.id_bloque = null;
+        this.espacioEdit.id_bloque = null;
+        this.espacios = [];
       },
       error: () => {
         Swal.fire('Error', 'No se pudieron cargar los bloques', 'error');
@@ -82,18 +87,33 @@ export class AnadirEspaciosComponent implements OnInit {
     });
   }
 
-  // Función para manejar el envío del formulario
-  // usamos swal para mostrar mensajes de éxito o error para que se vea mejor
+  onBloqueChange(): void {
+    if (!this.espacioEdit.id_bloque) return;
+    this.espacioService.getEspacios(this.espacioEdit.id_bloque).subscribe({
+      next: (espacios) => {
+        this.espacios = espacios;
+      },
+      error: () => {
+        Swal.fire('Error', 'No se pudieron cargar los espacios', 'error');
+      }
+    });
+  }
+
   onSubmit(): void {
-    if (!this.nuevoEspacio.id_bloque || !this.nuevoEspacio.cantidad_espacios) {
-      Swal.fire('Error', 'Todos los campos son obligatorios', 'error');
+    if (!this.espacioEdit.id_bloque || !this.nuevosEspacios.cantidad_espacios) {
+      Swal.fire('Error', 'Debes seleccionar un bloque y especificar la cantidad de espacios a añadir', 'error');
       return;
     }
 
-    this.bloquesService.anadirEspacios(this.nuevoEspacio.id_bloque, this.nuevoEspacio).subscribe({
+    const request = {
+      cantidad_espacios: this.nuevosEspacios.cantidad_espacios,
+      id_tipo_espacio: this.nuevosEspacios.id_tipo_espacio,
+    };
+
+    this.bloquesService.anadirEspacios(this.espacioEdit.id_bloque, request).subscribe({
       next: (response) => {
         Swal.fire('Éxito', 'Espacios añadidos correctamente', 'success');
-        this.activeModal.close(response);
+        this.onBloqueChange(); // Recargar los espacios después de añadir nuevos
       },
       error: () => {
         Swal.fire('Error', 'Error al añadir espacios', 'error');
@@ -101,4 +121,3 @@ export class AnadirEspaciosComponent implements OnInit {
     });
   }
 }
-

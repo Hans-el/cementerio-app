@@ -100,7 +100,7 @@
             class="nav-link d-flex align-items-center px-3 py-2"
           >
             <i class="bi bi-building-fill-gear nav-icon"></i>
-            <span class="nav-text ms-3">Ocupaciones</span>
+            <span class="nav-text ms-3">OCUPACIONES</span>
           </a>
         </li>
         <li class="nav-item">
@@ -110,16 +110,17 @@
             class="nav-link d-flex align-items-center px-3 py-2"
           >
             <i class="bi bi-person-vcard nav-icon"></i>
-            <span class="nav-text ms-3">Fallecidos</span>
+            <span class="nav-text ms-3">FALLECIDOS</span>
           </a>
         </li>
         <li class="nav-item">
           <a
-            (click)="editarBovedas()"
+            routerLink="/reportes"
+            routerLinkActive="active"
             class="nav-link d-flex align-items-center px-3 py-2"
           >
-            <i class="bi bi-pencil-square nav-icon"></i>
-            <span class="nav-text ms-3">Gestión de Ocupaciones</span>
+            <i class="bi bi-file-earmark-spreadsheet-fill nav-icon"></i>
+            <span class="nav-text ms-3">REPORTES</span>
           </a>
         </li>
       </ul>

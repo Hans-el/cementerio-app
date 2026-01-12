@@ -1,5 +1,5 @@
 <div class="modal-header">
-  <h4 class="modal-title">Añadir Espacios a Bloque</h4>
+  <h4 class="modal-title">Editar Espacios de Bloque</h4>
   <button type="button" class="close" (click)="activeModal.dismiss()">
     &times;
   </button>
@@ -10,7 +10,7 @@
       <label for="sector">Sector:</label>
       <select
         class="form-control"
-        [(ngModel)]="nuevoEspacio.id_sector"
+        [(ngModel)]="espacioEdit.id_sector"
         name="sector"
         (change)="onSectorChange()"
         required
@@ -25,10 +25,10 @@
       <label for="manzana">Manzana:</label>
       <select
         class="form-control"
-        [(ngModel)]="nuevoEspacio.id_manzana"
+        [(ngModel)]="espacioEdit.id_manzana"
         name="manzana"
         (change)="onManzanaChange()"
-        [disabled]="!nuevoEspacio.id_sector"
+        [disabled]="!espacioEdit.id_sector"
         required
       >
         <option value="" disabled selected>Selecciona una manzana</option>
@@ -41,9 +41,10 @@
       <label for="bloque">Bloque:</label>
       <select
         class="form-control"
-        [(ngModel)]="nuevoEspacio.id_bloque"
+        [(ngModel)]="espacioEdit.id_bloque"
         name="bloque"
-        [disabled]="!nuevoEspacio.id_manzana"
+        (change)="onBloqueChange()"
+        [disabled]="!espacioEdit.id_manzana"
         required
       >
         <option value="" disabled selected>Selecciona un bloque</option>
@@ -52,31 +53,42 @@
         </option>
       </select>
     </div>
-    <div class="form-group">
-      <label for="cantidad_espacios">Cantidad de Espacios:</label>
-      <input
-        type="number"
-        class="form-control"
-        [(ngModel)]="nuevoEspacio.cantidad_espacios"
-        name="cantidad_espacios"
-        required
-      />
+    <div class="form-group" *ngIf="espacios.length > 0">
+      <h5>Espacios del Bloque:</h5>
+      <ul class="list-group">
+        <li class="list-group-item" *ngFor="let espacio of espacios">
+          Espacio {{ espacio.numero_espacio }} - {{ espacio.tipo_espacio }}
+        </li>
+      </ul>
     </div>
     <div class="form-group">
-      <label for="tipo_espacio">Tipo de Espacio:</label>
-      <select
-        class="form-control"
-        [(ngModel)]="nuevoEspacio.id_tipo_espacio"
-        name="tipo_espacio"
-        required
-      >
-        <option
-          *ngFor="let tipo of tiposEspacio"
-          [value]="tipo.id_tipo_espacio"
+      <h5>Añadir Más Espacios:</h5>
+      <div class="form-group">
+        <label for="cantidad_espacios">Cantidad de Espacios:</label>
+        <input
+          type="number"
+          class="form-control"
+          [(ngModel)]="nuevosEspacios.cantidad_espacios"
+          name="cantidad_espacios"
+          required
+        />
+      </div>
+      <div class="form-group">
+        <label for="tipo_espacio">Tipo de Espacio:</label>
+        <select
+          class="form-control"
+          [(ngModel)]="nuevosEspacios.id_tipo_espacio"
+          name="tipo_espacio"
+          required
         >
-          {{ tipo.nombre }}
-        </option>
-      </select>
+          <option
+            *ngFor="let tipo of tiposEspacio"
+            [value]="tipo.id_tipo_espacio"
+          >
+            {{ tipo.nombre }}
+          </option>
+        </select>
+      </div>
     </div>
   </form>
 </div>
@@ -86,9 +98,9 @@
     class="btn btn-secondary"
     (click)="activeModal.dismiss()"
   >
-    Cancelar
+    Cerrar
   </button>
   <button type="button" class="btn btn-primary" (click)="onSubmit()">
-    Guardar
+    Añadir Espacios
   </button>
 </div>

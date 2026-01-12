@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { NichosService } from '../../services/nicho.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { NichoSeleccionadoService } from '../../services/nicho-seleccionado.service';
 import { Nicho } from '../../models/nicho.model'
 import { AnadirBovedaComponent } from '../anadir-bloque/anadir-boveda.component';
+import { EditarEspaciosComponent } from '../editar-espacios/editar-espacios.component';
+import { AnadirManzanaComponent } from '../anadir-manzana/anadir-manzana.component';
 
 @Component({
   selector: 'app-gestion-bovedas',
@@ -26,50 +26,35 @@ export class GestionBovedasComponent {
   constructor(
     public activeModal: NgbActiveModal,
     private modalService: NgbModal,
-    private nichosService: NichosService,
-    private nichoSeleccionadoService: NichoSeleccionadoService
   ) { }
 
-  validarCedula(): void {
-    // Permite que el usuario escriba, pero marca como inválido si no son 10 dígitos
-    this.cedulaInvalida = this.cedula.length > 0 && !/^\d{10}$/.test(this.cedula);
-  }
-  buscar() {
-    this.mensajeError = null;
-    this.resultadoBusqueda = null;
 
-    if (!this.cedula.trim()) {
-      this.mensajeError = 'Por favor, ingrese una cédula.';
-      return;
-    }
-
-
-    this.cargando = false; // Iniciar carga
-
-    this.nichosService.buscarPorCedula(this.cedula).subscribe({
-      next: (nichos) => {
-        if (nichos.length > 0) {
-          this.resultadoBusqueda = nichos;
-          this.nichoSeleccionadoService.setSelectedNicho(nichos[0]);
-
-        } else {
-          this.mensajeError = 'No se encontró ninguna bóveda asociada a esta cédula.';
-        }
-      },
-      error: (err) => {
-        this.mensajeError = 'Ocurrió un error al buscar la bóveda.';
-      }
+  //Funciones para abrir los modales correspondientes a cada botón
+  //1. Abrimos el modal de añadir manzana
+  abrirModalAnadirManzana(): void {
+    const modalRef = this.modalService.open(AnadirManzanaComponent);
+    modalRef.result.then((result) => {
+      console.log('manzanas cargadas:', result);
+    }).catch((error) => {
+      console.log('Modal cerrado sin acción');
     });
   }
-  //Abrimos el modal de añadir bóvedas
-  abrirModalAnadir(): void {
+  //2. Abrimos el modal de añadir bloques
+  abrirModalAnadirBloque(): void {
     const modalRef = this.modalService.open(AnadirBovedaComponent);
-    modalRef.componentInstance.guardar.subscribe((nuevaBoveda: any) => {
-      // Aquí puedes manejar la lógica para añadir la bóveda, por ejemplo:
-      console.log('Nueva bóveda añadida:', nuevaBoveda);
-      // Si tienes un servicio para guardar en la base de datos, llámalo aquí.
+    modalRef.result.then((result) => {
+      console.log('bloques cargados:', result);
+    }).catch((error) => {
+      console.log('Modal cerrado sin acción');
     });
   }
-
-
+  //3. Abrimos el modal de editar espacios
+  abrirModalEditarEspacio() {
+    const modalRef = this.modalService.open(EditarEspaciosComponent, { size: 'lg' });
+    modalRef.result.then((result) => {
+      console.log('espacios cargados:', result);
+    }).catch((error) => {
+      console.log('Modal cerrado sin acción');
+    });
+  }
 }

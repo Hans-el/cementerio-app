@@ -115,6 +115,18 @@
           </option>
         </select>
       </div>
+      <!-- Observaciones-->
+      <div class="col-12 mb-3">
+        <label for="observaciones" class="form-label">Observaciones</label>
+        <textarea
+          id="observaciones"
+          class="form-control"
+          rows="2"
+          placeholder="Notas adicionales..."
+          [(ngModel)]="nuevoDifunto.observaciones"
+          name="observaciones"
+        ></textarea>
+      </div>
     </div>
   </form>
 </div>
