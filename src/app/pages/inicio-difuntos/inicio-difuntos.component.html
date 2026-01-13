@@ -27,7 +27,7 @@
 
   <!-- Filtros + búsqueda -->
   <div class="card mb-4 p-3">
-    <div class="row g-3 align-items-end">
+    <div class="row g-3">
       <!-- BUSCADOR -->
       <div class="col-md-6">
         <label class="form-label fw-semibold">Buscar</label>
@@ -85,14 +85,13 @@
             </td>
             <td>{{ fallecido.observaciones || "--" }}</td>
             <td>
+              <!-- le asignamos abrirModalEditarDifunto al boton de editar para que se abra el modal con la información del fallecido -->
               <button
-                class="btn btn-m btn-warning my-1 fw-semibold"
+                class="btn btn-sm btn-warning my-1 fw-semibold"
                 (click)="abrirModalEditarDifunto(fallecido)"
               >
+                Editar
                 <i class="bi bi-pencil"></i>
-              </button>
-              <button class="btn btn-m btn-danger mx-1 fw-semibold">
-                <i class="bi bi-trash"></i>
               </button>
             </td>
           </tr>

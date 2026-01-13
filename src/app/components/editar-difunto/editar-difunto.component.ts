@@ -1,4 +1,4 @@
-import { Component, Input, EventEmitter, Output } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
@@ -15,14 +15,14 @@ import Swal from 'sweetalert2';
   styleUrls: ['./editar-difunto.component.css']
 })
 export class EditarDifuntoComponent {
-  @Input() fallecido: Fallecido = {
+  fallecido: Fallecido = {
     id_fallecido: 0,
     nombre_completo: '',
     fecha_fallecimiento: null,
     fecha_fallecimiento_raw: '',
     fecha_inhumacion: null,
     fecha_exhumacion: null,
-    observaciones: null
+    observaciones: ''
   };
 
   constructor(
@@ -31,11 +31,10 @@ export class EditarDifuntoComponent {
   ) { }
 
   guardarCambios(): void {
-    // Llamar directamente al servicio para actualizarlo
     this.fallecidoService.actualizarFallecido(this.fallecido.id_fallecido, this.fallecido).subscribe({
       next: (response) => {
         Swal.fire('Éxito', 'Fallecido actualizado correctamente', 'success');
-        this.activeModal.close(true); // Cerrar el modal y notificar éxito
+        this.activeModal.close(this.fallecido); // Cerrar el modal y devolver el fallecido actualizado
       },
       error: () => {
         Swal.fire('Error', 'Error al actualizar el fallecido', 'error');

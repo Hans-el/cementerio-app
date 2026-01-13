@@ -1,6 +1,7 @@
-<div class="modal-header border-0 pb-0">
-  <h5 class="modal-title fw-semibold bi bi-pencil-square my-1">
-    Editar Difunto
+<div class="modal-header border-0">
+  <h5 class="modal-title fw-semibold">
+    <i class="bi bi-pencil-square me-2 text-primary"></i>
+    Editar difunto
   </h5>
   <button
     type="button"
@@ -10,11 +11,13 @@
   ></button>
 </div>
 
-<div class="modal-body">
+<div class="modal-body pt-0">
   <form>
-    <!-- Nombre completo -->
-    <div class="mb-2">
-      <label class="form-label fw-semibold">Nombre Completo</label>
+    <!-- DATOS PERSONALES -->
+    <p class="fw-semibold text-muted mb-2">Datos del difunto</p>
+
+    <div class="mb-3">
+      <label class="form-label">Nombre completo</label>
       <input
         type="text"
         class="form-control"
@@ -25,66 +28,70 @@
       />
     </div>
 
-    <!-- Fecha de fallecimiento -->
-    <div class="mb-2">
-      <label class="form-label fw-semibold">Fecha de Fallecimiento</label>
-      <input
-        type="date"
-        class="form-control"
-        [(ngModel)]="fallecido.fecha_fallecimiento"
-        name="fecha_fallecimiento"
-      />
+    <!-- FECHAS -->
+    <p class="fw-semibold text-muted mt-3 mb-2">Fechas</p>
+
+    <div class="row">
+      <div class="col-md-4 mb-3">
+        <label class="form-label">Fecha de fallecimiento</label>
+        <input
+          type="date"
+          class="form-control"
+          [(ngModel)]="fallecido.fecha_fallecimiento"
+          name="fecha_fallecimiento"
+        />
+      </div>
+
+      <div class="col-md-4 mb-3">
+        <label class="form-label">Fecha de inhumación</label>
+        <input
+          type="date"
+          class="form-control"
+          [(ngModel)]="fallecido.fecha_inhumacion"
+          name="fecha_inhumacion"
+        />
+      </div>
+
+      <div class="col-md-4 mb-3">
+        <label class="form-label">Fecha de exhumación</label>
+        <input
+          type="date"
+          class="form-control"
+          [(ngModel)]="fallecido.fecha_exhumacion"
+          name="fecha_exhumacion"
+        />
+      </div>
     </div>
 
-    <!-- Fecha de inhumación -->
-    <div class="mb-2">
-      <label class="form-label fw-semibold">Fecha de Inhumación</label>
-      <input
-        type="date"
-        class="form-control"
-        [(ngModel)]="fallecido.fecha_inhumacion"
-        name="fecha_inhumacion"
-      />
-    </div>
-
-    <!-- Fecha de exhumación -->
-    <div class="mb-2">
-      <label class="form-label fw-semibold">Fecha de Exhumación</label>
-      <input
-        type="date"
-        class="form-control"
-        [(ngModel)]="fallecido.fecha_exhumacion"
-        name="fecha_exhumacion"
-      />
-    </div>
-
-    <!-- Observaciones -->
-    <div class="mb-2">
-      <label class="form-label fw-semibold">Observaciones</label>
+    <!-- OBSERVACIONES -->
+    <div class="mb-3">
+      <label class="form-label">Observaciones</label>
       <textarea
         class="form-control"
+        rows="3"
+        placeholder="Notas adicionales (opcional)"
         [(ngModel)]="fallecido.observaciones"
         name="observaciones"
-        rows="2"
-        placeholder="Notas adicionales..."
       ></textarea>
     </div>
   </form>
 </div>
 
-<div class="modal-footer">
+<div class="modal-footer border-0">
   <button
     type="button"
-    class="btn btn-outline-danger fw-bold"
+    class="btn btn-danger fw-semibold"
     (click)="activeModal.dismiss()"
   >
     Cancelar
   </button>
+
   <button
     type="button"
-    class="btn btn-outline-success fw-bold"
+    class="btn btn-success fw-semibold"
     (click)="guardarCambios()"
   >
+    <i class="bi bi-save me-1"></i>
     Guardar cambios
   </button>
 </div>

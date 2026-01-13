@@ -42,9 +42,8 @@ export class ManzanasService {
     return this.http.get<Manzana[]>(this.apiUrl, { params });
   }
 
-  /**
-   * Crear nueva manzana
-   */
+
+  //Crear nueva manzana, usamos un objeto con los datos que están definidos en el servicio y backend
   createManzana(data: {
     id_sector: number;
     numero_manzana: number;

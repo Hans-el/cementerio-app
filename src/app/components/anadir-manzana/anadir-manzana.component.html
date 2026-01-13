@@ -1,1 +1,87 @@
-<p>anadir-manzana works!</p>
+<div class="modal-header border-0">
+  <h5 class="modal-title fw-semibold">
+    <i class="bi bi-columns-gap me-2 text-primary"></i>
+    Añadir manzana
+  </h5>
+  <button
+    type="button"
+    class="btn-close"
+    aria-label="Cerrar"
+    (click)="activeModal.dismiss()"
+  ></button>
+</div>
+
+<div class="modal-body pt-0">
+  <form>
+    <!-- UBICACIÓN -->
+    <p class="fw-semibold text-muted mb-2">Ubicación</p>
+
+    <div class="row">
+      <div class="col-md-12 mb-3">
+        <label for="sector" class="form-label">Sector</label>
+        <select
+          class="form-select"
+          [(ngModel)]="nuevaManzana.id_sector"
+          name="sector"
+          (change)="onSectorChange()"
+          required
+        >
+          <option value="" disabled selected>Seleccione un sector</option>
+          <option *ngFor="let sector of sectores" [value]="sector.id_sector">
+            {{ sector.codigo }} - {{ sector.nombre }}
+          </option>
+        </select>
+      </div>
+    </div>
+
+    <!-- DATOS DE LA MANZANA -->
+    <p class="fw-semibold text-muted mt-3 mb-2">Datos de la manzana</p>
+
+    <div class="row">
+      <div class="col-md-4 mb-3">
+        <label for="numero_manzana" class="form-label">
+          Número de manzana
+        </label>
+        <input
+          type="number"
+          class="form-control"
+          [(ngModel)]="nuevaManzana.numero_manzana"
+          name="numero_manzana"
+          required
+          readonly
+        />
+        <small class="text-muted">Se genera automáticamente</small>
+      </div>
+
+      <div class="col-md-8 mb-3">
+        <label for="descripcion" class="form-label">Descripción</label>
+        <textarea
+          class="form-control"
+          rows="3"
+          placeholder="Descripción de la manzana (opcional)"
+          [(ngModel)]="nuevaManzana.descripcion"
+          name="descripcion"
+        ></textarea>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div class="modal-footer border-0">
+  <button
+    type="button"
+    class="btn btn-danger fw-semibold"
+    (click)="activeModal.dismiss()"
+  >
+    Cancelar
+  </button>
+
+  <button
+    type="button"
+    class="btn btn-success fw-semibold"
+    (click)="onSubmit()"
+  >
+    <i class="bi bi-save me-1"></i>
+    Guardar manzana
+  </button>
+</div>

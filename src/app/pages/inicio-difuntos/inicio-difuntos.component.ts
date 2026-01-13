@@ -34,6 +34,7 @@ export class InicioDifuntosComponent implements OnInit {
 
   ngOnInit(): void {
     this.cargarDifuntos(); // Cargar difuntos al iniciar el componente, lo usamos para el buscador
+
   }
 
   cargarDifuntos(page = 1): void {
@@ -91,7 +92,7 @@ export class InicioDifuntosComponent implements OnInit {
 
   abrirModalEditarDifunto(difunto: any) {
     const modalRef = this.modalService.open(EditarDifuntoComponent);
-    modalRef.componentInstance.difunto = { ...difunto }; // Pasa una copia del objeto
+    modalRef.componentInstance.fallecido = { ...difunto }; // Pasa una copia del objeto
 
     // Escuchar cuando se cierre el modal para recargar los datos
     modalRef.result.then(
