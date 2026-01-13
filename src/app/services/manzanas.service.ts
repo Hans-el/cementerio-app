@@ -15,7 +15,7 @@ export class ManzanasService {
   /**
    * Obtener todas las manzanas
    */
-  getManzanas(): Observable<Manzana[]> {
+  getManzanas(id_sector: number): Observable<Manzana[]> {
     return this.http.get<Manzana[]>(this.apiUrl);
   }
   //este lo uso para el modal de añadir difunto
@@ -29,6 +29,7 @@ export class ManzanasService {
   /**
    * Obtener manzanas por sector
    * (para filtros y selects encadenados)
+   * Aunque estos podrian no usarse ya porque con los parametros en getManzanasid se puede hacer lo mismo, pero lo dejamos por ahora
    */
   getManzanasBySector(idSector: number): Observable<Manzana[]> {
     const params = new HttpParams()

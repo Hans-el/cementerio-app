@@ -16,11 +16,12 @@ import Swal from 'sweetalert2';
 })
 export class InicioDifuntosComponent implements OnInit {
   difuntos: any[] = [];
+  totalFallecidos: number = 0;
   loading = false;
-  currentPage = 1; // Página actual
-  itemsPerPage = 50; // Ítems por página
-  totalItems = 0; // Total de ítems
-  totalPages = 0; // Total de páginas
+  currentPage: number = 1; // Página actual
+  limit: number = 30; // Número de registros por página
+  totalPages: number = 0; // Total de páginas
+  searchQuery: string = ''; // Consulta de búsqueda
 
   // Filtros
   filtros = {
@@ -37,30 +38,41 @@ export class InicioDifuntosComponent implements OnInit {
 
   }
 
-  cargarDifuntos(page = 1): void {
-    this.loading = true;
-    this.fallecidoService.getFallecidos(page, this.itemsPerPage).subscribe({
+  cargarDifuntos(): void {
+    this.fallecidoService.getFallecidos(this.currentPage, this.limit, this.searchQuery).subscribe({
       next: (response) => {
-        this.difuntos = response.data.filter(difunto => difunto.nombre_completo !== "S/N");
-        this.totalItems = response.total;
-        this.currentPage = response.page;
+        this.difuntos = response.data.filter(difunto => difunto.nombre_completo.toUpperCase() !== 'S/N');
+        this.totalFallecidos = response.total;
         this.totalPages = response.totalPages;
-        this.loading = false;
       },
       error: () => {
-        this.loading = false;
-        Swal.fire('Error', 'No se pudieron cargar los difuntos', 'error');
+        console.error('Error al cargar los difuntos');
       }
     });
   }
-  // Método para cambiar de página
-  cambiarPagina(page: number): void {
+  cargarTotalFallecidos(): void {
+    this.fallecidoService.getTotalFallecidos(this.searchQuery).subscribe({
+      next: (data) => {
+        this.totalFallecidos = data.total;
+      },
+      error: () => {
+        console.error('Error al cargar el total de difuntos');
+      }
+    });
+  }
+  // Método para manejar el cambio de página. Se llama cuando el usuario navega entre páginas.
+  // En el html se encuentra abajo en los botones de paginación
+  onPageChange(page: number): void {
     if (page >= 1 && page <= this.totalPages) {
-      this.cargarDifuntos(page);
+      this.currentPage = page;
+      this.cargarDifuntos();
     }
   }
-
-
+  onSearch(): void {
+    this.currentPage = 1;
+    this.cargarDifuntos();
+  }
+  // Obtener difuntos filtrados según la búsqueda
   get difuntosFiltrados(): any[] {
     if (!this.filtros.busqueda) {
       return this.difuntos;
@@ -75,6 +87,7 @@ export class InicioDifuntosComponent implements OnInit {
     return this.difuntosFiltrados.length;
   }
 
+  //Modal para añadir difunto, se abre al hacer click en el botón "Añadir Difunto"
   abrirModalAnadirDifunto() {
     const modalRef = this.modalService.open(GestionDifuntosComponent);
     modalRef.componentInstance.guardar.subscribe((nuevoDifunto: any) => {
@@ -90,15 +103,15 @@ export class InicioDifuntosComponent implements OnInit {
     });
   }
 
+  //Modal para editar difunto, se abre al hacer click en el botón "Editar" de cada fila
   abrirModalEditarDifunto(difunto: any) {
     const modalRef = this.modalService.open(EditarDifuntoComponent);
-    modalRef.componentInstance.fallecido = { ...difunto }; // Pasa una copia del objeto
-
+    modalRef.componentInstance.fallecido = { ...difunto }; // Pasa una copia del objeto fallecido al modal, de esta manera obtenemos el id cque va cargar los datos.
     // Escuchar cuando se cierre el modal para recargar los datos
     modalRef.result.then(
       (result) => {
         if (result) {
-          this.cargarDifuntos(this.currentPage); // Recargar la lista si se guardaron cambios
+          this.cargarDifuntos(); // Recargar la lista si se guardaron cambios
         }
       },
       (reason) => {

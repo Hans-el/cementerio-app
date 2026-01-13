@@ -7,7 +7,7 @@
     <div class="col-6 col-md-2">
       <div class="card text-center p-2 h-100">
         <h6 class="mb-1">Total</h6>
-        <h4 class="text-success mb-0">{{ getFallecidos }}</h4>
+        <h4 class="text-success mb-0">{{ totalFallecidos }}</h4>
       </div>
     </div>
 
@@ -30,12 +30,12 @@
     <div class="row g-3">
       <!-- BUSCADOR -->
       <div class="col-md-6">
-        <label class="form-label fw-semibold">Buscar</label>
+        <label class="form-label fw-semibold">Buscar Fallecido</label>
         <input
           type="text"
           class="form-control"
-          placeholder="Nombre del fallecido"
-          [(ngModel)]="filtros.busqueda"
+          placeholder="Código o Nombre del fallecido"
+          [(ngModel)]="searchQuery"
           (ngModelChange)="ngOnInit()"
         />
       </div>
@@ -111,14 +111,14 @@
   </div>
   <div class="pagination-controls">
     <button
-      (click)="cambiarPagina(currentPage - 1)"
+      (click)="onPageChange(currentPage - 1)"
       [disabled]="currentPage === 1"
     >
       Anterior
     </button>
     <span> Página {{ currentPage }} de {{ totalPages }} </span>
     <button
-      (click)="cambiarPagina(currentPage + 1)"
+      (click)="onPageChange(currentPage + 1)"
       [disabled]="currentPage === totalPages"
     >
       Siguiente

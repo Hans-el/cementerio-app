@@ -30,7 +30,7 @@ export class BloquesService {
     return this.http.get<any[]>(this.apiUrl, { params });
   }
 
-  // Obtener resumen de estados de los bloques (asegúrate de que esta ruta exista en el backend)
+  // Obtener resumen de estados de los bloques para la pagina de inicio
   getResumenEstadosBloques(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/resumen-estados`);
   }

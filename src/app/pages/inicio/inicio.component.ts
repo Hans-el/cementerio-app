@@ -83,7 +83,7 @@ export class InicioComponent implements OnInit {
   }
   //aca cargamos las manzanas. Esto debe estar igual a la funcion del backend en controllers/manzanaController.js [La ultima funcion creada]
   cargarManzanas(idSector: number): void {
-    this.manzanasService.getManzanasBySectorCodigo(idSector.toString()).subscribe({
+    this.manzanasService.getManzanasid(idSector).subscribe({
       next: data => {
         this.manzanas = data;
       },
@@ -95,7 +95,7 @@ export class InicioComponent implements OnInit {
   //aca cargamos los bloques segun la manzana y el sector seleccionado, usando la nueva funcion creada en bloques.service.ts.
   // recordemos que usamos numero_manzana para los filtros en el componente inicio.component.html, no id_manzana
   cargarBloques(idManzana: number): void {
-    this.bloquesService.getBloquesByManzanaId(idManzana).subscribe({
+    this.bloquesService.getBloquesid(idManzana).subscribe({
       next: data => {
         this.bloques = data; // Asegúrate de que `data` sea un arreglo válido
         console.log('Bloques cargados:', this.bloques); // Depuración

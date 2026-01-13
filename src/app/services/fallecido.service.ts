@@ -13,19 +13,31 @@ export class FallecidoService {
   constructor(private http: HttpClient, private authService: AuthService) { }
 
 
-  getFallecidos(page = 1, limit = 50): Observable<{ data: any[], total: number, page: number, limit: number, totalPages: number }> {
-    const params = new HttpParams()
+  // Obtener fallecidos paginados
+  getFallecidos(page: number, limit: number, q?: string): Observable<{ data: any[], total: number, page: number, limit: number, totalPages: number }> {
+    let params = new HttpParams()
       .set('page', page.toString())
       .set('limit', limit.toString());
 
-    return this.http.get<any>(this.apiUrl, { params });
+    if (q) {
+      params = params.set('q', q);
+    }
+
+    return this.http.get<{ data: any[], total: number, page: number, limit: number, totalPages: number }>(this.apiUrl, { params });
   }
 
-
-
-  getTotalFallecidos(): Observable<{ total: number }> {
-    return this.http.get<{ total: number }>(`${this.apiUrl}/total`);
+  // Obtener el total de fallecidos (sin paginación)
+  getTotalFallecidos(q?: string): Observable<{ total: number }> {
+    let params = new HttpParams();
+    if (q) {
+      params = params.set('q', q);
+    }
+    return this.http.get<{ total: number }>(`${this.apiUrl}/total`, { params });
   }
+
+  // getTotalFallecidos(): Observable<{ total: number }> {
+  //   return this.http.get<{ total: number }>(`${this.apiUrl}/total`);
+  // }
 
   buscarFallecidos(q: string): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/buscar`, {
