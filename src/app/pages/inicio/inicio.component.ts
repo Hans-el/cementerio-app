@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgbDropdownModule, NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 import Swal from 'sweetalert2';
-import { EditarBovedasComponent } from '../../components/editar-bovedas/editar-bovedas.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { OcupacionesService } from '../../services/ocupaciones.service';
 import { SectoresService } from '../../services/sectores.service';
@@ -11,6 +10,7 @@ import { ManzanasService } from '../../services/manzanas.service';
 import { BloquesService } from '../../services/bloques.service';
 import { GestionBovedasComponent } from '../../components/gestion-bloques/gestion-bovedas.component';
 import { Ocupacion } from '../../models/ocupacion.model';
+import { EspacioService } from '../../services/espacio.service';
 
 @Component({
   selector: 'app-inicio',
@@ -33,8 +33,13 @@ export class InicioComponent implements OnInit {
   sectores: any[] = [];
   manzanas: any[] = [];
   bloques: any[] = [];
-  resumenEstados: any[] = [];
   loading = false;
+  // Resumen de espacios para los badges
+  resumenEspacios: { bovedas: number, nichos: number, cruces: number } = {
+    bovedas: 0,
+    nichos: 0,
+    cruces: 0,
+  };
 
   // ===============================
   // FILTROS
@@ -57,14 +62,15 @@ export class InicioComponent implements OnInit {
     private sectoresService: SectoresService,
     private manzanasService: ManzanasService,
     private bloquesService: BloquesService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private espacioService: EspacioService
   ) { }
 
   ngOnInit(): void {
     this.cargarSectores();
     this.cargarOcupaciones();
-    this.cargarResumenEstados();
-    this.obtenerTotalOcupaciones(); // Función para obtener el total de ocupaciones
+    this.cargarResumenEspacios(); // Obtener el resumen de espacios
+    //this.obtenerTotalOcupaciones(); // Función para obtener el total de ocupaciones
 
 
   }
@@ -97,8 +103,7 @@ export class InicioComponent implements OnInit {
   cargarBloques(idManzana: number): void {
     this.bloquesService.getBloquesid(idManzana).subscribe({
       next: data => {
-        this.bloques = data; // Asegúrate de que `data` sea un arreglo válido
-        console.log('Bloques cargados:', this.bloques); // Depuración
+        this.bloques = data;
       },
       error: (error) => {
         console.error('Error al cargar bloques:', error);
@@ -148,17 +153,6 @@ export class InicioComponent implements OnInit {
       this.page++;
       this.cargarOcupaciones();
     }
-  }
-  // nueva funcion para cargar el resumen de estados de los bloques, para los cards de resumen en inicio.component.html
-  cargarResumenEstados(): void {
-    this.bloquesService.getResumenEstadosBloques().subscribe({
-      next: data => {
-        this.resumenEstados = data;
-      },
-      error: () => {
-        Swal.fire('Error', 'No se pudo cargar el resumen de estados', 'error');
-      }
-    });
   }
 
   // ===============================
@@ -252,36 +246,40 @@ export class InicioComponent implements OnInit {
 
 
   // CONTADORES DE LOS BADGES ((falta corregir para que se acualizen respectivamente los numeros reales))
-  // ===============================
-  // Métodos get para los cards de resumen
-  get total(): number {
-    return this.resumenEstados.reduce((sum, estado) => sum + estado.cantidad, 0);
+  // Conecta con la nueva función creada en bloques.service.ts
+  cargarResumenEspacios(): void {
+    this.espacioService.getResumenEspacios().subscribe({
+      next: resumen => {
+        this.resumenEspacios = { // Asignamremos los valores obtenidos como números para poder sumarlos y obtener el total
+          bovedas: Number(resumen.bovedas),
+          nichos: Number(resumen.nichos),
+          cruces: Number(resumen.cruces),
+        };
+      },
+      error: () => {
+        Swal.fire('Error', 'No se pudo cargar el resumen de estados', 'error');
+      }
+    });
+  }
+  //Para obtener el total lo usamos aca, es decir, lo usamos con "resumenEspacios.lo_que_queremos"
+  obtenerTotalLotes(): number {
+    return this.resumenEspacios.bovedas + this.resumenEspacios.nichos + this.resumenEspacios.cruces;
+  }
+  //obtener el total de bovedas
+  obtenerTotalBovedas(): number {
+    return this.resumenEspacios.bovedas;
+  }
+  //obtener el total de nichos 
+  obtenerTotalNichos(): number {
+    return this.resumenEspacios.nichos;
+  }
+  //obtener el total de cruces
+  obtenerTotalCruces(): number {
+    return this.resumenEspacios.cruces;
   }
 
-  get disponibles(): number {
-    const estado = this.resumenEstados.find(e => e.estado === 'DISPONIBLE');
-    return estado ? estado.cantidad : 0;
-  }
 
-  get ocupadas(): number {
-    const estado = this.resumenEstados.find(e => e.estado === 'OCUPADO');
-    return estado ? estado.cantidad : 0;
-  }
-
-  get mantenimiento(): number {
-    const estado = this.resumenEstados.find(e => e.estado === 'MANTENIMIENTO');
-    return estado ? estado.cantidad : 0;
-  }
-
-  get clausuradas(): number {
-    const estado = this.resumenEstados.find(e => e.estado === 'CLAUSURADO');
-    return estado ? estado.cantidad : 0;
-  }
-
-
-
-
-
+  // eliminar registro, aunque no sé si ponerlo acá
   eliminar(ocupacion: any): void {
     Swal.fire({
       title: '¿Eliminar ocupación?',
@@ -299,7 +297,7 @@ export class InicioComponent implements OnInit {
     });
   }
 
-  //editar registro, debemos ajustarlo al backend para que se actulice los datos en la base de datos
+  //editar ocupacion, aunque no sé si ponerlo acá tambien 
   editar(ocupacion: any): void {
     Swal.fire(
       'Pendiente',

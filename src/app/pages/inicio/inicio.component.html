@@ -6,24 +6,25 @@
   <div class="row g-5 mb-3">
     <div class="col-6 col-md-2">
       <div class="card text-center p-2 h-100">
-        <h6 class="mb-1">TOTAL LOTES</h6>
-        <h4 class="text-success mb-0">{{ total }}</h4>
-        <!-- FALTA CORREGIR-->
+        <h6 class="mb-1">Total Lotes</h6>
+        <h4 class="text-success mb-0">
+          <!-- obtenelos el total de lotes -->
+          {{ obtenerTotalLotes() }}
+        </h4>
       </div>
     </div>
 
     <div class="col-6 col-md-2">
       <div class="card text-center p-2 h-100">
         <h6 class="mb-1">BÓVEDAS</h6>
-        <h4 class="text-warning mb-0">{{ disponibles }}</h4>
-        <!-- FALTA CORREGIR-->
+        <h4 class="text-warning mb-0">{{ resumenEspacios.bovedas }}</h4>
       </div>
     </div>
 
     <div class="col-6 col-md-2">
       <div class="card text-center p-2 h-100">
         <h6 class="mb-1">NICHOS</h6>
-        <h4 class="text-dark mb-0">{{ ocupadas }}</h4>
+        <h4 class="text-dark mb-0">{{ resumenEspacios.nichos }}</h4>
         <!-- FALTA CORREGIR-->
       </div>
     </div>
@@ -31,7 +32,7 @@
     <div class="col-6 col-md-2">
       <div class="card text-center p-2 h-100">
         <h6 class="mb-1">CRUZ</h6>
-        <h4 class="text-danger mb-0">{{ clausuradas }}</h4>
+        <h4 class="text-danger mb-0">{{ resumenEspacios.cruces }}</h4>
         <!-- FALTA CORREGIR-->
       </div>
     </div>
@@ -154,7 +155,7 @@
             <td>
               {{
                 o.fecha_fallecimiento
-                  ? (o.fecha_fallecimiento | date : "yyyy-MM-dd")
+                  ? (o.fecha_fallecimiento | date: "yyyy-MM-dd")
                   : "-"
               }}
             </td>

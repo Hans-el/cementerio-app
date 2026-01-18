@@ -27,4 +27,8 @@ export class EspacioService {
     }
     return this.http.get<any[]>(`${this.apiUrl}/disponibles`, { params });
   }
+
+  getResumenEspacios(): Observable<{ bovedas: number, nichos: number, cruces: number }> {
+    return this.http.get<{ bovedas: number, nichos: number, cruces: number }>(`${this.apiUrl}/resumen`);
+  }
 }

@@ -30,8 +30,9 @@ export class BloquesService {
     return this.http.get<any[]>(this.apiUrl, { params });
   }
 
-  // Obtener resumen de estados de los bloques para la pagina de inicio
-  getResumenEstadosBloques(): Observable<any[]> {
+  // este es para los contadores de los badges y obtener el resumen de estados de todos los tipos de bloques
+  // bloqueController -> getResumenEstadosBloques
+  getResumenBloques(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/resumen-estados`);
   }
   // Crear nuevo bloque
