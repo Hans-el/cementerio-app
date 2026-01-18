@@ -4,16 +4,17 @@
     <div class="col-lg-5">
       <h3 class="fw-bold text-success">Contáctanos</h3>
       <p>
-        Estamos aquí para ayudarte con cualquier consulta sobre nuestros servicios del cementerio.
+        Estamos aquí para ayudarte con cualquier consulta sobre nuestros
+        servicios del cementerio.
+      </p>
+      <p><i class="bi bi-telephone-fill text-success"></i> 099 848 4760</p>
+      <p>
+        <i class="bi bi-envelope-fill text-success"></i>
+        coloncementerio&#64;gmail.com
       </p>
       <p>
-        <i class="bi bi-telephone-fill text-success"></i> 099 848 4760
-      </p>
-      <p>
-        <i class="bi bi-envelope-fill text-success"></i> coloncementerio&#64;gmail.com
-      </p>
-      <p>
-        <i class="bi bi-geo-alt-fill text-success"></i> Colón - Portoviejo, Manabí, Ecuador
+        <i class="bi bi-geo-alt-fill text-success"></i> Colón - Portoviejo,
+        Manabí, Ecuador
       </p>
       <div class="p-3 bg-light rounded-3 border mt-3">
         <h6 class="fw-bold text-success">Horarios de Atención</h6>
@@ -22,15 +23,24 @@
         <p class="mb-0 text-muted">Domingos: 8:00 AM - 12:00 PM</p>
       </div>
       <!-- API de WhatsApp para mayor comodidad -->
-      <br>
+      <br />
       <div class="col-lg-5">
         <p class="mb-1 text-muted">O, para mayor comodidad</p>
         <div class="p-3 bg-light rounded-3 border mt-3">
           <h6 class="fw-bold text-success">API de WhatsApp</h6>
-          <p class="mb-1 text-muted">Para mayor comodidad, contáctanos a traves de WhatsApp</p>
-          <img class="img-fluid mb-2" src="/assets/qrfinalya.jpg" alt="Código QR">
-          <a href="https://wa.me/+593998484760?text=Hola.%20¿Me%20comunico%20con%20la%20ADMINSITRACIÓN%20DEL%20CEMENTERIO%20DE%20COLÓN?."
-            target="_blank" class="btn btn-outline-success fw-bold w-100">
+          <p class="mb-1 text-muted">
+            Para mayor comodidad, contáctanos a traves de WhatsApp
+          </p>
+          <img
+            class="img-fluid mb-2"
+            src="/assets/qrfinalya.jpg"
+            alt="Código QR"
+          />
+          <a
+            href="https://wa.me/+593998484760?text=Hola.%20¿Me%20comunico%20con%20la%20ADMINSITRACIÓN%20DEL%20CEMENTERIO%20DE%20COLÓN?."
+            target="_blank"
+            class="btn btn-outline-success fw-bold w-100"
+          >
             <i class="bi bi-whatsapp"></i> Enviar mensaje
           </a>
         </div>
@@ -43,35 +53,68 @@
         <div class="card-body p-4">
           <h5 class="fw-bold text-success">Envíanos un mensaje</h5>
           <p class="text-muted small">
-            Completa el formulario y nos pondremos en contacto contigo lo antes posible.
+            Completa el formulario y nos pondremos en contacto contigo lo antes
+            posible.
           </p>
           <form (ngSubmit)="enviarMensaje()" #formContact="ngForm">
             <div class="mb-3">
               <label class="form-label">Nombre completo *</label>
-              <input type="text" class="form-control" placeholder="Tu nombre" name="nombre"
-                [(ngModel)]="formData.nombre" required />
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Tu nombre"
+                name="nombre"
+                [(ngModel)]="formData.nombre"
+                required
+              />
             </div>
             <div class="mb-3">
               <label class="form-label">Correo electrónico *</label>
-              <input type="email" class="form-control" placeholder="tucorreo@ejemplo.com" name="correo"
-                [(ngModel)]="formData.email" required />
+              <input
+                type="email"
+                class="form-control"
+                placeholder="tucorreo@ejemplo.com"
+                name="correo"
+                [(ngModel)]="formData.email"
+                required
+              />
             </div>
             <div class="mb-3">
               <label class="form-label">Teléfono</label>
-              <input type="text" class="form-control" placeholder="09..." name="telefono"
-                [(ngModel)]="formData.telefono" />
+              <input
+                type="text"
+                class="form-control"
+                placeholder="09..."
+                name="telefono"
+                [(ngModel)]="formData.telefono"
+              />
             </div>
             <div class="mb-3">
               <label class="form-label">Asunto</label>
-              <input type="text" class="form-control" placeholder="Motivo del mensaje" name="asunto"
-                [(ngModel)]="formData.asunto" />
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Motivo del mensaje"
+                name="asunto"
+                [(ngModel)]="formData.asunto"
+              />
             </div>
             <div class="mb-3">
               <label class="form-label">Mensaje *</label>
-              <textarea class="form-control" rows="4" placeholder="Describe tu consulta o solicitud..." name="mensaje"
-                [(ngModel)]="formData.mensaje" required></textarea>
+              <textarea
+                class="form-control"
+                rows="4"
+                placeholder="Describe tu consulta o solicitud..."
+                name="mensaje"
+                [(ngModel)]="formData.mensaje"
+                required
+              ></textarea>
             </div>
-            <button type="submit" class="btn btn-outline-success fw-bold w-100" [disabled]="!formContact.valid">
+            <button
+              type="submit"
+              class="btn btn-outline-success fw-bold w-100"
+              [disabled]="!formContact.valid"
+            >
               <i class="bi bi-send"></i> Enviar mensaje
             </button>
           </form>
