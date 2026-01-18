@@ -9,6 +9,7 @@ import { MapaBovedasComponent } from './pages/mapa-bovedas/mapa-bovedas.componen
 import { LayoutComponent } from './components/layout/layout.component';
 import { adminGuard } from './guards/admin.guard';
 import { InicioDifuntosComponent } from './pages/inicio-difuntos/inicio-difuntos.component';
+import { ReportesComponent } from './pages/reportes/reportes.component';
 
 //rutas de la aplicación
 export const routes: Routes = [
@@ -18,11 +19,12 @@ export const routes: Routes = [
     {
         //Definimos el layout, que es el sidebar, y dentro van las rutas hijas, es decir, todas las rutas que van a tener el sidebar.
         path: '', component: LayoutComponent, children: [
-            { path: 'mapa', component: MapaBovedasComponent }, 
-            { path: 'inicio', component: InicioComponent , canActivate: [adminGuard]}, //Gestión de bovedas. Uso guardia de admin para que solo el admin pueda acceder.
-            { path: 'difuntos', component: InicioDifuntosComponent,  canActivate: [adminGuard] }, //Gestión de difuntos. Se usa también la guardia de admin.
+            { path: 'mapa', component: MapaBovedasComponent },
+            { path: 'inicio', component: InicioComponent, canActivate: [adminGuard] }, //Gestión de bovedas. Uso guardia de admin para que solo el admin pueda acceder.
+            { path: 'difuntos', component: InicioDifuntosComponent, canActivate: [adminGuard] }, //Gestión de difuntos. Se usa también la guardia de admin.
             { path: 'contacto', component: ContactoComponent }, // para contactarse con la administracion del cementerio
             { path: 'perfil', component: PerfilComponent }, //no puede acceder si no está autenticado, es decir, no podrá editar sus datos ya que no está logueado (si es que quiero usar el authGuard)
+            { path: 'reportes', component: ReportesComponent, canActivate: [adminGuard] } //para generar reportes de difuntos y ocupaciones. Uso para auditoría. Solo el admin puede acceder.
         ]
-    }, 
+    },
 ];
