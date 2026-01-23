@@ -1,15 +1,13 @@
-<div class="container my-5">
-  <div class="card shadow-sm border-0">
-    <div class="card-header bg-white border-0">
-      <h3 class="fw-bold mb-2 text-success">
-        <i class="bi bi-file-earmark-bar-graph me-2 text-success"></i>
-        Generar reportes
-      </h3>
-    </div>
+<div class="container mt-4">
+  <h3 class="fw-bold mb-3 text-success">
+    <i class="bi bi-file-earmark-bar-graph me-2 text-success"></i>
+    Generar reportes
+  </h3>
 
+  <div class="card border-0 shadow-sm">
     <div class="card-body">
       <form>
-        <!-- TIPO DE REPORTE -->
+        <!-- CONFIGURACIÓN -->
         <p class="fw-semibold text-muted mb-2">Configuración del reporte</p>
 
         <div class="mb-3">
@@ -22,7 +20,7 @@
           >
             <option value="ocupaciones">Ocupaciones</option>
             <option value="fallecidos">Fallecidos</option>
-            <option value="bloques">Bloques</option>
+            <option value="bloques">Infraestructura</option>
           </select>
         </div>
 
@@ -65,13 +63,13 @@
         </div>
 
         <!-- ACCIÓN -->
-        <div class="mt-4">
+        <div class="d-flex justify-content-end mt-3">
           <button
             type="button"
             class="btn btn-success fw-semibold"
             (click)="generateReport()"
           >
-            <i class="bi bi-gear-fill me-1"></i>
+            <i class="bi bi-file-earmark-text me-1"></i>
             Generar reporte
           </button>
         </div>

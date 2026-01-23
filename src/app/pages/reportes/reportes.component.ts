@@ -71,31 +71,19 @@ export class ReportesComponent {
       if (this.useDateRange) {
         this.reportesService.getReporteFallecidos(this.startDate, this.endDate).subscribe({
           next: (data) => {
-            this.reportData = data;
             this.exportToExcel(data, 'Reporte_Fallecidos');
           },
           error: () => {
             console.error('Error al obtener el reporte de fallecidos');
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: 'No se pudo obtener el reporte de fallecidos.'
-            });
           }
         });
       } else {
         this.reportesService.getReporteFallecidos().subscribe({
           next: (data) => {
-            this.reportData = data;
             this.exportToExcel(data, 'Reporte_Total_Fallecidos');
           },
           error: () => {
             console.error('Error al obtener el reporte total de fallecidos');
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: 'No se pudo obtener el reporte total de fallecidos.'
-            });
           }
         });
       }
@@ -103,31 +91,19 @@ export class ReportesComponent {
       if (this.useDateRange) {
         this.reportesService.getReporteBloques(this.startDate, this.endDate).subscribe({
           next: (data) => {
-            this.reportData = data;
             this.exportToExcel(data, 'Reporte_Bloques');
           },
           error: () => {
             console.error('Error al obtener el reporte de bloques');
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: 'No se pudo obtener el reporte de bloques.'
-            });
           }
         });
       } else {
         this.reportesService.getReporteBloques().subscribe({
           next: (data) => {
-            this.reportData = data;
             this.exportToExcel(data, 'Reporte_Total_Bloques');
           },
           error: () => {
             console.error('Error al obtener el reporte total de bloques');
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: 'No se pudo obtener el reporte total de bloques.'
-            });
           }
         });
       }
@@ -135,22 +111,54 @@ export class ReportesComponent {
   }
 
   exportToExcel(data: any[], fileName: string): void {
-    // Definimos los encabezados del Excel para que quede igual al que ellos usan.
-    const headers = [
-      ['Código_bloque', 'Sector', 'Manzana', 'Bloque', 'Tipo', 'N°', 'Nombre del Fallecido', 'Fecha de Fallecimiento']
-    ];
+    // Definir los encabezados según el tipo de reporte
+    let headers: string[][] = [];
+    let dataForExcel: any[][] = [];
 
-    // Convertir los datos a un formato que XLSX pueda entender
-    const dataForExcel = data.map(item => [
-      item.codigo_bloque,
-      item.sector_cementerio,
-      item.manzana,
-      item.bloque_lote,
-      item.tipo_ubicacion,
-      item.numero,
-      item.nombre_fallecido,
-      item.fecha_fallecimiento
-    ]);
+
+    // para cada tipo de reporte, definir los encabezados correspondientes, en este caso son tres tipos de reportes: ocupaciones, fallecidos y bloques
+    // empezamos con el de ocupaciones, que sería el excel tal cual ellos han estado usado.
+    if (this.reportType === 'ocupaciones') {
+      headers = [
+        ['Código Bloque', 'Sector', 'Manzana', 'Bloque/Lote', 'Tipo', 'Espacio', 'Nombre del Fallecido', 'Fecha de Fallecimiento']
+      ];
+      dataForExcel = data.map(item => [
+        item.codigo_bloque,
+        item.sector_cementerio,
+        item.manzana,
+        item.bloque_lote,
+        item.tipo_ubicacion,
+        item.numero,
+        item.nombre_fallecido,
+        item.fecha_fallecimiento
+      ]);
+    } else if (this.reportType === 'fallecidos') {
+      headers = [
+        ['ID', 'Nombre Completo', 'Fecha Fallecimiento', 'Fecha Inhumación', 'Fecha Exhumación', 'Observaciones', 'Fecha Creación']
+      ];
+      dataForExcel = data.map(item => [
+        item.id_fallecido,
+        item.nombre_completo,
+        item.fecha_fallecimiento,
+        item.fecha_inhumacion,
+        item.fecha_exhumacion,
+        item.observaciones,
+        item.fecha_creacion
+      ]);
+    } else if (this.reportType === 'bloques') {
+      headers = [
+        ['ID Bloque', 'ID Manzana', 'Número Bloque', 'Cantidad Espacios', 'Observaciones', 'Fecha Creación', 'Fecha Actualización']
+      ];
+      dataForExcel = data.map(item => [
+        item.id_bloque,
+        item.id_manzana,
+        item.numero_bloque,
+        item.cantidad_espacios,
+        item.observaciones,
+        item.fecha_creacion,
+        item.fecha_actualizacion
+      ]);
+    }
 
     // Crear una hoja de cálculo con los encabezados y los datos
     const ws: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet([...headers, ...dataForExcel]);

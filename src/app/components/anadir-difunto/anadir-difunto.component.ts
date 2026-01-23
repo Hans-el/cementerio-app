@@ -111,13 +111,25 @@ export class AnadirDifuntoComponent implements OnInit {
       return;
     }
 
-    this.fallecidoService.crearFallecido(this.nuevoDifunto).subscribe({
-      next: (response) => {
-        Swal.fire('Éxito', 'Difunto y ocupación registrados correctamente', 'success');
-        this.activeModal.close(this.nuevoDifunto);
-      },
-      error: () => {
-        Swal.fire('Error', 'Error al registrar el difunto', 'error');
+    //usamos swal para preguntar si realmente quiere guardar el registro
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: "¿Quieres guardar este registro?",
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, guardar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.fallecidoService.crearFallecido(this.nuevoDifunto).subscribe({
+          next: (response) => {
+            Swal.fire('Éxito', 'Difunto registrado correctamente', 'success');
+            this.activeModal.close(this.nuevoDifunto);
+          },
+          error: () => {
+            Swal.fire('Error', 'Error al registrar el difunto', 'error');
+          }
+        });
       }
     });
   }
