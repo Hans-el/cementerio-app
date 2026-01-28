@@ -1,12 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from '@angular/forms';
-import { NichosService } from '../../services/nicho.service';
-import { Nicho } from '../../models/nicho.model'; //El modelo de Nicho en donde definimos la estructura de los datos, es decir, todos los campos que tiene un nicho.
 import { CommonModule } from '@angular/common';
-import { NichoSeleccionadoService } from '../../services/nicho-seleccionado.service';
 import { DisponibilidadModalComponent } from '../disponibilidad-modal/disponibilidad-modal.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { FallecidoService } from '../../services/fallecido.service';
+import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators'; // para el autocompletado
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-localizar-modal',
@@ -15,55 +15,74 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
   templateUrl: './localizar-modal.component.html',
   styleUrls: ['./localizar-modal.component.css']
 })
-export class LocalizarModalComponent {
-  cedula: string = '';
-  resultadoBusqueda: Nicho[] | null = null; // Resultado de la búsqueda
-  mensajeError: string | null = null; // Mensaje de error si no se encuentra nada
-  cargando: boolean = false; // Indicador de carga para mejor UX
-  cedulaInvalida: boolean = false; // Indicador de cédula inválida
+export class LocalizarModalComponent implements OnInit {
+  nombreFallecido: string = ''; // Nombre del fallecido a buscar
+  cargando: boolean = false; // Indicador de carga
+  resultadoBusqueda: any[] = []; // Resultados de la búsqueda
+  mensajeError: string = ''; // Mensaje de error en caso de fallo
+  sugerencias: string[] = []; // Sugerencias para autocompletado
+  private searchTerms = new Subject<string>(); // Para el autocompletado, sugerido por angular docs
 
   constructor(
     public activeModal: NgbActiveModal,
-    private nichosService: NichosService,
-    private nichoSeleccionadoService: NichoSeleccionadoService,
-    private modalService: NgbModal // Servicio para abrir modales
+    private modalService: NgbModal, // Servicio para abrir modales
+    private fallecidoService: FallecidoService // Servicio para buscar fallecidos
   ) { }
 
 
-  validarCedula(): void {
-    // Permite que el usuario escriba, pero marca como inválido si no son 10 dígitos
-    this.cedulaInvalida = this.cedula.length > 0 && !/^\d{10}$/.test(this.cedula);
+  ngOnInit(): void {
+    this.searchTerms.pipe(
+      debounceTime(300), // Espera 300ms después de cada tecla
+      distinctUntilChanged(), // Ignora si el término de búsqueda no ha cambiado
+      switchMap((term: string) => this.fallecidoService.obtenerSugerenciasNombres(term))
+    ).subscribe(sugerencias => {
+      this.sugerencias = sugerencias;
+    });
+  }
+
+  onInputChange(): void {
+    this.searchTerms.next(this.nombreFallecido);
+  }
+
+  seleccionarSugerencia(sugerencia: string): void {
+    this.nombreFallecido = sugerencia;
+    this.sugerencias = [];
+  }
+
+  buscar(): void {
+    if (!this.nombreFallecido) {
+      this.mensajeError = 'Por favor, ingrese el nombre del fallecido.';
+      return;
+    }
+
+    this.cargando = true;
+    this.mensajeError = '';
+    this.resultadoBusqueda = [];
+
+    this.fallecidoService.buscarBovedaPorNombre(this.nombreFallecido).subscribe({
+      next: (data) => {
+        if (data && data.length > 0) {
+          this.resultadoBusqueda = data.map(item => ({
+            sector: item.sector_cementerio,
+            manzana: item.manzana,
+            bloque: item.bloque_lote,
+            espacio: item.numero,
+          }));
+        } else {
+          this.mensajeError = 'No se encontró ninguna bóveda para el fallecido ingresado.';
+        }
+        this.cargando = false;
+      },
+      error: () => {
+        this.mensajeError = 'Ocurrió un error al buscar la bóveda.';
+        this.cargando = false;
+      }
+    });
   }
 
   openDisponibilidadModal() { // Abre el modal de disponibilidad que está puesto en el localizar para agilizar la adquisición de una bóveda
     this.modalService.open(DisponibilidadModalComponent, { centered: true, size: 'lg' });
   }
-  buscar(): void {
-    if (this.cedulaInvalida || !this.cedula.trim()) {
-      this.mensajeError = this.cedulaInvalida
-        ? 'La cédula debe tener 10 dígitos numéricos.'
-        : 'Por favor, ingrese una cédula.';
-      return;
-    }
 
-    this.cargando = true;
-    this.mensajeError = null;
-    this.resultadoBusqueda = null;
 
-    this.nichosService.buscarPorCedula(this.cedula).subscribe({
-      next: (nichos) => {
-        this.cargando = false;
-        if (nichos.length > 0) {
-          this.resultadoBusqueda = nichos;
-          this.nichoSeleccionadoService.setSelectedNicho(nichos[0]);
-        } else {
-          this.mensajeError = 'No se encontró ninguna bóveda asociada a esta cédula.';
-        }
-      },
-      error: (err) => {
-        this.cargando = false;
-        this.mensajeError = 'Ocurrió un error al buscar la bóveda.';
-      }
-    });
-  }
 }

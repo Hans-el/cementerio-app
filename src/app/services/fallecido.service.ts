@@ -39,12 +39,21 @@ export class FallecidoService {
   //   return this.http.get<{ total: number }>(`${this.apiUrl}/total`);
   // }
 
+  //este es usado en la pagina de fallecidos
   buscarFallecidos(q: string): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/buscar`, {
       params: { q }
     });
   }
 
+  //este es usado en el modal de localizar exclusivamente, para buscar unicamente por nombre.
+  buscarBovedaPorNombre(nombre: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/buscar-boveda`, { params: { nombre } });
+  }
+  //nuevo metodo para autocompletado de nombres en el modal de localizar. ESTA FUNCION ES MUY IMPORTANTE PARA FACILITAR LA BUSQUEDA EXACTA Y NO METER VALORES ERRONEOS.
+  obtenerSugerenciasNombres(term: string): Observable<string[]> {
+    return this.http.get<string[]>(`${this.apiUrl}/sugerencias-nombres`, { params: { term } });
+  }
   crearFallecido(data: any): Observable<any> {
     return this.http.post(this.apiUrl, data);
   }
