@@ -18,7 +18,7 @@ export class ReportesComponent {
   endDate: string = '';
   reportType: string = 'ocupaciones';
   reportData: any[] = [];
-  useDateRange: boolean = true; // Variable para controlar si se usa rango de fechas, si no, se generan todos los datos
+  useDateRange: boolean = true; // Variable para controlar si se usa rango de fechas, en caso de no haber pues que se generan todos los datos
 
 
   constructor(private reportesService: ReportesService) { }
@@ -120,7 +120,7 @@ export class ReportesComponent {
     // empezamos con el de ocupaciones, que sería el excel tal cual ellos han estado usado.
     if (this.reportType === 'ocupaciones') {
       headers = [
-        ['Código Bloque', 'Sector', 'Manzana', 'Bloque/Lote', 'Tipo', 'Espacio', 'Nombre del Fallecido', 'Fecha de Fallecimiento']
+        ['Código Bloque', 'Sector', 'Manzana', 'Bloque', 'Tipo', 'Espacio', 'Nombre del Fallecido', 'Fecha de Fallecimiento']
       ];
       dataForExcel = data.map(item => [
         item.codigo_bloque,
@@ -129,8 +129,8 @@ export class ReportesComponent {
         item.bloque_lote,
         item.tipo_ubicacion,
         item.numero,
-        item.nombre_fallecido,
-        item.fecha_fallecimiento
+        item.nombre_fallecido || 'S/N', // Aseguramos que muestre "S/N" si no hay fallecido para que el excel quede igual que el de ellos originalmente
+        item.fecha_fallecimiento || 'S/F' // Aseguramos que muestre "S/F" si no hay fecha de fallecimiento para que el excel quede igual que el de ellos originalmente
       ]);
     } else if (this.reportType === 'fallecidos') {
       headers = [
