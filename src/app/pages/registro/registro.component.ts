@@ -6,12 +6,11 @@ import { NgbAlertModule } from '@ng-bootstrap/ng-bootstrap';
 import Swal from 'sweetalert2';
 import { AuthService } from '../../services/auth.service';
 import moment from 'moment';
-import { DatepickerComponent } from '../../components/datepicker/datepicker.component'; //Para el componente de datepicker que creamos 
 
 @Component({
   selector: 'app-registro',
   standalone: true,
-  imports: [ReactiveFormsModule, FormsModule, CommonModule, NgbAlertModule, RouterModule, DatepickerComponent],
+  imports: [ReactiveFormsModule, FormsModule, CommonModule, NgbAlertModule, RouterModule,],
   templateUrl: './registro.component.html',
   styleUrls: ['./registro.component.css']
 })
@@ -43,7 +42,7 @@ export class RegistroComponent implements OnInit {
     this.showPassword = !this.showPassword;
   }
 
-  // Función de validar cédula matemáticamente. Me la proporcionó el compañero Anderson.
+  // Función de validar cédula matemáticamente. Me la pasó Anderson por whatsapp.
   public validar_cedula(cedula: string) {
     // Créditos: Victor Diaz De La Gasca.
     // Autor: Adrián Egüez
@@ -133,7 +132,7 @@ export class RegistroComponent implements OnInit {
     }
 
   }
- // establecer un límite de 10 caracteres para el campo cédula
+  // establecer un límite de 10 caracteres para el campo cédula
   limitCedulaLength(): void {
     const cedulaControl = this.registroForm.get('cedula');
     if (cedulaControl && cedulaControl.value.length > 10) {

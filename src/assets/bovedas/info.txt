@@ -1,4 +1,0 @@
-Aquí deben ir todas las imagenes de las bovedas. Tantas como se puedan.
-La finalidad de almacenar las imagenes de las bóvedas acá es mostrar al momennto de consultar.
-
-Nota: El administrador podrá subir la imagen de la boveda desde el formulario de añadir bóveda.

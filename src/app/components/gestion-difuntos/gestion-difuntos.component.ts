@@ -37,7 +37,6 @@ export class GestionDifuntosComponent {
   }
   abrirModalAnadir() {
     const modalRef = this.modalService.open(AnadirDifuntoComponent, { centered: true, size: 'lg' });
-
     modalRef.componentInstance.guardar.subscribe((nuevo: Fallecido) => {
       Swal.fire({
         icon: 'success',
@@ -47,5 +46,9 @@ export class GestionDifuntosComponent {
         showConfirmButton: false,
       });
     });
+  }
+
+  abrirModalEditar() {
+    // acá va la lógica para abrir el modal de edición de espacio del fallecido
   }
 }
