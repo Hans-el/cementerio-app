@@ -93,27 +93,28 @@
         <!-- Espacio para la imagen del bloque  -->
         <!-- Usamos esta lógica para obtener el codigo exacto de la imagen que estamos mostrando y por ende debería llamarse -->
         <!-- Lo que hacemos aquí es lo siguiente: -->
-        <!-- Ponemos primeramente la ruta del backend en donde tengo las imagenes -->
-        <!-- Segundo, sumamos ceros delante de cada valor para que tenga un formato uniforme y de esta manera pueda leer correctamente la imagen -->
-        <!-- Si no ponia ceros delante me leia: "http://localhost:3000/images/bloques/11/111.jpg  -->
-        <!-- Entonces, al añadir los ceros ya me lee: "http://localhost:3000/images/bloques/0101/010101.jpg y de esta manera concuerda con el nombre de la imagen en el backend-->
+        <!-- Agregamos una función en el componente ts para asegurarnos de que los valores siempre tengan dos dígitos.-->
+        <!-- La funcion se llama formatTwoDigits, entonces, si detecta que tiene un solo dígito, añade un cero delante para que tenga dos dígitos. -->
+        <!-- Si no, deja el valor tal cual. De esta manera obtenemos el codigo bien y por ende leerá bien la ruta del backend -->
         <!-- INGENIO PURO PAPÁAAAA -->
         <!-- y por ultimo, si no encuentra la imagen ponemos una por default. Esta imagen está guardada aquí en el frontend [assets/default.jpg] -->
         <div class="mt-2 text-center">
+          <p class="text-muted small mb-1">Bloque:</p>
+          <p class="text-strong mb-1 fw-semibold">
+            {{ formatTwoDigits(boveda.sector) }}.{{
+              formatTwoDigits(boveda.manzana)
+            }}.{{ formatTwoDigits(boveda.bloque) }}
+          </p>
+
           <img
             [src]="
               'http://localhost:3000/images/bloques/' +
-              '0' +
-              boveda.sector +
-              '0' +
-              boveda.manzana +
+              formatTwoDigits(boveda.sector) +
+              formatTwoDigits(boveda.manzana) +
               '/' +
-              '0' +
-              boveda.sector +
-              '0' +
-              boveda.manzana +
-              '0' +
-              boveda.bloque +
+              formatTwoDigits(boveda.sector) +
+              formatTwoDigits(boveda.manzana) +
+              formatTwoDigits(boveda.bloque) +
               '.jpg'
             "
             class="img-fluid rounded"
