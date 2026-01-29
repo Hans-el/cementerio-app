@@ -94,27 +94,27 @@
         <!-- Usamos esta lógica para obtener el codigo exacto de la imagen que estamos mostrando y por ende debería llamarse -->
         <!-- Lo que hacemos aquí es lo siguiente: -->
         <!-- Agregamos una función en el componente ts para asegurarnos de que los valores siempre tengan dos dígitos.-->
-        <!-- La funcion se llama formatTwoDigits, entonces, si detecta que tiene un solo dígito, añade un cero delante para que tenga dos dígitos. -->
+        <!-- La funcion se llama formatoDosDigitos, entonces, si detecta que tiene un solo dígito, añade un cero delante para que tenga dos dígitos. -->
         <!-- Si no, deja el valor tal cual. De esta manera obtenemos el codigo bien y por ende leerá bien la ruta del backend -->
         <!-- INGENIO PURO PAPÁAAAA -->
         <!-- y por ultimo, si no encuentra la imagen ponemos una por default. Esta imagen está guardada aquí en el frontend [assets/default.jpg] -->
         <div class="mt-2 text-center">
           <p class="text-muted small mb-1">Bloque:</p>
           <p class="text-strong mb-1 fw-semibold">
-            {{ formatTwoDigits(boveda.sector) }}.{{
-              formatTwoDigits(boveda.manzana)
-            }}.{{ formatTwoDigits(boveda.bloque) }}
+            {{ formatoDosDigitos(boveda.sector) }}.{{
+              formatoDosDigitos(boveda.manzana)
+            }}.{{ formatoDosDigitos(boveda.bloque) }}
           </p>
 
           <img
             [src]="
               'http://localhost:3000/images/bloques/' +
-              formatTwoDigits(boveda.sector) +
-              formatTwoDigits(boveda.manzana) +
+              formatoDosDigitos(boveda.sector) +
+              formatoDosDigitos(boveda.manzana) +
               '/' +
-              formatTwoDigits(boveda.sector) +
-              formatTwoDigits(boveda.manzana) +
-              formatTwoDigits(boveda.bloque) +
+              formatoDosDigitos(boveda.sector) +
+              formatoDosDigitos(boveda.manzana) +
+              formatoDosDigitos(boveda.bloque) +
               '.jpg'
             "
             class="img-fluid rounded"

@@ -90,7 +90,7 @@ export class LocalizarModalComponent implements OnInit {
   // Esta funcion formatea un número o string para que tenga al menos dos dígitos (añade un cero delante si es necesario)
   // esto es importante para la correcta lectura de las imágenes de los bloques, ya que todas siguen un formato de dos dígitos
   // lo que hace es verificar la longitud del valor convertido a string, y si es 1, añade un '0' delante, fin.
-  formatTwoDigits(value: number | string): string {
+  formatoDosDigitos(value: number | string): string {
     const strValue = value.toString();
     return strValue.length === 1 ? `0${strValue}` : strValue;
   }
