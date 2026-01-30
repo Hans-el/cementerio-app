@@ -3,10 +3,12 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { DisponibilidadModalComponent } from '../disponibilidad-modal/disponibilidad-modal.component';
+import { ImageModalComponent } from '../image-modal/image-modal.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FallecidoService } from '../../services/fallecido.service';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators'; // para el autocompletado
 import { Subject } from 'rxjs';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-localizar-modal',
@@ -21,6 +23,7 @@ export class LocalizarModalComponent implements OnInit {
   resultadoBusqueda: any[] = []; // Resultados de la búsqueda
   mensajeError: string = ''; // Mensaje de error en caso de fallo
   sugerencias: string[] = []; // Sugerencias para autocompletado
+  selectedImageUrl: string | null = null; // URL de la imagen seleccionada para el modal
   private searchTerms = new Subject<string>(); // Para el autocompletado, sugerido por angular docs
 
   constructor(
@@ -51,6 +54,17 @@ export class LocalizarModalComponent implements OnInit {
     this.sugerencias = [];
   }
 
+  openImageModal() {
+    if (!this.resultadoBusqueda || this.resultadoBusqueda.length === 0) {
+      this.mensajeError = 'No hay resultados para mostrar la imagen.';
+      return;
+    }
+    // Construye la URL de la imagen basada en los datos del resultado de búsqueda, nos sirve perfecto para localizar la carpeta correcta
+    const url = `http://localhost:3000/images/bloques/${this.formatoDosDigitos(this.resultadoBusqueda[0].sector)}${this.formatoDosDigitos(this.resultadoBusqueda[0].manzana)}/${this.formatoDosDigitos(this.resultadoBusqueda[0].sector)}${this.formatoDosDigitos(this.resultadoBusqueda[0].manzana)}${this.formatoDosDigitos(this.resultadoBusqueda[0].bloque)}.jpg`;
+    const modalRef = this.modalService.open(ImageModalComponent, { size: 'lg', centered: true });
+    modalRef.componentInstance.selectedImageUrl = url;
+  }
+
   // Método para buscar la ubicación por el nombre del fallecido
   buscar(): void {
     if (!this.nombreFallecido) {
@@ -66,6 +80,7 @@ export class LocalizarModalComponent implements OnInit {
       next: (data) => {
         if (data && data.length > 0) {
           this.resultadoBusqueda = data.map(item => ({
+            nombresector: item.sector_nombre,
             sector: item.sector_cementerio,
             manzana: item.manzana,
             bloque: item.bloque_lote,
@@ -94,6 +109,19 @@ export class LocalizarModalComponent implements OnInit {
     const strValue = value.toString();
     return strValue.length === 1 ? `0${strValue}` : strValue;
   }
+  //La siguiente funcion es para localizar la busqeuda pero en el mapa. Por ahora solo es un mensaje de consola y una alerta
+  //pero queremos mostrarlo en el mapa 
+  localizarEnMapa(boveda: any) {
+    // Cerrar el modal actual
+    this.activeModal.dismiss();
 
+    // aqui va la logica para mostrar en el mapa, ahora solo tengo una aletra de swal
+    Swal.fire({
+      title: 'Localizar en el Mapa',
+      text: `La bóveda está en el Sector ${boveda.sector}, Manzana ${boveda.manzana}, Bloque ${boveda.bloque}, Espacio ${boveda.espacio}.`,
+      icon: 'info',
+      confirmButtonText: 'Aceptar'
+    });
+  }
 
 }

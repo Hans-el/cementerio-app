@@ -1,0 +1,8 @@
+/* estilos para la imagen en el modal */
+/* Ponemos la imagen con bordes redondos */
+
+img {
+  width: 100%;
+  height: auto;
+  border-radius: 15px; 
+}

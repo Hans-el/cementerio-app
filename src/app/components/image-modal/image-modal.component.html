@@ -1,0 +1,18 @@
+<div class="modal-header me-2">
+  <h5 class="modal-title bi bi-image fw-bold me-2">BLOQUE FÍSICO:</h5>
+  <button
+    type="button"
+    class="btn-close"
+    aria-label="Close"
+    (click)="activeModal.close()"
+  ></button>
+</div>
+<div class="modal-body text-center">
+  <img
+    *ngIf="selectedImageUrl"
+    [src]="selectedImageUrl"
+    class="img-fluid"
+    alt="Imagen del bloque"
+  />
+  <p *ngIf="!selectedImageUrl">No hay imagen disponible.</p>
+</div>
