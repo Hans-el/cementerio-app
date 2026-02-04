@@ -50,5 +50,18 @@ export class BloquesService {
     return this.http.post(`${this.apiUrl}/${idBloque}/espacios`, espacios);
   }
 
+  //esta parte es para los bloques en venta
+  ponerEnVenta(bloqueData: any): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/poner-en-venta`, bloqueData);
+  }
+
+  getBloquesEnVenta(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/bloques-en-venta`);
+  }
+  borrarBloqueEnVenta(id_bloque_venta: number): Observable<any> {
+    return this.http.delete<any>(`${this.apiUrl}/bloques-en-venta/${id_bloque_venta}`);
+  }
+
+
 
 }
