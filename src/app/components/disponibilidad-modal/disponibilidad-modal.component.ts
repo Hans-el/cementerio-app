@@ -1,6 +1,6 @@
 import Swal from 'sweetalert2';
 import { Component } from '@angular/core';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -8,19 +8,18 @@ import { AuthService } from '../../services/auth.service';
 import { SectoresService } from '../../services/sectores.service';
 import { ManzanasService } from '../../services/manzanas.service';
 import { BloquesService } from '../../services/bloques.service';
-import { FallecidoService } from '../../services/fallecido.service';
-
+import { ImageModalComponent } from '../image-modal/image-modal.component';
 
 @Component({
   selector: 'app-disponibilidad-modal',
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './disponibilidad-modal.component.html',
-  styleUrls: ['./disponibilidad-modal.component.css']
+  styleUrls: ['./disponibilidad-modal.component.css'],
 })
 export class DisponibilidadModalComponent {
   userRole: string = 'Invitado'; // Valor por defecto si no inicia sesión
-  @Input() admin: boolean = false;
+  @Input() admin: boolean = false; // Indica si el usuario es admin o no
   // Selectores
   sectores: any[] = [];
   manzanas: any[] = [];
@@ -34,27 +33,28 @@ export class DisponibilidadModalComponent {
 
   constructor(
     public activeModal: NgbActiveModal,
+    private modalService: NgbModal,
     private sectoresService: SectoresService,
     private manzanasService: ManzanasService,
     private bloquesService: BloquesService,
     private authService: AuthService,
-  ) { }
+  ) {}
 
   ngOnInit(): void {
-    this.userRole = this.authService.getUserRole(); // Obtiene el rol al inicializar
-    this.cargarSectores();
-    this.cargarBloquesEnVenta();
-
+    this.userRole = this.authService.getUserRole(); // Obtiene el rol al inicializar, si sí es...
+    this.cargarSectores(); //... carga los sectores. Luego de seleccionar sector y manzana se cargan los demás.
+    this.cargarBloquesEnVenta(); // Carga los bloques en venta al iniciar el modal en caso de que sea admin
   }
 
   cargarSectores(): void {
-    this.sectoresService.getSectores().subscribe({ // Sin parámetros
+    this.sectoresService.getSectores().subscribe({
+      // Sin parámetros
       next: (sectores) => {
         this.sectores = sectores;
       },
       error: () => {
         Swal.fire('Error', 'No se pudieron cargar los sectores', 'error');
-      }
+      },
     });
   }
 
@@ -68,7 +68,7 @@ export class DisponibilidadModalComponent {
       },
       error: () => {
         Swal.fire('Error', 'No se pudieron cargar las manzanas', 'error');
-      }
+      },
     });
   }
 
@@ -81,10 +81,9 @@ export class DisponibilidadModalComponent {
       },
       error: () => {
         Swal.fire('Error', 'No se pudieron cargar los bloques', 'error');
-      }
+      },
     });
   }
-
 
   formatoDosDigitos(value: number | string): string {
     const strValue = value.toString();
@@ -93,15 +92,19 @@ export class DisponibilidadModalComponent {
 
   ponerEnVenta(): void {
     if (!this.selectedSector || !this.selectedManzana || !this.selectedBloque) {
-      Swal.fire('Error', 'Por favor, seleccione un sector, manzana y bloque.', 'error');
+      Swal.fire(
+        'Error',
+        'Por favor, seleccione un sector, manzana y bloque.',
+        'error',
+      );
       return;
     }
-
+    //usamos sweetalert2 para pedir una descripcion del bloque
     Swal.fire({
       title: 'Descripción del Bloque',
       input: 'textarea',
       inputLabel: 'Ingrese una breve descripción del bloque',
-      inputPlaceholder: 'Ej: Bloque con vista al jardín, recién renovado...',
+      inputPlaceholder: 'Ej: Contacto para más información...',
       showCancelButton: true,
       confirmButtonText: 'Guardar',
       cancelButtonText: 'Cancelar',
@@ -110,13 +113,13 @@ export class DisponibilidadModalComponent {
           return 'Debe ingresar una descripción';
         }
         return null;
-      }
+      },
     }).then((result) => {
       if (result.isConfirmed) {
         const descripcion = result.value;
         const bloqueData = {
           id_bloque: this.selectedBloque,
-          descripcion: descripcion
+          descripcion: descripcion,
         };
 
         this.bloquesService.ponerEnVenta(bloqueData).subscribe({
@@ -126,7 +129,7 @@ export class DisponibilidadModalComponent {
           },
           error: () => {
             Swal.fire('Error', 'No se pudo poner el bloque en venta.', 'error');
-          }
+          },
         });
       }
     });
@@ -135,41 +138,61 @@ export class DisponibilidadModalComponent {
   cargarBloquesEnVenta(): void {
     this.bloquesService.getBloquesEnVenta().subscribe({
       next: (bloques) => {
-        this.espaciosDisponibles = bloques.map(bloque => ({
+        this.espaciosDisponibles = bloques.map((bloque) => ({
           id_bloque_venta: bloque.id_bloque_venta,
           sector: bloque.sector,
           manzana: bloque.numero_manzana,
           bloque: bloque.numero_bloque,
-          imagenUrl: `http://localhost:3000/images/bloques/${this.formatoDosDigitos(bloque.sector)}${this.formatoDosDigitos(bloque.numero_manzana)}/${this.formatoDosDigitos(bloque.sector)}${this.formatoDosDigitos(bloque.numero_manzana)}${this.formatoDosDigitos(bloque.numero_bloque)}.jpg`
+          descripcion: bloque.descripcion,
+          imagenUrl: `http://localhost:3000/images/bloques/${this.formatoDosDigitos(bloque.sector)}${this.formatoDosDigitos(bloque.numero_manzana)}/${this.formatoDosDigitos(bloque.sector)}${this.formatoDosDigitos(bloque.numero_manzana)}${this.formatoDosDigitos(bloque.numero_bloque)}.jpg`,
         }));
       },
       error: () => {
-        Swal.fire('Error', 'No se pudieron cargar los bloques en venta.', 'error');
-      }
+        Swal.fire(
+          'Error',
+          'No se pudieron cargar los bloques en venta.',
+          'error',
+        );
+      },
     });
   }
   borrarBloqueEnVenta(id_bloque_venta: number): void {
     Swal.fire({
       title: '¿Estás seguro?',
-      text: '¡No podrás revertir esto!',
+      text: '¡Esta acción no se puede deshacer!',
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
+      confirmButtonColor: '#008f39 ',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Sí, borrarlo!'
+      confirmButtonText: 'Sí, confirmar',
     }).then((result) => {
       if (result.isConfirmed) {
         this.bloquesService.borrarBloqueEnVenta(id_bloque_venta).subscribe({
           next: () => {
-            Swal.fire('¡Borrado!', 'El bloque ha sido eliminado de la venta.', 'success');
+            Swal.fire(
+              '¡Borrado!',
+              'El bloque ha sido eliminado de la venta.',
+              'success',
+            );
             this.cargarBloquesEnVenta(); // Recargar la lista de bloques en venta
           },
           error: () => {
-            Swal.fire('Error', 'No se pudo borrar el bloque en venta.', 'error');
-          }
+            Swal.fire(
+              'Error',
+              'No se pudo borrar el bloque en venta.',
+              'error',
+            );
+          },
         });
       }
     });
   }
-
+  // Función para visualizar imagen en modal, usando ImageModalComponent que se usa tambiene en localizar
+  visualizarImagen(imagenUrl: string): void {
+    const modalRef = this.modalService.open(ImageModalComponent, {
+      size: 'lg',
+      centered: true,
+    });
+    modalRef.componentInstance.selectedImageUrl = imagenUrl;
+  }
 }
