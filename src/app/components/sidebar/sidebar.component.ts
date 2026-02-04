@@ -15,7 +15,7 @@ import { GestionBovedasComponent } from '../gestion-bloques/gestion-bovedas.comp
   standalone: true,
   imports: [RouterLink, RouterLinkActive, CommonModule, NgbDropdownModule],
   templateUrl: './sidebar.component.html',
-  styleUrls: ['./sidebar.component.css']
+  styleUrls: ['./sidebar.component.css'],
 })
 export class SidebarComponent implements OnInit {
   userRole: string = 'Invitado'; // Valor por defecto si no inicia sesión
@@ -24,15 +24,11 @@ export class SidebarComponent implements OnInit {
   isMobile = false; // Estado para dispositivos móviles
   hover: boolean = false;
 
-
-
   constructor(
     private authService: AuthService,
     private router: Router,
     private modalService: NgbModal,
-  ) { }
-
-
+  ) {}
 
   @HostListener('window:resize')
   checkIfMobile(event?: Event) {
@@ -55,16 +51,25 @@ export class SidebarComponent implements OnInit {
   }
 
   openLocalizarModal() {
-    this.modalService.open(LocalizarModalComponent, { centered: true, size: 'md' });
+    this.modalService.open(LocalizarModalComponent, {
+      centered: true,
+      size: 'md',
+    });
   }
 
   openDisponibilidadModal() {
-    this.modalService.open(DisponibilidadModalComponent, { centered: true, size: 'lg' });
+    this.modalService.open(DisponibilidadModalComponent, {
+      centered: true,
+      size: 'lg',
+    });
   }
 
   // Este método es para que el administrador pueda agregar o editar bóvedas
   editarBovedas() {
-    this.modalService.open(GestionBovedasComponent, { centered: true, size: 'md' });
+    this.modalService.open(GestionBovedasComponent, {
+      centered: true,
+      size: 'md',
+    });
   }
 
   get isLoggedIn(): boolean {
@@ -79,7 +84,7 @@ export class SidebarComponent implements OnInit {
       timerProgressBar: true,
       timer: 2200,
       icon: 'success',
-      confirmButtonText: 'OK'
+      confirmButtonText: 'OK',
     }).then(() => {
       // localStorage.removeItem('token');  *NOTA: No hace falta porque ya lo hace el authService.logout(). Se pone a manera de entendimiento*
       this.router.navigate(['/login']);
