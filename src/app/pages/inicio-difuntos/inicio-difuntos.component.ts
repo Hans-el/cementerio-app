@@ -12,7 +12,7 @@ import Swal from 'sweetalert2';
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './inicio-difuntos.component.html',
-  styleUrls: ['./inicio-difuntos.component.css']
+  styleUrls: ['./inicio-difuntos.component.css'],
 })
 export class InicioDifuntosComponent implements OnInit {
   difuntos: any[] = [];
@@ -30,25 +30,28 @@ export class InicioDifuntosComponent implements OnInit {
 
   constructor(
     private modalService: NgbModal,
-    private fallecidoService: FallecidoService
-  ) { }
+    private fallecidoService: FallecidoService,
+  ) {}
 
   ngOnInit(): void {
     this.cargarDifuntos(); // Cargar difuntos al iniciar el componente, lo usamos para el buscador
-
   }
 
   cargarDifuntos(): void {
-    this.fallecidoService.getFallecidos(this.currentPage, this.limit, this.searchQuery).subscribe({
-      next: (response) => {
-        this.difuntos = response.data.filter(difunto => difunto.nombre_completo.toUpperCase() !== 'S/N');
-        this.totalFallecidos = response.total;
-        this.totalPages = response.totalPages;
-      },
-      error: () => {
-        console.error('Error al cargar los difuntos');
-      }
-    });
+    this.fallecidoService
+      .getFallecidos(this.currentPage, this.limit, this.searchQuery)
+      .subscribe({
+        next: (response) => {
+          this.difuntos = response.data.filter(
+            (difunto) => difunto.nombre_completo.toUpperCase() !== 'S/N',
+          );
+          this.totalFallecidos = response.total;
+          this.totalPages = response.totalPages;
+        },
+        error: () => {
+          console.error('Error al cargar los difuntos');
+        },
+      });
   }
   cargarTotalFallecidos(): void {
     this.fallecidoService.getTotalFallecidos(this.searchQuery).subscribe({
@@ -57,7 +60,7 @@ export class InicioDifuntosComponent implements OnInit {
       },
       error: () => {
         console.error('Error al cargar el total de difuntos');
-      }
+      },
     });
   }
   // Método para manejar el cambio de página. Se llama cuando el usuario navega entre páginas.
@@ -77,9 +80,13 @@ export class InicioDifuntosComponent implements OnInit {
     if (!this.filtros.busqueda) {
       return this.difuntos;
     }
-    return this.difuntos.filter(difunto =>
-      difunto.nombre_completo.toLowerCase().includes(this.filtros.busqueda.toLowerCase()) ||
-      (difunto.fecha_fallecimiento_raw && difunto.fecha_fallecimiento_raw.includes(this.filtros.busqueda))
+    return this.difuntos.filter(
+      (difunto) =>
+        difunto.nombre_completo
+          .toLowerCase()
+          .includes(this.filtros.busqueda.toLowerCase()) ||
+        (difunto.fecha_fallecimiento_raw &&
+          difunto.fecha_fallecimiento_raw.includes(this.filtros.busqueda)),
     );
   }
 
@@ -98,7 +105,7 @@ export class InicioDifuntosComponent implements OnInit {
         },
         error: () => {
           Swal.fire('Error', 'Error al registrar el difunto', 'error');
-        }
+        },
       });
     });
   }
@@ -116,9 +123,36 @@ export class InicioDifuntosComponent implements OnInit {
       },
       (reason) => {
         // Manejar cancelación si es necesario
-      }
+      },
     );
   }
-
-
+  // Método para eliminar un difunto, se llama al hacer click en el botón "Eliminar" de cada fila
+  eliminarFallecido(id_fallecido: number): void {
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: '¡No podrás revertir esto!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, eliminarlo!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.fallecidoService.eliminarFallecido(id_fallecido).subscribe({
+          next: () => {
+            Swal.fire(
+              '¡Eliminado!',
+              'El fallecido ha sido eliminado.',
+              'success',
+            );
+            // Aquí puedes recargar la lista de fallecidos o hacer cualquier otra acción necesaria
+            this.cargarDifuntos();
+          },
+          error: () => {
+            Swal.fire('Error', 'No se pudo eliminar el fallecido.', 'error');
+          },
+        });
+      }
+    });
+  }
 }
