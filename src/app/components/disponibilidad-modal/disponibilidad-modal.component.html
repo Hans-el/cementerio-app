@@ -15,7 +15,7 @@
   <!-- SECCIÓN ADMIN -->
   <div *ngIf="userRole === 'admin'" class="mb-4">
     <p class="fw-semibold text-muted mb-2">
-      Seleccione el bloque para poner en venta
+      Seleccione el bloque para poner en disponibilidad de compra:
     </p>
 
     <div class="row">
@@ -79,7 +79,7 @@
 
   <!-- SECCIÓN LISTADO DE BLOQUES EN VENTA PA ADMIN Y USUARIOS NORMALES-->
   <!-- LISTADO DE BLOQUES -->
-  <p class="fw-semibold text-muted mb-3">Bloques actualmente en venta</p>
+  <p class="fw-semibold text-muted mb-3">Bloques actualmente disponibles</p>
 
   <div class="row">
     <div *ngFor="let espacio of espaciosDisponibles" class="col-md-6 mb-3">
@@ -92,7 +92,7 @@
             {{ formatoDosDigitos(espacio.bloque) }}
           </h6>
           <!-- Imagen del bloque -->
-          <div class="text-center my-2">
+          <div class="text-center my-3">
             <img
               [src]="espacio.imagenUrl"
               class="img-fluid rounded"
@@ -101,18 +101,19 @@
               onerror="this.src = 'assets/default.jpg'"
             />
           </div>
-          <p class="text-muted small mb-3">Detalles</p>
+          <!-- Descripción del bloque -->
+          <p class="text-muted small">Detalles</p>
           <p class="text-muted small">
             {{ espacio.descripcion }}
           </p>
           <!-- Botones de acción -->
           <div class="d-flex justify-content-between">
-            <button class="btn btn-outline-success btn-sm w-50 me-2">
+            <button class="btn btn-outline-success fw-bold btn-sm w-50 me-2">
               Localizar
             </button>
 
             <button
-              class="btn btn-outline-warning btn-sm w-50 me-2"
+              class="btn btn-outline-warning fw-bold btn-sm w-50 me-2"
               (click)="visualizarImagen(espacio.imagenUrl)"
             >
               Visualizar
@@ -120,7 +121,7 @@
 
             <button
               *ngIf="userRole === 'admin'"
-              class="btn btn-outline-danger btn-sm w-50"
+              class="btn btn-outline-danger fw-bold btn-sm w-50"
               (click)="borrarBloqueEnVenta(espacio.id_bloque_venta)"
             >
               Borrar
