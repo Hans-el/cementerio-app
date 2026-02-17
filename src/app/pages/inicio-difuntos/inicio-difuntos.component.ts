@@ -22,6 +22,7 @@ export class InicioDifuntosComponent implements OnInit {
   limit: number = 30; // Número de registros por página
   totalPages: number = 0; // Total de páginas
   searchQuery: string = ''; // Consulta de búsqueda
+  today: Date = new Date();
 
   // Filtros
   filtros = {

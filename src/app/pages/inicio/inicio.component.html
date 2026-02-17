@@ -1,209 +1,367 @@
-<div class="container my-4 mx-auto">
+<div class="container-fluid py-4 px-4">
   <!-- =======================
-       CARDS RESUMEN
+       CARDS RESUMEN - Diseño mejorado
   ======================== -->
-  <p class="h5 fw-semibold mb-3">Resumen</p>
-  <div class="row g-5 mb-3">
+  <div class="d-flex align-items-center justify-content-between mb-4">
+    <h5 class="fw-semibold text-secondary mb-0">
+      <i class="bi bi-grid-3x3-gap-fill me-2 text-success"></i>Resumen de
+      ocupaciones
+    </h5>
+    <span class="badge bg-light text-dark px-3 py-2 rounded-pill">
+      <i class="bi bi-calendar3 me-2"></i>{{ fechaActual | date: "dd/MM/yyyy" }}
+    </span>
+  </div>
+
+  <!-- Cards de resumen con diseño mejorado -->
+  <div class="row g-4 mb-5">
+    <!-- Total Lotes -->
     <div class="col-6 col-md-2">
-      <div class="card text-center p-2 h-100">
-        <h6 class="mb-1">Total Lotes</h6>
-        <h4 class="text-success mb-0">
-          <!-- obtenelos el total de lotes -->
-          {{ obtenerTotalLotes() }}
-        </h4>
+      <div class="card border-0 shadow-sm h-100 hover-lift">
+        <div class="card-body p-3">
+          <div class="d-flex align-items-center">
+            <div class="shrink-0">
+              <div class="bg-success bg-opacity-10 p-3 rounded-3">
+                <i class="bi bi-box-seam fs-4 text-success"></i>
+              </div>
+            </div>
+            <div class="grow ms-3">
+              <h6 class="text-muted mb-1 small">Total Lotes</h6>
+              <h4 class="fw-bold text-dark mb-0">{{ obtenerTotalLotes() }}</h4>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
+    <!-- Bóvedas -->
     <div class="col-6 col-md-2">
-      <div class="card text-center p-2 h-100">
-        <h6 class="mb-1">BÓVEDAS</h6>
-        <h4 class="text-warning mb-0">{{ resumenEspacios.bovedas }}</h4>
+      <div class="card border-0 shadow-sm h-100 hover-lift">
+        <div class="card-body p-3">
+          <div class="d-flex align-items-center">
+            <div class="shrink-0">
+              <div class="bg-warning bg-opacity-10 p-3 rounded-3">
+                <i class="bi bi-building fs-4 text-warning"></i>
+              </div>
+            </div>
+            <div class="grow ms-3">
+              <h6 class="text-muted mb-1 small">Bóvedas</h6>
+              <h4 class="fw-bold text-dark mb-0">
+                {{ resumenEspacios.bovedas }}
+              </h4>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
+    <!-- Nichos -->
     <div class="col-6 col-md-2">
-      <div class="card text-center p-2 h-100">
-        <h6 class="mb-1">NICHOS</h6>
-        <h4 class="text-dark mb-0">{{ resumenEspacios.nichos }}</h4>
-        <!-- FALTA CORREGIR-->
+      <div class="card border-0 shadow-sm h-100 hover-lift">
+        <div class="card-body p-3">
+          <div class="d-flex align-items-center">
+            <div class="shrink-0">
+              <div class="bg-secondary bg-opacity-10 p-3 rounded-3">
+                <i class="bi bi-columns-gap fs-4 text-secondary"></i>
+              </div>
+            </div>
+            <div class="grow ms-3">
+              <h6 class="text-muted mb-1 small">Nichos</h6>
+              <h4 class="fw-bold text-dark mb-0">
+                {{ resumenEspacios.nichos }}
+              </h4>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
+    <!-- Cruz -->
     <div class="col-6 col-md-2">
-      <div class="card text-center p-2 h-100">
-        <h6 class="mb-1">CRUZ</h6>
-        <h4 class="text-danger mb-0">{{ resumenEspacios.cruces }}</h4>
-        <!-- FALTA CORREGIR-->
+      <div class="card border-0 shadow-sm h-100 hover-lift">
+        <div class="card-body p-3">
+          <div class="d-flex align-items-center">
+            <div class="shrink-0">
+              <div class="bg-danger bg-opacity-10 p-3 rounded-3">
+                <i class="bi bi-plus-circle fs-4 text-danger"></i>
+              </div>
+            </div>
+            <div class="grow ms-3">
+              <h6 class="text-muted mb-1 small">Cruz</h6>
+              <h4 class="fw-bold text-dark mb-0">
+                {{ resumenEspacios.cruces }}
+              </h4>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
-    <div class="col-6 col-md-2 text-md-end ms-auto">
-      <button class="btn btn-success fw-bold w-100" (click)="editarBovedas()">
-        <i class="bi bi-building-add nav-icon"></i>
-        <span class="nav-text ms-2 d-none d-sm-inline"
-          >Gestión Ocupaciones</span
+    <!-- Botón de acción -->
+    <div class="col-6 col-md-4">
+      <div
+        class="card border-0 bg-success bg-gradient h-100 shadow-sm hover-lift"
+      >
+        <div
+          class="card-body p-3 d-flex align-items-center justify-content-center"
         >
-      </button>
+          <button
+            class="btn btn-link text-white text-decoration-none w-100 p-0"
+            (click)="editarBovedas()"
+          >
+            <i class="bi bi-pencil-square fs-4 me-2"></i>
+            <span class="fw-semibold">Gestión Ocupaciones</span>
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 
   <!-- =======================
-       FILTROS + BUSCADOR
+       FILTROS + BUSCADOR - Diseño mejorado
   ======================== -->
-  <div class="card mb-4 p-3">
-    <div class="row g-3 align-items-end">
-      <!-- BUSCADOR -->
-      <div class="col-md-6">
-        <label class="form-label fw-semibold">Buscar</label>
-        <input
-          type="text"
-          class="form-control"
-          placeholder="Código (01.02.03) o Nombre del fallecido"
-          [(ngModel)]="filtros.busqueda"
-          (ngModelChange)="buscarTexto()"
-        />
-      </div>
+  <div class="card border-0 shadow-sm mb-4">
+    <div class="card-header bg-white border-0 py-3">
+      <h6 class="fw-semibold text-secondary mb-0">
+        <i class="bi bi-sliders2 me-2"></i>Filtros de búsqueda
+      </h6>
+    </div>
+    <div class="card-body pt-0">
+      <div class="row g-3">
+        <!-- BUSCADOR -->
+        <div class="col-md-6">
+          <label class="form-label text-muted small fw-semibold mb-1">
+            <i class="bi bi-search me-1"></i>Buscar
+          </label>
+          <div class="input-group">
+            <span class="input-group-text bg-light border-end-0">
+              <i class="bi bi-search text-muted"></i>
+            </span>
+            <input
+              type="text"
+              class="form-control form-control bg-light border-start-1 ps-2"
+              placeholder="Código (01.02.03) o Nombre del fallecido"
+              [(ngModel)]="filtros.busqueda"
+              (ngModelChange)="buscarTexto()"
+            />
+          </div>
+        </div>
 
-      <!-- SECTOR -->
-      <div class="col-md-2">
-        <label class="form-label fw-semibold">Sector</label>
-        <select
-          class="form-select"
-          [(ngModel)]="filtros.sector"
-          (change)="onSectorChange()"
-        >
-          <option [ngValue]="null">Todos los sectores</option>
-          <option *ngFor="let s of sectores" [ngValue]="s.id_sector">
-            {{ ("0" + s.codigo).slice(-2) }}
-          </option>
-        </select>
-      </div>
+        <!-- SECTOR -->
+        <div class="col-md-2">
+          <label class="form-label text-muted small fw-semibold mb-1"
+            >Sector</label
+          >
+          <select
+            class="form-select form-select bg-light"
+            [(ngModel)]="filtros.sector"
+            (change)="onSectorChange()"
+          >
+            <option [ngValue]="null">Todos</option>
+            <option *ngFor="let s of sectores" [ngValue]="s.id_sector">
+              {{ ("0" + s.codigo).slice(-2) }}
+            </option>
+          </select>
+        </div>
 
-      <!-- MANZANA -->
-      <div class="col-md-2">
-        <label class="form-label fw-semibold">Manzana</label>
-        <select
-          class="form-select"
-          [(ngModel)]="filtros.manzana"
-          (change)="onManzanaChange()"
-          [disabled]="!manzanas.length"
-        >
-          <option [ngValue]="null">Todas las manzanas</option>
-          <option *ngFor="let m of manzanas" [ngValue]="m.numero_manzana">
-            {{ m.numero_manzana }}
-          </option>
-        </select>
-      </div>
+        <!-- MANZANA -->
+        <div class="col-md-2">
+          <label class="form-label text-muted small fw-semibold mb-1"
+            >Manzana</label
+          >
+          <select
+            class="form-select form-select-lg bg-light"
+            [(ngModel)]="filtros.manzana"
+            (change)="onManzanaChange()"
+            [disabled]="!manzanas.length"
+          >
+            <option [ngValue]="null">Todas</option>
+            <option *ngFor="let m of manzanas" [ngValue]="m.numero_manzana">
+              {{ m.numero_manzana }}
+            </option>
+          </select>
+        </div>
 
-      <!-- BLOQUE -->
-      <div class="col-md-2">
-        <label class="form-label fw-semibold">Bloque</label>
-        <select
-          class="form-select"
-          [(ngModel)]="filtros.bloque"
-          (change)="onBloqueChange()"
-          [disabled]="!bloques.length"
-        >
-          <option [ngValue]="null">Todos los bloques</option>
-          <option *ngFor="let b of bloques" [ngValue]="b.numero_bloque">
-            {{ b.numero_bloque }}
-          </option>
-        </select>
+        <!-- BLOQUE -->
+        <div class="col-md-2">
+          <label class="form-label text-muted small fw-semibold mb-1"
+            >Bloque</label
+          >
+          <select
+            class="form-select form-select-lg bg-light"
+            [(ngModel)]="filtros.bloque"
+            (change)="onBloqueChange()"
+            [disabled]="!bloques.length"
+          >
+            <option [ngValue]="null">Todos</option>
+            <option *ngFor="let b of bloques" [ngValue]="b.numero_bloque">
+              {{ b.numero_bloque }}
+            </option>
+          </select>
+        </div>
       </div>
     </div>
   </div>
 
   <!-- =======================
-       TABLA
+       TABLA - Diseño mejorado
   ======================== -->
-  <div class="card">
-    <div class="table-responsive my-3">
-      <table class="table table-hover mb-0 align-middle">
-        <thead class="table-light text-center">
-          <tr>
-            <th>Código</th>
-            <th>Sector</th>
-            <th>Manzana</th>
-            <th>Bloque</th>
-            <th>Tipo</th>
-            <th>Espacio</th>
-            <th>Fallecido</th>
-            <th>Fecha Fallecimiento</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
+  <div class="card border-0 shadow-sm">
+    <div
+      class="card-header bg-white border-0 py-3 d-flex justify-content-between align-items-center"
+    >
+      <h6 class="fw-semibold text-secondary mb-0">
+        <i class="bi bi-table me-2"></i>Listado de Ocupaciones
+      </h6>
+      <span class="badge bg-light text-dark px-3 py-2 rounded-pill">
+        <i class="bi bi-list-ol me-2"></i>{{ ocupaciones.length }} registros
+      </span>
+    </div>
 
-        <tbody class="text-center">
-          <tr *ngFor="let o of ocupaciones">
-            <td class="fw-semibold">{{ o.codigo_bloque }}</td>
-            <td>{{ "0" + o.sector_cementerio }}</td>
-            <td>{{ o.manzana }}</td>
-            <td>{{ o.bloque_lote }}</td>
-            <td>{{ o.tipo_ubicacion }}</td>
-            <td>{{ o.numero }}</td>
-            <!-- SI UN FALLECIDO TIENE COMO NOMBRE "S/N" LE ASIGNAMOS  -->
-            <td>
-              {{
-                o.nombre_fallecido
-                  ? o.nombre_fallecido === "S/N"
-                    ? "--"
-                    : o.nombre_fallecido
-                  : "--"
-              }}
-            </td>
-            <!-- SI NO TIENE FECHA DE FALLECIMIENTO MOSTRAMOS - -->
-            <td>
-              {{
-                o.fecha_fallecimiento
-                  ? (o.fecha_fallecimiento | date: "yyyy-MM-dd")
-                  : "-"
-              }}
-            </td>
-            <td>
-              <button
-                class="btn btn-m btn-warning my-1 fw-semibold"
-                (click)="editar(o)"
-              >
-                <i class="bi bi-pencil"></i>
-              </button>
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="bg-light">
+            <tr>
+              <th class="px-4 py-3 text-muted small fw-bold">Código</th>
+              <th class="py-3 text-muted small fw-bold">Sector</th>
+              <th class="py-3 text-muted small fw-bold">Manzana</th>
+              <th class="py-3 text-muted small fw-bold">Bloque</th>
+              <th class="py-3 text-muted small fw-bold">Tipo</th>
+              <th class="py-3 text-muted small fw-bold">Espacio</th>
+              <th class="py-3 text-muted small fw-bold">Fallecido</th>
+              <th class="py-3 text-muted small fw-bold">Fecha Fallecimiento</th>
+              <th class="px-4 py-3 text-muted small fw-semibold text-end">
+                Acciones
+              </th>
+            </tr>
+          </thead>
 
-              <button
-                class="btn btn-m btn-danger mx-1 fw-semibold"
-                (click)="eliminar(o)"
-              >
-                <i class="bi bi-trash"></i>
-              </button>
-            </td>
-          </tr>
+          <tbody class="border-0">
+            <tr *ngFor="let o of ocupaciones" class="border-bottom">
+              <td class="px-4">
+                <span
+                  class="badge bg-success bg-opacity-10 text-success px-3 py-2 rounded-3"
+                >
+                  {{ o.codigo_bloque }}
+                </span>
+              </td>
+              <td class="fw-medium">{{ "0" + o.sector_cementerio }}</td>
+              <td class="fw-medium">{{ o.manzana }}</td>
+              <td class="fw-medium">{{ o.bloque_lote }}</td>
+              <td>
+                <span
+                  class="badge"
+                  [ngClass]="{
+                    'bg-warning bg-opacity-10 text-':
+                      o.tipo_ubicacion === 'BOVEDA',
+                    'bg-secondary bg-opacity-10 text-':
+                      o.tipo_ubicacion === 'NICHO',
+                    'bg-danger bg-opacity-10 text-danger':
+                      o.tipo_ubicacion === 'CRUZ',
+                  }"
+                >
+                  {{ o.tipo_ubicacion }}
+                </span>
+              </td>
+              <td class="fw-medium">{{ o.numero }}</td>
+              <td>
+                <span
+                  [class.text-muted]="
+                    !o.nombre_fallecido || o.nombre_fallecido === 'S/N'
+                  "
+                >
+                  {{
+                    o.nombre_fallecido
+                      ? o.nombre_fallecido === "S/N"
+                        ? "—"
+                        : o.nombre_fallecido
+                      : "—"
+                  }}
+                </span>
+              </td>
+              <td>
+                <span [class.text-muted]="!o.fecha_fallecimiento">
+                  {{
+                    o.fecha_fallecimiento
+                      ? (o.fecha_fallecimiento | date: "dd MMM yyyy")
+                      : "—"
+                  }}
+                </span>
+              </td>
+              <td class="px-4">
+                <div class="d-flex gap-2 justify-content-end">
+                  <button
+                    class="btn btn-warning border-1px"
+                    (click)="editar(o)"
+                    title="Editar"
+                  >
+                    <i class="bi bi-pencil"></i>
+                  </button>
+                  <button
+                    class="btn btn-danger border-1px"
+                    (click)="eliminar(o)"
+                    title="Eliminar"
+                  >
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
 
-          <tr *ngIf="!ocupaciones.length && !loading">
-            <td colspan="9" class="text-center text-muted py-4">
-              No se encontraron resultados
-            </td>
-          </tr>
+            <tr *ngIf="!ocupaciones.length && !loading">
+              <td colspan="9" class="text-center py-5">
+                <div class="py-4">
+                  <i class="bi bi-inbox fs-1 text-muted"></i>
+                  <p class="text-muted mb-0 mt-3">
+                    No se encontraron resultados
+                  </p>
+                </div>
+              </td>
+            </tr>
 
-          <tr *ngIf="loading">
-            <td colspan="9" class="text-center py-4">
-              <div class="spinner-border text-success"></div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+            <tr *ngIf="loading">
+              <td colspan="9" class="text-center py-5">
+                <div class="spinner-border text-success" role="status">
+                  <span class="visually-hidden">Cargando...</span>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
-  <!-- Paginación -->
-  <div class="d-flex justify-content-center mt-3">
-    <nav aria-label="Page navigation">
-      <ul class="pagination">
+
+  <!-- =======================
+       PAGINACIÓN - Diseño mejorado
+  ======================== -->
+  <div class="d-flex justify-content-between align-items-center mt-4">
+    <div class="text-muted small">
+      Mostrando página {{ page }} de {{ limit || 1 }}
+    </div>
+    <nav aria-label="Navegación de páginas">
+      <ul class="pagination pagination-sm mb-0">
         <li class="page-item" [class.disabled]="page === 1">
-          <button class="btn bt-" (click)="paginaAnterior()">Anterior</button>
+          <button
+            class="page-link border-0 bg-light text-dark"
+            (click)="paginaAnterior()"
+          >
+            <i class="bi bi-chevron-left"></i>
+            <span class="ms-1 d-none d-md-inline">Anterior</span>
+          </button>
         </li>
         <li class="page-item">
-          <span class="page-link">Página {{ page }} </span>
+          <span class="page-link border-0 bg-success text-white fw-semibold">
+            {{ page }}
+          </span>
         </li>
         <li class="page-item">
-          <button class="page-link" (click)="siguientePagina()">
-            Siguiente
+          <button
+            class="page-link border-0 bg-light text-dark"
+            (click)="siguientePagina()"
+          >
+            <span class="me-1 d-none d-md-inline">Siguiente</span>
+            <i class="bi bi-chevron-right"></i>
           </button>
         </li>
       </ul>

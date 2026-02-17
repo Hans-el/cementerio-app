@@ -51,6 +51,7 @@ export class InicioComponent implements OnInit {
   // ===============================
   // DATA
   // ===============================
+  fechaActual: Date = new Date(); // Agrega esta línea
   ocupaciones: Ocupacion[] = [];
   sectores: any[] = [];
   manzanas: any[] = [];
