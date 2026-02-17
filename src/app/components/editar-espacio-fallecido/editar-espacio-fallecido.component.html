@@ -1,7 +1,6 @@
 <div class="modal-header bg-light">
-  <h5 class="modal-title d-flex align-items-center gap-2">
-    <i class="bi bi-pencil-square text-primary"></i>
-    Editar Espacio de Fallecido
+  <h5 class="modal-title">
+    <i class="bi bi-pencil-square me-2"></i>Editar Espacio de Fallecido
   </h5>
   <button
     type="button"
@@ -10,155 +9,160 @@
     (click)="activeModal.dismiss()"
   ></button>
 </div>
-
 <div class="modal-body">
-  <!-- 🔍 Búsqueda -->
-  <div class="mb-4 position-relative">
-    <label for="nombreFallecido" class="form-label fw-semibold">
-      Buscar fallecido
-    </label>
-    <input
-      type="text"
-      class="form-control"
-      id="nombreFallecido"
-      [(ngModel)]="nombreFallecido"
-      (input)="buscarFallecido()"
-      placeholder="Escriba el nombre del fallecido..."
-    />
-
+  <!-- Barra de búsqueda -->
+  <div class="mb-4">
+    <label for="nombreFallecido" class="form-label fw-semibold"
+      >Buscar fallecido</label
+    >
+    <div class="input-group">
+      <input
+        type="text"
+        class="form-control"
+        id="nombreFallecido"
+        [(ngModel)]="nombreFallecido"
+        (input)="buscarFallecido()"
+        placeholder="Ingrese el nombre del fallecido..."
+      />
+    </div>
     <div
       *ngIf="sugerenciasFallecidos.length > 0 && nombreFallecido.length > 0"
-      class="list-group position-absolute w-100 shadow-sm"
-      style="z-index: 1000"
+      class="dropdown-menu show w-100"
     >
-      <button
+      <div
         *ngFor="let fallecido of sugerenciasFallecidos"
-        type="button"
-        class="list-group-item list-group-item-action"
+        class="dropdown-item"
+        style="cursor: pointer"
         (click)="seleccionarFallecido(fallecido)"
       >
-        <i class="bi bi-person me-2"></i>
-        {{ fallecido.nombre_completo }}
-      </button>
+        <div class="d-flex justify-content-between align-items-center">
+          <span>{{ fallecido.nombre_completo }}</span>
+          <small class="text-muted"
+            >{{ fallecido.codigo_bloque }} - Espacio:
+            {{ fallecido.numero }}</small
+          >
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- 📄 Información actual -->
-  <div *ngIf="fallecidoSeleccionado" class="card mb-4 border-0 shadow-sm">
+  <!-- Información del fallecido seleccionado -->
+  <div *ngIf="fallecidoSeleccionado" class="card mb-4">
+    <div class="card-header bg-light fw-semibold">
+      Información del Fallecido
+    </div>
     <div class="card-body">
-      <h6 class="text-muted mb-2">FALLECIDO</h6>
-      <h5 class="fw-bold mb-3">
-        {{ fallecidoSeleccionado.nombre_completo }}
-      </h5>
-
-      <div class="row text-sm">
-        <div class="col-md-6 mb-2">
-          <strong>Sector:</strong> {{ fallecidoSeleccionado.sector }}
-        </div>
-        <div class="col-md-6 mb-2">
-          <strong>Manzana:</strong> {{ fallecidoSeleccionado.manzana }}
-        </div>
-        <div class="col-md-6 mb-2">
-          <strong>Bloque:</strong> {{ fallecidoSeleccionado.bloque }}
-        </div>
-        <div class="col-md-6 mb-2">
-          <strong>Espacio:</strong> {{ fallecidoSeleccionado.espacio }}
+      <div class="row">
+        <div class="col-md-6">
+          <p class="mb-2 text-muted">Nombre</p>
+          <h3>{{ fallecidoSeleccionado.nombre_completo }}</h3>
+          <br />
+          <p class="mb-2 text-muted">Ubicación Actual</p>
+          <ul class="list-unstyled">
+            <li><strong>Sector:</strong> {{ fallecidoSeleccionado.sector }}</li>
+            <li>
+              <strong>Manzana:</strong> {{ fallecidoSeleccionado.manzana }}
+            </li>
+            <li><strong>Bloque:</strong> {{ fallecidoSeleccionado.bloque }}</li>
+            <li>
+              <strong>Espacio:</strong> {{ fallecidoSeleccionado.espacio }}
+            </li>
+          </ul>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- 🔄 Nuevo espacio -->
-  <div *ngIf="fallecidoSeleccionado">
-    <h6 class="fw-semibold mb-3">Nuevo espacio asignado</h6>
-
-    <div class="row g-3">
-      <div class="col-md-3">
-        <label class="form-label">Sector</label>
-        <select
-          class="form-select"
-          [(ngModel)]="nuevoSector"
-          (change)="onNuevoSectorChange()"
-        >
-          <option value="">Seleccione</option>
-          <option *ngFor="let sector of sectores" [value]="sector.id_sector">
-            {{ sector.codigo }}
-          </option>
-        </select>
-      </div>
-
-      <div class="col-md-3">
-        <label class="form-label">Manzana</label>
-        <select
-          class="form-select"
-          [(ngModel)]="nuevaManzana"
-          (change)="onNuevaManzanaChange()"
-          [disabled]="!nuevoSector"
-        >
-          <option value="">Seleccione</option>
-          <option
-            *ngFor="let manzana of nuevasManzanas"
-            [value]="manzana.id_manzana"
+  <!-- Selectores para elegir el nuevo espacio -->
+  <div *ngIf="fallecidoSeleccionado" class="card">
+    <div class="card-header bg-light fw-semibold">Nuevo Espacio a Asignar</div>
+    <div class="card-body">
+      <div class="row g-3">
+        <div class="col-md-3">
+          <label for="nuevoSector" class="form-label">Sector</label>
+          <select
+            id="nuevoSector"
+            class="form-select"
+            [(ngModel)]="nuevoSector"
+            (change)="onNuevoSectorChange()"
           >
-            {{ manzana.numero_manzana }}
-          </option>
-        </select>
-      </div>
-
-      <div class="col-md-3">
-        <label class="form-label">Bloque</label>
-        <select
-          class="form-select"
-          [(ngModel)]="nuevoBloque"
-          (change)="onNuevoBloqueChange()"
-          [disabled]="!nuevaManzana"
-        >
-          <option value="">Seleccione</option>
-          <option
-            *ngFor="let bloque of nuevosBloques"
-            [value]="bloque.id_bloque"
+            <option value="" selected>Seleccione...</option>
+            <option *ngFor="let sector of sectores" [value]="sector.id_sector">
+              {{ sector.codigo }}
+            </option>
+          </select>
+        </div>
+        <div class="col-md-3">
+          <label for="nuevaManzana" class="form-label">Manzana</label>
+          <select
+            id="nuevaManzana"
+            class="form-select"
+            [(ngModel)]="nuevaManzana"
+            (change)="onNuevaManzanaChange()"
+            [disabled]="!nuevoSector"
           >
-            {{ bloque.numero_bloque }}
-          </option>
-        </select>
-      </div>
-
-      <div class="col-md-3">
-        <label class="form-label">Espacio</label>
-        <select
-          class="form-select"
-          [(ngModel)]="nuevoEspacio"
-          [disabled]="!nuevoBloque"
-        >
-          <option value="">Seleccione</option>
-          <option
-            *ngFor="let espacio of nuevosEspacios"
-            [value]="espacio.id_espacio"
+            <option value="" selected>Seleccione...</option>
+            <option
+              *ngFor="let manzana of nuevasManzanas"
+              [value]="manzana.id_manzana"
+            >
+              {{ manzana.numero_manzana }}
+            </option>
+          </select>
+        </div>
+        <div class="col-md-3">
+          <label for="nuevoBloque" class="form-label">Bloque</label>
+          <select
+            id="nuevoBloque"
+            class="form-select"
+            [(ngModel)]="nuevoBloque"
+            (change)="onNuevoBloqueChange()"
+            [disabled]="!nuevaManzana"
           >
-            {{ espacio.numero_espacio }}
-          </option>
-        </select>
+            <option value="" selected>Seleccione...</option>
+            <option
+              *ngFor="let bloque of nuevosBloques"
+              [value]="bloque.id_bloque"
+            >
+              {{ bloque.numero_bloque }}
+            </option>
+          </select>
+        </div>
+        <div class="col-md-3">
+          <label for="nuevoEspacio" class="form-label">Espacio</label>
+          <select
+            id="nuevoEspacio"
+            class="form-select"
+            [(ngModel)]="nuevoEspacio"
+            [disabled]="!nuevoBloque"
+          >
+            <option value="" selected>Seleccione...</option>
+            <option
+              *ngFor="let espacio of nuevosEspacios"
+              [value]="espacio.id_espacio"
+            >
+              {{ espacio.numero_espacio }}
+            </option>
+          </select>
+        </div>
       </div>
     </div>
   </div>
 </div>
-
 <div class="modal-footer">
   <button
     type="button"
-    class="btn btn-outline-secondary"
+    class="btn btn-outline-danger fw-semibold"
     (click)="activeModal.dismiss()"
   >
-    Cancelar
+    <i class="me-1"></i>Cancelar
   </button>
-
   <button
     *ngIf="fallecidoSeleccionado && nuevoEspacio"
     type="button"
-    class="btn btn-primary px-4"
+    class="btn btn-outline-success fw-semibold"
     (click)="guardarCambios()"
   >
-    <i class="bi bi-save me-2"></i>
-    Guardar cambios
+    <i class="me-1"></i>Guardar Cambios
   </button>
 </div>
