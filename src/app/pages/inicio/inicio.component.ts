@@ -14,44 +14,16 @@ import { BloquesService } from '../../services/bloques.service';
 import { GestionBovedasComponent } from '../../components/gestion-bloques/gestion-bovedas.component';
 import { Ocupacion } from '../../models/ocupacion.model';
 import { EspacioService } from '../../services/espacio.service';
-/*
-import { CardModule } from 'primeng/card';
-import { TableModule } from 'primeng/table';
-import { ButtonModule } from 'primeng/button';
-import { BadgeModule } from 'primeng/badge';
-import { InputTextModule } from 'primeng/inputtext';
-import { DropdownModule } from 'primeng/dropdown';
-import { TagModule } from 'primeng/tag';
-import { ProgressSpinnerModule } from 'primeng/progressspinner';
-import { PaginatorModule } from 'primeng/paginator';
-COSAS DE NGPRIME POR SI QUIERO USARLO */
 
 @Component({
   selector: 'app-inicio',
   standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    NgbDropdownModule,
-    NgbPaginationModule,
-    //TableModule,
-    //CardModule,
-    //ButtonModule,
-    //InputTextModule,
-    //BadgeModule,
-    //DropdownModule,
-    //TagModule,
-    //ProgressSpinnerModule,
-    //PaginatorModule,
-  ],
+  imports: [CommonModule, FormsModule, NgbDropdownModule, NgbPaginationModule],
   templateUrl: './inicio.component.html',
   styleUrls: ['./inicio.component.scss'],
 })
 export class InicioComponent implements OnInit {
-  // ===============================
-  // DATA
-  // ===============================
-  fechaActual: Date = new Date(); // Agrega esta línea
+  fechaActual: Date = new Date(); // Variable para mostrar la fecha actual en el HTML
   ocupaciones: Ocupacion[] = [];
   sectores: any[] = [];
   manzanas: any[] = [];
@@ -64,9 +36,7 @@ export class InicioComponent implements OnInit {
     cruces: 0,
   };
 
-  // ===============================
-  // FILTROS
-  // ===============================
+  // FILTROS (Se inicializan como vacíos o nulos para que no apliquen al cargar la página)
   filtros = {
     busqueda: '',
     sector: null as number | null,
@@ -74,10 +44,11 @@ export class InicioComponent implements OnInit {
     bloque: null as number | null,
   };
 
-  // PAGINACIÓN
+  // PAGINACIÓN (De 50 en 50)
   page: number = 1;
   limit: number = 50;
   totalOcupaciones: number = 0;
+  totalPages: number = 0;
 
   constructor(
     private ocupacionesService: OcupacionesService,
@@ -90,12 +61,12 @@ export class InicioComponent implements OnInit {
 
   ngOnInit(): void {
     this.cargarSectores();
+    this.cargarResumenEspacios();
+    this.obtenerTotalOcupaciones();
     this.cargarOcupaciones();
-    this.cargarResumenEspacios(); // Obtener el resumen de espacios
-    //this.obtenerTotalOcupaciones(); // Función para obtener el total de ocupaciones
   }
 
-  // CARGAS BASE DE LOS DATOS
+  // para el filtro
   cargarSectores(): void {
     this.sectoresService.getSectores().subscribe({
       next: (data) => {
@@ -106,7 +77,7 @@ export class InicioComponent implements OnInit {
       },
     });
   }
-  //aca cargamos las manzanas. Esto debe estar igual a la funcion del backend en controllers/manzanaController.js [La ultima funcion creada]
+  //aca cargamos las manzana en base al sector seleccionado. Para el filtro tmb
   cargarManzanas(idSector: number): void {
     this.manzanasService.getManzanasid(idSector).subscribe({
       next: (data) => {
@@ -134,6 +105,7 @@ export class InicioComponent implements OnInit {
   //aca cargamos las ocupaciones activas, usando la funcion creada en ocupaciones.service.ts
   cargarOcupaciones(): void {
     this.loading = true;
+    //añadimos paginacion aquí para no cargar todas las ocupaciones de golpe, sino solo las que correspondan a la página actual
     this.ocupacionesService.getOcupaciones(this.page, this.limit).subscribe({
       next: (data) => {
         this.ocupaciones = data;
@@ -148,16 +120,15 @@ export class InicioComponent implements OnInit {
   // Función para obtener el total de ocupaciones
   obtenerTotalOcupaciones(): void {
     this.ocupacionesService.getTotalOcupaciones().subscribe({
-      next: (total) => {
-        this.totalOcupaciones = total;
+      next: (data) => {
+        this.totalOcupaciones = data;
+        this.totalPages = Math.ceil(this.totalOcupaciones / this.limit);
       },
       error: () => {
         console.error('Error al obtener el total de ocupaciones');
       },
     });
   }
-
-  // Función para ir a la página anterior
   paginaAnterior(): void {
     if (this.page > 1) {
       this.page--;
@@ -165,18 +136,14 @@ export class InicioComponent implements OnInit {
     }
   }
 
-  // Función para ir a la página siguiente
   siguientePagina(): void {
-    const totalPages = Math.ceil(this.totalOcupaciones / this.limit);
-    if (this.page < totalPages) {
+    if (this.page < this.totalPages) {
       this.page++;
       this.cargarOcupaciones();
     }
   }
 
-  // ===============================
   // BUSCADOR TEXTO
-  // ===============================
   buscarTexto(): void {
     if (!this.filtros.busqueda || this.filtros.busqueda.length < 2) {
       this.cargarOcupaciones();

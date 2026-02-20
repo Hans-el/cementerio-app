@@ -15,7 +15,9 @@
   box-sizing: border-box; /* Asegura que el padding no aumente el ancho total */
 }
 
-/* En móviles, ajusta el margen */
+/* LO SIGUIENTE ES LO QUE GENERA RESPONSIVIDAD EN NUESTRO SITIO */
+/* DE ESTA MANERA SE AJUSTA A LA PANTALLA DEL DISPOSITIVO*/
+/* SE COLOCÓ AQUÍ PORQUE ESTE ES EL LAYOUT, ES LA PLANTILLA GENERAL DEL SISTEMA, DONDE ESTÁ EL SIDEBAR Y EL CONTENIDO*/
 @media (max-width: 767.98px) {
   .main-content {
     margin-left: 0;

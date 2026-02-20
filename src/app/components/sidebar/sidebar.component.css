@@ -1,12 +1,21 @@
+/* Agregamos un linear gradient para darle un toque de degradado  */
 .sidebar {
-  background-color: #2d5a3d;
   color: white;
   overflow-y: auto;
   overflow-x: hidden;
   box-sizing: border-box;
   z-index: 1000;
   transition: width 0.3s;
+  background: linear-gradient(
+    180deg,
+    #163212 0%,
+    #30422e 100%
+  );
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+  box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15);
 }
+
 
 .sidebar-header {
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -53,11 +62,12 @@ Con esto logramos que sea más fácil de usar en pantallas pequeñas */
 }
 
 .nav-link:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: #163212;
 }
 
 .nav-link.active {
-  background-color: rgba(255, 255, 255, 0.2);
+  background-color: #2d5a3d;
+  
 }
 
 .nav-icon {
@@ -76,7 +86,6 @@ Con esto logramos que sea más fácil de usar en pantallas pequeñas */
 
 .sidebar-footer {
   border-top: 1px solid rgba(255, 255, 255, 0.1);
-
 }
 
 /* Estilo para el área del usuario (hover y diseño) */
@@ -85,38 +94,26 @@ Con esto logramos que sea más fácil de usar en pantallas pequeñas */
   border-radius: 6px;
   transition: background-color 0.2s;
   margin: 0.5rem 0;
-  
+    background: linear-gradient(
+    90deg,
+    #163212 0%,
+    #30422e 100%
+  );
+  color: #e5e7eb;
 }
-
 .user-section:hover {
+   
+  color: #e5e7eb;
   background-color: rgba(255, 255, 255, 0.08);
 }
 /* Icono de flecha para indicar que es un dropdown */
 .user-section::after {
-  content: '\F282'; /* Icono de chevrón down de Bootstrap Icons (Unicode) */
-  font-family: "bootstrap-icons" !important;
   margin-left: auto;
   font-size: 0.8rem;
 }
 
-
-.user-avatar i {
-  font-size: 1.5rem;
-}
-
-.user-name {
-  margin: 0;
-  font-weight: 500;
-}
-
-.user-role {
-  font-size: 0.8rem;
-  color: rgba(255, 255, 255, 0.7);
-}
-
 /* Estilo del menú desplegable */
 .dropdown-menu {
-  background-color: #0c5224; /* Mismo color que el sidebar */
   border: none;
   border-radius: 6px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -128,15 +125,21 @@ Con esto logramos que sea más fácil de usar en pantallas pequeñas */
   transform: translate3d(0, 0, 0);
   z-index: 1050;
   overflow: hidden;
+  background: linear-gradient(
+    180deg,
+    #163212 0%,
+    #30422e 100%
+  );
+  color: #e5e7eb;
 }
-
-
-
 
 .btn-toggle-sidebar {
   z-index: 1050;
-  background-color: #2d5a3d;
-  border: none;
+  background: linear-gradient(
+    180deg,
+    #163212 0%,
+    #30422e 100%
+  );  border: none;
   border-radius: 50%;
   width: 40px;
   height: 40px;

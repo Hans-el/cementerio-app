@@ -25,12 +25,6 @@
   background-color: rgba(0, 128, 0, 0.02);
 }
 
-/* Badges con efectos */
-.badge {
-  font-weight: 500;
-  padding: 0.5rem 0.75rem;
-  border-radius: 10px;
-}
 
 /* Inputs con mejor contraste */
 .form-control-lg, .form-select {
@@ -53,4 +47,16 @@
 
 .page-link:hover {
   background-color: #e9ecef;
+}
+
+.card-resumen {
+  background: linear-gradient(
+    180deg,
+    #163212 0%,
+    #30422e 50%
+  );
+  color: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+  transition: all 0.25s ease;
 }
