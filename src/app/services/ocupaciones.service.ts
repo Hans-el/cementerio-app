@@ -11,44 +11,115 @@ export class OcupacionesService {
   //Este servicio se usa en el componente inicio
   //Este servicio usa los datos del modelo de Ocupacion (models/ocupacion.model.ts)
 
-  constructor(private http: HttpClient) { }
-  /** Listado principal (vista completa) */
-  getOcupaciones(page = 1, limit = 50): Observable<Ocupacion[]> {
-    return this.http.get<Ocupacion[]>(
-      `${this.apiUrl}?page=${page}&limit=${limit}`
-    );
+  constructor(private http: HttpClient) {}
+
+  /**
+   * Obtener ocupaciones paginadas
+   * @param page Número de página
+   * @param limit Número de registros por página
+   * @returns Observable con los datos paginados
+   */
+  getOcupaciones(
+    page: number = 1,
+    limit: number = 50,
+  ): Observable<{
+    data: Ocupacion[];
+    total: number;
+    page: number;
+    limit: number;
+    totalPages: number;
+  }> {
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('limit', limit.toString());
+
+    return this.http.get<{
+      data: Ocupacion[];
+      total: number;
+      page: number;
+      limit: number;
+      totalPages: number;
+    }>(this.apiUrl, { params });
   }
 
-  // Obtener el total de ocupaciones, ideal para mostrarlos en los contadores
-  getTotalOcupaciones(): Observable<number> {
-    return this.http.get<number>(`${this.apiUrl}/total`);
+  /**
+   * Obtener el total de ocupaciones
+   * @returns Observable con el total de ocupaciones
+   */
+  getTotalOcupaciones(): Observable<{ total: number }> {
+    return this.http.get<{ total: number }>(`${this.apiUrl}/total`);
   }
 
-  /** Buscar por código o fallecido */
-  buscarOcupaciones(query: string): Observable<Ocupacion[]> {
-    return this.http.get<Ocupacion[]>(
-      `${this.apiUrl}/buscar?q=${query}`
-    );
+  /**
+   * Buscar ocupaciones por término de búsqueda con paginación
+   * @param query Término de búsqueda
+   * @param page Número de página
+   * @param limit Número de registros por página
+   * @returns Observable con los datos paginados
+   */
+  buscarOcupaciones(
+    query: string,
+    page: number = 1,
+    limit: number = 50,
+  ): Observable<{
+    data: Ocupacion[];
+    total: number;
+    page: number;
+    limit: number;
+    totalPages: number;
+  }> {
+    let params = new HttpParams()
+      .set('q', query)
+      .set('page', page.toString())
+      .set('limit', limit.toString());
+
+    return this.http.get<{
+      data: Ocupacion[];
+      total: number;
+      page: number;
+      limit: number;
+      totalPages: number;
+    }>(`${this.apiUrl}/buscar`, { params });
   }
 
-  // para filtrar las ocupaciones por sector, manzana y bloque
-  filtrarOcupaciones(filtros: {
-    sector?: string;
-    manzana?: string;
-    bloque?: string;
-    tipo?: string;
-  }): Observable<Ocupacion[]> {
-    let params = new HttpParams();
+  /**
+   * Filtrar ocupaciones con paginación
+   * @param filtros Objeto con los filtros a aplicar
+   * @param page Número de página
+   * @param limit Número de registros por página
+   * @returns Observable con los datos paginados
+   */
+  filtrarOcupaciones(
+    filtros: {
+      sector?: string;
+      manzana?: string;
+      bloque?: string;
+      tipo?: string;
+    },
+    page: number = 1,
+    limit: number = 50,
+  ): Observable<{
+    data: Ocupacion[];
+    total: number;
+    page: number;
+    limit: number;
+    totalPages: number;
+  }> {
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('limit', limit.toString());
 
     if (filtros.sector) params = params.set('sector', filtros.sector);
     if (filtros.manzana) params = params.set('manzana', filtros.manzana);
     if (filtros.bloque) params = params.set('bloque', filtros.bloque);
     if (filtros.tipo) params = params.set('tipo', filtros.tipo);
 
-    return this.http.get<Ocupacion[]>(
-      `${this.apiUrl}/filtrar`,
-      { params }
-    );
+    return this.http.get<{
+      data: Ocupacion[];
+      total: number;
+      page: number;
+      limit: number;
+      totalPages: number;
+    }>(`${this.apiUrl}/filtrar`, { params });
   }
-
 }

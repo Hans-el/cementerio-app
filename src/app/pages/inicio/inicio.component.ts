@@ -108,7 +108,7 @@ export class InicioComponent implements OnInit {
     //añadimos paginacion aquí para no cargar todas las ocupaciones de golpe, sino solo las que correspondan a la página actual
     this.ocupacionesService.getOcupaciones(this.page, this.limit).subscribe({
       next: (data) => {
-        this.ocupaciones = data;
+        this.ocupaciones = data.data;
         this.loading = false;
       },
       error: () => {
@@ -121,7 +121,7 @@ export class InicioComponent implements OnInit {
   obtenerTotalOcupaciones(): void {
     this.ocupacionesService.getTotalOcupaciones().subscribe({
       next: (data) => {
-        this.totalOcupaciones = data;
+        this.totalOcupaciones = data.total;
         this.totalPages = Math.ceil(this.totalOcupaciones / this.limit);
       },
       error: () => {
@@ -150,31 +150,40 @@ export class InicioComponent implements OnInit {
       return;
     }
     this.loading = true;
-    this.ocupacionesService.buscarOcupaciones(this.filtros.busqueda).subscribe({
-      next: (data) => {
-        this.ocupaciones = data;
-        this.loading = false;
-      },
-      error: () => {
-        this.loading = false;
-        Swal.fire('Error', 'Error en la búsqueda', 'error');
-      },
-    });
+    this.ocupacionesService
+      .buscarOcupaciones(this.filtros.busqueda, this.page, this.limit)
+      .subscribe({
+        next: (response) => {
+          this.ocupaciones = response.data;
+          this.totalOcupaciones = response.total;
+          this.totalPages = response.totalPages;
+          this.loading = false;
+        },
+        error: () => {
+          this.loading = false;
+          Swal.fire('Error', 'Error en la búsqueda', 'error');
+        },
+      });
   }
 
   // FILTROS DINÁMICOS
   aplicarFiltros(): void {
     this.loading = true;
-
     this.ocupacionesService
-      .filtrarOcupaciones({
-        sector: this.filtros.sector?.toString(),
-        manzana: this.filtros.manzana?.toString(),
-        bloque: this.filtros.bloque?.toString(),
-      })
+      .filtrarOcupaciones(
+        {
+          sector: this.filtros.sector?.toString(),
+          manzana: this.filtros.manzana?.toString(),
+          bloque: this.filtros.bloque?.toString(),
+        },
+        this.page,
+        this.limit,
+      )
       .subscribe({
-        next: (data) => {
-          this.ocupaciones = data;
+        next: (response) => {
+          this.ocupaciones = response.data;
+          this.totalOcupaciones = response.total;
+          this.totalPages = response.totalPages;
           this.loading = false;
         },
         error: () => {
