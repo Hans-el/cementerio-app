@@ -134,19 +134,22 @@ export class InicioDifuntosComponent implements OnInit {
       text: '¡No podrás revertir esto!',
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
+      confirmButtonColor: '#163212',
       confirmButtonText: 'Sí, eliminarlo!',
     }).then((result) => {
       if (result.isConfirmed) {
         this.fallecidoService.eliminarFallecido(id_fallecido).subscribe({
           next: () => {
-            Swal.fire(
-              '¡Eliminado!',
-              'El fallecido ha sido eliminado.',
-              'success',
-            );
-            // Aquí puedes recargar la lista de fallecidos o hacer cualquier otra acción necesaria
+            Swal.fire({
+              toast: true,
+              position: 'top-end',
+              showConfirmButton: false,
+              timer: 2000,
+              timerProgressBar: true,
+              title: '¡Registro Eliminado!',
+              text: 'El difunto ha sido eliminado.',
+              icon: 'success',
+            });
             this.cargarDifuntos();
           },
           error: () => {

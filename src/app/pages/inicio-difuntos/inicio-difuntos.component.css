@@ -64,3 +64,17 @@
   background-color: #28a745;
   border-color: #28a745;
 }
+
+
+.card-resumen {
+  background: linear-gradient(
+    180deg,
+    #163212 0%,
+    #334c30 50%
+  );
+  font-weight: 500;
+  color: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+  transition: all 0.25s ease;
+}

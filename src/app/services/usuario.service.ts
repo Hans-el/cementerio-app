@@ -1,15 +1,16 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 // Servicio para manejar operaciones relacionadas con usuarios
 export class UsuarioService {
-  private apiUrl = 'http://localhost:3000/api/usuarios'; // Ajusta según tu backend
+  private apiUrl = environment.apiUrl + '/usuarios'; // Ajusta según tu backend
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   // Obtener usuario por ID
   getUsuario(id: number): Observable<any> {
@@ -24,10 +25,8 @@ export class UsuarioService {
   getUsuarios(): Observable<any> {
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`
+      Authorization: `Bearer ${token}`,
     });
     return this.http.get(`${this.apiUrl}/usuarios`, { headers });
   }
-
-
 }

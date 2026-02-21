@@ -2,12 +2,13 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Ocupacion } from '../models/ocupacion.model'; // usamos el modelo de Ocupacion
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class OcupacionesService {
-  private apiUrl = 'http://localhost:3000/api/ocupaciones';
+  private apiUrl = environment.apiUrl + '/ocupaciones'; // Usamos la URL del entorno
   //Este servicio se usa en el componente inicio
   //Este servicio usa los datos del modelo de Ocupacion (models/ocupacion.model.ts)
 

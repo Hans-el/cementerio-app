@@ -2,16 +2,15 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Manzana } from '../models/manzana.model';
-
+import { environment } from '../../environments/environment';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ManzanasService {
-  private apiUrl = 'http://localhost:3000/api/manzanas';
+  private apiUrl = environment.apiUrl + '/manzanas'; // Usamos la URL del entorno
 
-
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
   /**
    * Obtener todas las manzanas
    */
@@ -32,17 +31,14 @@ export class ManzanasService {
    * Aunque estos podrian no usarse ya porque con los parametros en getManzanasid se puede hacer lo mismo, pero lo dejamos por ahora
    */
   getManzanasBySector(idSector: number): Observable<Manzana[]> {
-    const params = new HttpParams()
-      .set('id_sector', idSector.toString());
+    const params = new HttpParams().set('id_sector', idSector.toString());
 
     return this.http.get<Manzana[]>(this.apiUrl, { params });
   }
   getManzanasBySectorCodigo(idSector: string): Observable<Manzana[]> {
-    const params = new HttpParams()
-      .set('codigo_sector', idSector);
+    const params = new HttpParams().set('codigo_sector', idSector);
     return this.http.get<Manzana[]>(this.apiUrl, { params });
   }
-
 
   //Crear nueva manzana, usamos un objeto con los datos que están definidos en el servicio y backend
   createManzana(data: {

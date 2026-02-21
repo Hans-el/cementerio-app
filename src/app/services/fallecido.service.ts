@@ -3,12 +3,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AuthService } from './auth.service';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FallecidoService {
-  private apiUrl = 'http://localhost:3000/api/fallecidos';
+  private apiUrl = environment.apiUrl + '/fallecidos'; // Usamos la URL del entorno
 
   constructor(
     private http: HttpClient,

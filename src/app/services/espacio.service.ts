@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class EspacioService {
-  private apiUrl = 'http://localhost:3000/api/espacios';
+  private apiUrl = environment.apiUrl + '/espacios'; // Usamos la URL del entorno
 
   constructor(private http: HttpClient) {}
 

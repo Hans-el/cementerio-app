@@ -1,35 +1,36 @@
 // Este servicio se crea para manejar las operaciones relacionadas con el perfil de usuario
 // Como actualizar perfil, obtener detalles de usuario, etc.
-
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AuthService } from './auth.service';
-
+import { environment } from '../../environments/environment';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class PerfilService {
-  private apiUrl = 'http://localhost:3000/api/usuarios';
+  private apiUrl = environment.apiUrl + '/usuarios'; // Usamos la URL del entorno
 
-  constructor(private http: HttpClient, private authService: AuthService) { }
+  constructor(
+    private http: HttpClient,
+    private authService: AuthService,
+  ) {}
 
   //obtener el perfil de un usuario por el ID
   getPerfil(id: number): Observable<any> {
     const token = this.authService.getToken(); // Obtener el token de autenticación
-    const headers = new HttpHeaders({ 
-      Authorization: `Bearer ${token}`
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
     });
     return this.http.get(`${this.apiUrl}/${id}`, { headers });
   }
-
 
   // editar el perfil del usuario
   updatePerfil(id: number, data: any): Observable<any> {
     const token = this.authService.getToken();
     const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`
+      Authorization: `Bearer ${token}`,
     });
     return this.http.put(`${this.apiUrl}/${id}`, data, { headers });
   }

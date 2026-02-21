@@ -2,14 +2,18 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ApiService } from './api.service';
+import { environment } from '../../environments/environment';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:3000/api';
+  private apiUrl = environment.apiUrl; // Usamos la URL del entorno
 
-  constructor(private http: HttpClient, apiService: ApiService) { }
+  constructor(
+    private http: HttpClient,
+    apiService: ApiService,
+  ) {}
 
   // Método para iniciar sesión
   login(cedula: string, contrasena: string): Observable<any> {
@@ -30,7 +34,7 @@ export class AuthService {
   getUsuarios(): Observable<any> {
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`
+      Authorization: `Bearer ${token}`,
     });
     return this.http.get(`${this.apiUrl}/usuarios`, { headers });
   }
@@ -90,7 +94,7 @@ export class AuthService {
     const token = this.getToken();
     return new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
+      Authorization: `Bearer ${token}`,
     });
   }
   // Método para obtener el usuario completo desde el token (id, nombre, rol, etc.)

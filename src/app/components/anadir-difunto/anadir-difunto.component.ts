@@ -14,7 +14,7 @@ import { FallecidoService } from '../../services/fallecido.service';
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './anadir-difunto.component.html',
-  styleUrls: ['./anadir-difunto.component.css']
+  styleUrls: ['./anadir-difunto.component.css'],
 })
 export class AnadirDifuntoComponent implements OnInit {
   // Datos del difunto
@@ -24,7 +24,7 @@ export class AnadirDifuntoComponent implements OnInit {
     fecha_inhumacion: null,
     fecha_exhumacion: null,
     observaciones: '',
-    id_espacio: null
+    id_espacio: null,
   };
 
   // Selectores
@@ -44,21 +44,22 @@ export class AnadirDifuntoComponent implements OnInit {
     private manzanasService: ManzanasService,
     private bloquesService: BloquesService,
     private espacioService: EspacioService,
-    private fallecidoService: FallecidoService
-  ) { }
+    private fallecidoService: FallecidoService,
+  ) {}
 
   ngOnInit(): void {
     this.cargarSectores();
   }
 
   cargarSectores(): void {
-    this.sectoresService.getSectores().subscribe({ // Sin parámetros
+    this.sectoresService.getSectores().subscribe({
+      // Sin parámetros
       next: (sectores) => {
         this.sectores = sectores;
       },
       error: () => {
         Swal.fire('Error', 'No se pudieron cargar los sectores', 'error');
-      }
+      },
     });
   }
 
@@ -73,7 +74,7 @@ export class AnadirDifuntoComponent implements OnInit {
       },
       error: () => {
         Swal.fire('Error', 'No se pudieron cargar las manzanas', 'error');
-      }
+      },
     });
   }
 
@@ -87,7 +88,7 @@ export class AnadirDifuntoComponent implements OnInit {
       },
       error: () => {
         Swal.fire('Error', 'No se pudieron cargar los bloques', 'error');
-      }
+      },
     });
   }
 
@@ -100,10 +101,9 @@ export class AnadirDifuntoComponent implements OnInit {
       error: (err) => {
         console.error('Error al cargar espacios:', err);
         Swal.fire('Error', 'No se pudieron cargar los espacios', 'error');
-      }
+      },
     });
   }
-
 
   onSubmit(): void {
     if (!this.nuevoDifunto.nombre_completo || !this.nuevoDifunto.id_espacio) {
@@ -114,21 +114,31 @@ export class AnadirDifuntoComponent implements OnInit {
     //usamos swal para preguntar si realmente quiere guardar el registro
     Swal.fire({
       title: '¿Estás seguro?',
-      text: "¿Quieres guardar este registro?",
+      text: '¿Quieres guardar este registro?',
       icon: 'question',
       showCancelButton: true,
       confirmButtonText: 'Sí, guardar',
-      cancelButtonText: 'Cancelar'
+      confirmButtonColor: '#163212',
+      cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
         this.fallecidoService.crearFallecido(this.nuevoDifunto).subscribe({
           next: (response) => {
-            Swal.fire('Éxito', 'Difunto registrado correctamente', 'success');
+            Swal.fire({
+              toast: true,
+              position: 'top-end',
+              showConfirmButton: false,
+              title: 'Registro Guardado',
+              text: 'Difunto registrado correctamente',
+              icon: 'success',
+              timer: 2000,
+              timerProgressBar: true,
+            });
             this.activeModal.close(this.nuevoDifunto);
           },
           error: () => {
             Swal.fire('Error', 'Error al registrar el difunto', 'error');
-          }
+          },
         });
       }
     });

@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
-interface MensajeContacto { //Esta interfaz también está creada en model/contacto 
+interface MensajeContacto {
+  //Esta interfaz también está creada en model/contacto
   nombre: string;
   email: string;
   telefono: string;
@@ -11,10 +13,10 @@ interface MensajeContacto { //Esta interfaz también está creada en model/conta
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ContactoService {
-  private apiUrl = 'http://localhost:3000/api/contacto  '; //la url del backend
+  private apiUrl = environment.apiUrl + '/contacto'; //la url del backend
 
   constructor(private http: HttpClient) {}
 
