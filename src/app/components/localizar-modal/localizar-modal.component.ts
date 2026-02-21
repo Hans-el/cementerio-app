@@ -9,13 +9,14 @@ import { FallecidoService } from '../../services/fallecido.service';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators'; // para el autocompletado
 import { Subject } from 'rxjs';
 import Swal from 'sweetalert2';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-localizar-modal',
   standalone: true,
   imports: [FormsModule, CommonModule],
   templateUrl: './localizar-modal.component.html',
-  styleUrls: ['./localizar-modal.component.css']
+  styleUrls: ['./localizar-modal.component.css'],
 })
 export class LocalizarModalComponent implements OnInit {
   nombreFallecido: string = ''; // Nombre del fallecido a buscar
@@ -25,22 +26,26 @@ export class LocalizarModalComponent implements OnInit {
   sugerencias: string[] = []; // Sugerencias para autocompletado
   selectedImageUrl: string | null = null; // URL de la imagen seleccionada para el modal
   private searchTerms = new Subject<string>(); // Para el autocompletado, sugerido por angular docs
+  environment = environment; // Para acceder a la URL del API en el template
 
   constructor(
     public activeModal: NgbActiveModal,
     private modalService: NgbModal, // Servicio para abrir modales
-    private fallecidoService: FallecidoService // Servicio para buscar fallecidos
-  ) { }
-
+    private fallecidoService: FallecidoService, // Servicio para buscar fallecidos
+  ) {}
 
   ngOnInit(): void {
-    this.searchTerms.pipe(
-      debounceTime(300), // Espera 300ms después de cada tecla
-      distinctUntilChanged(), // Ignora si el término de búsqueda no ha cambiado
-      switchMap((term: string) => this.fallecidoService.obtenerSugerenciasNombres(term))
-    ).subscribe(sugerencias => {
-      this.sugerencias = sugerencias;
-    });
+    this.searchTerms
+      .pipe(
+        debounceTime(300), // Espera 300ms después de cada tecla
+        distinctUntilChanged(), // Ignora si el término de búsqueda no ha cambiado
+        switchMap((term: string) =>
+          this.fallecidoService.obtenerSugerenciasNombres(term),
+        ),
+      )
+      .subscribe((sugerencias) => {
+        this.sugerencias = sugerencias;
+      });
   }
 
   // Llama a este método cada vez que cambia el input
@@ -60,8 +65,11 @@ export class LocalizarModalComponent implements OnInit {
       return;
     }
     // Construye la URL de la imagen basada en los datos del resultado de búsqueda, nos sirve perfecto para localizar la carpeta correcta
-    const url = `http://localhost:3000/images/bloques/${this.formatoDosDigitos(this.resultadoBusqueda[0].sector)}${this.formatoDosDigitos(this.resultadoBusqueda[0].manzana)}/${this.formatoDosDigitos(this.resultadoBusqueda[0].sector)}${this.formatoDosDigitos(this.resultadoBusqueda[0].manzana)}${this.formatoDosDigitos(this.resultadoBusqueda[0].bloque)}.jpg`;
-    const modalRef = this.modalService.open(ImageModalComponent, { size: 'lg', centered: true });
+    const url = `${environment.apiUrl}/images/bloques/${this.formatoDosDigitos(this.resultadoBusqueda[0].sector)}${this.formatoDosDigitos(this.resultadoBusqueda[0].manzana)}/${this.formatoDosDigitos(this.resultadoBusqueda[0].sector)}${this.formatoDosDigitos(this.resultadoBusqueda[0].manzana)}${this.formatoDosDigitos(this.resultadoBusqueda[0].bloque)}.jpg`;
+    const modalRef = this.modalService.open(ImageModalComponent, {
+      size: 'lg',
+      centered: true,
+    });
     modalRef.componentInstance.selectedImageUrl = url;
   }
 
@@ -76,30 +84,37 @@ export class LocalizarModalComponent implements OnInit {
     this.mensajeError = '';
     this.resultadoBusqueda = [];
 
-    this.fallecidoService.buscarBovedaPorNombre(this.nombreFallecido).subscribe({
-      next: (data) => {
-        if (data && data.length > 0) {
-          this.resultadoBusqueda = data.map(item => ({
-            nombresector: item.sector_nombre,
-            sector: item.sector_cementerio,
-            manzana: item.manzana,
-            bloque: item.bloque_lote,
-            espacio: item.numero,
-          }));
-        } else {
-          this.mensajeError = 'No se encontró ninguna bóveda para el fallecido ingresado.';
-        }
-        this.cargando = false;
-      },
-      error: () => {
-        this.mensajeError = 'Ocurrió un error al buscar la bóveda.';
-        this.cargando = false;
-      }
-    });
+    this.fallecidoService
+      .buscarBovedaPorNombre(this.nombreFallecido)
+      .subscribe({
+        next: (data) => {
+          if (data && data.length > 0) {
+            this.resultadoBusqueda = data.map((item) => ({
+              nombresector: item.sector_nombre,
+              sector: item.sector_cementerio,
+              manzana: item.manzana,
+              bloque: item.bloque_lote,
+              espacio: item.numero,
+            }));
+          } else {
+            this.mensajeError =
+              'No se encontró ninguna bóveda para el fallecido ingresado.';
+          }
+          this.cargando = false;
+        },
+        error: () => {
+          this.mensajeError = 'Ocurrió un error al buscar la bóveda.';
+          this.cargando = false;
+        },
+      });
   }
 
-  openDisponibilidadModal() { // Abre el modal de disponibilidad que está puesto en el localizar para agilizar la adquisición de una bóveda
-    this.modalService.open(DisponibilidadModalComponent, { centered: true, size: 'lg' });
+  openDisponibilidadModal() {
+    // Abre el modal de disponibilidad que está puesto en el localizar para agilizar la adquisición de una bóveda
+    this.modalService.open(DisponibilidadModalComponent, {
+      centered: true,
+      size: 'lg',
+    });
   }
 
   // Esta funcion formatea un número o string para que tenga al menos dos dígitos (añade un cero delante si es necesario)
@@ -110,7 +125,7 @@ export class LocalizarModalComponent implements OnInit {
     return strValue.length === 1 ? `0${strValue}` : strValue;
   }
   //La siguiente funcion es para localizar la busqeuda pero en el mapa. Por ahora solo es un mensaje de consola y una alerta
-  //pero queremos mostrarlo en el mapa 
+  //pero queremos mostrarlo en el mapa
   localizarEnMapa(boveda: any) {
     // Cerrar el modal actual
     this.activeModal.dismiss();
@@ -120,8 +135,7 @@ export class LocalizarModalComponent implements OnInit {
       title: 'Localizar en el Mapa',
       text: `La bóveda está en el Sector ${boveda.sector}, Manzana ${boveda.manzana}, Bloque ${boveda.bloque}, Espacio ${boveda.espacio}.`,
       icon: 'info',
-      confirmButtonText: 'Aceptar'
+      confirmButtonText: 'Aceptar',
     });
   }
-
 }

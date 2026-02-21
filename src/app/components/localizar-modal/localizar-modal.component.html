@@ -2,40 +2,21 @@
   <h5 class="modal-title fw-semibold">
     <i class="bi bi-search me-2"></i>Localizar Bóveda
   </h5>
-  <button
-    type="button"
-    class="btn-close ms-auto"
-    aria-label="Cerrar"
-    (click)="activeModal.dismiss()"
-  ></button>
+  <button type="button" class="btn-close ms-auto" aria-label="Cerrar" (click)="activeModal.dismiss()"></button>
 </div>
 
 <div class="modal-body">
   <div class="modal-footer mb-2 gap-2 justify-content-center">
     <div class="mb-4 w-100 position-relative">
       <label class="form-label fw-semibold">Nombre del Fallecido</label>
-      <input
-        type="text"
-        class="form-control"
-        placeholder="Ej: Juan Pérez"
-        [(ngModel)]="nombreFallecido"
-        (input)="onInputChange()"
-        aria-label="Nombre del fallecido"
-        aria-describedby="ayudaNombre"
-      />
+      <input type="text" class="form-control" placeholder="Ej: Juan Pérez" [(ngModel)]="nombreFallecido"
+        (input)="onInputChange()" aria-label="Nombre del fallecido" aria-describedby="ayudaNombre" />
       <!-- Lista de sugerencias -->
       <!-- Esto fue un requerimiento importante para facilitar la búsqueda exacta y no meter valores erróneos, sugerida por la retrolimentacion del administrador -->
-      <div
-        *ngIf="sugerencias.length > 0 && nombreFallecido.length > 0"
-        class="list-group position-absolute w-100"
-        style="z-index: 1000"
-      >
-        <button
-          *ngFor="let sugerencia of sugerencias"
-          type="button"
-          class="list-group-item list-group-item-action"
-          (click)="seleccionarSugerencia(sugerencia)"
-        >
+      <div *ngIf="sugerencias.length > 0 && nombreFallecido.length > 0" class="list-group position-absolute w-100"
+        style="z-index: 1000">
+        <button *ngFor="let sugerencia of sugerencias" type="button" class="list-group-item list-group-item-action"
+          (click)="seleccionarSugerencia(sugerencia)">
           {{ sugerencia }}
         </button>
       </div>
@@ -47,25 +28,12 @@
 
   <!-- Botones juntos -->
   <div class="d-flex mb-4 gap-2 justify-content-center">
-    <button
-      type="button"
-      class="btn btn-outline-success fw-bold w-50"
-      (click)="buscar()"
-      [disabled]="cargando || !nombreFallecido"
-    >
-      <span
-        *ngIf="cargando"
-        class="spinner-border spinner-border-sm"
-        role="status"
-        aria-hidden="true"
-      ></span>
+    <button type="button" class="btn btn-outline-success fw-bold w-50" (click)="buscar()"
+      [disabled]="cargando || !nombreFallecido">
+      <span *ngIf="cargando" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
       Buscar
     </button>
-    <button
-      type="button"
-      class="btn btn-outline-danger fw-bold w-50"
-      (click)="activeModal.dismiss()"
-    >
+    <button type="button" class="btn btn-outline-danger fw-bold w-50" (click)="activeModal.dismiss()">
       Cerrar
     </button>
   </div>
@@ -79,10 +47,7 @@
   </div>
 
   <!-- Resultados -->
-  <div
-    *ngIf="resultadoBusqueda && resultadoBusqueda.length > 0 && !cargando"
-    class="mt-2"
-  >
+  <div *ngIf="resultadoBusqueda && resultadoBusqueda.length > 0 && !cargando" class="mt-2">
     <p class="fw-semibold mb-2">Fallecido se encuentra ubicado en:</p>
     <div *ngFor="let boveda of resultadoBusqueda" class="card mb-2">
       <div class="card-body p-3">
@@ -102,13 +67,12 @@
           <p class="text-muted small mb-1">CODIGO BLOQUE:</p>
           <p class="text-strong mb-1 fw-semibold">
             {{ formatoDosDigitos(boveda.sector) }}.{{
-              formatoDosDigitos(boveda.manzana)
+            formatoDosDigitos(boveda.manzana)
             }}.{{ formatoDosDigitos(boveda.bloque) }}
           </p>
 
-          <img
-            [src]="
-              'http://localhost:3000/images/bloques/' +
+          <img [src]="
+              environment.apiUrl + '/images/bloques/' +
               formatoDosDigitos(boveda.sector) +
               formatoDosDigitos(boveda.manzana) +
               '/' +
@@ -116,19 +80,11 @@
               formatoDosDigitos(boveda.manzana) +
               formatoDosDigitos(boveda.bloque) +
               '.jpg'
-            "
-            class="img-fluid rounded"
-            alt="Imagen del Bloque"
-            style="max-height: 150px"
-            onerror="this.src = 'assets/default.jpg'"
-            (click)="openImageModal()"
-          />
+            " class="img-fluid rounded" alt="Imagen del Bloque" style="max-height: 150px"
+            onerror="this.src = 'assets/default.jpg'" (click)="openImageModal()" />
         </div>
         <div class="d-flex justify-content-center mt-3">
-          <button
-            class="btn btn-outline-success me-2"
-            (click)="localizarEnMapa(boveda)"
-          >
+          <button class="btn btn-outline-success me-2" (click)="localizarEnMapa(boveda)">
             <i class="bi bi-geo-alt-fill me-1 fw-bold"></i> Localizar en el Mapa
           </button>
         </div>
@@ -137,25 +93,17 @@
   </div>
 
   <!-- Mensaje de error en caso de no encontrar la bóveda -->
-  <div
-    *ngIf="mensajeError && !cargando"
-    class="alert alert-danger d-flex align-items-center p-2 my-2"
-  >
+  <div *ngIf="mensajeError && !cargando" class="alert alert-danger d-flex align-items-center p-2 my-2">
     <i class="bi bi-exclamation-triangle-fill me-2"></i>
     <div class="small">{{ mensajeError }}</div>
   </div>
 
   <!-- Mensaje informativo para el usuario -->
-  <div
-    *ngIf="!cargando && !resultadoBusqueda.length && !mensajeError"
-    class="text-muted small mt-2"
-  >
+  <div *ngIf="!cargando && !resultadoBusqueda.length && !mensajeError" class="text-muted small mt-2">
     <p class="mb-0">
       Si no encuentra la bóveda del fallecido, verifique el nombre ingresado. En
       caso de no disponer de una bóveda,
-      <a (click)="openDisponibilidadModal()" class="link-secondary"
-        >adquiera una</a
-      >.
+      <a (click)="openDisponibilidadModal()" class="link-secondary">adquiera una</a>.
     </p>
   </div>
 </div>

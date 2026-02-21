@@ -9,6 +9,7 @@ import { SectoresService } from '../../services/sectores.service';
 import { ManzanasService } from '../../services/manzanas.service';
 import { BloquesService } from '../../services/bloques.service';
 import { ImageModalComponent } from '../image-modal/image-modal.component';
+import { environment } from '../../../environments/environment'; // Para acceder a la URL del API en el template
 
 @Component({
   selector: 'app-disponibilidad-modal',
@@ -28,6 +29,7 @@ export class DisponibilidadModalComponent {
   selectedSector: number | null = null;
   selectedManzana: number | null = null;
   selectedBloque: number | null = null;
+  environment = environment; // Para acceder a la URL del API en el template
 
   espaciosDisponibles: any[] = [];
 
@@ -144,7 +146,7 @@ export class DisponibilidadModalComponent {
           manzana: bloque.numero_manzana,
           bloque: bloque.numero_bloque,
           descripcion: bloque.descripcion,
-          imagenUrl: `http://localhost:3000/images/bloques/${this.formatoDosDigitos(bloque.sector)}${this.formatoDosDigitos(bloque.numero_manzana)}/${this.formatoDosDigitos(bloque.sector)}${this.formatoDosDigitos(bloque.numero_manzana)}${this.formatoDosDigitos(bloque.numero_bloque)}.jpg`,
+          imagenUrl: `${this.environment.apiUrl}/images/bloques/${this.formatoDosDigitos(bloque.sector)}${this.formatoDosDigitos(bloque.numero_manzana)}/${this.formatoDosDigitos(bloque.sector)}${this.formatoDosDigitos(bloque.numero_manzana)}${this.formatoDosDigitos(bloque.numero_bloque)}.jpg`,
         }));
       },
       error: () => {
