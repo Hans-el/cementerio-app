@@ -1,132 +1,194 @@
 <section class="container my-5">
-  <div class="row g-4">
-    <!-- Columna izquierda: Información de contacto -->
+
+  <div class="row g-5">
+
+    <!-- =========================
+         COLUMNA IZQUIERDA
+    ========================== -->
     <div class="col-lg-5">
-      <h3 class="fw-bold text-success">Contáctanos</h3>
-      <p>
-        Estamos aquí para ayudarte con cualquier consulta sobre nuestros
-        servicios del cementerio.
+
+      <h4 class="fw-semibold text-secondary mb-3">
+        <i class="bi bi-chat-dots me-2 text-success"></i>
+        Contáctanos
+      </h4>
+
+      <p class="text-muted">
+        Estamos aquí para ayudarte con cualquier consulta sobre nuestros servicios.
       </p>
-      <p><i class="bi bi-telephone-fill text-success"></i> 099 848 4760</p>
-      <p>
-        <i class="bi bi-envelope-fill text-success"></i>
-        coloncementerio&#64;gmail.com
-      </p>
-      <p>
-        <i class="bi bi-geo-alt-fill text-success"></i> Colón - Portoviejo,
-        Manabí, Ecuador
-      </p>
-      <div class="p-3 bg-light rounded-3 border mt-3">
-        <h6 class="fw-bold text-success">Horarios de Atención</h6>
-        <p class="mb-1 text-muted">Lunes a Viernes: 8:00 AM - 5:00 PM</p>
-        <p class="mb-1 text-muted">Sábados: 8:00 AM - 3:00 PM</p>
-        <p class="mb-0 text-muted">Domingos: 8:00 AM - 12:00 PM</p>
+
+      <!-- Datos -->
+      <div class="contact-info mt-4">
+
+        <div class="d-flex align-items-start mb-3">
+          <i class="bi bi-telephone-fill text-success me-3 fs-5"></i>
+          <span class="text-secondary">099 848 4760</span>
+        </div>
+
+        <div class="d-flex align-items-start mb-3">
+          <i class="bi bi-envelope-fill text-success me-3 fs-5"></i>
+          <span class="text-secondary">coloncementerio&#64;gmail.com</span>
+        </div>
+
+        <div class="d-flex align-items-start mb-3">
+          <i class="bi bi-geo-alt-fill text-success me-3 fs-5"></i>
+          <span class="text-secondary">
+            Colón - Portoviejo, Manabí, Ecuador
+          </span>
+        </div>
+
       </div>
-      <!-- API de WhatsApp para mayor comodidad -->
-      <br />
-      <div class="col-lg-5">
-        <p class="mb-1 text-muted">O, para mayor comodidad</p>
-        <div class="p-3 bg-light rounded-3 border mt-3">
-          <h6 class="fw-bold text-success">API de WhatsApp</h6>
-          <p class="mb-1 text-muted">
-            Para mayor comodidad, contáctanos a traves de WhatsApp
+
+      <!-- Horarios -->
+      <div class="card card-contact-info mt-4">
+        <div class="card-body">
+          <h6 class="fw-semibold text-white mb-3">
+            Horarios de Atención
+          </h6>
+          <p class="mb-1 text-light small">Lunes a Viernes: 8:00 AM - 5:00 PM</p>
+          <p class="mb-1 text-light small">Sábados: 8:00 AM - 3:00 PM</p>
+          <p class="mb-0 text-light small">Domingos: 8:00 AM - 12:00 PM</p>
+        </div>
+      </div>
+
+      <!-- WhatsApp -->
+      <div class="card card-whatsapp mt-4">
+        <div class="card-body text-center">
+
+          <h6 class="fw-semibold text-white mb-2">
+            Atención vía WhatsApp
+          </h6>
+
+          <p class="text-light small mb-3">
+            Escanea el código QR o envíanos un mensaje directo.
           </p>
+
           <img
-            class="img-fluid mb-2"
+            class="img-fluid mb-3 rounded-3 shadow-sm"
             src="/assets/qrfinalya.jpg"
             alt="Código QR"
           />
+
           <a
-            href="https://wa.me/+593998484760?text=Hola.%20¿Me%20comunico%20con%20la%20ADMINSITRACIÓN%20DEL%20CEMENTERIO%20DE%20COLÓN?."
+            href="https://wa.me/+593998484760?text=Hola.%20¿Me%20comunico%20con%20la%20ADMINISTRACIÓN%20DEL%20CEMENTERIO%20DE%20COLÓN?"
             target="_blank"
-            class="btn btn-outline-success fw-bold w-100"
+            class="btn btn-light fw-semibold w-100"
           >
-            <i class="bi bi-whatsapp"></i> Enviar mensaje
+            <i class="bi bi-whatsapp me-2"></i>
+            Enviar mensaje
           </a>
+
         </div>
       </div>
+
     </div>
 
-    <!-- Columna derecha: Formulario -->
-    <div class="col-lg-5">
-      <div class="card shadow-sm border-0 rounded-4">
+    <!-- =========================
+         COLUMNA DERECHA
+    ========================== -->
+    <div class="col-lg-7">
+
+      <div class="card card-form-institucional border-0">
         <div class="card-body p-4">
-          <h5 class="fw-bold text-success">Envíanos un mensaje</h5>
-          <p class="text-muted small">
-            Completa el formulario y nos pondremos en contacto contigo lo antes
-            posible.
+
+          <h5 class="fw-semibold text-secondary mb-1">
+            Envíanos un mensaje
+          </h5>
+
+          <p class="text-muted small mb-4">
+            Completa el formulario y nos pondremos en contacto contigo lo antes posible.
           </p>
+
           <form (ngSubmit)="enviarMensaje()" #formContact="ngForm">
+
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label small fw-semibold text-muted">
+                  Nombre completo *
+                </label>
+                <input
+                  type="text"
+                  class="form-control form-control-institucional"
+                  name="nombre"
+                  [(ngModel)]="formData.nombre"
+                  required
+                />
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <label class="form-label small fw-semibold text-muted">
+                  Correo electrónico *
+                </label>
+                <input
+                  type="email"
+                  class="form-control form-control-institucional"
+                  name="correo"
+                  [(ngModel)]="formData.email"
+                  required
+                />
+              </div>
+            </div>
+
             <div class="mb-3">
-              <label class="form-label">Nombre completo *</label>
+              <label class="form-label small fw-semibold text-muted">
+                Teléfono
+              </label>
               <input
                 type="text"
-                class="form-control"
-                placeholder="Tu nombre"
-                name="nombre"
-                [(ngModel)]="formData.nombre"
-                required
-              />
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Correo electrónico *</label>
-              <input
-                type="email"
-                class="form-control"
-                placeholder="tucorreo@ejemplo.com"
-                name="correo"
-                [(ngModel)]="formData.email"
-                required
-              />
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Teléfono</label>
-              <input
-                type="text"
-                class="form-control"
-                placeholder="09..."
+                class="form-control form-control-institucional"
                 name="telefono"
                 [(ngModel)]="formData.telefono"
               />
             </div>
+
             <div class="mb-3">
-              <label class="form-label">Asunto</label>
+              <label class="form-label small fw-semibold text-muted">
+                Asunto
+              </label>
               <input
                 type="text"
-                class="form-control"
-                placeholder="Motivo del mensaje"
+                class="form-control form-control-institucional"
                 name="asunto"
                 [(ngModel)]="formData.asunto"
               />
             </div>
-            <div class="mb-3">
-              <label class="form-label">Mensaje *</label>
+
+            <div class="mb-4">
+              <label class="form-label small fw-semibold text-muted">
+                Mensaje *
+              </label>
               <textarea
-                class="form-control"
+                class="form-control form-control-institucional"
                 rows="4"
-                placeholder="Describe tu consulta o solicitud..."
                 name="mensaje"
                 [(ngModel)]="formData.mensaje"
                 required
               ></textarea>
             </div>
+
             <button
               type="submit"
-              class="btn btn-outline-success fw-bold w-100"
+              class="btn btn-institucional w-100 fw-semibold"
               [disabled]="!formContact.valid"
             >
-              <i class="bi bi-send"></i> Enviar mensaje
+              <i class="bi bi-send me-2"></i>
+              Enviar mensaje
             </button>
+
           </form>
-          <!-- Mensajes de éxito o error -->
-          <div *ngIf="mensajeEnviado">
+
+          <div *ngIf="mensajeEnviado" class="alert alert-success mt-3">
             {{ mensajeEnviado }}
           </div>
-          <div *ngIf="error">
+
+          <div *ngIf="error" class="alert alert-danger mt-3">
             {{ error }}
           </div>
+
         </div>
       </div>
+
     </div>
+
   </div>
+
 </section>

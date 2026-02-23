@@ -1,49 +1,26 @@
-/* Card */
-.contact-form-card {
-  max-width: 400px;
-  background: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
-  padding: 1.5rem;
-  margin-left: auto;
-}
+/* CARD CONTACTO INFO (VERDE)ç */
 
-/* Título y subtítulo */
-.title {
-  font-weight: bold;
-  margin-bottom: 0.3rem;
-  color: #2c3e50;
-}
-
-.subtitle {
-  font-size: 0.9rem;
-  color: #6c757d;
-  margin-bottom: 1rem;
-}
-
-/* Inputs */
-.form-control {
-  border-radius: 8px;
-  padding: 10px;
-  border: 1px solid #ced4da;
-}
-
-.form-control:focus {
-  border-color: #198754;
-  box-shadow: 0 0 0 0.1rem rgba(25, 135, 84, 0.25);
-}
-
-/* Botón */
-.btn-submit {
-  border-radius: 8px;
-  background-color: #155d42;
-  color: #fff;
-  font-weight: 500;
-  padding: 10px;
+.card-contact-info {
+  background: linear-gradient(
+    180deg,
+    #163212 0%,
+    #30422e 100%
+  );
+  border-radius: 18px;
   border: none;
-  transition: background 0.3s;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
 }
 
-.btn-submit:hover {
-  background-color: #0f4a34;
+
+/* CARD WHATSAPP*/
+
+.card-whatsapp {
+  background: linear-gradient(
+    180deg,
+    #1e4620 0%,
+    #2f5e33 100%
+  );
+  border-radius: 18px;
+  border: none;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
 }

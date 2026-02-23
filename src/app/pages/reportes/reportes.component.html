@@ -1,20 +1,42 @@
-<div class="container mt-4">
-  <h3 class="fw-bold mb-3 text-success">
-    <i class="bi bi-file-earmark-bar-graph me-2 text-success"></i>
-    Generar reportes
-  </h3>
+<div class="container-fluid py-4 px-4">
 
-  <div class="card border-0 shadow-sm">
-    <div class="card-body">
+  <!-- HEADER -->
+  <div class="d-flex align-items-center justify-content-between mb-4">
+    <h4 class="fw-semibold text-secondary mb-0">
+      <i class="bi bi-file-earmark-bar-graph me-2 text-success"></i>
+      Generar reportes
+    </h4>
+
+    <span class="badge bg-light text-dark px-3 py-2 rounded-pill">
+      Configuración avanzada
+    </span>
+  </div>
+
+  <!-- CARD FORMULARIO -->
+  <div class="card card-form-institucional border-0">
+    <div class="card-body p-4">
+
       <form>
-        <!-- CONFIGURACIÓN -->
-        <p class="fw-semibold text-muted mb-2">Configuración del reporte</p>
 
-        <div class="mb-3">
-          <label for="reportType" class="form-label">Tipo de reporte</label>
+        <!-- TÍTULO SECCIÓN -->
+        <div class="mb-4">
+          <h6 class="fw-semibold text-secondary mb-1">
+            Configuración del reporte
+          </h6>
+          <small class="text-muted">
+            Seleccione el tipo de reporte y los filtros opcionales.
+          </small>
+        </div>
+
+        <!-- TIPO DE REPORTE -->
+        <div class="mb-4">
+          <label for="reportType" class="form-label fw-semibold small text-muted">
+            Tipo de reporte
+          </label>
+
           <select
             id="reportType"
-            class="form-select"
+            class="form-select form-control-institucional"
             [(ngModel)]="reportType"
             name="reportType"
           >
@@ -24,7 +46,7 @@
           </select>
         </div>
 
-        <!-- RANGO DE FECHAS -->
+        <!-- CHECK RANGO -->
         <div class="form-check mb-3">
           <input
             type="checkbox"
@@ -33,46 +55,52 @@
             [(ngModel)]="useDateRange"
             name="useDateRange"
           />
-          <label class="form-check-label" for="useDateRange">
+          <label class="form-check-label small fw-semibold text-muted" for="useDateRange">
             Usar rango de fechas
           </label>
         </div>
 
+        <!-- FECHAS -->
         <div *ngIf="useDateRange" class="row">
-          <div class="col-md-6 mb-3">
-            <label for="startDate" class="form-label">Fecha inicio</label>
+          <div class="col-md-6 mb-4">
+            <label for="startDate" class="form-label small fw-semibold text-muted">
+              Fecha inicio
+            </label>
             <input
               type="date"
               id="startDate"
-              class="form-control"
+              class="form-control form-control-institucional"
               [(ngModel)]="startDate"
               name="startDate"
             />
           </div>
 
-          <div class="col-md-6 mb-3">
-            <label for="endDate" class="form-label">Fecha fin</label>
+          <div class="col-md-6 mb-4">
+            <label for="endDate" class="form-label small fw-semibold text-muted">
+              Fecha fin
+            </label>
             <input
               type="date"
               id="endDate"
-              class="form-control"
+              class="form-control form-control-institucional"
               [(ngModel)]="endDate"
               name="endDate"
             />
           </div>
         </div>
 
-        <!-- ACCIÓN -->
-        <div class="d-flex justify-content-end mt-3">
+        <!-- BOTÓN -->
+        <div class="d-flex justify-content-end mt-4">
           <button
             type="button"
-            class="btn btn-success fw-semibold"
+            class="btn btn-institucional fw-semibold"
             (click)="generateReport()"
           >
-            <i class="bi bi-file-earmark-text me-1"></i>
+            <i class="bi bi-file-earmark-text me-2"></i>
             Generar reporte
           </button>
         </div>
+
       </form>
     </div>
   </div>

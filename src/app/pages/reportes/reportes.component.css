@@ -1,0 +1,51 @@
+/* CARD INSTITUCIONAL FORM*/
+
+.card-form-institucional {
+  border-radius: 18px;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  background-color: #ffffff;
+  transition: all 0.25s ease;
+}
+
+.card-form-institucional:hover {
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+}
+
+
+/* INPUTS INSTITUCIONALES*/
+
+.form-control-institucional,
+.form-select.form-control-institucional {
+  border-radius: 10px;
+  border: 1px solid #e0e0e0;
+  padding: 0.6rem 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.form-control-institucional:focus {
+  border-color: #163212;
+  box-shadow: 0 0 0 0.2rem rgba(22, 50, 18, 0.15);
+}
+
+
+/* BOTÓN INSTITUCIONAL */
+
+.btn-institucional {
+  background: linear-gradient(
+    180deg,
+    #163212 0%,
+    #30422e 100%
+  );
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  padding: 0.6rem 1.5rem;
+  transition: all 0.2s ease;
+}
+
+.btn-institucional:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+  color: #ffffff;
+}

@@ -19,6 +19,8 @@ export class ReportesComponent {
   reportType: string = 'ocupaciones';
   reportData: any[] = [];
   useDateRange: boolean = true; // Variable para controlar si se usa rango de fechas, en caso de no haber pues que se generan todos los datos
+  fechaActual: Date = new Date(); // Variable para mostrar la fecha actual en el HTML
+
 
 
   constructor(private reportesService: ReportesService) { }
