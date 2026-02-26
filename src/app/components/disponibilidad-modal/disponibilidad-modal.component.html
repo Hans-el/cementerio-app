@@ -1,14 +1,9 @@
 <div class="modal-header border-0 mb-3">
   <h5 class="modal-title fw-semibold">
-    <i class="bi bi-columns-gap me-2 text-primary"></i>
+    <i class="bi bi-columns-gap me-2 text-success"></i>
     Disponibilidad de Bloques
   </h5>
-  <button
-    type="button"
-    class="btn-close"
-    aria-label="Cerrar"
-    (click)="activeModal.dismiss()"
-  ></button>
+  <button type="button" class="btn-close" aria-label="Cerrar" (click)="activeModal.dismiss()"></button>
 </div>
 
 <div class="modal-body pt-0">
@@ -21,12 +16,7 @@
     <div class="row">
       <div class="col-md-4 mb-3">
         <label for="sector" class="form-label">Sector</label>
-        <select
-          id="sector"
-          class="form-select"
-          [(ngModel)]="selectedSector"
-          (change)="onSectorChange()"
-        >
+        <select id="sector" class="form-select" [(ngModel)]="selectedSector" (change)="onSectorChange()">
           <option value="" selected>Seleccione un sector</option>
           <option *ngFor="let sector of sectores" [value]="sector.id_sector">
             {{ sector.codigo }}
@@ -36,13 +26,8 @@
 
       <div class="col-md-4 mb-3">
         <label for="manzana" class="form-label">Manzana</label>
-        <select
-          id="manzana"
-          class="form-select"
-          [(ngModel)]="selectedManzana"
-          (change)="onManzanaChange()"
-          [disabled]="!selectedSector"
-        >
+        <select id="manzana" class="form-select" [(ngModel)]="selectedManzana" (change)="onManzanaChange()"
+          [disabled]="!selectedSector">
           <option value="" selected>Seleccione una manzana</option>
           <option *ngFor="let manzana of manzanas" [value]="manzana.id_manzana">
             {{ manzana.numero_manzana }}
@@ -52,12 +37,7 @@
 
       <div class="col-md-4 mb-3">
         <label for="bloque" class="form-label">Bloque</label>
-        <select
-          id="bloque"
-          class="form-select"
-          [(ngModel)]="selectedBloque"
-          [disabled]="!selectedManzana"
-        >
+        <select id="bloque" class="form-select" [(ngModel)]="selectedBloque" [disabled]="!selectedManzana">
           <option value="" selected>Seleccione un bloque</option>
           <option *ngFor="let bloque of bloques" [value]="bloque.id_bloque">
             {{ bloque.numero_bloque }}
@@ -67,10 +47,7 @@
     </div>
 
     <div *ngIf="selectedBloque" class="d-flex justify-content-end">
-      <button
-        class="btn btn-success fw-semibold w-100"
-        (click)="ponerEnVenta()"
-      >
+      <button class="btn btn-success fw-semibold w-100" (click)="ponerEnVenta()">
         <i class="bi bi-tag me-1"></i>
         Poner en venta
       </button>
@@ -93,13 +70,8 @@
           </h6>
           <!-- Imagen del bloque -->
           <div class="text-center my-3">
-            <img
-              [src]="espacio.imagenUrl"
-              class="img-fluid rounded"
-              alt="Imagen del bloque"
-              style="max-height: 150px"
-              onerror="this.src = 'assets/default.jpg'"
-            />
+            <img [src]="espacio.imagenUrl" class="img-fluid rounded" alt="Imagen del bloque" style="max-height: 150px"
+              onerror="this.src = 'assets/default.jpg'" />
           </div>
           <!-- Descripción del bloque -->
           <p class="text-muted small">Detalles</p>
@@ -112,18 +84,13 @@
               Localizar
             </button>
 
-            <button
-              class="btn btn-outline-warning fw-bold btn-sm w-50 me-2"
-              (click)="visualizarImagen(espacio.imagenUrl)"
-            >
+            <button class="btn btn-outline-warning fw-bold btn-sm w-50 me-2"
+              (click)="visualizarImagen(espacio.imagenUrl)">
               Visualizar
             </button>
 
-            <button
-              *ngIf="userRole === 'admin'"
-              class="btn btn-outline-danger fw-bold btn-sm w-50"
-              (click)="borrarBloqueEnVenta(espacio.id_bloque_venta)"
-            >
+            <button *ngIf="userRole === 'admin'" class="btn btn-outline-danger fw-bold btn-sm w-50"
+              (click)="borrarBloqueEnVenta(espacio.id_bloque_venta)">
               Borrar
             </button>
           </div>
@@ -134,11 +101,7 @@
 </div>
 
 <div class="modal-footer border-0">
-  <button
-    type="button"
-    class="btn btn-danger fw-semibold"
-    (click)="activeModal.dismiss()"
-  >
+  <button type="button" class="btn btn-danger fw-semibold" (click)="activeModal.dismiss()">
     Cerrar
   </button>
 </div>
