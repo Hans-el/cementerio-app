@@ -34,12 +34,8 @@
             Tipo de reporte
           </label>
 
-          <select
-            id="reportType"
-            class="form-select form-control-institucional"
-            [(ngModel)]="reportType"
-            name="reportType"
-          >
+          <select id="reportType" class="form-select form-control-institucional" [(ngModel)]="reportType"
+            name="reportType">
             <option value="ocupaciones">Ocupaciones</option>
             <option value="fallecidos">Fallecidos</option>
             <option value="bloques">Infraestructura</option>
@@ -48,13 +44,8 @@
 
         <!-- CHECK RANGO -->
         <div class="form-check mb-3">
-          <input
-            type="checkbox"
-            class="form-check-input"
-            id="useDateRange"
-            [(ngModel)]="useDateRange"
-            name="useDateRange"
-          />
+          <input type="checkbox" class="form-check-input" id="useDateRange" [(ngModel)]="useDateRange"
+            name="useDateRange" />
           <label class="form-check-label small fw-semibold text-muted" for="useDateRange">
             Usar rango de fechas
           </label>
@@ -66,37 +57,23 @@
             <label for="startDate" class="form-label small fw-semibold text-muted">
               Fecha inicio
             </label>
-            <input
-              type="date"
-              id="startDate"
-              class="form-control form-control-institucional"
-              [(ngModel)]="startDate"
-              name="startDate"
-            />
+            <input type="date" id="startDate" class="form-control form-control-institucional" [(ngModel)]="startDate"
+              name="startDate" />
           </div>
 
           <div class="col-md-6 mb-4">
             <label for="endDate" class="form-label small fw-semibold text-muted">
               Fecha fin
             </label>
-            <input
-              type="date"
-              id="endDate"
-              class="form-control form-control-institucional"
-              [(ngModel)]="endDate"
-              name="endDate"
-            />
+            <input type="date" id="endDate" class="form-control form-control-institucional" [(ngModel)]="endDate"
+              name="endDate" />
           </div>
         </div>
 
         <!-- BOTÓN -->
         <div class="d-flex justify-content-end mt-4">
-          <button
-            type="button"
-            class="btn btn-institucional fw-semibold"
-            (click)="generateReport()"
-          >
-            <i class="bi bi-file-earmark-text me-2"></i>
+          <button type="button" class="btn btn-institucional fw-semibold" (click)="generateReport()">
+            <i class="bi bi-filetype-xlsx text me-2 fs-5"></i>
             Generar reporte
           </button>
         </div>
