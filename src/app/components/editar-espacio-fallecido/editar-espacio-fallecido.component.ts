@@ -8,6 +8,7 @@ import { ManzanasService } from '../../services/manzanas.service';
 import { BloquesService } from '../../services/bloques.service';
 import { EspacioService } from '../../services/espacio.service';
 import { FallecidoService } from '../../services/fallecido.service';
+import { environment } from '../../../environments/environment';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -21,6 +22,7 @@ export class EditarEspacioFallecidoComponent {
   nombreFallecido: string = '';
   fallecidoSeleccionado: any = null;
   sugerenciasFallecidos: any[] = [];
+  environment = environment; // Para acceder a la URL del API en el template
 
   sectores: any[] = [];
   nuevasManzanas: any[] = [];
@@ -126,6 +128,10 @@ export class EditarEspacioFallecidoComponent {
     }
   }
 
+  formatoDosDigitos(value: number | string): string {
+    const strValue = value.toString();
+    return strValue.length === 1 ? `0${strValue}` : strValue;
+  }
   //usamos Swal alert para mostrar mensajes de éxito o error al guardar los cambios. En caso de éxito, se cierra el modal y se muestra un mensaje de confirmación. En caso de error, se muestra un mensaje con el detalle del error.
   guardarCambios(): void {
     if (!this.fallecidoSeleccionado || !this.nuevoEspacio) {

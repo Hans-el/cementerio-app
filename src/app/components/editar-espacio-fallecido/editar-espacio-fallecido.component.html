@@ -1,169 +1,317 @@
-<div class="modal-header bg-light">
-  <h5 class="modal-title">
-    <i class="bi bi-pencil-square me-2 text-primary"></i>Editar Espacio de
-    Fallecido
-  </h5>
+<!-- Modal Header - Diseño mejorado -->
+<div class="modal-header border-0 px-4 pt-4">
+  <div class="d-flex align-items-center">
+    <div class="bg-primary bg-opacity-10 p-2 rounded-3 me-3">
+      <i class="bi bi-pencil-square fs-4 text-primary"></i>
+    </div>
+    <div>
+      <h5 class="modal-title fw-semibold text-dark mb-1">
+        Editar Espacio de Fallecido
+      </h5>
+      <p class="text-muted small mb-0">
+        Cambie la ubicación asignada al fallecido
+      </p>
+    </div>
+  </div>
   <button
     type="button"
     class="btn-close"
-    aria-label="Close"
+    aria-label="Cerrar"
     (click)="activeModal.dismiss()"
   ></button>
 </div>
-<div class="modal-body">
-  <!-- Barra de búsqueda -->
+
+<div class="modal-body px-4 py-3">
+  <!-- =======================
+       BARRA DE BÚSQUEDA MEJORADA
+  ======================== -->
   <div class="mb-4">
-    <label for="nombreFallecido" class="form-label fw-semibold"
-      >Buscar fallecido</label
-    >
+    <label class="form-label text-muted small fw-semibold mb-1">
+      <i class="bi me-1 text-primary"></i>Buscar fallecido
+    </label>
     <div class="input-group">
+      <span class="input-group-text bg-light border-end-0">
+        <i class="bi bi-person-fill text-muted"></i>
+      </span>
       <input
         type="text"
-        class="form-control"
-        id="nombreFallecido"
+        class="form-control form-control-lg bg-light border-start-0 ps-0 fs-6"
         [(ngModel)]="nombreFallecido"
         (input)="buscarFallecido()"
-        placeholder="Ingrese el nombre del fallecido..."
+        placeholder="Ingrese el nombre del fallecido"
+        [class.border-primary]="sugerenciasFallecidos.length > 0"
       />
+      <span class="input-group-text bg-light border-0" *ngIf="nombreFallecido">
+        <i class="bi bi-pencil-fill text-primary"></i>
+      </span>
     </div>
+
+    <!-- Sugerencias mejoradas -->
     <div
       *ngIf="sugerenciasFallecidos.length > 0 && nombreFallecido.length > 0"
-      class="dropdown-menu show w-100"
+      class="list-group position-absolute w-100 shadow-lg rounded-3 overflow-hidden"
+      style="z-index: 1000; max-height: 250px; overflow-y: auto"
     >
-      <div
+      <button
         *ngFor="let fallecido of sugerenciasFallecidos"
-        class="dropdown-item"
-        style="cursor: pointer"
+        type="button"
+        class="list-group-item list-group-item-action border-0"
         (click)="seleccionarFallecido(fallecido)"
       >
         <div class="d-flex justify-content-between align-items-center">
-          <span>{{ fallecido.nombre_completo }}</span>
-          <small class="text-muted"
-            >{{ fallecido.codigo_bloque }} - Espacio:
-            {{ fallecido.numero }}</small
-          >
+          <div class="d-flex align-items-center">
+            <div>
+              <span class="fw-semibold d-block">{{
+                fallecido.nombre_completo
+              }}</span>
+              <small class="text-muted">
+                <i class="bi me-1"></i>Código: {{ fallecido.codigo_bloque }} |
+                Espacio: {{ fallecido.numero }}
+              </small>
+            </div>
+          </div>
         </div>
-      </div>
+      </button>
     </div>
+
+    <small class="text-muted d-flex align-items-center mt-2">
+      <i class="bi me-1 text-primary small"></i>
+      Seleccione un fallecido de la lista para editar su ubicación
+    </small>
   </div>
 
-  <!-- Información del fallecido seleccionado -->
-  <div *ngIf="fallecidoSeleccionado" class="card mb-4">
-    <div class="card-header bg-light fw-semibold">
-      Información del Fallecido
+  <!-- =======================
+       INFORMACIÓN DEL FALLECIDO SELECCIONADO
+  ======================== -->
+  <div
+    *ngIf="fallecidoSeleccionado"
+    class="card border-0 shadow-sm mb-4 hover-lift"
+  >
+    <div class="card-header bg-white border-0 py-3">
+      <div class="d-flex align-items-center">
+        <span class="fw-semibold text-secondary"
+          >Información del Fallecido</span
+        >
+      </div>
     </div>
-    <div class="card-body">
+    <div class="card-body pt-0">
       <div class="row">
         <div class="col-md-6">
-          <p class="mb-2 text-muted">Nombre</p>
-          <h3>{{ fallecidoSeleccionado.nombre_completo }}</h3>
-          <br />
-          <p class="mb-2 text-muted">Ubicación Actual</p>
-          <ul class="list-unstyled">
-            <li><strong>Sector:</strong> {{ fallecidoSeleccionado.sector }}</li>
-            <li>
-              <strong>Manzana:</strong> {{ fallecidoSeleccionado.manzana }}
-            </li>
-            <li><strong>Bloque:</strong> {{ fallecidoSeleccionado.bloque }}</li>
-            <li>
-              <strong>Espacio:</strong> {{ fallecidoSeleccionado.espacio }}
-            </li>
-          </ul>
+          <!-- Nombre destacado -->
+          <div class="bg-light rounded-3 p-3 mb-3">
+            <div class="d-flex align-items-center">
+              <div class="bg-primary bg-opacity-10 p-3 rounded-3 me-3">
+                <i class="bi bi-person-fill fs-4 text-success"></i>
+              </div>
+              <div>
+                <span class="text-muted small text-uppercase fw-semibold"
+                  >Nombre completo</span
+                >
+                <h4 class="fw-bold text-dark mb-0">
+                  {{ fallecidoSeleccionado.nombre_completo }}
+                </h4>
+              </div>
+            </div>
+          </div>
+
+          <!-- Ubicación actual con diseño de grid -->
+          <div>
+            <span class="text-muted small fw-semibold d-block mb-2">
+              <i class="bi me-1 text-primary"></i>Ubicación Actual
+            </span>
+            <div class="row g-2">
+              <div class="col-6">
+                <div class="bg-light p-2 rounded-3">
+                  <span class="text-muted small d-block">Sector</span>
+                  <span class="fw-semibold">{{
+                    fallecidoSeleccionado.sector
+                  }}</span>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="bg-light p-2 rounded-3">
+                  <span class="text-muted small d-block">Manzana</span>
+                  <span class="fw-semibold">{{
+                    fallecidoSeleccionado.manzana
+                  }}</span>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="bg-light p-2 rounded-3">
+                  <span class="text-muted small d-block">Bloque</span>
+                  <span class="fw-semibold">{{
+                    fallecidoSeleccionado.bloque
+                  }}</span>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="bg-light p-2 rounded-3">
+                  <span class="text-muted small d-block">Espacio</span>
+                  <span class="fw-semibold">{{
+                    fallecidoSeleccionado.espacio
+                  }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Imagen o información adicional (opcional) -->
+        <!-- Para este caso pondremos la imagen traida desde el backend -->
+        <div
+          class="col-md-6 d-flex flex-column align-items-center justify-content-center"
+        >
+          <img
+            [src]="
+              environment.apiUrl +
+              '/images/bloques/' +
+              formatoDosDigitos(fallecidoSeleccionado.sector) +
+              formatoDosDigitos(fallecidoSeleccionado.manzana) +
+              '/' +
+              formatoDosDigitos(fallecidoSeleccionado.sector) +
+              formatoDosDigitos(fallecidoSeleccionado.manzana) +
+              formatoDosDigitos(fallecidoSeleccionado.bloque) +
+              '.jpg'
+            "
+            class="img-fluid rounded-3 shadow-sm"
+            alt="Imagen del Bloque"
+            style="max-height: 150px; cursor: pointer"
+            onerror="this.src = 'assets/default.jpg'"
+          />
+
+          <p class="text-muted small text-center">
+            {{ fallecidoSeleccionado.fecha_fallecimiento | date: "longDate" }}
+          </p>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- Selectores para elegir el nuevo espacio -->
-  <div *ngIf="fallecidoSeleccionado" class="card">
-    <div class="card-header bg-light fw-semibold">Nuevo Espacio a Asignar</div>
-    <div class="card-body">
-      <div class="row g-3">
-        <div class="col-md-3">
-          <label for="nuevoSector" class="form-label">Sector</label>
-          <select
-            id="nuevoSector"
-            class="form-select"
-            [(ngModel)]="nuevoSector"
-            (change)="onNuevoSectorChange()"
+    <!-- =======================
+       NUEVO ESPACIO A ASIGNAR - DISEÑO PROFESIONAL
+  ======================== -->
+    <div *ngIf="fallecidoSeleccionado" class="card border-0 shadow-sm">
+      <div class="card-header bg-white border-0 py-3">
+        <div class="d-flex align-items-center">
+          <span class="fw-semibold text-secondary"
+            >Nuevo Espacio a Asignar</span
           >
-            <option value="" selected>Seleccione...</option>
-            <option *ngFor="let sector of sectores" [value]="sector.id_sector">
-              {{ sector.codigo }}
-            </option>
-          </select>
         </div>
-        <div class="col-md-3">
-          <label for="nuevaManzana" class="form-label">Manzana</label>
-          <select
-            id="nuevaManzana"
-            class="form-select"
-            [(ngModel)]="nuevaManzana"
-            (change)="onNuevaManzanaChange()"
-            [disabled]="!nuevoSector"
-          >
-            <option value="" selected>Seleccione...</option>
-            <option
-              *ngFor="let manzana of nuevasManzanas"
-              [value]="manzana.id_manzana"
+      </div>
+      <div class="card-body pt-0">
+        <div class="row g-3">
+          <!-- Sector -->
+          <div class="col-md-3">
+            <label class="form-label text-muted small fw-semibold mb-1">
+              <i class="bi bi-grid-3x3-gap-fill me-1 text-primary"></i>Sector
+            </label>
+            <select
+              class="form-select form-select-lg bg-light border-0"
+              [(ngModel)]="nuevoSector"
+              (change)="onNuevoSectorChange()"
             >
-              {{ manzana.numero_manzana }}
-            </option>
-          </select>
-        </div>
-        <div class="col-md-3">
-          <label for="nuevoBloque" class="form-label">Bloque</label>
-          <select
-            id="nuevoBloque"
-            class="form-select"
-            [(ngModel)]="nuevoBloque"
-            (change)="onNuevoBloqueChange()"
-            [disabled]="!nuevaManzana"
-          >
-            <option value="" selected>Seleccione...</option>
-            <option
-              *ngFor="let bloque of nuevosBloques"
-              [value]="bloque.id_bloque"
+              <option value="" selected>Seleccione...</option>
+              <option
+                *ngFor="let sector of sectores"
+                [value]="sector.id_sector"
+              >
+                {{ sector.codigo }}
+              </option>
+            </select>
+          </div>
+
+          <!-- Manzana -->
+          <div class="col-md-3">
+            <label class="form-label text-muted small fw-semibold mb-1">
+              <i class="bi bi-square-fill me-1 text-primary"></i>Manzana
+            </label>
+            <select
+              class="form-select form-select-lg bg-light border-0"
+              [(ngModel)]="nuevaManzana"
+              (change)="onNuevaManzanaChange()"
+              [disabled]="!nuevoSector"
             >
-              {{ bloque.numero_bloque }}
-            </option>
-          </select>
-        </div>
-        <div class="col-md-3">
-          <label for="nuevoEspacio" class="form-label">Espacio</label>
-          <select
-            id="nuevoEspacio"
-            class="form-select"
-            [(ngModel)]="nuevoEspacio"
-            [disabled]="!nuevoBloque"
-          >
-            <option value="" selected>Seleccione...</option>
-            <option
-              *ngFor="let espacio of nuevosEspacios"
-              [value]="espacio.id_espacio"
+              <option value="" selected>Seleccione...</option>
+              <option
+                *ngFor="let manzana of nuevasManzanas"
+                [value]="manzana.id_manzana"
+              >
+                {{ manzana.numero_manzana }}
+              </option>
+            </select>
+          </div>
+
+          <!-- Bloque -->
+          <div class="col-md-3">
+            <label class="form-label text-muted small fw-semibold mb-1">
+              <i class="bi bi-layers-fill me-1 text-primary"></i>Bloque
+            </label>
+            <select
+              class="form-select form-select-lg bg-light border-0"
+              [(ngModel)]="nuevoBloque"
+              (change)="onNuevoBloqueChange()"
+              [disabled]="!nuevaManzana"
             >
-              {{ espacio.numero_espacio }}
-            </option>
-          </select>
+              <option value="" selected>Seleccione...</option>
+              <option
+                *ngFor="let bloque of nuevosBloques"
+                [value]="bloque.id_bloque"
+              >
+                {{ bloque.numero_bloque }}
+              </option>
+            </select>
+          </div>
+
+          <!-- Espacio -->
+          <div class="col-md-3">
+            <label class="form-label text-muted small fw-semibold mb-1">
+              <i class="bi bi-pin-map-fill me-1 text-primary"></i>Espacio
+            </label>
+            <select
+              class="form-select form-select-lg bg-light border-0"
+              [(ngModel)]="nuevoEspacio"
+              [disabled]="!nuevoBloque"
+            >
+              <option value="" selected>Seleccione...</option>
+              <option
+                *ngFor="let espacio of nuevosEspacios"
+                [value]="espacio.id_espacio"
+              >
+                {{ espacio.numero_espacio }}
+              </option>
+            </select>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </div>
-<div class="modal-footer">
+
+<!-- MODAL FOOTER - DISEÑO MEJORADO-->
+<div class="modal-footer border-0">
   <button
     type="button"
-    class="btn btn-outline-danger fw-semibold"
+    class="btn btn-danger fw-semibold"
     (click)="activeModal.dismiss()"
   >
-    <i class="me-1"></i>Cancelar
+    <i class="bi me-2"></i>Cancelar
   </button>
+
   <button
     *ngIf="fallecidoSeleccionado && nuevoEspacio"
     type="button"
-    class="btn btn-outline-success fw-semibold"
+    class="btn btn-success fw-semibold"
     (click)="guardarCambios()"
   >
-    <i class="me-1"></i>Guardar Cambios
+    <i class="bi bi-check-lg"></i>
+    Guardar Cambios
+  </button>
+  <button
+    *ngIf="!fallecidoSeleccionado || !nuevoEspacio"
+    type="button"
+    class="btn btn-success"
+    disabled
+  >
+    <i class="bi me-2"></i>
+    Seleccione ubicación
   </button>
 </div>
