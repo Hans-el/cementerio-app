@@ -149,12 +149,17 @@ export class DisponibilidadModalComponent {
           imagenUrl: `${this.environment.apiUrl}/images/bloques/${this.formatoDosDigitos(bloque.sector)}${this.formatoDosDigitos(bloque.numero_manzana)}/${this.formatoDosDigitos(bloque.sector)}${this.formatoDosDigitos(bloque.numero_manzana)}${this.formatoDosDigitos(bloque.numero_bloque)}.jpg`,
         }));
       },
+      //ponemos el error en un sweetalert2, pero dentro de un toast para que no moleste tanto al usuario, ya que no es algo tan grave como para mostrar un modal
       error: () => {
-        Swal.fire(
-          'Error',
-          'No se pudieron cargar los bloques en venta.',
-          'error',
-        );
+        Swal.fire({
+          toast: true,
+          position: 'top-end',
+          icon: 'error',
+          title: 'No se pudieron cargar los bloques en venta',
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+        });
       },
     });
   }
