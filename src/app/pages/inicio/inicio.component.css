@@ -50,13 +50,13 @@
 }
 
 .card-resumen {
-  background: linear-gradient(
-    180deg,
-    #163212 0%,
-    #334c30 50%
-  );
+  background: linear-gradient(135deg, #2d5a27 0%, #1a3a16 100%);
   color: #ffffff;
   border-radius: 16px;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
   transition: all 0.25s ease;
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25);
+  }
 }

@@ -10,6 +10,7 @@ import { LayoutComponent } from './components/layout/layout.component';
 import { adminGuard } from './guards/admin.guard';
 import { InicioDifuntosComponent } from './pages/inicio-difuntos/inicio-difuntos.component';
 import { ReportesComponent } from './pages/reportes/reportes.component';
+import { DashboardComponent } from './pages/dashboard/dashboard.component';
 
 //rutas de la aplicación
 export const routes: Routes = [
@@ -24,7 +25,9 @@ export const routes: Routes = [
             { path: 'difuntos', component: InicioDifuntosComponent, canActivate: [adminGuard] }, //Gestión de difuntos. Se usa también la guardia de admin.
             { path: 'contacto', component: ContactoComponent }, // para contactarse con la administracion del cementerio
             { path: 'perfil', component: PerfilComponent }, //no puede acceder si no está autenticado, es decir, no podrá editar sus datos ya que no está logueado (si es que quiero usar el authGuard)
-            { path: 'reportes', component: ReportesComponent, canActivate: [adminGuard] } //para generar reportes de difuntos y ocupaciones. Uso para auditoría. Solo el admin puede acceder.
+            { path: 'reportes', component: ReportesComponent, canActivate: [adminGuard] }, //para generar reportes de difuntos y ocupaciones. Uso para auditoría. Solo el admin puede acceder.
+            { path: 'dashboard', component: DashboardComponent, canActivate: [adminGuard] } //para mostrar un dashboard con estadísticas y gráficos. Solo el admin puede acceder.,
+
         ]
     },
 ];

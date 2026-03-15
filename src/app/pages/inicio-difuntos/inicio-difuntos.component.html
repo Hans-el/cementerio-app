@@ -15,38 +15,33 @@
   <!-- =======================
        CARDS RESUMEN - Diseño profesional
   ======================== -->
-  <div class="row g-4 mb-5">
+  <div class="row g-4 mb-3">
     <!-- Total Fallecidos -->
     <div class="col-6 col-md-3">
-      <div class="card card-resumen border-0 shadow-sm h-100 hover-lift">
-        <div class="card-body p-3">
-          <div class="d-flex align-items-center">
-            <div class="shrink-0">
-              <div class="bg-success bg-opacity-10 p-3 rounded-3">
-                <i class="bi bi-people fs-4 "></i>
+        <div class="card card-resumen border-0 h-100">
+          <div class="card-body p-3">
+            <div class="d-flex align-items-center">
+              <div class="bg-success bg-opacity-10 p-3 rounded-3 me-3">
+                <i class="bi bi-box-seam fs-4 text-success"></i>
               </div>
-            </div>
-            <div class="grow ms-3">
-              <h6 class="text-white mb-1 small text-uppercase fw-semibold">
-                Total Fallecidos
-              </h6>
-              <h4 class="fw-bold text-white mb-0">{{ totalFallecidos }}</h4>
+              <div>
+                <h6 class="text-white mb-1 small">Total Fallecidos</h6>
+                <h4 class="fw-bold text-white mb-0">
+                  {{ totalFallecidos }}
+                </h4>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <div class="col-6 col-md-2">
-      <div class="card card-resumen border-1px h-100 shadow-sm hover-lift">
-        <div class="card-body p-3 d-flex align-items-center justify-content-center">
-          <button class="btn btn-link text-white text-decoration-none w-100 p-0" (click)="abrirModalAnadirDifunto()">
-            <i class="bi bi-pencil-square fs-4 me-2"></i>
-            <span id="botonGestion" class="fw-semibold">Fallecidos</span>
-          </button>
-        </div>
-      </div>
-    </div>
+   <div class="col-12 col-md-3 offset-md-6">
+        <button class="btn btn-success w-100 h-100 d-flex flex-column align-items-center justify-content-center border-0 rounded-3 shadow-sm"
+          (click)="abrirModalAnadirDifunto()">
+          <i class="bi bi-plus-lg fs-4 mb-1"></i>
+          <span class="small fw-semibold">Agregar Fallecido</span>
+        </button>
+     </div>
   </div>
 
   <!--=======================FILTROS Y BÚSQUEDA - Diseño elegante========================-->

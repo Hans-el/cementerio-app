@@ -1,0 +1,17 @@
+.card-resumen {
+  background: linear-gradient(135deg, #2d5a27 0%, #1a3a16 100%);
+  border-radius: 12px;
+  transition: all 0.25s ease;
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25);
+  }
+}
+
+.legend-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}

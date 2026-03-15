@@ -67,11 +67,7 @@
 
 
 .card-resumen {
-  background: linear-gradient(
-    180deg,
-    #163212 0%,
-    #334c30 50%
-  );
+  background: linear-gradient(135deg, #2d5a27 0%, #1a3a16 100%);
   font-weight: 500;
   color: #ffffff;
   border-radius: 16px;
