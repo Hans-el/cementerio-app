@@ -32,7 +32,7 @@ export class LocalizarModalComponent implements OnInit {
     public activeModal: NgbActiveModal,
     private modalService: NgbModal, // Servicio para abrir modales
     private fallecidoService: FallecidoService, // Servicio para buscar fallecidos
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.searchTerms
@@ -132,9 +132,9 @@ export class LocalizarModalComponent implements OnInit {
     //Solo mostraremos una alerta Swal con el codigo del SECTOR y la MANZANA pero en negritas para que resalte, y un mensaje que diga "LOCALIZADO EN EL MAPA"
     Swal.fire({
       title: 'LOCALIZADO EN EL MAPA',
-      html: `Tu ubicación está en el: <h1> <strong> ${this.formatoDosDigitos(boveda.sector)}.${this.formatoDosDigitos(boveda.manzana)}</strong> </h1> 
-      Específicamente en: <h4> <strong> ${this.formatoDosDigitos(boveda.sector)}.${this.formatoDosDigitos(boveda.manzana)}.${this.formatoDosDigitos(boveda.bloque)}</strong> </h4>
-      <em> <h6> Recuerda que los códigos están anotados en cada bloque </h6> </em>`,
+      html: `Tu ubicación está en: <h1> <strong> ${this.formatoDosDigitos(boveda.sector)}.${this.formatoDosDigitos(boveda.manzana)}</strong> </h1> 
+          Con el código: <h4> <strong> ${this.formatoDosDigitos(boveda.sector)}.${this.formatoDosDigitos(boveda.manzana)}.${this.formatoDosDigitos(boveda.bloque)}</strong> </h4>
+          <em> <h6> Nota: Los códigos están anotados en cada bloque. </h6> </em>`,
       icon: 'success',
       confirmButtonText: 'Aceptar',
       confirmButtonColor: '#28a745',

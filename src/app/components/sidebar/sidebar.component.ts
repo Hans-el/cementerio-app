@@ -9,6 +9,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { LocalizarModalComponent } from '../localizar-modal/localizar-modal.component';
 import { DisponibilidadModalComponent } from '../disponibilidad-modal/disponibilidad-modal.component';
 import { GestionBovedasComponent } from '../gestion-bloques/gestion-bovedas.component';
+import { UsuarioService } from '../../services/usuario.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -28,8 +29,10 @@ export class SidebarComponent implements OnInit {
     private authService: AuthService,
     private router: Router,
     private modalService: NgbModal,
+    private usuarioService: UsuarioService,
   ) {}
 
+  // Este HostListener escucha los cambios en el tamaño de la ventana para adaptar el sidebar a dispositivos móviles
   @HostListener('window:resize')
   checkIfMobile(event?: Event) {
     this.isMobile = window.innerWidth <= 768;
@@ -42,7 +45,7 @@ export class SidebarComponent implements OnInit {
 
   ngOnInit(): void {
     this.userRole = this.authService.getUserRole(); // Obtiene el rol al inicializar
-    //this.userName = this.authService.getUserFromToken()?.nombre || ''; // para mostrar el nombre del usuario en el sidebar
+    //this.userName = this.usuarioService.getUserName(t
     this.checkIfMobile();
   }
 
@@ -79,14 +82,15 @@ export class SidebarComponent implements OnInit {
   logout(): void {
     this.authService.logout();
     Swal.fire({
+      toast: true,
+      position: 'top-end',
       title: 'Cierre de sesión!',
       text: 'Has cerrado sesión correctamente.',
       timerProgressBar: true,
-      timer: 2200,
+      timer: 1000,
       icon: 'success',
       confirmButtonText: 'OK',
     }).then(() => {
-      // localStorage.removeItem('token');  *NOTA: No hace falta porque ya lo hace el authService.logout(). Se pone a manera de entendimiento*
       this.router.navigate(['/login']);
     });
   }
