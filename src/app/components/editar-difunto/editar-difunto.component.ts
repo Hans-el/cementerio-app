@@ -18,10 +18,10 @@ export class EditarDifuntoComponent {
   fallecido: Fallecido = {
     id_fallecido: 0,
     nombre_completo: '',
-    fecha_fallecimiento: null,
+    fecha_fallecimiento: '',
     fecha_fallecimiento_raw: '',
-    fecha_inhumacion: null,
-    fecha_exhumacion: null,
+    fecha_inhumacion: '',
+    fecha_exhumacion: '',
     observaciones: ''
   };
 
@@ -33,7 +33,16 @@ export class EditarDifuntoComponent {
   guardarCambios(): void {
     this.fallecidoService.actualizarFallecido(this.fallecido.id_fallecido, this.fallecido).subscribe({
       next: (response) => {
-        Swal.fire('Éxito', 'Fallecido actualizado correctamente', 'success');
+        //alerta swal con toast en la esquina superior derecha, con el mensaje "Fallecido actualizado correctamente" y un icono de éxito
+        Swal.fire({
+          title: 'Fallecido actualizado correctamente',
+          icon: 'success',
+          toast: true,
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+        });
         this.activeModal.close(this.fallecido); // Cerrar el modal y devolver el fallecido actualizado
       },
       error: () => {

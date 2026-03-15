@@ -129,13 +129,15 @@ export class LocalizarModalComponent implements OnInit {
   localizarEnMapa(boveda: any) {
     // Cerrar el modal actual
     this.activeModal.dismiss();
-
-    // aqui va la logica para mostrar en el mapa, ahora solo tengo una aletra de swal
+    //Solo mostraremos una alerta Swal con el codigo del SECTOR y la MANZANA pero en negritas para que resalte, y un mensaje que diga "LOCALIZADO EN EL MAPA"
     Swal.fire({
-      title: 'Localizar en el Mapa',
-      text: `La bóveda está en el Sector ${boveda.sector}, Manzana ${boveda.manzana}, Bloque ${boveda.bloque}, Espacio ${boveda.espacio}.`,
-      icon: 'info',
+      title: 'LOCALIZADO EN EL MAPA',
+      html: `Tu ubicación está en el: <h1> <strong> ${this.formatoDosDigitos(boveda.sector)}.${this.formatoDosDigitos(boveda.manzana)}</strong> </h1> 
+      Específicamente en: <h4> <strong> ${this.formatoDosDigitos(boveda.sector)}.${this.formatoDosDigitos(boveda.manzana)}.${this.formatoDosDigitos(boveda.bloque)}</strong> </h4>
+      <em> <h6> Recuerda que los códigos están anotados en cada bloque </h6> </em>`,
+      icon: 'success',
       confirmButtonText: 'Aceptar',
+      confirmButtonColor: '#28a745',
     });
   }
 }

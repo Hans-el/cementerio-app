@@ -10,6 +10,7 @@ import { ManzanasService } from '../../services/manzanas.service';
 import { BloquesService } from '../../services/bloques.service';
 import { ImageModalComponent } from '../image-modal/image-modal.component';
 import { environment } from '../../../environments/environment'; // Para acceder a la URL del API en el template
+import { LocalizarModalComponent } from '../localizar-modal/localizar-modal.component';
 
 @Component({
   selector: 'app-disponibilidad-modal',
@@ -86,6 +87,20 @@ export class DisponibilidadModalComponent {
       },
     });
   }
+ localizarEnMapa(boveda: any) {
+     // Cerrar el modal actual
+     this.activeModal.dismiss();
+     //Solo mostraremos una alerta Swal con el codigo del SECTOR y la MANZANA pero en negritas para que resalte, y un mensaje que diga "LOCALIZADO EN EL MAPA"
+     Swal.fire({
+       title: 'LOCALIZADO EN EL MAPA',
+       html: `El bloque se encuentra en: <h1> <strong> ${this.formatoDosDigitos(boveda.sector)}.${this.formatoDosDigitos(boveda.manzana)}</strong> </h1> 
+       Con el código: <h4> <strong> ${this.formatoDosDigitos(boveda.sector)}.${this.formatoDosDigitos(boveda.manzana)}.${this.formatoDosDigitos(boveda.bloque)}</strong> </h4>
+       <em> <h6> Nota: Los códigos están anotados en cada bloque. </h6> </em>`,
+       icon: 'success',
+       confirmButtonText: 'Aceptar',
+       confirmButtonColor: '#28a745',
+     });
+   }
 
   formatoDosDigitos(value: number | string): string {
     const strValue = value.toString();
