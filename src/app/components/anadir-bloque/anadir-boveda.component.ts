@@ -9,18 +9,15 @@ import { BloquesService } from '../../services/bloques.service';
 import { ManzanasService } from '../../services/manzanas.service';
 import { SectoresService } from '../../services/sectores.service';
 
-
 @Component({
   selector: 'app-anadir-boveda',
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './anadir-boveda.component.html',
-  styleUrl: './anadir-boveda.component.css'
+  styleUrl: './anadir-boveda.component.css',
 })
 export class AnadirBovedaComponent implements OnInit {
-
-
-  // Objeto para almacenar los datos de la nueva bóveda. Esto lo definimos segun la base de datos que me de el señor, por ahora lo dejamos así. 
+  // Objeto para almacenar los datos de la nueva bóveda. Esto lo definimos segun la base de datos que me de el señor, por ahora lo dejamos así.
   // esto irá en /models/boveda.model.ts
   nuevoBloque: any = {
     id_sector: null,
@@ -36,16 +33,16 @@ export class AnadirBovedaComponent implements OnInit {
   bloquesExistentes: any[] = [];
   tiposEspacio: any[] = [
     { id_tipo_espacio: 1, nombre: 'Bóveda' },
-    { id_tipo_espacio: 2, nombre: 'Nicho' }
-  ]; // 
+    { id_tipo_espacio: 2, nombre: 'Nicho' },
+  ]; //
 
-  constructor(public activeModal: NgbActiveModal,
+  constructor(
+    public activeModal: NgbActiveModal,
     private http: HttpClient,
     private sectoresService: SectoresService,
     private manzanasService: ManzanasService,
     private bloquesService: BloquesService,
-
-  ) { }
+  ) {}
   // Al inicializar el componente, cargamos los sectores disponibles
   ngOnInit(): void {
     this.cargarSectores();
@@ -59,7 +56,7 @@ export class AnadirBovedaComponent implements OnInit {
       },
       error: () => {
         Swal.fire('Error', 'No se pudieron cargar las manzanas', 'error');
-      }
+      },
     });
   }
   // una vez obtenidos los sectores anteriormente, cargamos las manzanas correspondientes y seleccionamos la que queremos
@@ -73,7 +70,7 @@ export class AnadirBovedaComponent implements OnInit {
       },
       error: () => {
         Swal.fire('Error', 'No se pudieron cargar las manzanas', 'error');
-      }
+      },
     });
   }
 
@@ -87,34 +84,50 @@ export class AnadirBovedaComponent implements OnInit {
       },
       error: () => {
         Swal.fire('Error', 'No se pudieron cargar los bloques', 'error');
-      }
+      },
     });
   }
 
   // Función para obtener el siguiente número de bloque disponible, no los que ya exsisten.
-  obtenerSiguienteNumeroBloque(): number {
+  obtenerSiguienteNumeroBloque(): string {
     if (this.bloquesExistentes.length === 0) {
-      return 1;
+      return '1';
     }
-    const numerosBloque = this.bloquesExistentes.map(bloque => bloque.numero_bloque);
+
+    // Extraemos solo la parte numérica de cada numero_bloque (ej: "36-A" → 36, "36" → 36)
+    const numerosBloque = this.bloquesExistentes
+      .map((b) => parseInt(b.numero_bloque, 10))
+      .filter((n) => !isNaN(n));
+
+    if (numerosBloque.length === 0) return '1';
+
     const maxNumeroBloque = Math.max(...numerosBloque);
-    return maxNumeroBloque + 1;
+    return (maxNumeroBloque + 1).toString();
   }
 
   // Función para manejar el envío del formulario
   //usamos swal para mostrar mensajes de éxito o error para que se vea mejor
   onSubmit(): void {
-    if (!this.nuevoBloque.id_sector || !this.nuevoBloque.id_manzana || !this.nuevoBloque.numero_bloque || !this.nuevoBloque.cantidad_espacios) {
-      Swal.fire('Error', 'Por favor, complete todos los campos obligatorios', 'error');
+    if (
+      !this.nuevoBloque.id_sector ||
+      !this.nuevoBloque.id_manzana ||
+      !this.nuevoBloque.numero_bloque ||
+      !this.nuevoBloque.cantidad_espacios
+    ) {
+      Swal.fire(
+        'Error',
+        'Por favor, complete todos los campos obligatorios',
+        'error',
+      );
       return;
     }
     Swal.fire({
       title: '¿Guardar nuevo bloque?',
-      text: "¿Desea guardar el nuevo bloque?",
+      text: '¿Desea guardar el nuevo bloque?',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Sí, guardar',
-      cancelButtonText: 'Cancelar'
+      cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
         this.bloquesService.createBloque(this.nuevoBloque).subscribe({
@@ -124,7 +137,7 @@ export class AnadirBovedaComponent implements OnInit {
           },
           error: () => {
             Swal.fire('Error', 'Error al crear el bloque', 'error');
-          }
+          },
         });
       }
     });
