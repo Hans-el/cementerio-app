@@ -46,6 +46,9 @@ export class ReportesComponent {
             error: () => {
               console.error('Error al obtener el reporte de ocupaciones');
               Swal.fire({
+                toast: true,
+                position: 'top-end',
+                timer: 3000,
                 icon: 'error',
                 title: 'Error',
                 text: 'No se pudo obtener el reporte de ocupaciones.',
@@ -61,6 +64,9 @@ export class ReportesComponent {
           error: () => {
             console.error('Error al obtener el reporte total de ocupaciones');
             Swal.fire({
+              toast: true,
+              position: 'top-end',
+              timer: 3000,
               icon: 'error',
               title: 'Error',
               text: 'No se pudo obtener el reporte total de ocupaciones.',
