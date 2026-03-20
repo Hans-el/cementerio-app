@@ -18,30 +18,31 @@
   <div class="row g-4 mb-3">
     <!-- Total Fallecidos -->
     <div class="col-6 col-md-3">
-        <div class="card card-resumen border-0 h-100">
-          <div class="card-body p-3">
-            <div class="d-flex align-items-center">
-              <div class="bg-success bg-opacity-10 p-3 rounded-3 me-3">
-                <i class="bi bi-box-seam fs-4 text-success"></i>
-              </div>
-              <div>
-                <h6 class="text-white mb-1 small">Total Fallecidos</h6>
-                <h4 class="fw-bold text-white mb-0">
-                  {{ totalFallecidos }}
-                </h4>
-              </div>
+      <div class="card card-resumen border-0 h-100">
+        <div class="card-body p-3">
+          <div class="d-flex align-items-center">
+            <div class="bg-success bg-opacity-10 p-3 rounded-3 me-3">
+              <i class="bi bi-box-seam fs-4 text-success"></i>
+            </div>
+            <div>
+              <h6 class="text-white mb-1 small">Total Fallecidos</h6>
+              <h4 class="fw-bold text-white mb-0">
+                {{ totalFallecidos }}
+              </h4>
             </div>
           </div>
         </div>
       </div>
+    </div>
 
-   <div class="col-12 col-md-3 offset-md-6">
-        <button class="btn btn-success w-100 h-100 d-flex flex-column align-items-center justify-content-center border-0 rounded-3 shadow-sm"
-          (click)="abrirModalAnadirDifunto()">
-          <i class="bi bi-plus-lg fs-4 mb-1"></i>
-          <span class="small fw-semibold">Agregar Fallecido</span>
-        </button>
-     </div>
+    <div class="col-12 col-md-3 offset-md-6">
+      <button
+        class="btn btn-success w-100 h-100 d-flex flex-column align-items-center justify-content-center border-0 rounded-3 shadow-sm"
+        (click)="abrirModalAnadirDifunto()">
+        <i class="bi bi-plus-lg fs-4 mb-1"></i>
+        <span class="small fw-semibold">Agregar Fallecido</span>
+      </button>
+    </div>
   </div>
 
   <!--=======================FILTROS Y BÚSQUEDA - Diseño elegante========================-->
@@ -193,7 +194,7 @@
         <table class="table table-hover align-middle mb-0">
           <thead class="bg-light">
             <tr>
-              <th class="px-4 py-3 text-muted small fw-semibold">Código</th>
+              <th class="px-4 py-3 text-muted small fw-semibold">Código Bloque</th>
               <th class="py-3 text-muted small fw-semibold">Nombre Completo</th>
               <th class="py-3 text-muted small fw-semibold">
                 F. Fallecimiento

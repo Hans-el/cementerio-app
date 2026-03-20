@@ -3,12 +3,7 @@
     <i class="bi bi-grid-3x3-gap-fill me-2 text-primary"></i>
     Añadir bloque
   </h5>
-  <button
-    type="button"
-    class="btn-close"
-    aria-label="Cerrar"
-    (click)="activeModal.dismiss()"
-  ></button>
+  <button type="button" class="btn-close" aria-label="Cerrar" (click)="activeModal.dismiss()"></button>
 </div>
 
 <div class="modal-body pt-0">
@@ -19,13 +14,8 @@
     <div class="row">
       <div class="col-md-6 mb-3">
         <label for="sector" class="form-label">Sector</label>
-        <select
-          class="form-select"
-          [(ngModel)]="nuevoBloque.id_sector"
-          name="sector"
-          (change)="onSectorChange()"
-          required
-        >
+        <select class="form-select" [(ngModel)]="nuevoBloque.id_sector" name="sector" (change)="onSectorChange()"
+          required>
           <option value="" disabled selected>Seleccione un sector</option>
           <option *ngFor="let sector of sectores" [value]="sector.id_sector">
             {{ sector.codigo }} - {{ sector.nombre }}
@@ -35,14 +25,8 @@
 
       <div class="col-md-6 mb-3">
         <label for="manzana" class="form-label">Manzana</label>
-        <select
-          class="form-select"
-          [(ngModel)]="nuevoBloque.id_manzana"
-          name="manzana"
-          (change)="onManzanaChange()"
-          [disabled]="!nuevoBloque.id_sector"
-          required
-        >
+        <select class="form-select" [(ngModel)]="nuevoBloque.id_manzana" name="manzana" (change)="onManzanaChange()"
+          [disabled]="!nuevoBloque.id_sector" required>
           <option value="" disabled selected>Seleccione una manzana</option>
           <option *ngFor="let manzana of manzanas" [value]="manzana.id_manzana">
             {{ manzana.numero_manzana }}
@@ -57,14 +41,7 @@
     <div class="row">
       <div class="col-md-4 mb-3">
         <label for="numero_bloque" class="form-label">Número de bloque</label>
-        <input
-          type="text"
-          class="form-control"
-          [(ngModel)]="nuevoBloque.numero_bloque"
-          name="numero_bloque"
-          required
-          readonly
-        />
+        <input type="text" class="form-control" [(ngModel)]="nuevoBloque.numero_bloque" name="numero_bloque" required />
         <small class="text-muted">Se genera automáticamente</small>
       </div>
 
@@ -72,27 +49,14 @@
         <label for="cantidad_espacios" class="form-label">
           Cantidad de espacios
         </label>
-        <input
-          type="text"
-          class="form-control"
-          [(ngModel)]="nuevoBloque.cantidad_espacios"
-          name="cantidad_espacios"
-          required
-        />
+        <input type="text" class="form-control" [(ngModel)]="nuevoBloque.cantidad_espacios" name="cantidad_espacios"
+          required />
       </div>
 
       <div class="col-md-4 mb-3">
         <label for="tipo_espacio" class="form-label">Tipo de espacio</label>
-        <select
-          class="form-select"
-          [(ngModel)]="nuevoBloque.id_tipo_espacio"
-          name="tipo_espacio"
-          required
-        >
-          <option
-            *ngFor="let tipo of tiposEspacio"
-            [value]="tipo.id_tipo_espacio"
-          >
+        <select class="form-select" [(ngModel)]="nuevoBloque.id_tipo_espacio" name="tipo_espacio" required>
+          <option *ngFor="let tipo of tiposEspacio" [value]="tipo.id_tipo_espacio">
             {{ tipo.nombre }}
           </option>
         </select>
@@ -102,31 +66,18 @@
     <!-- OBSERVACIONES -->
     <div class="mb-3">
       <label for="observaciones" class="form-label">Observaciones</label>
-      <textarea
-        class="form-control"
-        rows="3"
-        placeholder="Notas adicionales (opcional)"
-        [(ngModel)]="nuevoBloque.observaciones"
-        name="observaciones"
-      ></textarea>
+      <textarea class="form-control" rows="3" placeholder="Notas adicionales (opcional)"
+        [(ngModel)]="nuevoBloque.observaciones" name="observaciones"></textarea>
     </div>
   </form>
 </div>
 
 <div class="modal-footer border-0">
-  <button
-    type="button"
-    class="btn btn-danger fw-semibold"
-    (click)="activeModal.dismiss()"
-  >
+  <button type="button" class="btn btn-danger fw-semibold" (click)="activeModal.dismiss()">
     Cancelar
   </button>
 
-  <button
-    type="button"
-    class="btn btn-success fw-semibold"
-    (click)="onSubmit()"
-  >
+  <button type="button" class="btn btn-success fw-semibold" (click)="onSubmit()">
     <i class="bi bi-save me-1"></i>
     Guardar bloque
   </button>
