@@ -63,7 +63,7 @@
             <div>
               <h6 class="text-white mb-1 small">Nichos</h6>
               <h4 class="fw-bold text-white mb-0">
-                {{ resumenEspacios.nichos}}
+                {{ resumenEspacios.nichos }}
               </h4>
             </div>
           </div>
@@ -93,12 +93,12 @@
     <div class="col-12 col-md">
       <button
         class="btn btn-success w-100 h-100 d-flex flex-column align-items-center justify-content-center border-0 rounded-3 shadow-sm"
-        (click)="editarBovedas()">
+        (click)="editarBovedas()"
+      >
         <i class="bi bi-plus-lg fs-4 mb-1"></i>
         <span class="small fw-semibold">Agregar Ocupación</span>
       </button>
     </div>
-
   </div>
 
   <!-- =======================
@@ -121,16 +121,26 @@
             <span class="input-group-text bg-light border-end-0">
               <i class="bi bi-search text-muted"></i>
             </span>
-            <input type="text" class="form-control form-control bg-light border-start-1 ps-2"
-              placeholder="Código de Bloque (Ej. 01.02.03) o Nombre del fallecido" [(ngModel)]="filtros.busqueda"
-              (ngModelChange)="buscarTexto()" />
+            <input
+              type="text"
+              class="form-control form-control bg-light border-start-1 ps-2"
+              placeholder="Código de Bloque (Ej. 01.02.03) o Nombre del fallecido"
+              [(ngModel)]="filtros.busqueda"
+              (ngModelChange)="buscarTexto()"
+            />
           </div>
         </div>
 
         <!-- SECTOR -->
         <div class="col-md-2">
-          <label class="form-label text-muted small fw-semibold mb-1">Sector</label>
-          <select class="form-select form-select bg-light" [(ngModel)]="filtros.sector" (change)="onSectorChange()">
+          <label class="form-label text-muted small fw-semibold mb-1"
+            >Sector</label
+          >
+          <select
+            class="form-select form-select bg-light"
+            [(ngModel)]="filtros.sector"
+            (change)="onSectorChange()"
+          >
             <option [ngValue]="null">Todos</option>
             <option *ngFor="let s of sectores" [ngValue]="s.id_sector">
               {{ ("0" + s.codigo).slice(-2) }}
@@ -140,9 +150,15 @@
 
         <!-- MANZANA -->
         <div class="col-md-2">
-          <label class="form-label text-muted small fw-semibold mb-1">Manzana</label>
-          <select class="form-select form-select-lg bg-light" [(ngModel)]="filtros.manzana" (change)="onManzanaChange()"
-            [disabled]="!manzanas.length">
+          <label class="form-label text-muted small fw-semibold mb-1"
+            >Manzana</label
+          >
+          <select
+            class="form-select form-select-lg bg-light"
+            [(ngModel)]="filtros.manzana"
+            (change)="onManzanaChange()"
+            [disabled]="!manzanas.length"
+          >
             <option [ngValue]="null">Todas</option>
             <option *ngFor="let m of manzanas" [ngValue]="m.numero_manzana">
               {{ m.numero_manzana }}
@@ -152,9 +168,15 @@
 
         <!-- BLOQUE -->
         <div class="col-md-2">
-          <label class="form-label text-muted small fw-semibold mb-1">Bloque</label>
-          <select class="form-select form-select-lg bg-light" [(ngModel)]="filtros.bloque" (change)="onBloqueChange()"
-            [disabled]="!bloques.length">
+          <label class="form-label text-muted small fw-semibold mb-1"
+            >Bloque</label
+          >
+          <select
+            class="form-select form-select-lg bg-light"
+            [(ngModel)]="filtros.bloque"
+            (change)="onBloqueChange()"
+            [disabled]="!bloques.length"
+          >
             <option [ngValue]="null">Todos</option>
             <option *ngFor="let b of bloques" [ngValue]="b.numero_bloque">
               {{ b.numero_bloque }}
@@ -169,7 +191,9 @@
        TABLA - Diseño mejorado
   ======================== -->
   <div class="card border-0 shadow-sm">
-    <div class="card-header bg-white border-0 py-3 d-flex justify-content-between align-items-center">
+    <div
+      class="card-header bg-white border-0 py-3 d-flex justify-content-between align-items-center"
+    >
       <h6 class="fw-semibold text-secondary mb-0">
         <i class="bi bi-table me-2"></i>Listado de Ocupaciones
       </h6>
@@ -198,9 +222,11 @@
           </thead>
 
           <tbody class="border-0">
-            <tr *ngFor="let o of ocupaciones" class="border-bottom">
+            <tr *ngFor="let o of ocupacionesAgrupadas" class="border-bottom">
               <td class="px-4">
-                <span class="badge bg-success bg-opacity-10 text-success px-3 py-2 rounded-3">
+                <span
+                  class="badge bg-success bg-opacity-10 text-success px-3 py-2 rounded-3"
+                >
                   {{ o.codigo_bloque }}
                 </span>
               </td>
@@ -208,53 +234,61 @@
               <td class="fw-medium">{{ o.manzana }}</td>
               <td class="fw-medium">{{ o.bloque_lote }}</td>
               <td>
-                <span class="badge" [ngClass]="{
+                <span
+                  class="badge"
+                  [ngClass]="{
                     'bg-warning bg-opacity-10 text-':
                       o.tipo_ubicacion === 'BOVEDA',
                     'bg-secondary bg-opacity-10 text-':
                       o.tipo_ubicacion === 'NICHO',
                     'bg-danger bg-opacity-10 text-danger':
                       o.tipo_ubicacion === 'CRUZ',
-                  }">
+                  }"
+                >
                   {{ o.tipo_ubicacion }}
                 </span>
               </td>
               <td class="fw-medium">{{ o.numero }}</td>
+              <!-- Columna fallecidos agrupados
+               Hacemos esto para mostrar todos los fallecidos de un mismo espacio en un solo registro-->
               <td>
-                <span [class.text-muted]="
-                    !o.nombre_fallecido || o.nombre_fallecido === 'S/N'
-                  ">
-                  {{
-                  o.nombre_fallecido
-                  ? o.nombre_fallecido === "S/N"
-                  ? "—"
-                  : o.nombre_fallecido
-                  : "—"
-                  }}
-                </span>
+                <ng-container
+                  *ngIf="o.fallecidos.length > 0; else sinFallecido"
+                >
+                  <div *ngFor="let nombre of o.fallecidos" class="small">
+                    {{ nombre }}
+                  </div>
+                </ng-container>
+                <ng-template #sinFallecido>
+                  <span class="text-muted">—</span>
+                </ng-template>
               </td>
+              <!-- Columna fechas agrupadas
+               Hacemos esto para mostrar todas las fechas de fallecimiento de un mismo espacio en un solo registro, que coincida con los fallecidos-->
               <td>
-                <span [class.text-muted]="!o.fecha_fallecimiento">
-                  {{
-                  o.fecha_fallecimiento
-                  ? (o.fecha_fallecimiento | date: "dd MMM yyyy")
-                  : "—"
-                  }}
-                </span>
+                <ng-container *ngIf="o.fechas.length > 0; else sinFecha">
+                  <div *ngFor="let fecha of o.fechas" class="small">
+                    {{ fecha ? (fecha | date: "dd MMM yyyy") : "—" }}
+                  </div>
+                </ng-container>
+                <ng-template #sinFecha>
+                  <span class="text-muted">—</span>
+                </ng-template>
               </td>
               <td class="px-4">
-                <div class="d-flex gap-2 justify-content-end">
-                  <button class="btn btn-warning border-1px" (click)="editar(o)" title="Editar">
-                    <i class="bi bi-pencil"></i>
-                  </button>
-                  <button class="btn btn-danger border-1px" (click)="eliminar(o)" title="Eliminar">
+                <div class="d-flex gap-2 justify-content-end">                  
+                  <button
+                    class="btn btn-danger border-1px"
+                    (click)="eliminar(o)"
+                    title="Eliminar"
+                  >
                     <i class="bi bi-trash"></i>
                   </button>
                 </div>
               </td>
             </tr>
 
-            <tr *ngIf="!ocupaciones.length && !loading">
+            <tr *ngIf="!ocupacionesAgrupadas.length && !loading">
               <td colspan="9" class="text-center py-5">
                 <div class="py-4">
                   <i class="bi bi-inbox fs-1 text-muted"></i>
@@ -288,7 +322,10 @@
     <nav aria-label="Navegación de páginas">
       <ul class="pagination pagination-sm mb-0">
         <li class="page-item" [class.disabled]="page === 1">
-          <button class="page-link border-0 bg-light text-dark" (click)="paginaAnterior()">
+          <button
+            class="page-link border-0 bg-light text-dark"
+            (click)="paginaAnterior()"
+          >
             <i class="bi bi-chevron-left"></i>
             <span class="ms-1 d-none d-md-inline">Anterior</span>
           </button>
@@ -299,7 +336,10 @@
           </span>
         </li>
         <li class="page-item" [class.disabled]="page === totalPages">
-          <button class="page-link border-0 bg-light text-dark" (click)="siguientePagina()">
+          <button
+            class="page-link border-0 bg-light text-dark"
+            (click)="siguientePagina()"
+          >
             <span class="me-1 d-none d-md-inline">Siguiente</span>
             <i class="bi bi-chevron-right"></i>
           </button>

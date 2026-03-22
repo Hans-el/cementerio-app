@@ -29,6 +29,8 @@ export class InicioComponent implements OnInit {
   manzanas: any[] = [];
   bloques: any[] = [];
   loading = false;
+  ocupacionesAgrupadas: any[] = []; // Variable para almacenar los fallecidos agrupados por numero de espacio
+
   // Resumen de espacios para los badges
   resumenEspacios: { bovedas: number; nichos: number; cruces: number } = {
     bovedas: 0,
@@ -57,7 +59,7 @@ export class InicioComponent implements OnInit {
     private bloquesService: BloquesService,
     private modalService: NgbModal,
     private espacioService: EspacioService,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.cargarSectores();
@@ -102,6 +104,36 @@ export class InicioComponent implements OnInit {
     });
   }
 
+  // Función para agrupar ocupaciones por número de espacio y mostrar los fallecidos en un solo registro
+  // Es decir, para mostrar una fila por espacio ocupado, aunque haya varios fallecidos en ese mismo espacio, y mostrar los nombres de los fallecidos separados por comas en la misma fila
+  agruparOcupaciones(): void {
+    const mapa = new Map<string, any>();
+
+    for (const o of this.ocupaciones) {
+      // Clave única por espacio: código de bloque + tipo + número de espacio
+      const clave = `${o.codigo_bloque}-${o.tipo_ubicacion}-${o.numero}`;
+
+      if (!mapa.has(clave)) {
+        mapa.set(clave, {
+          ...o, //id_espacio, codigo_bloque, sector_cementerio, manzana, tipo_ubicacion, bloque_lote, numero
+          fallecidos: [],
+          fechas: [],
+        });
+      }
+
+      const entrada = mapa.get(clave);
+
+      // Solo añadir si hay un fallecido real (no S/N ni vacío)
+      if (o.nombre_fallecido && o.nombre_fallecido !== 'S/N') {
+        entrada.fallecidos.push(o.nombre_fallecido);
+        entrada.fechas.push(o.fecha_fallecimiento ?? null);
+      }
+    }
+
+    this.ocupacionesAgrupadas = Array.from(mapa.values());
+    console.log('Primer registro agrupado:', this.ocupacionesAgrupadas[0]); // <-- verificar
+
+  }
   //aca cargamos las ocupaciones activas, usando la funcion creada en ocupaciones.service.ts
   cargarOcupaciones(): void {
     this.loading = true;
@@ -109,6 +141,7 @@ export class InicioComponent implements OnInit {
     this.ocupacionesService.getOcupaciones(this.page, this.limit).subscribe({
       next: (data) => {
         this.ocupaciones = data.data;
+        this.agruparOcupaciones(); // Agrupamos las ocupaciones por numero de espacio
         this.loading = false;
       },
       error: () => {
@@ -155,6 +188,7 @@ export class InicioComponent implements OnInit {
       .subscribe({
         next: (response) => {
           this.ocupaciones = response.data;
+          this.agruparOcupaciones(); // Agrupamos las ocupaciones por numero de espacio
           this.totalOcupaciones = response.total;
           this.totalPages = response.totalPages;
           this.loading = false;
@@ -182,6 +216,7 @@ export class InicioComponent implements OnInit {
       .subscribe({
         next: (response) => {
           this.ocupaciones = response.data;
+          this.agruparOcupaciones(); // Agrupamos las ocupaciones por numero de espacio
           this.totalOcupaciones = response.total;
           this.totalPages = response.totalPages;
           this.loading = false;
@@ -283,18 +318,34 @@ export class InicioComponent implements OnInit {
   // eliminar registro, aunque no sé si ponerlo acá
   eliminar(ocupacion: any): void {
     Swal.fire({
-      title: '¿Eliminar ocupación?',
-      text: `Ocupación de ${ocupacion.nombre_fallecido}`,
+      title: '¿Eliminar espacio?',
+      html: `¿Deseas eliminar el espacio <b>${ocupacion.numero}</b> del bloque <b>${ocupacion.codigo_bloque}</b>?<br>
+           <small class="text-muted">Esta acción no se puede deshacer.</small>`,
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonText: 'Eliminar',
+      confirmButtonText: 'Sí, eliminar',
+      confirmButtonColor: '#dc3545',
       cancelButtonText: 'Cancelar',
-    }).then(() => {
-      Swal.fire(
-        'Pendiente',
-        'La eliminación se realizará desde el backend',
-        'info',
-      );
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.espacioService.eliminarEspacio(ocupacion.id_espacio).subscribe({
+          next: () => {
+            Swal.fire('Eliminado', 'El espacio fue eliminado correctamente.', 'success');
+            // Recargar según el estado actual de los filtros
+            if (this.filtros.busqueda) {
+              this.buscarTexto();
+            } else if (this.filtros.sector || this.filtros.manzana || this.filtros.bloque) {
+              this.aplicarFiltros();
+            } else {
+              this.cargarOcupaciones();
+            }
+          },
+          error: (err) => {
+            const mensaje = err.error?.message || 'No se pudo eliminar el espacio.';
+            Swal.fire('Error', mensaje, 'error');
+          },
+        });
+      }
     });
   }
 

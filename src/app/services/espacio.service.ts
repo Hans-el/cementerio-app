@@ -38,4 +38,8 @@ export class EspacioService {
       `${this.apiUrl}/resumen`,
     );
   }
+  //eliminar espacio por id
+  eliminarEspacio(id_espacio: number): Observable<any> {
+    return this.http.delete<any>(`${this.apiUrl}/${id_espacio}`);
+  }
 }
