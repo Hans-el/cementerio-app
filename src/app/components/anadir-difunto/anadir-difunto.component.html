@@ -30,6 +30,7 @@
         />
       </div>
 
+      <!-- Fecha de fallecimiento. Agregamos el atributo max para limitar la fecha a hoy, evitando fechas futuras. -->
       <div class="col-md-4 mb-3">
         <label for="fecha_fallecimiento" class="form-label">
           Fecha de fallecimiento
@@ -40,6 +41,7 @@
           class="form-control"
           [(ngModel)]="nuevoDifunto.fecha_fallecimiento"
           name="fecha_fallecimiento"
+          max="{{ today }}"
         />
       </div>
     </div>

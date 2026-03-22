@@ -9,6 +9,7 @@ import { BloquesService } from '../../services/bloques.service';
 import { EspacioService } from '../../services/espacio.service';
 import { FallecidoService } from '../../services/fallecido.service';
 
+
 @Component({
   selector: 'app-anadir-difunto',
   standalone: true,
@@ -17,6 +18,8 @@ import { FallecidoService } from '../../services/fallecido.service';
   styleUrls: ['./anadir-difunto.component.css'],
 })
 export class AnadirDifuntoComponent implements OnInit {
+  // Variable para limitar la fecha de fallecimiento a hoy
+  today: string = new Date().toISOString().split('T')[0];
   // Datos del difunto
   nuevoDifunto: any = {
     nombre_completo: '',
