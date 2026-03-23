@@ -315,7 +315,8 @@ export class InicioComponent implements OnInit {
     return this.resumenEspacios.cruces;
   }
 
-  // eliminar registro, aunque no sé si ponerlo acá
+  // eliminar espacio unicamente, aunque si el espacio tiene fallecidos no se podrá porque el backend no lo permitirá 
+  // ya que primero necesitar estar el espacio libre.
   eliminar(ocupacion: any): void {
     Swal.fire({
       title: '¿Eliminar espacio?',
@@ -347,10 +348,5 @@ export class InicioComponent implements OnInit {
         });
       }
     });
-  }
-
-  //editar ocupacion, aunque no sé si ponerlo acá tambien
-  editar(ocupacion: any): void {
-    Swal.fire('Pendiente', 'La edición se realizará desde el backend', 'info');
   }
 }

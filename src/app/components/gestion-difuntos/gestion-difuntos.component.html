@@ -1,6 +1,6 @@
 <div class="modal-header border-0 pb-0">
   <h5 class="modal-title fw-semibold">
-    <i class="bi bi-person-square me-2"></i>Gestionar Fallecidos
+    <i class="bi bi-person-square me-2"></i>Editar Fallecidos
   </h5>
   <button
     type="button"
@@ -14,23 +14,25 @@
   <div class="modal-footer mb-2 gap-2 justify-content-center">
     <button
       type="button"
-      class="btn btn-outline-success fw-bold bi-person-add"
+      class="btn btn-outline-success fw-bold bi-plus-square-dotted w-50"
       (click)="abrirModalAnadir()"
     >
       Añadir Fallecido
-    </button>
-    <button
-      type="button"
-      class="btn btn-outline-success fw-bold w-50 bi-pencil-square"
-      (click)="abrirModalEditar()"
-    >
-      Editar Espacio
     </button>
   </div>
   <div class="modal-footer mb-2 gap-2 justify-content-center">
     <button
       type="button"
-      class="btn btn-danger fw-semibold w-50"
+      class="btn btn-outline-success fw-bold w-50 bi-pencil-square"
+      (click)="abrirModalEditar()"
+    >
+      Espacio del fallecido
+    </button>
+  </div>
+  <div class="modal-footer mb-2 gap-2 justify-content-end">
+    <button
+      type="button"
+      class="btn btn-danger fw-semibold"
       (click)="activeModal.dismiss()"
     >
       Cerrar
