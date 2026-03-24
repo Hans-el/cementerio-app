@@ -144,9 +144,7 @@
                   <span class="fw-medium small">
                     {{
                     fallecido.fecha_inhumacion
-                    ? (fallecido.fecha_fallecimiento | date: "dd/MM/yyyy")
-                    : fallecido.fecha_fallecimiento
-                    ? (fallecido.fecha_fallecimiento | date: "dd/MM/yyyy")
+                    ? (fallecido.fecha_inhumacion | date: "dd MMM yyyy")
                     : "--"
                     }}
                   </span>
@@ -229,9 +227,7 @@
                 <span [class.text-muted]="!fallecido.fecha_inhumacion">
                   {{
                   fallecido.fecha_inhumacion
-                  ? (fallecido.fecha_fallecimiento | date: "dd MMM yyyy")
-                  : fallecido.fecha_fallecimiento
-                  ? (fallecido.fecha_fallecimiento | date: "dd MMM yyyy")
+                  ? (fallecido.fecha_inhumacion | date: "dd MMM yyyy")
                   : "--"
                   }}
                 </span>
