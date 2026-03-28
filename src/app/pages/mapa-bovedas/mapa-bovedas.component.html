@@ -1,5 +1,32 @@
-<div class="mapa-container ml-auto">
-  <div>
-    <img src="assets/map.png" class="img-fluid rounded" alt="Mapa de Bóvedas" />
+<!-- Controles del mapa -->
+<div class="mapa-wrapper"> 
+  <div class="mapa-controles">
+    <button class="btn-zoom bi bi-plus" (click)="zoomIn()"></button>
+    <span class="zoom-nivel">{{ zoomLevel }}%</span>
+    <button class="btn-zoom bi bi-dash" (click)="zoomOut()"></button>
+    <button
+      class="btn-zoom bi bi-arrow-clockwise"
+      (click)="resetZoom()"
+      title="Restablecer"
+    >
+    </button>
+  </div>
+
+  <!-- En este div tenemos las herramientas de control del mapa 
+   Por ejemplo, botones de zoom y reset. La logica está en el componente -->
+  <div
+    class="mapa-viewport"
+    (mousedown)="onMouseDown($event)"
+    (mousemove)="onMouseMove($event)"
+    (mouseup)="onMouseUp()"
+    (mouseleave)="onMouseUp()"
+    (touchstart)="onTouchStart($event)"
+    (touchmove)="onTouchMove($event)"
+    (touchend)="onTouchEnd()"
+  >
+  <!-- En este div tenemos la imagen del mapa. -->
+    <div class="mapa-canvas" [style.transform]="transform">
+      <img src="assets/map.png" alt="Croquis del cementerio de Colón" draggable="false" />
+    </div>
   </div>
 </div>
