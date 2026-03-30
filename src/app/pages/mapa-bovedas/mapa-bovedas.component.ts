@@ -6,7 +6,7 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './mapa-bovedas.component.html',
-  styleUrl: './mapa-bovedas.component.css'
+  styleUrl: './mapa-bovedas.component.css',
 })
 export class MapaBovedasComponent {
   scale = 1;
@@ -37,7 +37,7 @@ export class MapaBovedasComponent {
   zoomOut(): void {
     this.applyZoom(this.scale * 0.8);
   }
-  resetZoom(): void { 
+  resetZoom(): void {
     this.scale = 1;
     const clamped = this.clampTranslate(0, 0);
     this.translateX = clamped.x;
@@ -103,8 +103,8 @@ export class MapaBovedasComponent {
   }
 
   //para calcular los limites segun el scale actual
-  //La lógica de clampTranslate funciona así: 
-  // si la imagen (con zoom aplicado) es más grande que el viewport, el usuario puede arrastrar solo hasta el borde de la imagen — nunca más allá. 
+  //La lógica de clampTranslate funciona así:
+  // si la imagen (con zoom aplicado) es más grande que el viewport, el usuario puede arrastrar solo hasta el borde de la imagen — nunca más allá.
   // Si la imagen es más pequeña que el viewport (scale muy reducido), la centra automáticamente.
   private clampTranslate(x: number, y: number): { x: number; y: number } {
     const el = document.querySelector('.mapa-viewport') as HTMLElement;
@@ -126,5 +126,4 @@ export class MapaBovedasComponent {
       y: Math.min(maxY, Math.max(minY, y)),
     };
   }
-
 }

@@ -14,6 +14,7 @@ import { BloquesService } from '../../services/bloques.service';
 import { GestionBovedasComponent } from '../../components/gestion-bloques/gestion-bovedas.component';
 import { Ocupacion } from '../../models/ocupacion.model';
 import { EspacioService } from '../../services/espacio.service';
+import { environment } from '../../../environments/environment.development';
 
 @Component({
   selector: 'app-inicio',
@@ -30,6 +31,9 @@ export class InicioComponent implements OnInit {
   bloques: any[] = [];
   loading = false;
   ocupacionesAgrupadas: any[] = []; // Variable para almacenar los fallecidos agrupados por numero de espacio
+  //propiedas para subir imagenes
+  imagenBloqueUrl: string = '';
+  imagenError: boolean = false;
 
   // Resumen de espacios para los badges
   resumenEspacios: { bovedas: number; nichos: number; cruces: number } = {
@@ -59,7 +63,7 @@ export class InicioComponent implements OnInit {
     private bloquesService: BloquesService,
     private modalService: NgbModal,
     private espacioService: EspacioService,
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.cargarSectores();
@@ -132,7 +136,6 @@ export class InicioComponent implements OnInit {
 
     this.ocupacionesAgrupadas = Array.from(mapa.values());
     console.log('Primer registro agrupado:', this.ocupacionesAgrupadas[0]); // <-- verificar
-
   }
   //aca cargamos las ocupaciones activas, usando la funcion creada en ocupaciones.service.ts
   cargarOcupaciones(): void {
@@ -227,9 +230,56 @@ export class InicioComponent implements OnInit {
         },
       });
   }
+  // Agregar este método para construir la URL de la imagen
+  // cuando el filtro de bloque esté activo
+  construirUrlImagen(): void {
+    if (!this.filtros.sector || !this.filtros.manzana || !this.filtros.bloque) {
+      this.imagenBloqueUrl = '';
+      return;
+    }
+
+    const s = String(this.filtros.sector).padStart(2, '0');
+    const m = String(this.filtros.manzana).padStart(2, '0');
+    const b = String(this.filtros.bloque).padStart(2, '0');
+
+    this.imagenBloqueUrl = `${environment.apiUrl}/images/bloques/${s}${m}/${s}${m}${b}.jpg`;
+    this.imagenError = false;
+  }
+
+  verImagenBloque(): void {
+    // Abre la imagen en modal — usa el componente image-modal que ya tienes
+    // o simplemente abre en una nueva pestaña si no tienes modal
+    window.open(this.imagenBloqueUrl, '_blank');
+  }
+
+  actualizarImagenBloque(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (!input.files || !input.files[0]) return;
+
+    const archivo = input.files[0];
+    const s = String(this.filtros.sector).padStart(2, '0');
+    const m = String(this.filtros.manzana).padStart(2, '0');
+    const b = String(this.filtros.bloque).padStart(2, '0');
+
+    this.bloquesService.subirImagenBloque(s, m, b, archivo).subscribe({
+      next: () => {
+        Swal.fire('Éxito', 'Imagen actualizada correctamente.', 'success');
+        // Forzar recarga de la imagen añadiendo timestamp para evitar caché
+        this.imagenBloqueUrl = `${environment.apiUrl}/images/bloques/${s}${m}/${s}${m}${b}.jpg?t=${Date.now()}`;
+        this.imagenError = false;
+      },
+      error: () => {
+        Swal.fire('Error', 'No se pudo actualizar la imagen.', 'error');
+      },
+    });
+
+    // Limpiar el input para permitir subir el mismo archivo de nuevo
+    input.value = '';
+  }
 
   // Función para manejar el cambio de sector
   onSectorChange(): void {
+    this.imagenBloqueUrl = ''; // <-- limpiar la URL de la imagen al cambiar de sector
     this.filtros.manzana = null;
     this.filtros.bloque = null;
     this.manzanas = [];
@@ -246,6 +296,7 @@ export class InicioComponent implements OnInit {
 
   // Función para manejar el cambio de manzana
   onManzanaChange(): void {
+    this.imagenBloqueUrl = ''; // <-- limpiar la URL de la imagen al cambiar de manzana
     this.filtros.bloque = null;
     this.bloques = [];
 
@@ -266,6 +317,7 @@ export class InicioComponent implements OnInit {
 
   // Función para manejar el cambio de bloque
   onBloqueChange(): void {
+    this.construirUrlImagen(); // <-- agregar para construir la URL de la imagen del bloque seleccionado
     this.aplicarFiltros();
   }
 
@@ -315,7 +367,7 @@ export class InicioComponent implements OnInit {
     return this.resumenEspacios.cruces;
   }
 
-  // eliminar espacio unicamente, aunque si el espacio tiene fallecidos no se podrá porque el backend no lo permitirá 
+  // eliminar espacio unicamente, aunque si el espacio tiene fallecidos no se podrá porque el backend no lo permitirá
   // ya que primero necesitar estar el espacio libre.
   eliminar(ocupacion: any): void {
     Swal.fire({
@@ -331,18 +383,27 @@ export class InicioComponent implements OnInit {
       if (result.isConfirmed) {
         this.espacioService.eliminarEspacio(ocupacion.id_espacio).subscribe({
           next: () => {
-            Swal.fire('Eliminado', 'El espacio fue eliminado correctamente.', 'success');
+            Swal.fire(
+              'Eliminado',
+              'El espacio fue eliminado correctamente.',
+              'success',
+            );
             // Recargar según el estado actual de los filtros
             if (this.filtros.busqueda) {
               this.buscarTexto();
-            } else if (this.filtros.sector || this.filtros.manzana || this.filtros.bloque) {
+            } else if (
+              this.filtros.sector ||
+              this.filtros.manzana ||
+              this.filtros.bloque
+            ) {
               this.aplicarFiltros();
             } else {
               this.cargarOcupaciones();
             }
           },
           error: (err) => {
-            const mensaje = err.error?.message || 'No se pudo eliminar el espacio.';
+            const mensaje =
+              err.error?.message || 'No se pudo eliminar el espacio.';
             Swal.fire('Error', mensaje, 'error');
           },
         });

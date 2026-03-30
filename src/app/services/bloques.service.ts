@@ -63,4 +63,17 @@ export class BloquesService {
       `${this.apiUrl}/bloques-en-venta/${id_bloque_venta}`,
     );
   }
+  subirImagenBloque(
+    sector: string,
+    manzana: string,
+    bloque: string,
+    archivo: File,
+  ): Observable<any> {
+    const formData = new FormData();
+    formData.append('imagen', archivo);
+    return this.http.post<any>(
+      `${this.apiUrl}/imagen/${sector}/${manzana}/${bloque}`,
+      formData,
+    );
+  }
 }
