@@ -135,7 +135,7 @@ export class InicioComponent implements OnInit {
     }
 
     this.ocupacionesAgrupadas = Array.from(mapa.values());
-    console.log('Primer registro agrupado:', this.ocupacionesAgrupadas[0]); // <-- verificar
+    console.log('Primer registro agrupado:', this.ocupacionesAgrupadas[0]);
   }
   //aca cargamos las ocupaciones activas, usando la funcion creada en ocupaciones.service.ts
   cargarOcupaciones(): void {
