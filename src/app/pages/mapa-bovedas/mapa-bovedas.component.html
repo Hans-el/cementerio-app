@@ -1,5 +1,5 @@
 <!-- Controles del mapa -->
-<div class="mapa-wrapper"> 
+<div class="mapa-wrapper">
   <div class="mapa-controles">
     <button class="btn-zoom bi bi-plus" (click)="zoomIn()"></button>
     <span class="zoom-nivel">{{ zoomLevel }}%</span>
@@ -8,8 +8,7 @@
       class="btn-zoom bi bi-arrow-clockwise"
       (click)="resetZoom()"
       title="Restablecer"
-    >
-    </button>
+    ></button>
   </div>
 
   <!-- En este div tenemos las herramientas de control del mapa 
@@ -24,9 +23,13 @@
     (touchmove)="onTouchMove($event)"
     (touchend)="onTouchEnd()"
   >
-  <!-- En este div tenemos la imagen del mapa. -->
+    <!-- En este div tenemos la imagen del mapa. -->
     <div class="mapa-canvas" [style.transform]="transform">
-      <img src="assets/map.png" alt="Croquis del cementerio de Colón" draggable="false" />
+      <img
+        src="assets/mapa.png"
+        alt="Croquis del cementerio de Colón"
+        draggable="false"
+      />
     </div>
   </div>
 </div>
