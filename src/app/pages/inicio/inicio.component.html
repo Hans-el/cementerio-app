@@ -12,24 +12,6 @@
   <!-- Cards de resumen con diseño mejorado -->
   <div class="row g-3 mb-4">
     <!-- Total Lotes -->
-    <div class="col-6 col-md">
-      <div class="card card-resumen border-0 h-100">
-        <div class="card-body p-3">
-          <div class="d-flex align-items-center">
-            <div class="bg-success bg-opacity-10 p-3 rounded-3 me-3">
-              <i class="bi bi-box-seam fs-4 text-success"></i>
-            </div>
-            <div>
-              <h6 class="text-white mb-1 small">Total Espacios</h6>
-              <h4 class="fw-bold text-white mb-0">
-                {{ obtenerTotalLotes() }}
-              </h4>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
     <!-- Bóvedas -->
     <div class="col-6 col-md">
       <div class="card card-resumen border-0 h-100">
@@ -86,11 +68,30 @@
         </div>
       </div>
     </div>
+    <div class="col-6 col-md">
+      <div class="card card-resumen border-0 h-100">
+        <div class="card-body p-3">
+          <div class="d-flex align-items-center">
+            <div class="bg-success bg-opacity-10 p-3 rounded-3 me-3">
+              <i class="bi bi-plus-lg fs-4 text-success"></i>
+            </div>
+            <div>
+              <h6 class="text-white mb-1 small">Lote</h6>
+              <h4 class="fw-bold text-white mb-0">
+                {{ resumenEspacios.lote }}
+              </h4>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Botón de acción -->
     <div class="col-12 col-md">
       <button
         class="btn btn-success w-100 h-100 d-flex flex-column align-items-center justify-content-center border-0 rounded-3 shadow-sm"
-        (click)="editarBovedas()">
+        (click)="editarBovedas()"
+      >
         <i class="bi bi-pencil-square fs-4 mb-1"></i>
         <span class="small fw-semibold">Espacios</span>
       </button>
@@ -117,16 +118,26 @@
             <span class="input-group-text bg-light border-end-0">
               <i class="bi bi-search text-muted"></i>
             </span>
-            <input type="text" class="form-control form-control bg-light border-start-1 ps-2"
-              placeholder="Código de Bloque (Ej. 01.02.03) o Nombre del fallecido" [(ngModel)]="filtros.busqueda"
-              (ngModelChange)="buscarTexto()" />
+            <input
+              type="text"
+              class="form-control form-control bg-light border-start-1 ps-2"
+              placeholder="Código de Bloque (Ej. 01.02.03) o Nombre del fallecido"
+              [(ngModel)]="filtros.busqueda"
+              (ngModelChange)="buscarTexto()"
+            />
           </div>
         </div>
 
         <!-- SECTOR -->
         <div class="col-md-2">
-          <label class="form-label text-muted small fw-semibold mb-1">Sector</label>
-          <select class="form-select form-select bg-light" [(ngModel)]="filtros.sector" (change)="onSectorChange()">
+          <label class="form-label text-muted small fw-semibold mb-1"
+            >Sector</label
+          >
+          <select
+            class="form-select form-select bg-light"
+            [(ngModel)]="filtros.sector"
+            (change)="onSectorChange()"
+          >
             <option [ngValue]="null">Todos</option>
             <option *ngFor="let s of sectores" [ngValue]="s.id_sector">
               {{ ("0" + s.codigo).slice(-2) }}
@@ -136,9 +147,15 @@
 
         <!-- MANZANA -->
         <div class="col-md-2">
-          <label class="form-label text-muted small fw-semibold mb-1">Manzana</label>
-          <select class="form-select form-select-lg bg-light" [(ngModel)]="filtros.manzana" (change)="onManzanaChange()"
-            [disabled]="!manzanas.length">
+          <label class="form-label text-muted small fw-semibold mb-1"
+            >Manzana</label
+          >
+          <select
+            class="form-select form-select-lg bg-light"
+            [(ngModel)]="filtros.manzana"
+            (change)="onManzanaChange()"
+            [disabled]="!manzanas.length"
+          >
             <option [ngValue]="null">Todas</option>
             <option *ngFor="let m of manzanas" [ngValue]="m.numero_manzana">
               {{ m.numero_manzana }}
@@ -148,9 +165,15 @@
 
         <!-- BLOQUE -->
         <div class="col-md-2">
-          <label class="form-label text-muted small fw-semibold mb-1">Bloque</label>
-          <select class="form-select form-select-lg bg-light" [(ngModel)]="filtros.bloque" (change)="onBloqueChange()"
-            [disabled]="!bloques.length">
+          <label class="form-label text-muted small fw-semibold mb-1"
+            >Bloque</label
+          >
+          <select
+            class="form-select form-select-lg bg-light"
+            [(ngModel)]="filtros.bloque"
+            (change)="onBloqueChange()"
+            [disabled]="!bloques.length"
+          >
             <option [ngValue]="null">Todos</option>
             <option *ngFor="let b of bloques" [ngValue]="b.numero_bloque">
               {{ b.numero_bloque }}
@@ -165,7 +188,9 @@
        TABLA - Diseño mejorado
   ======================== -->
   <div class="card border-0 shadow-sm">
-    <div class="card-header bg-white border-0 py-3 d-flex justify-content-between align-items-center">
+    <div
+      class="card-header bg-white border-0 py-3 d-flex justify-content-between align-items-center"
+    >
       <h6 class="fw-semibold text-secondary mb-0">
         <i class="bi bi-table me-2"></i>Listado de Ocupaciones
       </h6>
@@ -176,7 +201,9 @@
 
     <!-- Panel imagen del bloque — solo visible cuando hay bloque seleccionado por el filtro-->
     <div *ngIf="imagenBloqueUrl" class="card border-0 shadow-sm mb-4">
-      <div class="card-header bg-white border-0 py-3 d-flex justify-content-between align-items-center">
+      <div
+        class="card-header bg-white border-0 py-3 d-flex justify-content-between align-items-center"
+      >
         <h6 class="fw-semibold text-secondary mb-0">
           <i class="bi bi-image me-2 text-success"></i>
           Vista del bloque
@@ -185,25 +212,41 @@
           </span>
         </h6>
         <div class="d-flex gap-2">
-
           <!-- Botón ver imagen -->
-          <button class="btn btn-outline-secondary btn-sm" (click)="verImagenBloque()" title="Ver imagen completa">
+          <button
+            class="btn btn-outline-secondary btn-sm"
+            (click)="verImagenBloque()"
+            title="Ver imagen completa"
+          >
             <i class="bi bi-arrows-fullscreen me-1"></i>Ampliar
           </button>
 
           <!-- Botón actualizar imagen -->
-          <label class="btn btn-outline-success btn-sm mb-0" title="Actualizar imagen del bloque"
-            style="cursor: pointer;">
+          <label
+            class="btn btn-outline-success btn-sm mb-0"
+            title="Actualizar imagen del bloque"
+            style="cursor: pointer"
+          >
             <i class="bi bi-cloud-upload me-1"></i>Actualizar imagen
-            <input type="file" accept="image/*" class="d-none" (change)="actualizarImagenBloque($event)" />
+            <input
+              type="file"
+              accept="image/*"
+              class="d-none"
+              (change)="actualizarImagenBloque($event)"
+            />
           </label>
-
         </div>
       </div>
       <div class="card-body text-center py-3">
-        <img [src]="imagenBloqueUrl" class="img-fluid rounded-3" alt="Imagen del bloque"
-          style="max-height: 220px; cursor: pointer;" (click)="verImagenBloque()" (error)="imagenError = true"
-          *ngIf="!imagenError" />
+        <img
+          [src]="imagenBloqueUrl"
+          class="img-fluid rounded-3"
+          alt="Imagen del bloque"
+          style="max-height: 220px; cursor: pointer"
+          (click)="verImagenBloque()"
+          (error)="imagenError = true"
+          *ngIf="!imagenError"
+        />
         <div *ngIf="imagenError" class="py-4 text-muted">
           <i class="bi bi-image fs-1 d-block mb-2"></i>
           <small>No hay imagen disponible para este bloque</small>
@@ -233,7 +276,9 @@
           <tbody class="border-0">
             <tr *ngFor="let o of ocupacionesAgrupadas" class="border-bottom">
               <td class="px-4">
-                <span class="badge bg-success bg-opacity-10 text-success px-3 py-2 rounded-3">
+                <span
+                  class="badge bg-success bg-opacity-10 text-success px-3 py-2 rounded-3"
+                >
                   {{ o.codigo_bloque }}
                 </span>
               </td>
@@ -241,14 +286,19 @@
               <td class="fw-medium">{{ o.manzana }}</td>
               <td class="fw-medium">{{ o.bloque_lote }}</td>
               <td>
-                <span class="badge" [ngClass]="{
+                <span
+                  class="badge"
+                  [ngClass]="{
                     'bg-warning bg-opacity-10 text-':
                       o.tipo_ubicacion === 'BOVEDA',
                     'bg-secondary bg-opacity-10 text-':
                       o.tipo_ubicacion === 'NICHO',
                     'bg-danger bg-opacity-10 text-danger':
                       o.tipo_ubicacion === 'CRUZ',
-                  }">
+                    'bg-secondary bg-opacity-10 text-success ':
+                      o.tipo_ubicacion === 'LOTE',
+                  }"
+                >
                   {{ o.tipo_ubicacion }}
                 </span>
               </td>
@@ -256,7 +306,9 @@
               <!-- Columna fallecidos agrupados
                Hacemos esto para mostrar todos los fallecidos de un mismo espacio en un solo registro-->
               <td>
-                <ng-container *ngIf="o.fallecidos.length > 0; else sinFallecido">
+                <ng-container
+                  *ngIf="o.fallecidos.length > 0; else sinFallecido"
+                >
                   <div *ngFor="let nombre of o.fallecidos" class="small">
                     {{ nombre }}
                   </div>
@@ -279,7 +331,11 @@
               </td>
               <td class="px-4">
                 <div class="d-flex gap-2 justify-content-end">
-                  <button class="btn btn-danger border-1px" (click)="eliminar(o)" title="Eliminar">
+                  <button
+                    class="btn btn-danger border-1px"
+                    (click)="eliminar(o)"
+                    title="Eliminar"
+                  >
                     <i class="bi bi-trash"></i>
                   </button>
                 </div>
@@ -317,7 +373,10 @@
     <nav aria-label="Navegación de páginas">
       <ul class="pagination pagination-sm mb-0">
         <li class="page-item" [class.disabled]="page === 1">
-          <button class="page-link border-0 bg-light text-dark" (click)="paginaAnterior()">
+          <button
+            class="page-link border-0 bg-light text-dark"
+            (click)="paginaAnterior()"
+          >
             <i class="bi bi-chevron-left"></i>
             <span class="ms-1 d-none d-md-inline">Anterior</span>
           </button>
@@ -328,7 +387,10 @@
           </span>
         </li>
         <li class="page-item" [class.disabled]="page === totalPages">
-          <button class="page-link border-0 bg-light text-dark" (click)="siguientePagina()">
+          <button
+            class="page-link border-0 bg-light text-dark"
+            (click)="siguientePagina()"
+          >
             <span class="me-1 d-none d-md-inline">Siguiente</span>
             <i class="bi bi-chevron-right"></i>
           </button>

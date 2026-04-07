@@ -34,6 +34,7 @@ export class AnadirBovedaComponent implements OnInit {
   tiposEspacio: any[] = [
     { id_tipo_espacio: 1, nombre: 'Bóveda' },
     { id_tipo_espacio: 2, nombre: 'Nicho' },
+    { id_tipo_espacio: 4, nombre: 'Lote' },
   ]; //
 
   constructor(
@@ -42,12 +43,23 @@ export class AnadirBovedaComponent implements OnInit {
     private sectoresService: SectoresService,
     private manzanasService: ManzanasService,
     private bloquesService: BloquesService,
-  ) {}
+  ) { }
   // Al inicializar el componente, cargamos los sectores disponibles
   ngOnInit(): void {
     this.cargarSectores();
   }
-
+  // Getter para saber si el tipo seleccionado es LOTE
+  get esLote(): boolean {
+    return this.tiposEspacio.find(t => t.id_tipo_espacio === this.nuevoBloque.id_tipo_espacio)?.nombre === 'Lote';
+  }
+  // Cuando cambia el tipo, si es LOTE forzamos cantidad = 1
+  onTipoEspacioChange(): void {
+    if (this.esLote) {
+      this.nuevoBloque.cantidad_espacios = 1;
+    } else {
+      this.nuevoBloque.cantidad_espacios = null;
+    }
+  }
   // Función para cargar los sectores desde el servicio
   cargarSectores(): void {
     this.sectoresService.getSectores().subscribe({
@@ -88,7 +100,7 @@ export class AnadirBovedaComponent implements OnInit {
     });
   }
 
-  // Función para obtener el siguiente número de bloque disponible, no los que ya exsisten.
+  // Función para obtener el siguiente número de bloque disponible basado en los bloques existentes en la manzana seleccionada
   obtenerSiguienteNumeroBloque(): string {
     if (this.bloquesExistentes.length === 0) {
       return '1';

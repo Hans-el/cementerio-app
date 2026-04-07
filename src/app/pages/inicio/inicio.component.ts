@@ -36,10 +36,11 @@ export class InicioComponent implements OnInit {
   imagenError: boolean = false;
 
   // Resumen de espacios para los badges
-  resumenEspacios: { bovedas: number; nichos: number; cruces: number } = {
+  resumenEspacios: { bovedas: number; nichos: number; cruces: number; lote: number } = {
     bovedas: 0,
     nichos: 0,
     cruces: 0,
+    lote: 0,
   };
 
   // FILTROS (Se inicializan como vacíos o nulos para que no apliquen al cargar la página)
@@ -63,7 +64,7 @@ export class InicioComponent implements OnInit {
     private bloquesService: BloquesService,
     private modalService: NgbModal,
     private espacioService: EspacioService,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.cargarSectores();
@@ -242,7 +243,7 @@ export class InicioComponent implements OnInit {
     const m = String(this.filtros.manzana).padStart(2, '0');
     const b = String(this.filtros.bloque).padStart(2, '0');
 
-    this.imagenBloqueUrl = `${environment.apiUrl}/images/bloques/${s}${m}/${s}${m}${b}.jpg`;
+    this.imagenBloqueUrl = `${environment.apiUrl}/images/bloques/${s}${m}/${s}${m}${b}.jpg`; //ruta de la imagen del bloque
     this.imagenError = false;
   }
 
@@ -334,11 +335,19 @@ export class InicioComponent implements OnInit {
   cargarResumenEspacios(): void {
     this.espacioService.getResumenEspacios().subscribe({
       next: (resumen) => {
+        const resumenConLote = resumen as {
+          bovedas: number;
+          nichos: number;
+          cruces: number;
+          lotes: number;
+        };
+
         this.resumenEspacios = {
           // Asignamremos los valores obtenidos como números para poder sumarlos y obtener el total
-          bovedas: Number(resumen.bovedas),
-          nichos: Number(resumen.nichos),
-          cruces: Number(resumen.cruces),
+          bovedas: Number(resumenConLote.bovedas),
+          nichos: Number(resumenConLote.nichos),
+          cruces: Number(resumenConLote.cruces),
+          lote: Number(resumenConLote.lotes),
         };
       },
       error: () => {
@@ -347,11 +356,12 @@ export class InicioComponent implements OnInit {
     });
   }
   //Para obtener el total lo usamos aca, es decir, lo usamos con "resumenEspacios.lo_que_queremos"
-  obtenerTotalLotes(): number {
+  obtenerTotalEspacios(): number {
     return (
       this.resumenEspacios.bovedas +
       this.resumenEspacios.nichos +
-      this.resumenEspacios.cruces
+      this.resumenEspacios.cruces +
+      this.resumenEspacios.lote
     );
   }
   //obtener el total de bovedas
@@ -365,6 +375,10 @@ export class InicioComponent implements OnInit {
   //obtener el total de cruces
   obtenerTotalCruces(): number {
     return this.resumenEspacios.cruces;
+  }
+  //obtener el total de lotes
+  obtenerTotalLotes(): number {
+    return this.resumenEspacios.lote;
   }
 
   // eliminar espacio unicamente, aunque si el espacio tiene fallecidos no se podrá porque el backend no lo permitirá
