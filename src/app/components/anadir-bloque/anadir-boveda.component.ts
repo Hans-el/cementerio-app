@@ -43,14 +43,18 @@ export class AnadirBovedaComponent implements OnInit {
     private sectoresService: SectoresService,
     private manzanasService: ManzanasService,
     private bloquesService: BloquesService,
-  ) { }
+  ) {}
   // Al inicializar el componente, cargamos los sectores disponibles
   ngOnInit(): void {
     this.cargarSectores();
   }
   // Getter para saber si el tipo seleccionado es LOTE
   get esLote(): boolean {
-    return this.tiposEspacio.find(t => t.id_tipo_espacio === this.nuevoBloque.id_tipo_espacio)?.nombre === 'Lote';
+    return (
+      this.tiposEspacio.find(
+        (t) => t.id_tipo_espacio === this.nuevoBloque.id_tipo_espacio,
+      )?.nombre === 'Lote'
+    );
   }
   // Cuando cambia el tipo, si es LOTE forzamos cantidad = 1
   onTipoEspacioChange(): void {
