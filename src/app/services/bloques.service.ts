@@ -9,7 +9,7 @@ import { environment } from '../../environments/environment';
 export class BloquesService {
   private apiUrl = environment.apiUrl + '/bloques'; // Usamos la URL del entorno
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   // Obtener todos los bloques
   getBloques(): Observable<any[]> {
@@ -74,6 +74,15 @@ export class BloquesService {
     return this.http.post<any>(
       `${this.apiUrl}/imagen/${sector}/${manzana}/${bloque}`,
       formData,
+    );
+  }
+  /**
+ * Obtiene la URL de la foto de un bloque desde la base de datos.
+ * Cuando migremos a Cloudinary, solo el backend cambia — este método ya no se toca.
+ */
+  getFotoBloque(sector: string, manzana: string, bloque: string): Observable<{ foto_url: string | null }> {
+    return this.http.get<{ foto_url: string | null }>(
+      `${this.apiUrl}/imagen/${sector}/${manzana}/${bloque}`
     );
   }
 }

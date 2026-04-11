@@ -231,9 +231,8 @@ export class InicioComponent implements OnInit {
         },
       });
   }
-  // Agregar este método para construir la URL de la imagen
-  // cuando el filtro de bloque esté activo
-  construirUrlImagen(): void {
+  // obtener foto del bloque
+  cargarFotoBloque(): void {
     if (!this.filtros.sector || !this.filtros.manzana || !this.filtros.bloque) {
       this.imagenBloqueUrl = '';
       return;
@@ -243,8 +242,24 @@ export class InicioComponent implements OnInit {
     const m = String(this.filtros.manzana).padStart(2, '0');
     const b = String(this.filtros.bloque).padStart(2, '0');
 
-    this.imagenBloqueUrl = `${environment.apiUrl}/images/bloques/${s}${m}/${s}${m}${b}.jpg`; //ruta de la imagen del bloque
-    this.imagenError = false;
+    this.bloquesService.getFotoBloque(s, m, b).subscribe({
+      next: (response) => {
+        if (response.foto_url) {
+          // Extraemos solo el origen: http://192.168.100.64:3000
+          // y le concatenamos la foto_url que ya viene con /api/images/...
+          const origen = new URL(environment.apiUrl).origin;
+          this.imagenBloqueUrl = `${origen}${response.foto_url}`;
+          this.imagenError = false;
+        } else {
+          this.imagenBloqueUrl = '';
+          this.imagenError = true;
+        }
+      },
+      error: () => {
+        this.imagenBloqueUrl = '';
+        this.imagenError = true;
+      },
+    });
   }
 
   verImagenBloque(): void {
@@ -265,8 +280,8 @@ export class InicioComponent implements OnInit {
     this.bloquesService.subirImagenBloque(s, m, b, archivo).subscribe({
       next: () => {
         Swal.fire('Éxito', 'Imagen actualizada correctamente.', 'success');
-        // Forzar recarga de la imagen añadiendo timestamp para evitar caché
-        this.imagenBloqueUrl = `${environment.apiUrl}/images/bloques/${s}${m}/${s}${m}${b}.jpg?t=${Date.now()}`;
+        // Recargar la foto desde la BD en vez de construir la URL manualmente
+        this.cargarFotoBloque();
         this.imagenError = false;
       },
       error: () => {
@@ -274,13 +289,13 @@ export class InicioComponent implements OnInit {
       },
     });
 
-    // Limpiar el input para permitir subir el mismo archivo de nuevo
     input.value = '';
   }
 
   // Función para manejar el cambio de sector
   onSectorChange(): void {
-    this.imagenBloqueUrl = ''; // <-- limpiar la URL de la imagen al cambiar de sector
+    this.imagenBloqueUrl = ''; // limpiamos la URL de la imagen al cambiar de manzana
+    this.imagenError = false; // reseteamos el error de imagen al cambiar de manzana
     this.filtros.manzana = null;
     this.filtros.bloque = null;
     this.manzanas = [];
@@ -297,7 +312,8 @@ export class InicioComponent implements OnInit {
 
   // Función para manejar el cambio de manzana
   onManzanaChange(): void {
-    this.imagenBloqueUrl = ''; // <-- limpiar la URL de la imagen al cambiar de manzana
+    this.imagenBloqueUrl = '';
+    this.imagenError = false;
     this.filtros.bloque = null;
     this.bloques = [];
 
@@ -318,7 +334,7 @@ export class InicioComponent implements OnInit {
 
   // Función para manejar el cambio de bloque
   onBloqueChange(): void {
-    this.construirUrlImagen(); // <-- agregar para construir la URL de la imagen del bloque seleccionado
+    this.cargarFotoBloque(); // <-- agregar para construir la URL de la imagen del bloque seleccionado
     this.aplicarFiltros();
   }
 
