@@ -31,8 +31,7 @@ export class InicioDifuntosComponent implements OnInit {
 
   constructor(
     private modalService: NgbModal,
-    private fallecidoService: FallecidoService,
-  ) {}
+    private fallecidoService: FallecidoService,) { }
 
   ngOnInit(): void {
     this.cargarDifuntos(); // Cargar difuntos al iniciar el componente, lo usamos para el buscador

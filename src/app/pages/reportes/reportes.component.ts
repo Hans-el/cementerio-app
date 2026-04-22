@@ -20,9 +20,9 @@ export class ReportesComponent {
   useDateRange: boolean = true; // Variable para controlar si se usa rango de fechas, en caso de no haber pues que se generan todos los datos
   fechaActual: Date = new Date(); // Variable para mostrar la fecha actual en el HTML
 
-  constructor(private reportesService: ReportesService) {}
+  constructor(private reportesService: ReportesService) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   generateReport(): void {
     if (this.useDateRange && (!this.startDate || !this.endDate)) {
@@ -157,46 +157,60 @@ export class ReportesComponent {
     } else if (this.reportType === 'fallecidos') {
       headers = [
         [
-          'Fecha Creación',
+          'Fecha Registro',
           'Nombre Completo',
           'Fecha Fallecimiento',
           'Fecha Inhumación',
           'Fecha Exhumación',
-          'Observaciones',
           'Ubicación',
           'Espacio',
+          'Observaciones',
         ],
       ];
       dataForExcel = data.map((item) => [
-        item.fecha_creacion,
+        item.fecha_creacion
+          ? new Date(item.fecha_creacion).toLocaleDateString('es-EC')
+          : '—',
         item.nombre_completo,
-        item.fecha_fallecimiento || 'S/F',
-        item.fecha_inhumacion || 'S/F',
-        item.fecha_exhumacion || 'S/F',
-        item.observaciones,
+        item.fecha_fallecimiento
+          ? new Date(item.fecha_fallecimiento).toLocaleDateString('es-EC')
+          : 'S/F',
+        item.fecha_inhumacion
+          ? new Date(item.fecha_inhumacion).toLocaleDateString('es-EC')
+          : 'S/F',
+        item.fecha_exhumacion
+          ? new Date(item.fecha_exhumacion).toLocaleDateString('es-EC')
+          : 'S/F',
         item.codigo_bloque,
         item.espacio,
+        item.observaciones ?? '—',
       ]);
     } else if (this.reportType === 'bloques') {
-      headers = [
-        [
-          'ID Bloque',
-          'ID Manzana',
-          'Número Bloque',
-          'Cantidad Espacios',
-          'Observaciones',
-          'Fecha Creación',
-          'Fecha Actualización',
-        ],
-      ];
+      headers = [[
+        'Tipo de Cambio',
+        'Código Bloque',
+        'Sector',
+        'Manzana',
+        'Bloque',
+        'Tipo Espacio',
+        'Cantidad Espacios',
+        'Número Espacio',
+        'Observaciones',
+        'Fecha del Cambio',
+      ]];
       dataForExcel = data.map((item) => [
-        item.id_bloque,
-        item.id_manzana,
-        item.numero_bloque,
-        item.cantidad_espacios,
-        item.observaciones,
-        item.fecha_creacion,
-        item.fecha_actualizacion,
+        item.tipo_cambio,
+        item.codigo_bloque,
+        item.sector,
+        item.manzana,
+        item.bloque,
+        item.tipo_espacio,
+        item.cantidad_espacios ?? '—',
+        item.numero_espacio ?? '—',
+        item.observaciones ?? '—',
+        item.fecha_cambio
+          ? new Date(item.fecha_cambio).toLocaleDateString('es-EC')
+          : '—',
       ]);
     }
 

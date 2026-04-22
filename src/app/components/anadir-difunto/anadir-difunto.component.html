@@ -1,21 +1,33 @@
 <div class="modal-header border-0">
   <h5 class="modal-title fw-semibold">
     <i class="bi bi-person-plus-fill me-2 text-primary"></i>
-    Añadir difunto
+    Añadir Fallecido
   </h5>
-  <button type="button" class="btn-close" aria-label="Cerrar" (click)="activeModal.dismiss()"></button>
+  <button
+    type="button"
+    class="btn-close"
+    aria-label="Cerrar"
+    (click)="activeModal.dismiss()"
+  ></button>
 </div>
 
 <div class="modal-body pt-0">
   <form #difuntoForm="ngForm">
-    <!-- DATOS DEL DIFUNTO -->
-    <p class="fw-semibold text-muted mb-2">Datos del difunto</p>
+    <!-- DATOS DEL FALLECIDO -->
+    <p class="fw-semibold text-muted mb-2">Datos del fallecido</p>
 
     <div class="row">
       <div class="col-md-8 mb-3">
         <label for="nombre_completo" class="form-label">Nombre completo</label>
-        <input type="text" id="nombre_completo" class="form-control" placeholder="Nombres y apellidos"
-          [(ngModel)]="nuevoDifunto.nombre_completo" name="nombre_completo" required />
+        <input
+          type="text"
+          id="nombre_completo"
+          class="form-control"
+          placeholder="Nombres y apellidos"
+          [(ngModel)]="nuevoDifunto.nombre_completo"
+          name="nombre_completo"
+          required
+        />
       </div>
 
       <!-- Fecha de fallecimiento. Agregamos el atributo max para limitar la fecha a hoy, evitando fechas futuras. -->
@@ -23,8 +35,14 @@
         <label for="fecha_fallecimiento" class="form-label">
           Fecha de fallecimiento
         </label>
-        <input type="date" id="fecha_fallecimiento" class="form-control" [(ngModel)]="nuevoDifunto.fecha_fallecimiento"
-          name="fecha_fallecimiento" max="{{ today }}" />
+        <input
+          type="date"
+          id="fecha_fallecimiento"
+          class="form-control"
+          [(ngModel)]="nuevoDifunto.fecha_fallecimiento"
+          name="fecha_fallecimiento"
+          max="{{ today }}"
+        />
       </div>
     </div>
 
@@ -34,7 +52,13 @@
     <div class="row">
       <div class="col-md-6 mb-3">
         <label for="sector" class="form-label">Sector</label>
-        <select id="sector" class="form-select" [(ngModel)]="selectedSector" name="sector" (change)="onSectorChange()">
+        <select
+          id="sector"
+          class="form-select"
+          [(ngModel)]="selectedSector"
+          name="sector"
+          (change)="onSectorChange()"
+        >
           <option value="" disabled selected>Seleccione un sector</option>
           <option *ngFor="let sector of sectores" [value]="sector.id_sector">
             {{ sector.codigo }}
@@ -44,8 +68,14 @@
 
       <div class="col-md-6 mb-3">
         <label for="manzana" class="form-label">Manzana</label>
-        <select id="manzana" class="form-select" [(ngModel)]="selectedManzana" name="manzana"
-          (change)="onManzanaChange()" [disabled]="!selectedSector">
+        <select
+          id="manzana"
+          class="form-select"
+          [(ngModel)]="selectedManzana"
+          name="manzana"
+          (change)="onManzanaChange()"
+          [disabled]="!selectedSector"
+        >
           <option value="" disabled selected>Seleccione una manzana</option>
           <option *ngFor="let manzana of manzanas" [value]="manzana.id_manzana">
             {{ manzana.numero_manzana }}
@@ -57,8 +87,14 @@
     <div class="row">
       <div class="col-md-6 mb-3">
         <label for="bloque" class="form-label">Bloque</label>
-        <select id="bloque" class="form-select" [(ngModel)]="selectedBloque" name="bloque" (change)="onBloqueChange()"
-          [disabled]="!selectedManzana">
+        <select
+          id="bloque"
+          class="form-select"
+          [(ngModel)]="selectedBloque"
+          name="bloque"
+          (change)="onBloqueChange()"
+          [disabled]="!selectedManzana"
+        >
           <option value="" disabled selected>Seleccione un bloque</option>
           <option *ngFor="let bloque of bloques" [value]="bloque.id_bloque">
             {{ bloque.numero_bloque }}
@@ -68,8 +104,13 @@
 
       <div class="col-md-6 mb-3">
         <label for="espacio" class="form-label">Espacio</label>
-        <select id="espacio" class="form-select" [(ngModel)]="nuevoDifunto.id_espacio" name="espacio"
-          [disabled]="!selectedBloque">
+        <select
+          id="espacio"
+          class="form-select"
+          [(ngModel)]="nuevoDifunto.id_espacio"
+          name="espacio"
+          [disabled]="!selectedBloque"
+        >
           <option value="" disabled selected>Seleccione un espacio</option>
           <option *ngFor="let espacio of espacios" [value]="espacio.id_espacio">
             {{ espacio.tipo_espacio }} - {{ espacio.numero_espacio }}
@@ -79,19 +120,33 @@
       <!-- Observaciones-->
       <div class="col-12 mb-3">
         <label for="observaciones" class="form-label">Observaciones</label>
-        <textarea id="observaciones" class="form-control" rows="2" placeholder="Notas adicionales..."
-          [(ngModel)]="nuevoDifunto.observaciones" name="observaciones"></textarea>
+        <textarea
+          id="observaciones"
+          class="form-control"
+          rows="2"
+          placeholder="Notas adicionales..."
+          [(ngModel)]="nuevoDifunto.observaciones"
+          name="observaciones"
+        ></textarea>
       </div>
     </div>
   </form>
 </div>
 
 <div class="modal-footer border-0">
-  <button type="button" class="btn btn-danger fw-semibold" (click)="activeModal.dismiss()">
+  <button
+    type="button"
+    class="btn btn-danger fw-semibold"
+    (click)="activeModal.dismiss()"
+  >
     Cancelar
   </button>
 
-  <button type="button" class="btn btn-success fw-semibold" (click)="onSubmit()">
+  <button
+    type="button"
+    class="btn btn-success fw-semibold"
+    (click)="onSubmit()"
+  >
     <i class="bi bi-save me-1"></i>
     Guardar difunto
   </button>
