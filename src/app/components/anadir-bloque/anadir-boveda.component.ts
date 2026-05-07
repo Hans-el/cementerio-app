@@ -43,7 +43,7 @@ export class AnadirBovedaComponent implements OnInit {
     private sectoresService: SectoresService,
     private manzanasService: ManzanasService,
     private bloquesService: BloquesService,
-  ) {}
+  ) { }
   // Al inicializar el componente, cargamos los sectores disponibles
   ngOnInit(): void {
     this.cargarSectores();
