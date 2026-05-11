@@ -129,13 +129,36 @@ export class LocalizarModalComponent implements OnInit {
   localizarEnMapa(boveda: any) {
     // Cerrar el modal actual
     this.activeModal.dismiss();
-    //Solo mostraremos una alerta Swal con el codigo del SECTOR y la MANZANA pero en negritas para que resalte, y un mensaje que diga "LOCALIZADO EN EL MAPA"
+    const sector = this.formatoDosDigitos(boveda.sector);
+    const manzana = this.formatoDosDigitos(boveda.manzana);
+    const bloque = this.formatoDosDigitos(boveda.bloque);
+    const codigoBoveda = `${sector}.${manzana}.${bloque}`;
+
+    // Mostramos la ubicación con jerarquía visual clara: código completo, sector y manzana.
     Swal.fire({
-      title: 'LOCALIZADO EN EL MAPA',
-      html: `Tu ubicación está en: <h1> <strong> ${this.formatoDosDigitos(boveda.sector)}.${this.formatoDosDigitos(boveda.manzana)}</strong> </h1> 
-          Con el código: <h4> <strong> ${this.formatoDosDigitos(boveda.sector)}.${this.formatoDosDigitos(boveda.manzana)}.${this.formatoDosDigitos(boveda.bloque)}</strong> </h4>
-          <em> <h6> Nota: Los códigos están anotados en cada bloque. </h6> </em>`,
+      title: 'Ubicación encontrada',
+      html: `
+        <div style="text-align:left;">
+          <p style="margin:0 0 1rem 0; color:#6c757d;">El fallecido se encuentra en:</p>
+
+          <div style="display:flex; gap:.75rem; margin-bottom:1rem;">
+            <div style="flex:1; background:#f8f9fa; border:1px solid #e9ecef; border-radius:14px; padding:1rem; text-align:center;">
+              <div style="font-size:.75rem; font-weight:700; letter-spacing:.08em; color:#6c757d; text-transform:uppercase;">Sector.Manzana</div>
+              <div style="font-size:2rem; font-weight:800; color:#198754; line-height:1.1;">${sector}.${manzana}</div>
+            </div>            
+          </div>
+
+          <div style="background:#e9f7ef; border:1px solid #cdebd8; border-radius:14px; padding:.9rem 1rem; margin-bottom:1rem;">
+            <div style="font-size:.75rem; font-weight:700; letter-spacing:.08em; color:#198754; text-transform:uppercase; margin-bottom:.35rem;">Código completo</div>
+            <div style="font-size:1.25rem; font-weight:800; color:#14532d;">${codigoBoveda}</div>
+          </div>
+
+          <p style="margin:0; font-size:.92rem; color:#6c757d;">El primer código hace referencia a tu lugar en el mapa.<br>El codigo completo corresponde a tu ubicacion precisa.</p>
+        </div>
+      `,
       icon: 'success',
+      width: '34rem',
+      padding: '1.5rem',
       confirmButtonText: 'Aceptar',
       confirmButtonColor: '#28a745',
     });
