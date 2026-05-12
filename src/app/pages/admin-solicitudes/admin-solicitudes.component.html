@@ -1,0 +1,178 @@
+<div class="container-fluid py-4 px-4">
+
+    <!-- Header -->
+    <div class="d-flex align-items-center justify-content-between mb-4">
+        <h5 class="fw-semibold text-secondary mb-0">
+          <i class="bi bi-folder2-open me-2 text-success"></i>
+          Solicitudes de Inhumación
+        </h5>
+        <span class="badge bg-light text-dark px-3 py-2 rounded-pill">
+          {{ solicitudesFiltradas.length }} solicitudes
+        </span>
+      </div>
+      
+      <!-- Filtros -->
+      <div class="card border-0 shadow-sm mb-4">
+        <div class="card-body py-3">
+          <div class="row g-3 align-items-end">
+      
+            <!-- Estado -->
+            <div class="col-md-3">
+              <label class="form-label text-muted small fw-semibold mb-1">Estado</label>
+              <select class="form-select form-select-sm bg-light" [(ngModel)]="filtroEstado">
+                <option value="TODOS">Todos</option>
+                <option value="PENDIENTE">Pendientes</option>
+                <option value="APROBADA">Aprobadas</option>
+                <option value="RECHAZADA">Rechazadas</option>
+              </select>
+            </div>
+      
+            <!-- Fecha inicio -->
+            <div class="col-md-3">
+              <label class="form-label text-muted small fw-semibold mb-1">Desde</label>
+              <input type="date" class="form-control form-control-sm bg-light"
+                [(ngModel)]="filtroFechaInicio" />
+            </div>
+      
+            <!-- Fecha fin -->
+            <div class="col-md-3">
+              <label class="form-label text-muted small fw-semibold mb-1">Hasta</label>
+              <input type="date" class="form-control form-control-sm bg-light"
+                [(ngModel)]="filtroFechaFin" />
+            </div>
+      
+            <!-- Limpiar -->
+            <div class="col-md-3">
+              <button class="btn btn-outline-secondary btn-sm w-100"
+                (click)="limpiarFiltros()">
+                <i class="bi bi-x-circle me-1"></i>Limpiar filtros
+              </button>
+            </div>
+      
+          </div>
+        </div>
+      </div>
+  
+    <div class="row g-3">
+  
+      <!-- Lista de solicitudes -->
+      <div [class]="solicitudSeleccionada ? 'col-md-5' : 'col-12'">
+        <div class="card border-0 shadow-sm">
+          <div class="card-body p-0">
+  
+            <div *ngIf="loading" class="text-center py-5">
+              <div class="spinner-border text-success"></div>
+            </div>
+  
+            <div *ngIf="!loading && !solicitudesFiltradas.length" class="text-center py-5 text-muted">
+              <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+              No hay solicitudes
+            </div>
+  
+            <div *ngFor="let s of solicitudesFiltradas"
+              class="d-flex align-items-center justify-content-between px-4 py-3 border-bottom"
+              style="cursor: pointer;"
+              [class.bg-light]="solicitudSeleccionada?.id_solicitud === s.id_solicitud"
+              (click)="verDocumentos(s)">
+              <div>
+                <div class="fw-medium small">{{ s.nombre_usuario }}</div>
+                <div class="text-muted" style="font-size: 11px;">
+                  {{ s.cedula_usuario }} · {{ s.fecha_solicitud | date:'dd/MM/yyyy HH:mm' }}
+                </div>
+              </div>
+              <div class="d-flex flex-column align-items-end gap-1">
+                <span class="badge rounded-pill px-2 py-1 small" [class]="badgeClass(s.estado)">
+                  {{ s.estado }}
+                </span>
+                <span class="text-muted" style="font-size: 10px;">
+                  {{ s.total_documentos }}/7 docs
+                </span>
+              </div>
+            </div>
+  
+          </div>
+        </div>
+      </div>
+  
+      <!-- Panel de detalle -->
+      <div class="col-md-7" *ngIf="solicitudSeleccionada">
+        <div class="card border-0 shadow-sm">
+          <div class="card-header bg-white border-0 py-3 d-flex justify-content-between align-items-center">
+            <h6 class="fw-semibold text-secondary mb-0">
+              <i class="bi bi-person me-2"></i>{{ solicitudSeleccionada.nombre_usuario }}
+            </h6>
+            <button class="btn btn-sm btn-light" (click)="solicitudSeleccionada = null">
+              <i class="bi bi-x"></i>
+            </button>
+          </div>
+          <div class="card-body">
+  
+            <!-- Info del solicitante -->
+            <div class="row g-2 mb-4">
+              <div class="col-6">
+                <div class="text-muted small">Cédula</div>
+                <div class="fw-medium small">{{ solicitudSeleccionada.cedula_usuario }}</div>
+              </div>
+              <div class="col-6">
+                <div class="text-muted small">Correo</div>
+                <div class="fw-medium small">{{ solicitudSeleccionada.correo_usuario }}</div>
+              </div>
+              <div class="col-6">
+                <div class="text-muted small">Fecha solicitud</div>
+                <div class="fw-medium small">{{ solicitudSeleccionada.fecha_solicitud | date:'dd/MM/yyyy HH:mm' }}</div>
+              </div>
+              <div class="col-6">
+                <div class="text-muted small">Estado</div>
+                <span class="badge rounded-pill px-2 py-1 small" [class]="badgeClass(solicitudSeleccionada.estado)">
+                  {{ solicitudSeleccionada.estado }}
+                </span>
+              </div>
+              <div class="col-12" *ngIf="solicitudSeleccionada.observaciones">
+                <div class="text-muted small">Observaciones</div>
+                <div class="fw-medium small">{{ solicitudSeleccionada.observaciones }}</div>
+              </div>
+            </div>
+  
+            <!-- Documentos -->
+            <h6 class="fw-semibold text-secondary mb-3">
+              <i class="bi bi-paperclip me-2"></i>Documentos
+            </h6>
+  
+            <div *ngIf="loadingDocumentos" class="text-center py-3">
+              <div class="spinner-border spinner-border-sm text-success"></div>
+            </div>
+  
+            <div *ngIf="!loadingDocumentos">
+              <div *ngFor="let doc of documentosSolicitudActual"
+                class="d-flex align-items-center justify-content-between py-2 border-bottom">
+                <div class="d-flex align-items-center gap-2">
+                  <i class="bi bi-file-earmark-pdf text-danger"></i>
+                  <span class="small fw-medium">{{ doc.nombre_documento }}</span>
+                </div>
+                <a [href]="urlDocumento(doc.ruta_archivo)"
+                  target="_blank"
+                  class="btn btn-outline-secondary btn-sm">
+                  <i class="bi bi-eye me-1"></i>Ver
+                </a>
+              </div>
+            </div>
+  
+            <!-- Acciones -->
+            <div class="d-flex gap-2 justify-content-end mt-4"
+              *ngIf="solicitudSeleccionada.estado === 'PENDIENTE'">
+              <button class="btn btn-outline-danger btn-sm fw-semibold"
+                (click)="rechazar(solicitudSeleccionada)">
+                <i class="bi bi-x-circle me-1"></i>Rechazar
+              </button>
+              <button class="btn btn-success btn-sm fw-semibold"
+                (click)="aprobar(solicitudSeleccionada)">
+                <i class="bi bi-check-circle me-1"></i>Aprobar
+              </button>
+            </div>
+  
+          </div>
+        </div>
+      </div>
+  
+    </div>
+  </div>
