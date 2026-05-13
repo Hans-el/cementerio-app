@@ -13,6 +13,7 @@ import { ReportesComponent } from './pages/reportes/reportes.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { AdminSolicitudesComponent } from './pages/admin-solicitudes/admin-solicitudes.component';
 import { SolicitudInhumacionComponent } from './pages/solicitud-inhumacion/solicitud-inhumacion.component';
+import { SolicitudExhumacionComponent } from './pages/solicitud-exhumacion/solicitud-exhumacion.component';
 
 //rutas de la aplicación
 export const routes: Routes = [
@@ -29,6 +30,7 @@ export const routes: Routes = [
             { path: 'perfil', component: PerfilComponent }, //no puede acceder si no está autenticado, es decir, no podrá editar sus datos ya que no está logueado (si es que quiero usar el authGuard)
             { path: 'reportes', component: ReportesComponent, canActivate: [adminGuard] }, //para generar reportes de difuntos y ocupaciones. Uso para auditoría. Solo el admin puede acceder.
             { path: 'dashboard', component: DashboardComponent, canActivate: [adminGuard] }, //para mostrar un dashboard con estadísticas y gráficos. Solo el admin puede acceder.,
+            { path: 'exhumaciones', component: SolicitudExhumacionComponent, canActivate: [authGuard] },
             { path: 'inhumaciones', component: SolicitudInhumacionComponent, canActivate: [authGuard] },
             { path: 'admin/solicitudes', component: AdminSolicitudesComponent, canActivate: [authGuard, adminGuard] }
 

@@ -1,233 +1,218 @@
 <div class="container py-4" style="max-width: 760px;">
 
-    <!-- Cargando -->
-    <div *ngIf="cargando" class="text-center py-5">
-      <div class="spinner-border text-success"></div>
-    </div>
-  
-    <ng-container *ngIf="solicitudActiva && !modoNuevaSolicitud; else nuevaSolicitud">
-
-        <div class="d-flex align-items-center justify-content-between mb-4">
-          <div>
-            <h4 class="fw-semibold text-secondary mb-1">
-              <i class="bi bi-file-earmark-text me-2 text-success"></i>
-              Mi solicitud de Inhumación
-            </h4>
-            <p class="text-muted small mb-0">
-              Enviada el {{ solicitudActiva.fecha_solicitud | date:'dd/MM/yyyy HH:mm' }}
-            </p>
-          </div>
-          <span class="badge px-3 py-2 rounded-pill fw-semibold" [class]="badgeClass(solicitudActiva.estado)">
-            <i class="bi me-1" [class]="badgeIcon(solicitudActiva.estado)"></i>
-            {{ solicitudActiva.estado }}
-          </span>
-        </div>
-      
-        <!-- Mensaje según estado -->
-        <div class="alert mb-4"
-          [class.alert-warning]="solicitudActiva.estado === 'PENDIENTE'"
-          [class.alert-success]="solicitudActiva.estado === 'APROBADA'"
-          [class.alert-danger]="solicitudActiva.estado === 'RECHAZADA'">
-      
-          <ng-container [ngSwitch]="solicitudActiva.estado">
-      
-            <div *ngSwitchCase="'PENDIENTE'">
-              <i class="bi bi-clock me-2"></i>
-              Tu solicitud está siendo revisada. Recuerda acercarte a la administración
-              para realizar el pago de <strong>${{ PRECIO }}</strong>.
-            </div>
-      
-            <div *ngSwitchCase="'APROBADA'">
-              <i class="bi bi-check-circle me-2"></i>
-              ¡Tu solicitud fue aprobada!
-              <span *ngIf="solicitudActiva.fecha_actualizacion">
-                Aprobada el {{ solicitudActiva.fecha_actualizacion | date:'dd/MM/yyyy HH:mm' }}.
-              </span>
-            </div>
-      
-            <div *ngSwitchCase="'RECHAZADA'">
-              <i class="bi bi-x-circle me-2"></i>
-              <strong>Tu solicitud fue rechazada.</strong>
-              <div class="mt-2" *ngIf="solicitudActiva.observaciones">
-                <span class="fw-semibold">Motivo:</span> {{ solicitudActiva.observaciones }}
-              </div>
-              <div class="mt-2" *ngIf="!solicitudActiva.observaciones">
-                No se especificó un motivo. Contacta a la administración para más información.
-              </div>
-            </div>
-      
-          </ng-container>
-        </div>
-      
-        <!-- Documentos enviados -->
-        <div class="card border-0 shadow-sm mb-4">
-          <div class="card-header bg-white border-0 py-3">
-            <h6 class="fw-semibold text-secondary mb-0">
-              <i class="bi bi-paperclip me-2"></i>Documentos enviados
-            </h6>
-          </div>
-          <div class="card-body p-0">
-            <div *ngFor="let doc of documentosActivos"
-              class="d-flex align-items-center justify-content-between px-4 py-3 border-bottom">
-      
-              <div class="d-flex align-items-center gap-3">
-                <i class="bi bi-file-earmark-pdf text-danger fs-5"></i>
-                <div>
-                  <div class="fw-medium small">{{ doc.nombre_documento }}</div>
-                  <div class="text-muted" style="font-size: 11px;">
-                    Subido: {{ doc.fecha_subida | date:'dd/MM/yyyy HH:mm' }}
-                  </div>
-                </div>
-              </div>
-      
-              <div class="d-flex gap-2 align-items-center">
-                <a [href]="urlDocumento(doc.ruta_archivo)"
-                  target="_blank"
-                  class="btn btn-outline-secondary btn-sm">
-                  <i class="bi bi-eye me-1"></i>Ver
-                </a>
-                <label *ngIf="solicitudActiva.estado === 'PENDIENTE'"
-                  class="btn btn-outline-warning btn-sm mb-0"
-                  style="cursor: pointer;">
-                  <i class="bi bi-arrow-repeat me-1"></i>Editar
-                  <input type="file" accept="application/pdf" class="d-none"
-                    (change)="onReemplazarDocumento($event, doc)" />
-                </label>
-              </div>
-      
-            </div>
-          </div>
-        </div>
-      
-        <!-- Botón nueva solicitud — APROBADA o RECHAZADA -->
-        <div class="d-flex justify-content-end" *ngIf="puedeEnviarNueva">
-          <button class="btn btn-success px-4 fw-semibold" (click)="iniciarNuevaSolicitud()">
-            <i class="bi bi-plus-circle me-2"></i>
-            {{ solicitudActiva.estado === 'RECHAZADA' ? 'Reenviar solicitud' : 'Nueva solicitud' }}
-          </button>
-        </div>
-      
-      </ng-container>
-      
-      <!-- Nueva solicitud — incluye cancelar si viene de RECHAZADA/APROBADA -->
-      <ng-template #nuevaSolicitud>
-      
-        <div class="d-flex align-items-center justify-content-between mb-4">
-          <div>
-            <h4 class="fw-semibold text-secondary mb-1">
-              <i class="bi bi-file-earmark-arrow-up me-2 text-success"></i>
-              {{ modoNuevaSolicitud ? 'Nueva solicitud de Inhumación' : 'Solicitud de Inhumación' }}
-            </h4>
-            <p class="text-muted small mb-0">
-              Sube los documentos requeridos para iniciar tu solicitud.
-            </p>
-          </div>
-          <span class="badge bg-success bg-opacity-10 text-success px-3 py-2 rounded-pill fw-semibold">
-            Costo: ${{ PRECIO }}
-          </span>
-        </div>
-      
-        <!-- Botón cancelar — solo si viene de historial -->
-        <div class="mb-3" *ngIf="modoNuevaSolicitud">
-          <button class="btn btn-outline-secondary btn-sm" (click)="cancelarNuevaSolicitud()">
-            <i class="bi bi-arrow-left me-1"></i>Volver al historial
-          </button>
-        </div>
-      
-        <!-- Aviso de pago -->
-        <div class="alert alert-info d-flex align-items-start gap-2 mb-4">
-          <i class="bi bi-info-circle-fill mt-1 flex-shrink-0"></i>
-          <div>
-            <strong>Importante:</strong> Una vez enviada la solicitud, deberás acercarte a la
-            administración para realizar el pago de <strong>${{ PRECIO }}</strong>.
-            Tu solicitud será aprobada luego de confirmar el pago.
-          </div>
-        </div>
-      
-        <!-- Progreso -->
-        <div class="card border-0 shadow-sm mb-4">
-          <div class="card-body py-3">
-            <div class="d-flex justify-content-between align-items-center mb-2">
-              <span class="small fw-semibold text-muted">Documentos subidos</span>
-              <span class="small fw-bold"
-                [class.text-success]="todosSubidos"
-                [class.text-muted]="!todosSubidos">
-                {{ totalSubidos }} / {{ documentosRequeridos.length }}
-              </span>
-            </div>
-            <div class="progress" style="height: 6px; border-radius: 3px;">
-              <div class="progress-bar bg-success"
-                [style.width.%]="(totalSubidos / documentosRequeridos.length) * 100">
-              </div>
-            </div>
-          </div>
-        </div>
-      
-        <!-- Lista documentos -->
-        <div class="card border-0 shadow-sm mb-4">
-          <div class="card-header bg-white border-0 py-3">
-            <h6 class="fw-semibold text-secondary mb-0">
-              <i class="bi bi-paperclip me-2"></i>Documentos requeridos
-            </h6>
-          </div>
-          <div class="card-body p-0">
-            <div *ngFor="let doc of documentosRequeridos; let i = index"
-              class="d-flex align-items-center justify-content-between px-4 py-3 border-bottom">
-      
-              <div class="d-flex align-items-center gap-3">
-                <div class="rounded-circle d-flex align-items-center justify-content-center"
-                  style="width: 36px; height: 36px; flex-shrink: 0;"
-                  [class.bg-success]="archivos[i]"
-                  [class.bg-opacity-10]="archivos[i]"
-                  [class.bg-light]="!archivos[i]">
-                  <i class="bi fs-5"
-                    [class.bi-check-circle-fill]="archivos[i]"
-                    [class.text-success]="archivos[i]"
-                    [class.bi-file-earmark-pdf]="!archivos[i]"
-                    [class.text-muted]="!archivos[i]">
-                  </i>
-                </div>
-                <div>
-                  <div class="fw-medium small">{{ doc }}</div>
-                  <div class="text-muted" style="font-size: 11px;">
-                    {{ archivos[i] ? archivos[i]!.name : 'Sin archivo' }}
-                  </div>
-                </div>
-              </div>
-      
-              <div class="d-flex gap-2 align-items-center">
-                <ng-container *ngIf="!archivos[i]; else conArchivo">
-                  <label [for]="'doc-' + i"
-                    class="btn btn-outline-success btn-sm mb-0"
-                    style="cursor: pointer;">
-                    <i class="bi bi-upload me-1"></i>Subir PDF
-                    <input [id]="'doc-' + i" type="file" accept="application/pdf"
-                      class="d-none" (change)="onArchivoSeleccionado($event, i)" />
-                  </label>
-                </ng-container>
-                <ng-template #conArchivo>
-                  <span class="badge bg-success bg-opacity-10 text-success small">
-                    <i class="bi bi-check me-1"></i>Listo
-                  </span>
-                  <button class="btn btn-outline-danger btn-sm" (click)="eliminarArchivo(i)">
-                    <i class="bi bi-x"></i>
-                  </button>
-                </ng-template>
-              </div>
-      
-            </div>
-          </div>
-        </div>
-      
-        <div class="d-flex justify-content-end">
-          <button class="btn btn-success px-4 fw-semibold"
-            [disabled]="!todosSubidos || enviando"
-            (click)="enviarSolicitud()">
-            <span *ngIf="enviando" class="spinner-border spinner-border-sm me-2"></span>
-            <i *ngIf="!enviando" class="bi bi-send-fill me-2"></i>
-            {{ enviando ? 'Enviando...' : 'Enviar solicitud' }}
-          </button>
-        </div>
-      
-      </ng-template>
+  <!-- Cargando -->
+  <div *ngIf="cargando" class="text-center py-5">
+    <div class="spinner-border text-success"></div>
   </div>
+
+  <ng-container *ngIf="solicitudActiva && !modoNuevaSolicitud; else nuevaSolicitud">
+
+    <div class="d-flex align-items-center justify-content-between mb-4">
+      <div>
+        <h4 class="fw-semibold text-secondary mb-1">
+          <i class="bi bi-file-earmark-text me-2 text-success"></i>
+          Mi solicitud de Inhumación
+        </h4>
+        <p class="text-muted small mb-0">
+          Enviada el {{ solicitudActiva.fecha_solicitud | date:'dd/MM/yyyy HH:mm' }}
+        </p>
+      </div>
+      <span class="badge px-3 py-2 rounded-pill fw-semibold" [class]="badgeClass(solicitudActiva.estado)">
+        <i class="bi me-1" [class]="badgeIcon(solicitudActiva.estado)"></i>
+        {{ solicitudActiva.estado }}
+      </span>
+    </div>
+
+    <!-- Mensaje según estado -->
+    <div class="alert mb-4" [class.alert-warning]="solicitudActiva.estado === 'PENDIENTE'"
+      [class.alert-success]="solicitudActiva.estado === 'APROBADA'"
+      [class.alert-danger]="solicitudActiva.estado === 'RECHAZADA'">
+
+      <ng-container [ngSwitch]="solicitudActiva.estado">
+
+        <div *ngSwitchCase="'PENDIENTE'">
+          <i class="bi bi-clock me-2"></i>
+          Tu solicitud está siendo revisada. Recuerda acercarte a la administración
+          para realizar el pago de <strong>${{ PRECIO }}</strong>.
+        </div>
+
+        <div *ngSwitchCase="'APROBADA'">
+          <i class="bi bi-check-circle me-2"></i>
+          ¡Tu solicitud fue aprobada!
+          <span *ngIf="solicitudActiva.fecha_actualizacion">
+            Aprobada el {{ solicitudActiva.fecha_actualizacion | date:'dd/MM/yyyy HH:mm' }}.
+          </span>
+        </div>
+
+        <div *ngSwitchCase="'RECHAZADA'">
+          <i class="bi bi-x-circle me-2"></i>
+          <strong>Tu solicitud fue rechazada.</strong>
+          <div class="mt-2" *ngIf="solicitudActiva.observaciones">
+            <span class="fw-semibold">Motivo:</span> {{ solicitudActiva.observaciones }}
+          </div>
+          <div class="mt-2" *ngIf="!solicitudActiva.observaciones">
+            No se especificó un motivo. Contacta a la administración para más información.
+          </div>
+        </div>
+
+      </ng-container>
+    </div>
+
+    <!-- Documentos enviados -->
+    <div class="card border-0 shadow-sm mb-4">
+      <div class="card-header bg-white border-0 py-3">
+        <h6 class="fw-semibold text-secondary mb-0">
+          <i class="bi bi-paperclip me-2"></i>Documentos enviados
+        </h6>
+      </div>
+      <div class="card-body p-0">
+        <div *ngFor="let doc of documentosActivos"
+          class="d-flex align-items-center justify-content-between px-4 py-3 border-bottom">
+
+          <div class="d-flex align-items-center gap-3">
+            <i class="bi bi-file-earmark-pdf text-danger fs-5"></i>
+            <div>
+              <div class="fw-medium small">{{ doc.nombre_documento }}</div>
+              <div class="text-muted" style="font-size: 11px;">
+                Subido: {{ doc.fecha_subida | date:'dd/MM/yyyy HH:mm' }}
+              </div>
+            </div>
+          </div>
+
+          <div class="d-flex gap-2 align-items-center">
+            <a [href]="urlDocumento(doc.ruta_archivo)" target="_blank" class="btn btn-outline-secondary btn-sm">
+              <i class="bi bi-eye me-1"></i>Ver
+            </a>
+            <label *ngIf="solicitudActiva.estado === 'PENDIENTE'" class="btn btn-outline-warning btn-sm mb-0"
+              style="cursor: pointer;">
+              <i class="bi bi-arrow-repeat me-1"></i>Editar
+              <input type="file" accept="application/pdf" class="d-none"
+                (change)="onReemplazarDocumento($event, doc)" />
+            </label>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Botón nueva solicitud — APROBADA o RECHAZADA -->
+    <div class="d-flex justify-content-end" *ngIf="puedeEnviarNueva">
+      <button class="btn btn-success px-4 fw-semibold" (click)="iniciarNuevaSolicitud()">
+        <i class="bi bi-plus-circle me-2"></i>
+        {{ solicitudActiva.estado === 'RECHAZADA' ? 'Reenviar solicitud' : 'Nueva solicitud' }}
+      </button>
+    </div>
+
+  </ng-container>
+
+  <!-- Nueva solicitud — incluye cancelar si viene de RECHAZADA/APROBADA -->
+  <ng-template #nuevaSolicitud>
+
+    <div class="d-flex align-items-center justify-content-between mb-4">
+      <div>
+        <h4 class="fw-semibold text-secondary mb-1">
+          <i class="bi bi-file-earmark-arrow-up me-2 text-success"></i>
+          {{ modoNuevaSolicitud ? 'Nueva solicitud de Inhumación' : 'Solicitud de Inhumación' }}
+        </h4>
+        <p class="text-muted small mb-0">
+          Sube los documentos requeridos para iniciar tu solicitud.
+        </p>
+      </div>
+      <span class="badge bg-success bg-opacity-10 text-success px-3 py-2 rounded-pill fw-semibold">
+        Costo: ${{ PRECIO }}
+      </span>
+    </div>
+
+    <!-- Botón cancelar — solo si viene de historial -->
+    <div class="mb-3" *ngIf="modoNuevaSolicitud">
+      <button class="btn btn-outline-secondary btn-sm" (click)="cancelarNuevaSolicitud()">
+        <i class="bi bi-arrow-left me-1"></i>Volver al historial
+      </button>
+    </div>
+
+    <!-- Aviso de pago -->
+    <div class="alert alert-info d-flex align-items-start gap-2 mb-4">
+      <i class="bi bi-info-circle-fill mt-1 shrink-0"></i>
+      <div>
+        <strong>Importante:</strong> Una vez enviada la solicitud, deberás acercarte a la
+        administración para realizar el pago de <strong>${{ PRECIO }}</strong>.
+        Tu solicitud será aprobada luego de confirmar el pago.
+      </div>
+    </div>
+
+    <!-- Progreso -->
+    <div class="card border-0 shadow-sm mb-4">
+      <div class="card-body py-3">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <span class="small fw-semibold text-muted">Documentos subidos</span>
+          <span class="small fw-bold" [class.text-success]="todosSubidos" [class.text-muted]="!todosSubidos">
+            {{ totalSubidos }} / {{ documentosRequeridos.length }}
+          </span>
+        </div>
+        <div class="progress" style="height: 6px; border-radius: 3px;">
+          <div class="progress-bar bg-success" [style.width.%]="(totalSubidos / documentosRequeridos.length) * 100">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lista documentos -->
+    <div class="card border-0 shadow-sm mb-4">
+      <div class="card-header bg-white border-0 py-3">
+        <h6 class="fw-semibold text-secondary mb-0">
+          <i class="bi bi-paperclip me-2"></i>Documentos requeridos
+        </h6>
+      </div>
+      <div class="card-body p-0">
+        <div *ngFor="let doc of documentosRequeridos; let i = index"
+          class="d-flex align-items-center justify-content-between px-4 py-3 border-bottom">
+
+          <div class="d-flex align-items-center gap-3">
+            <div class="rounded-circle d-flex align-items-center justify-content-center"
+              style="width: 36px; height: 36px; flex-shrink: 0;" [class.bg-success]="archivos[i]"
+              [class.bg-opacity-10]="archivos[i]" [class.bg-light]="!archivos[i]">
+              <i class="bi fs-5" [class.bi-check-circle-fill]="archivos[i]" [class.text-success]="archivos[i]"
+                [class.bi-file-earmark-pdf]="!archivos[i]" [class.text-muted]="!archivos[i]">
+              </i>
+            </div>
+            <div>
+              <div class="fw-medium small">{{ doc }}</div>
+              <div class="text-muted" style="font-size: 11px;">
+                {{ archivos[i] ? archivos[i]!.name : 'Sin archivo' }}
+              </div>
+            </div>
+          </div>
+
+          <div class="d-flex gap-2 align-items-center">
+            <ng-container *ngIf="!archivos[i]; else conArchivo">
+              <label [for]="'doc-' + i" class="btn btn-outline-success btn-sm mb-0" style="cursor: pointer;">
+                <i class="bi bi-upload me-1"></i>Subir PDF
+                <input [id]="'doc-' + i" type="file" accept="application/pdf" class="d-none"
+                  (change)="onArchivoSeleccionado($event, i)" />
+              </label>
+            </ng-container>
+            <ng-template #conArchivo>
+              <span class="badge bg-success bg-opacity-10 text-success small">
+                <i class="bi bi-check me-1"></i>Listo
+              </span>
+              <button class="btn btn-outline-danger btn-sm" (click)="eliminarArchivo(i)">
+                <i class="bi bi-x"></i>
+              </button>
+            </ng-template>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-success px-4 fw-semibold" [disabled]="!todosSubidos || enviando"
+        (click)="enviarSolicitud()">
+        <span *ngIf="enviando" class="spinner-border spinner-border-sm me-2"></span>
+        <i *ngIf="!enviando" class="bi bi-send-fill me-2"></i>
+        {{ enviando ? 'Enviando...' : 'Enviar solicitud' }}
+      </button>
+    </div>
+
+  </ng-template>
+</div>

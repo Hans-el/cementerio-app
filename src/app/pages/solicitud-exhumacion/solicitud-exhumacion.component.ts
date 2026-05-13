@@ -1,59 +1,52 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { InhumacionService } from '../../services/inhumacion.service';
+import { ExhumacionService } from '../../services/exhumacion.service';
 import {
-  SolicitudInhumacion,
-  DocumentoInhumacion,
-} from '../../models/inhumacion.model';
-import { Router } from '@angular/router';
-import Swal from 'sweetalert2';
+  SolicitudExhumacion,
+  DocumentoExhumacion,
+} from '../../models/exhumacion.model';
 import { environment } from '../../../environments/environment';
+import Swal from 'sweetalert2';
 
-//archivos necesarios
 const DOCUMENTOS_REQUERIDOS = [
-  'Copia de Cédula del Propietario',
-  'Copia de Cédula del Fallecido',
-  'Copia de Cédula del familar más cercano',
-  'Copia Certificado del INEC',
-  'Copia Certificado de Defunción',
+  'Documento 1',
+  'Documento 2',
+  'Documento 3',
+  'Documento 4',
 ];
 
 @Component({
-  selector: 'app-solicitud-inhumacion',
+  selector: 'app-solicitud-exhumacion',
   standalone: true,
-  imports: [CommonModule, FormsModule],
-  templateUrl: './solicitud-inhumacion.component.html',
-  styleUrl: './solicitud-inhumacion.component.css',
+  imports: [CommonModule, FormsModule, DatePipe],
+  templateUrl: './solicitud-exhumacion.component.html',
+  styleUrl: './solicitud-exhumacion.component.css',
 })
-export class SolicitudInhumacionComponent {
+export class SolicitudExhumacionComponent implements OnInit {
   documentosRequeridos = DOCUMENTOS_REQUERIDOS;
   archivos: (File | null)[] = new Array(DOCUMENTOS_REQUERIDOS.length).fill(
     null,
   );
-
-  // Estado de la solicitud activa
-  solicitudActiva: SolicitudInhumacion | null = null;
-  documentosActivos: DocumentoInhumacion[] = [];
+  solicitudActiva: SolicitudExhumacion | null = null;
+  documentosActivos: DocumentoExhumacion[] = [];
 
   cargando = false;
   enviando = false;
-  reenviando = false;
   modoNuevaSolicitud = false;
 
-  readonly PRECIO = 10.81;
+  readonly PRECIO = 27.03;
   readonly apiBase = new URL(environment.apiUrl).origin;
 
-  constructor(private inhumacionService: InhumacionService) {}
+  constructor(private exhumacionService: ExhumacionService) {}
 
   ngOnInit(): void {
     this.verificarSolicitudActiva();
   }
 
-  // Al entrar al componente verificamos si ya tiene solicitud activa
   verificarSolicitudActiva(): void {
     this.cargando = true;
-    this.inhumacionService.getSolicitudActiva().subscribe({
+    this.exhumacionService.getSolicitudActiva().subscribe({
       next: (solicitud) => {
         this.solicitudActiva = solicitud;
         if (solicitud) {
@@ -69,7 +62,7 @@ export class SolicitudInhumacionComponent {
   }
 
   cargarDocumentosActivos(id_solicitud: number): void {
-    this.inhumacionService.getDocumentos(id_solicitud).subscribe({
+    this.exhumacionService.getDocumentos(id_solicitud).subscribe({
       next: (docs) => {
         this.documentosActivos = docs;
         this.cargando = false;
@@ -80,13 +73,10 @@ export class SolicitudInhumacionComponent {
     });
   }
 
-  // ---- Formulario nueva solicitud ----
-
   onArchivoSeleccionado(event: Event, index: number): void {
     const input = event.target as HTMLInputElement;
     if (!input.files?.[0]) return;
     const archivo = input.files[0];
-
     if (archivo.type !== 'application/pdf') {
       Swal.fire(
         'Formato inválido',
@@ -117,9 +107,39 @@ export class SolicitudInhumacionComponent {
   get todosSubidos(): boolean {
     return this.archivos.every((a) => a !== null);
   }
-
   get totalSubidos(): number {
     return this.archivos.filter((a) => a !== null).length;
+  }
+  get puedeEnviarNueva(): boolean {
+    return (
+      this.solicitudActiva?.estado === 'RECHAZADA' ||
+      this.solicitudActiva?.estado === 'APROBADA'
+    );
+  }
+
+  iniciarNuevaSolicitud(): void {
+    Swal.fire({
+      title: '¿Iniciar nueva solicitud?',
+      html:
+        this.solicitudActiva?.estado === 'RECHAZADA'
+          ? 'Tu solicitud anterior fue rechazada. Puedes enviar una nueva con los documentos corregidos.'
+          : '¿Deseas iniciar una nueva solicitud de exhumación?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, nueva solicitud',
+      cancelButtonText: 'Cancelar',
+      confirmButtonColor: '#2d5a27',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.modoNuevaSolicitud = true;
+        this.archivos = new Array(this.documentosRequeridos.length).fill(null);
+      }
+    });
+  }
+
+  cancelarNuevaSolicitud(): void {
+    this.modoNuevaSolicitud = false;
+    this.archivos = new Array(this.documentosRequeridos.length).fill(null);
   }
 
   enviarSolicitud(): void {
@@ -143,10 +163,10 @@ export class SolicitudInhumacionComponent {
     }).then((result) => {
       if (!result.isConfirmed) return;
       this.enviando = true;
-      this.inhumacionService.crearSolicitud(this.archivos as File[]).subscribe({
+      this.exhumacionService.crearSolicitud(this.archivos as File[]).subscribe({
         next: () => {
           this.enviando = false;
-          this.modoNuevaSolicitud = false; // <-- resetea la solicitud
+          this.modoNuevaSolicitud = false;
           Swal.fire({
             title: '¡Solicitud enviada!',
             html: `Tu solicitud fue registrada. Recuerda cancelar <strong>$${this.PRECIO}</strong> en la administración.`,
@@ -166,13 +186,10 @@ export class SolicitudInhumacionComponent {
     });
   }
 
-  // ---- Editar documento (solo PENDIENTE) ----
-
-  onReemplazarDocumento(event: Event, doc: DocumentoInhumacion): void {
+  onReemplazarDocumento(event: Event, doc: DocumentoExhumacion): void {
     const input = event.target as HTMLInputElement;
     if (!input.files?.[0]) return;
     const archivo = input.files[0];
-
     if (archivo.type !== 'application/pdf') {
       Swal.fire(
         'Formato inválido',
@@ -182,7 +199,6 @@ export class SolicitudInhumacionComponent {
       input.value = '';
       return;
     }
-
     Swal.fire({
       title: '¿Reemplazar documento?',
       text: `Se reemplazará "${doc.nombre_documento}".`,
@@ -196,8 +212,7 @@ export class SolicitudInhumacionComponent {
         input.value = '';
         return;
       }
-
-      this.inhumacionService
+      this.exhumacionService
         .reemplazarDocumento(doc.id_documento, archivo)
         .subscribe({
           next: () => {
@@ -221,37 +236,6 @@ export class SolicitudInhumacionComponent {
     });
   }
 
-  get puedeEnviarNueva(): boolean {
-    return (
-      this.solicitudActiva?.estado === 'RECHAZADA' ||
-      this.solicitudActiva?.estado === 'APROBADA'
-    );
-  }
-
-  iniciarNuevaSolicitud(): void {
-    Swal.fire({
-      title: '¿Iniciar nueva solicitud?',
-      html:
-        this.solicitudActiva?.estado === 'RECHAZADA'
-          ? 'Tu solicitud anterior fue rechazada. Puedes enviar una nueva con los documentos corregidos.'
-          : 'Tu solicitud anterior fue aprobada. ¿Deseas iniciar una nueva solicitud de inhumación?',
-      icon: 'question',
-      showCancelButton: true,
-      confirmButtonText: 'Sí, nueva solicitud',
-      cancelButtonText: 'Cancelar',
-      confirmButtonColor: '#2d5a27',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.modoNuevaSolicitud = true;
-        this.archivos = new Array(this.documentosRequeridos.length).fill(null);
-      }
-    });
-  }
-
-  cancelarNuevaSolicitud(): void {
-    this.modoNuevaSolicitud = false;
-    this.archivos = new Array(this.documentosRequeridos.length).fill(null);
-  }
   urlDocumento(ruta: string): string {
     return `${this.apiBase}${ruta}`;
   }
