@@ -13,7 +13,7 @@
 
   <!-- Selector de tipo -->
   <div class="card border-0 shadow-sm mb-3">
-    <div class="card-body py-2 px-3">
+    <div class="card-body py-4 px-4">
       <div class="d-flex gap-2">
         <button class="btn btn-sm fw-semibold px-4" [class.btn-success]="tipoActivo === 'inhumacion'"
           [class.btn-outline-secondary]="tipoActivo !== 'inhumacion'" (click)="cambiarTipo('inhumacion')">
@@ -31,7 +31,7 @@
 
   <!-- Filtros -->
   <div class="card border-0 shadow-sm mb-4">
-    <div class="card-body py-3">
+    <div class="card-body py-4 px-4">
       <div class="row g-3 align-items-end">
         <div class="col-md-3">
           <label class="form-label text-muted small fw-semibold mb-1">Estado</label>
@@ -63,8 +63,8 @@
 
     <!-- Lista de solicitudes -->
     <div [class]="solicitudSeleccionada ? 'col-md-5' : 'col-12'">
-      <div class="card border-0 shadow-sm">
-        <div class="card-body p-0">
+      <div class="card border shadow-sm">
+        <div class="card-body py-3 px-3 ">
 
           <div *ngIf="loading" class="text-center py-5">
             <div class="spinner-border text-success"></div>

@@ -44,7 +44,7 @@ export class AdminSolicitudesComponent implements OnInit {
   constructor(
     private inhumacionService: InhumacionService,
     private exhumacionService: ExhumacionService,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.cargarSolicitudes();
@@ -152,13 +152,13 @@ export class AdminSolicitudesComponent implements OnInit {
       const obs$ =
         this.tipoActivo === 'inhumacion'
           ? this.inhumacionService.cambiarEstado(
-              solicitud.id_solicitud,
-              'APROBADA',
-            )
+            solicitud.id_solicitud,
+            'APROBADA',
+          )
           : this.exhumacionService.cambiarEstado(
-              solicitud.id_solicitud,
-              'APROBADA',
-            );
+            solicitud.id_solicitud,
+            'APROBADA',
+          );
 
       obs$.subscribe({
         next: () => {
@@ -193,15 +193,15 @@ export class AdminSolicitudesComponent implements OnInit {
       const obs$ =
         this.tipoActivo === 'inhumacion'
           ? this.inhumacionService.cambiarEstado(
-              solicitud.id_solicitud,
-              'RECHAZADA',
-              result.value,
-            )
+            solicitud.id_solicitud,
+            'RECHAZADA',
+            result.value,
+          )
           : this.exhumacionService.cambiarEstado(
-              solicitud.id_solicitud,
-              'RECHAZADA',
-              result.value,
-            );
+            solicitud.id_solicitud,
+            'RECHAZADA',
+            result.value,
+          );
 
       obs$.subscribe({
         next: () => {
