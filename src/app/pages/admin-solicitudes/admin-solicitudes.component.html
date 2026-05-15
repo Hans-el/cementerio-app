@@ -122,6 +122,12 @@
               <div class="fw-medium small">{{ solicitudSeleccionada.correo_usuario }}</div>
             </div>
             <div class="col-6">
+              <div class="text-muted small">Teléfono</div>
+              <div class="fw-medium small">
+                {{ solicitudSeleccionada.telefono_usuario || '—' }}
+              </div>
+            </div>
+            <div class="col-6">
               <div class="text-muted small">Fecha solicitud</div>
               <div class="fw-medium small">
                 {{ solicitudSeleccionada.fecha_solicitud | date:'dd/MM/yyyy HH:mm' }}

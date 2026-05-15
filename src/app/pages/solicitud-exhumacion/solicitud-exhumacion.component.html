@@ -34,6 +34,7 @@
                     <i class="bi bi-clock me-2"></i>
                     Tu solicitud está siendo revisada. Recuerda acercarte a la administración
                     para realizar el pago de <strong>${{ PRECIO }}</strong>.
+                    <span>Serás notificado por correo o teléfono.</span>
                 </div>
 
                 <div *ngSwitchCase="'APROBADA'">
@@ -42,6 +43,8 @@
                     <span *ngIf="solicitudActiva.fecha_actualizacion">
                         Aprobada el {{ solicitudActiva.fecha_actualizacion | date:'dd/MM/yyyy HH:mm' }}.
                     </span>
+                    <br>
+                    <span>Acércate al cementerio para realizar el proceso de exhumación.</span>
                 </div>
 
                 <div *ngSwitchCase="'RECHAZADA'">

@@ -7,6 +7,7 @@ export interface SolicitudExhumacion {
   nombre_usuario: string;
   cedula_usuario: string;
   correo_usuario: string;
+  telefono_usuario: string | null;
   total_documentos: number;
 }
 

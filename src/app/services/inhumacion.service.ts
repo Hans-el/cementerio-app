@@ -57,4 +57,8 @@ export class InhumacionService {
     formData.append('documento', archivo);
     return this.http.put<any>(`${this.apiUrl}/documentos/${id_documento}`, formData);
   }
+  // En inhumacion.service.ts
+  getPendientesCount(): Observable<{ total: number }> {
+    return this.http.get<{ total: number }>(`${this.apiUrl}/pendientes/count`);
+  }
 }

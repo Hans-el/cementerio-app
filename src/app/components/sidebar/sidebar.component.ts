@@ -10,6 +10,9 @@ import { LocalizarModalComponent } from '../localizar-modal/localizar-modal.comp
 import { DisponibilidadModalComponent } from '../disponibilidad-modal/disponibilidad-modal.component';
 import { GestionBovedasComponent } from '../gestion-bloques/gestion-bovedas.component';
 import { UsuarioService } from '../../services/usuario.service';
+import { ExhumacionService } from '../../services/exhumacion.service';
+import { InhumacionService } from '../../services/inhumacion.service';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-sidebar',
@@ -19,6 +22,7 @@ import { UsuarioService } from '../../services/usuario.service';
   styleUrls: ['./sidebar.component.css'],
 })
 export class SidebarComponent implements OnInit {
+  solicitudesPendientes = 0;
   userRole: string = 'Invitado'; // Valor por defecto si no inicia sesión
   userName: string = ''; // Nombre del usuario para mostrar en el sidebar
   isCollapsed = false; // Estado del sidebar
@@ -30,7 +34,9 @@ export class SidebarComponent implements OnInit {
     private router: Router,
     private modalService: NgbModal,
     private usuarioService: UsuarioService,
-  ) {}
+    private exhumacionService: ExhumacionService,
+    private inhumacionService: InhumacionService
+  ) { }
 
   // Este HostListener escucha los cambios en el tamaño de la ventana para adaptar el sidebar a dispositivos móviles
   @HostListener('window:resize')
@@ -47,6 +53,23 @@ export class SidebarComponent implements OnInit {
     this.userRole = this.authService.getUserRole(); // Obtiene el rol al inicializar
     //this.userName = this.usuarioService.getUserName(t
     this.checkIfMobile();
+    if (this.userRole === 'admin') {
+      this.cargarPendientes();
+      // Refrescar cada 60 segundos para mantener el badge actualizado
+      setInterval(() => this.cargarPendientes(), 60000);
+    }
+  }
+  //para las notificaciones de solicitudes pendientes en el admin
+  cargarPendientes(): void {
+    forkJoin({
+      inhumaciones: this.inhumacionService.getPendientesCount(),
+      exhumaciones: this.exhumacionService.getPendientesCount(),
+    }).subscribe({
+      next: ({ inhumaciones, exhumaciones }) => {
+        this.solicitudesPendientes = inhumaciones.total + exhumaciones.total;
+      },
+      error: () => { } // silencioso — no es crítico
+    });
   }
 
   toggleSidebar() {

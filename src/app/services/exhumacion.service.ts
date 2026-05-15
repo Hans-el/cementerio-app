@@ -13,7 +13,7 @@ import {
 export class ExhumacionService {
   private apiUrl = environment.apiUrl + '/exhumaciones';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
   crearSolicitud(archivos: File[]): Observable<any> {
     const formData = new FormData();
     archivos.forEach((archivo) => formData.append('documentos', archivo));
@@ -52,5 +52,9 @@ export class ExhumacionService {
       `${this.apiUrl}/documentos/${id_documento}`,
       formData,
     );
+  }
+  // En exhumacion.service.ts — igual
+  getPendientesCount(): Observable<{ total: number }> {
+    return this.http.get<{ total: number }>(`${this.apiUrl}/pendientes/count`);
   }
 }

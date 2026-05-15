@@ -26,7 +26,6 @@ type Solicitud = SolicitudInhumacion | SolicitudExhumacion;
 })
 export class AdminSolicitudesComponent implements OnInit {
   tipoActivo: TipoSolicitud = 'inhumacion';
-
   solicitudes: Solicitud[] = [];
   documentosSolicitudActual: any[] = [];
   solicitudSeleccionada: Solicitud | null = null;
