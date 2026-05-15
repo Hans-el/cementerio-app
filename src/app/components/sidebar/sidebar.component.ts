@@ -13,6 +13,7 @@ import { UsuarioService } from '../../services/usuario.service';
 import { ExhumacionService } from '../../services/exhumacion.service';
 import { InhumacionService } from '../../services/inhumacion.service';
 import { forkJoin } from 'rxjs';
+import { set } from 'date-fns';
 
 @Component({
   selector: 'app-sidebar',
@@ -54,9 +55,11 @@ export class SidebarComponent implements OnInit {
     //this.userName = this.usuarioService.getUserName(t
     this.checkIfMobile();
     if (this.userRole === 'admin') {
-      this.cargarPendientes();
-      // Refrescar cada 60 segundos para mantener el badge actualizado
-      setInterval(() => this.cargarPendientes(), 60000);
+      setTimeout(() => {
+        this.cargarPendientes();
+        // Refrescar cada 60 segundos para mantener el badge actualizado
+        setInterval(() => this.cargarPendientes(), 60000);
+      }, 500);
     }
   }
   //para las notificaciones de solicitudes pendientes en el admin
@@ -68,7 +71,11 @@ export class SidebarComponent implements OnInit {
       next: ({ inhumaciones, exhumaciones }) => {
         this.solicitudesPendientes = inhumaciones.total + exhumaciones.total;
       },
-      error: () => { } // silencioso — no es crítico
+      error: (err) => {
+        console.error('Error al cargar pendientes:', err);
+        console.error('Status:', err.status);
+        console.error('Mensaje:', err.error);
+      }
     });
   }
 
