@@ -16,5 +16,6 @@ export interface DocumentoExhumacion {
   id_solicitud: number;
   nombre_documento: string;
   ruta_archivo: string;
+  url_firmada: string | null;
   fecha_subida: string;
 }

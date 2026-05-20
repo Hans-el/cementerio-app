@@ -168,7 +168,7 @@
                 <i class="bi bi-file-earmark-pdf text-danger"></i>
                 <span class="small fw-medium">{{ doc.nombre_documento }}</span>
               </div>
-              <a [href]="urlDocumento(doc.ruta_archivo)" target="_blank" class="btn btn-outline-secondary btn-sm">
+              <a [href]="doc.url_firmada" target="_blank" [class.disabled]="!doc.url_firmada">
                 <i class="bi bi-eye me-1"></i>Ver
               </a>
             </div>

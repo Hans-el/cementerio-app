@@ -231,7 +231,37 @@ export class InicioComponent implements OnInit {
         },
       });
   }
-  // obtener foto del bloque
+  // cargar foto del bloque de manera local, usar cuando estemos haciendo pruebas sin supabase, es decir, cuando la URL de la imagen del bloque se construya a partir de la URL base del backend + la ruta de la imagen guardada en la BD
+  // cargarFotoBloque(): void {
+  //   if (!this.filtros.sector || !this.filtros.manzana || !this.filtros.bloque) {
+  //     this.imagenBloqueUrl = '';
+  //     return;
+  //   }
+
+  //   const s = String(this.filtros.sector).padStart(2, '0');
+  //   const m = String(this.filtros.manzana).padStart(2, '0');
+  //   const b = String(this.filtros.bloque).padStart(2, '0');
+
+  //   this.bloquesService.getFotoBloque(s, m, b).subscribe({
+  //     next: (response) => {
+  //       if (response.foto_url) {
+  //    
+  //         const origen = new URL(environment.apiUrl).origin;
+  //         this.imagenBloqueUrl = `${origen}${response.foto_url}`;
+  //         this.imagenError = false;
+  //       } else {
+  //         this.imagenBloqueUrl = '';
+  //         this.imagenError = true;
+  //       }
+  //     },
+  //     error: () => {
+  //       this.imagenBloqueUrl = '';
+  //       this.imagenError = true;
+  //     },
+  //   });
+  // }
+
+  //Para cargarla desde supabase, ya que supabase nos devuelve la URL completa con el dominio incluido.
   cargarFotoBloque(): void {
     if (!this.filtros.sector || !this.filtros.manzana || !this.filtros.bloque) {
       this.imagenBloqueUrl = '';
@@ -244,16 +274,9 @@ export class InicioComponent implements OnInit {
 
     this.bloquesService.getFotoBloque(s, m, b).subscribe({
       next: (response) => {
-        if (response.foto_url) {
-          // Extraemos solo el origen: http://192.168.100.64:3000
-          // y le concatenamos la foto_url que ya viene con /api/images/...
-          const origen = new URL(environment.apiUrl).origin;
-          this.imagenBloqueUrl = `${origen}${response.foto_url}`;
-          this.imagenError = false;
-        } else {
-          this.imagenBloqueUrl = '';
-          this.imagenError = true;
-        }
+        // La URL de Supabase ya es absoluta — no necesita apiBase
+        this.imagenBloqueUrl = response.foto_url ?? '';
+        this.imagenError = !response.foto_url;
       },
       error: () => {
         this.imagenBloqueUrl = '';
