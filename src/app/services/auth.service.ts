@@ -12,8 +12,8 @@ export class AuthService {
 
   constructor(
     private http: HttpClient,
-    apiService: ApiService,
-  ) {}
+    private apiService: ApiService,
+  ) { }
 
   // Método para iniciar sesión
   login(cedula: string, contrasena: string): Observable<any> {

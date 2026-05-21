@@ -10,7 +10,7 @@ import { environment } from '../../environments/environment';
 export class ApiService {
   private apiUrl = environment.apiUrl;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getHeaders(token?: string) {
     let headers = new HttpHeaders({
