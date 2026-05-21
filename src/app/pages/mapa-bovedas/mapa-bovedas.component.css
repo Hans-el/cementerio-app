@@ -83,3 +83,17 @@
   padding: 2px 6px;
   border-radius: 4px;
 }
+/* ── Móvil ────── */
+@media (max-width: 768px) {
+  :host {
+    padding: 0;
+    /* Altura = pantalla completa menos la altura del sidebar móvil */
+    height: calc(100dvh);
+  }
+
+  .mapa-canvas img {
+    /* En móvil la imagen parte con un ancho fijo para que sea navegable */
+    width: auto;
+    height: 100dvh;
+  }
+}

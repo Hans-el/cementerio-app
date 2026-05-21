@@ -1,5 +1,5 @@
-import { Component, Output, EventEmitter, HostListener } from '@angular/core';
-import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { Component, Output, EventEmitter, HostListener, ElementRef } from '@angular/core';
+import { NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import Swal from 'sweetalert2';
 import { OnInit } from '@angular/core';
@@ -13,7 +13,8 @@ import { UsuarioService } from '../../services/usuario.service';
 import { ExhumacionService } from '../../services/exhumacion.service';
 import { InhumacionService } from '../../services/inhumacion.service';
 import { forkJoin } from 'rxjs';
-import { set } from 'date-fns';
+import { filter } from 'rxjs/operators';
+
 
 @Component({
   selector: 'app-sidebar',
@@ -36,12 +37,13 @@ export class SidebarComponent implements OnInit {
     private modalService: NgbModal,
     private usuarioService: UsuarioService,
     private exhumacionService: ExhumacionService,
-    private inhumacionService: InhumacionService
+    private inhumacionService: InhumacionService,
+    private elementRef: ElementRef
   ) { }
 
   // Este HostListener escucha los cambios en el tamaño de la ventana para adaptar el sidebar a dispositivos móviles
   @HostListener('window:resize')
-  checkIfMobile(event?: Event) {
+  checkIfMobile() {
     this.isMobile = window.innerWidth <= 768;
     if (this.isMobile) {
       this.isCollapsed = true;
@@ -49,11 +51,31 @@ export class SidebarComponent implements OnInit {
       this.isCollapsed = false;
     }
   }
+  // Cierra el sidebar al tocar fuera de él en móvil
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    if (!this.isMobile || this.isCollapsed) return;
+
+    const clickDentroSidebar = this.elementRef.nativeElement.contains(event.target);
+    const clickEnBotonToggle = (event.target as HTMLElement).closest('.btn-toggle-sidebar');
+
+    if (!clickDentroSidebar && !clickEnBotonToggle) {
+      this.isCollapsed = true;
+    }
+  }
+
 
   ngOnInit(): void {
     this.userRole = this.authService.getUserRole(); // Obtiene el rol al inicializar
-    //this.userName = this.usuarioService.getUserName(t
     this.checkIfMobile();
+    // Cierra el sidebar automáticamente al navegar en móvil
+    this.router.events
+      .pipe(filter(event => event instanceof NavigationEnd))
+      .subscribe(() => {
+        if (this.isMobile) {
+          this.isCollapsed = true;
+        }
+      });
     if (this.userRole === 'admin') {
       setTimeout(() => {
         this.cargarPendientes();
@@ -78,18 +100,21 @@ export class SidebarComponent implements OnInit {
       }
     });
   }
-
   toggleSidebar() {
     this.isCollapsed = !this.isCollapsed;
   }
-
+  // Cierra el sidebar al hacer click en cualquier nav-link en móvil
+  cerrarEnMovil(): void {
+    if (this.isMobile) {
+      this.isCollapsed = true;
+    }
+  }
   openLocalizarModal() {
     this.modalService.open(LocalizarModalComponent, {
       centered: true,
       size: 'md',
     });
   }
-
   openDisponibilidadModal() {
     this.modalService.open(DisponibilidadModalComponent, {
       centered: true,

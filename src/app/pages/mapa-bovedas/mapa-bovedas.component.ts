@@ -10,7 +10,7 @@ import { CommonModule } from '@angular/common';
 })
 export class MapaBovedasComponent {
   scale = 1;
-  minScale = 0.5;
+  minScale = 1;
   maxScale = 4;
   translateX = 0;
   translateY = 0;
