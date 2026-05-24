@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 
@@ -9,7 +9,7 @@ import { environment } from '../../environments/environment';
 export class ReportesService {
   private apiUrl = environment.apiUrl + '/reportes'; // Usamos la URL del entorno
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   // Reportes de ocupaciones
   getReporteOcupaciones(
@@ -45,5 +45,19 @@ export class ReportesService {
       params.endDate = endDate;
     }
     return this.http.get<any[]>(`${this.apiUrl}/bloques`, { params });
+  }
+  //Reporte de solicitudes exhumaciones/inhumaciones
+  getReporteSolicitudes(
+    startDate?: string,
+    endDate?: string,
+    tipo?: string,
+    estado?: string
+  ): Observable<any[]> {
+    let params = new HttpParams();
+    if (startDate) params = params.set('startDate', startDate);
+    if (endDate) params = params.set('endDate', endDate);
+    if (tipo) params = params.set('tipo', tipo);
+    if (estado) params = params.set('estado', estado);
+    return this.http.get<any[]>(`${this.apiUrl}/solicitudes`, { params });
   }
 }

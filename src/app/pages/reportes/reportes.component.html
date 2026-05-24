@@ -27,38 +27,50 @@
 
         <!-- TIPO DE REPORTE -->
         <div class="mb-4">
-          <label
-            for="reportType"
-            class="form-label fw-semibold small text-muted"
-          >
+          <label for="reportType" class="form-label fw-semibold small text-muted">
             Tipo de reporte
           </label>
 
-          <select
-            id="reportType"
-            class="form-select form-control-institucional"
-            [(ngModel)]="reportType"
-            name="reportType"
-          >
-            <option value="ocupaciones">Ocupaciones</option>
-            <option value="fallecidos">Fallecidos</option>
-            <option value="bloques">Infraestructura</option>
+          <select id="reportType" class="form-select form-control-institucional" [(ngModel)]="reportType"
+            name="reportType">
+            <option value="Espacios">Espacios</option>
+            <option value="Fallecidos">Fallecidos</option>
+            <option value="Solicitudes">Solicitudes</option>
           </select>
         </div>
+        <!-- Extra selector por si selecciona solicitudes -->
+        <ng-container *ngIf="reportType === 'Solicitudes'">
+          <div class="row mt-3">
+            <div class="col-md-6 mb-3">
+              <label class="form-label small fw-semibold text-muted">Tipo de trámite</label>
+              <select class="form-select form-control-institucional" [(ngModel)]="filtroTipoSolicitud"
+                name="filtroTipo">
+                <option value="TODOS">Todos</option>
+                <option value="inhumacion">Inhumación</option>
+                <option value="exhumacion">Exhumación</option>
+              </select>
+            </div>
+
+            <div class="col-md-6 mb-3">
+              <label class="form-label small fw-semibold text-muted">Estado</label>
+              <select class="form-select form-control-institucional" [(ngModel)]="filtroEstadoSolicitud"
+                name="filtroEstado">
+                <option value="TODOS">Todos</option>
+                <option value="PENDIENTE">Pendientes</option>
+                <option value="APROBADA">Aprobadas</option>
+                <option value="RECHAZADA">Rechazadas</option>
+              </select>
+            </div>
+
+          </div>
+        </ng-container>
+
 
         <!-- CHECK RANGO -->
         <div class="form-check mb-3">
-          <input
-            type="checkbox"
-            class="form-check-input"
-            id="useDateRange"
-            [(ngModel)]="useDateRange"
-            name="useDateRange"
-          />
-          <label
-            class="form-check-label small fw-semibold text-muted"
-            for="useDateRange"
-          >
+          <input type="checkbox" class="form-check-input" id="useDateRange" [(ngModel)]="useDateRange"
+            name="useDateRange" />
+          <label class="form-check-label small fw-semibold text-muted" for="useDateRange">
             Usar rango de fechas
           </label>
         </div>
@@ -66,45 +78,25 @@
         <!-- FECHAS -->
         <div *ngIf="useDateRange" class="row">
           <div class="col-md-6 mb-4">
-            <label
-              for="startDate"
-              class="form-label small fw-semibold text-muted"
-            >
+            <label for="startDate" class="form-label small fw-semibold text-muted">
               Fecha inicio
             </label>
-            <input
-              type="date"
-              id="startDate"
-              class="form-control form-control-institucional"
-              [(ngModel)]="startDate"
-              name="startDate"
-            />
+            <input type="date" id="startDate" class="form-control form-control-institucional" [(ngModel)]="startDate"
+              name="startDate" />
           </div>
 
           <div class="col-md-6 mb-4">
-            <label
-              for="endDate"
-              class="form-label small fw-semibold text-muted"
-            >
+            <label for="endDate" class="form-label small fw-semibold text-muted">
               Fecha fin
             </label>
-            <input
-              type="date"
-              id="endDate"
-              class="form-control form-control-institucional"
-              [(ngModel)]="endDate"
-              name="endDate"
-            />
+            <input type="date" id="endDate" class="form-control form-control-institucional" [(ngModel)]="endDate"
+              name="endDate" />
           </div>
         </div>
 
         <!-- BOTÓN -->
         <div class="d-flex justify-content-end mt-4">
-          <button
-            type="button"
-            class="btn btn-institucional fw-semibold"
-            (click)="generateReport()"
-          >
+          <button type="button" class="btn btn-institucional fw-semibold" (click)="generateReport()">
             <i class="bi bi-filetype-xlsx text me-2 fs-5"></i>
             Generar reporte
           </button>
