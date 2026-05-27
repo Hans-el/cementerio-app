@@ -104,4 +104,173 @@
       </form>
     </div>
   </div>
+  <!-- ======================== BITÁCORA ======================== -->
+  <div class="card card-form-institucional border-0 mt-4">
+    <div class="card-body p-4">
+
+      <div class="d-flex align-items-center justify-content-between mb-4">
+        <div>
+          <h6 class="fw-semibold text-secondary mb-1">
+            <i class="bi bi-journal-text me-2 text-success"></i>Bitácora de acciones
+          </h6>
+          <small class="text-muted">Registro de cambios realizados por la administración.</small>
+        </div>
+        <span class="badge bg-light text-dark px-3 py-2 rounded-pill">
+          {{ bitacoraTotal }} registros
+        </span>
+      </div>
+
+      <!-- Filtros -->
+      <div class="row g-3 mb-4">
+        <div class="col-md-3">
+          <label class="form-label small fw-semibold text-muted">Desde</label>
+          <input type="date" class="form-control form-control-institucional" [(ngModel)]="filtrosBitacora.startDate"
+            name="bStartDate" />
+        </div>
+        <div class="col-md-3">
+          <label class="form-label small fw-semibold text-muted">Hasta</label>
+          <input type="date" class="form-control form-control-institucional" [(ngModel)]="filtrosBitacora.endDate"
+            name="bEndDate" />
+        </div>
+        <div class="col-md-2">
+          <label class="form-label small fw-semibold text-muted">Entidad</label>
+          <select class="form-select form-control-institucional" [(ngModel)]="filtrosBitacora.entidad" name="bEntidad">
+            <option value="TODOS">Todas</option>
+            <option value="FALLECIDO">Fallecido</option>
+            <option value="BLOQUE">Bloque</option>
+            <!-- <option value="ESPACIO">Espacio</option> -->
+            <option value="SOLICITUD_INHUMACION">Solicitud Inhumación</option>
+            <option value="SOLICITUD_EXHUMACION">Solicitud Exhumación</option>
+          </select>
+        </div>
+        <div class="col-md-2">
+          <label class="form-label small fw-semibold text-muted">Acción</label>
+          <select class="form-select form-control-institucional" [(ngModel)]="filtrosBitacora.accion" name="bAccion">
+            <option value="TODOS">Todas</option>
+            <option value="CREAR">Crear</option>
+            <option value="EDITAR">Editar</option>
+            <option value="ELIMINAR">Eliminar</option>
+            <option value="CAMBIAR_ESTADO">Cambiar estado</option>
+          </select>
+        </div>
+        <div class="col-md-2 d-flex align-items-end gap-2">
+          <button class="btn btn-institucional btn-sm flex-grow-1" (click)="aplicarFiltrosBitacora()">
+            <i class="bi bi-search me-1"></i>Filtrar
+          </button>
+          <button class="btn btn-outline-secondary btn-sm" (click)="limpiarFiltrosBitacora()" title="Limpiar">
+            <i class="bi bi-x-circle"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Tabla -->
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="bg-light">
+            <tr>
+              <th class="py-3 text-muted small fw-bold">Fecha</th>
+              <th class="py-3 text-muted small fw-bold">Usuario</th>
+              <th class="py-3 text-muted small fw-bold">Acción</th>
+              <th class="py-3 text-muted small fw-bold">Entidad</th>
+              <th class="py-3 text-muted small fw-bold">Descripción</th>
+              <th class="py-3 text-muted small fw-bold">Detalle</th>
+            </tr>
+          </thead>
+          <tbody>
+
+            <tr *ngIf="loadingBitacora">
+              <td colspan="6" class="text-center py-4">
+                <div class="spinner-border spinner-border-sm text-success"></div>
+              </td>
+            </tr>
+
+            <tr *ngIf="!loadingBitacora && !bitacora.length">
+              <td colspan="6" class="text-center py-5 text-muted">
+                <i class="bi bi-journal fs-1 d-block mb-2"></i>
+                No hay registros con los filtros seleccionados
+              </td>
+            </tr>
+
+            <tr *ngFor="let r of bitacora" class="border-bottom">
+              <td class="small text-muted" style="white-space: nowrap;">
+                {{ r.fecha | date:'dd/MM/yyyy HH:mm' }}
+              </td>
+              <td>
+                <div class="fw-medium small">{{ r.nombre_usuario }}</div>
+                <div class="text-muted" style="font-size: 11px;">{{ r.cedula_usuario }}</div>
+              </td>
+              <td>
+                <span class="badge rounded-pill px-2 py-1 small" [class]="badgeAccion(r.accion)">
+                  {{ r.accion }}
+                </span>
+              </td>
+              <td>
+                <span class="badge rounded-pill px-2 py-1 small" [class]="badgeEntidad(r.entidad)">
+                  {{ r.entidad | titlecase }}
+                </span>
+              </td>
+              <td class="small">{{ r.descripcion }}</td>
+              <td>
+                <!-- Muestra valor anterior y nuevo en tooltip expandible -->
+                <button class="btn btn-outline-secondary btn-sm" *ngIf="r.valor_anterior || r.valor_nuevo" type="button"
+                  data-bs-toggle="collapse" [attr.data-bs-target]="'#detalle-' + r.id_bitacora">
+                  <i class="bi bi-eye"></i>
+                </button>
+              </td>
+            </tr>
+
+            <!-- Fila expandible con detalle -->
+            <tr *ngFor="let r of bitacora">
+              <td colspan="6" class="p-0">
+                <div class="collapse" [id]="'detalle-' + r.id_bitacora">
+                  <div class="p-3 bg-light border-bottom">
+                    <div class="row g-3">
+                      <div class="col-md-6" *ngIf="r.valor_anterior">
+                        <div class="small fw-semibold text-muted mb-1">Valor anterior</div>
+                        <pre class="small bg-white p-2 rounded border mb-0"
+                          style="font-size: 11px; max-height: 120px; overflow-y: auto;">{{ r.valor_anterior | json }}</pre>
+                      </div>
+                      <div class="col-md-6" *ngIf="r.valor_nuevo">
+                        <div class="small fw-semibold text-muted mb-1">Valor nuevo</div>
+                        <pre class="small bg-white p-2 rounded border mb-0"
+                          style="font-size: 11px; max-height: 120px; overflow-y: auto;">{{ r.valor_nuevo | json }}</pre>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Paginación -->
+      <div class="d-flex justify-content-between align-items-center mt-4">
+        <div class="text-muted small">
+          Página {{ bitacoraPage }} de {{ bitacoraTotalPages || 1 }}
+        </div>
+        <nav>
+          <ul class="pagination pagination-sm mb-0">
+            <li class="page-item" [class.disabled]="bitacoraPage === 1">
+              <button class="page-link border-0 bg-light text-dark" (click)="paginaAnteriorBitacora()">
+                <i class="bi bi-chevron-left"></i>
+              </button>
+            </li>
+            <li class="page-item">
+              <span class="page-link border-0 bg-success text-white fw-semibold">
+                {{ bitacoraPage }}
+              </span>
+            </li>
+            <li class="page-item" [class.disabled]="bitacoraPage === bitacoraTotalPages">
+              <button class="page-link border-0 bg-light text-dark" (click)="siguientePaginaBitacora()">
+                <i class="bi bi-chevron-right"></i>
+              </button>
+            </li>
+          </ul>
+        </nav>
+      </div>
+
+    </div>
+  </div>
 </div>

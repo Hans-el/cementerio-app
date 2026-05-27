@@ -4,6 +4,8 @@ import { FormsModule } from '@angular/forms';
 import * as XLSX from 'xlsx';
 import { ReportesService } from '../../services/reportes.service';
 import Swal from 'sweetalert2';
+import { BitacoraService } from '../../services/bitacora.service';
+import { BitacoraResponse, RegistroBitacora } from '../../models/bitacora.model';
 
 @Component({
   selector: 'app-reportes',
@@ -21,10 +23,86 @@ export class ReportesComponent {
   fechaActual: Date = new Date(); // Variable para mostrar la fecha actual en el HTML
   filtroTipoSolicitud: string = 'TODOS';   // TODOS | inhumacion | exhumacion
   filtroEstadoSolicitud: string = 'TODOS'; // TODOS | PENDIENTE | APROBADA | RECHAZADA
+  // Propiedades nuevas para la bitácora
+  bitacora: RegistroBitacora[] = [];
+  bitacoraTotal: number = 0;
+  bitacoraTotalPages: number = 0;
+  bitacoraPage: number = 1;
+  bitacoraLimit: number = 10;
+  loadingBitacora = false;
 
-  constructor(private reportesService: ReportesService) { }
+  filtrosBitacora = {
+    startDate: '',
+    endDate: '',
+    entidad: 'TODOS',
+    accion: 'TODOS',
+  };
 
-  ngOnInit(): void { }
+  constructor(private reportesService: ReportesService, private bitacoraService: BitacoraService) { }
+
+  ngOnInit(): void {
+    this.cargarBitacora();
+  }
+
+  cargarBitacora(): void {
+    this.loadingBitacora = true;
+    this.bitacoraService.getBitacora({
+      page: this.bitacoraPage,
+      limit: this.bitacoraLimit,
+      startDate: this.filtrosBitacora.startDate || undefined,
+      endDate: this.filtrosBitacora.endDate || undefined,
+      entidad: this.filtrosBitacora.entidad !== 'TODOS' ? this.filtrosBitacora.entidad : undefined,
+      accion: this.filtrosBitacora.accion !== 'TODOS' ? this.filtrosBitacora.accion : undefined,
+    }).subscribe({
+      next: (res) => {
+        this.bitacora = res.data;
+        this.bitacoraTotal = res.total;
+        this.bitacoraTotalPages = res.totalPages;
+        this.loadingBitacora = false;
+      },
+      error: () => { this.loadingBitacora = false; }
+    });
+  }
+
+  aplicarFiltrosBitacora(): void {
+    this.bitacoraPage = 1;
+    this.cargarBitacora();
+  }
+
+  limpiarFiltrosBitacora(): void {
+    this.filtrosBitacora = { startDate: '', endDate: '', entidad: 'TODOS', accion: 'TODOS' };
+    this.bitacoraPage = 1;
+    this.cargarBitacora();
+  }
+
+  paginaAnteriorBitacora(): void {
+    if (this.bitacoraPage > 1) { this.bitacoraPage--; this.cargarBitacora(); }
+  }
+
+  siguientePaginaBitacora(): void {
+    if (this.bitacoraPage < this.bitacoraTotalPages) { this.bitacoraPage++; this.cargarBitacora(); }
+  }
+
+  badgeAccion(accion: string): string {
+    switch (accion) {
+      case 'CREAR': return 'bg-success bg-opacity-10 text-success';
+      case 'EDITAR': return 'bg-warning bg-opacity-35 text-dark';
+      case 'ELIMINAR': return 'bg-danger bg-opacity-10 text-danger';
+      case 'CAMBIAR_ESTADO': return 'bg-info bg-opacity-10 text-info';
+      default: return 'bg-secondary bg-opacity-10 text-secondary';
+    }
+  }
+
+  badgeEntidad(entidad: string): string {
+    switch (entidad) {
+      case 'FALLECIDO': return 'bg-danger bg-opacity-10 text-danger';
+      case 'BLOQUE': return 'bg-success bg-opacity-10 text-success';
+      case 'ESPACIO': return 'bg-warning bg-opacity-10 text-warning';
+      case 'SOLICITUD_INHUMACION': return 'bg-info bg-opacity-10 text-info';
+      case 'SOLICITUD_EXHUMACION': return 'bg-secondary bg-opacity-10 text-secondary';
+      default: return 'bg-light text-dark';
+    }
+  }
 
   generateReport(): void {
     if (this.useDateRange && (!this.startDate || !this.endDate)) {
