@@ -218,7 +218,7 @@
                 <span [class.text-muted]="!fallecido.fecha_fallecimiento">
                   {{
                   fallecido.fecha_fallecimiento
-                  ? (fallecido.fecha_fallecimiento | date: "dd MMM yyyy")
+                  ? (fallecido.fecha_fallecimiento | date: "dd MMM yyyy": "UTC")
                   : "--"
                   }}
                 </span>
@@ -227,7 +227,7 @@
                 <span [class.text-muted]="!fallecido.fecha_inhumacion">
                   {{
                   fallecido.fecha_inhumacion
-                  ? (fallecido.fecha_inhumacion | date: "dd MMM yyyy")
+                  ? (fallecido.fecha_inhumacion | date: "dd MMM yyyy": "UTC")
                   : "--"
                   }}
                 </span>
@@ -236,7 +236,7 @@
                 <span [class.text-muted]="!fallecido.fecha_exhumacion">
                   {{
                   fallecido.fecha_exhumacion
-                  ? (fallecido.fecha_exhumacion | date: "dd MMM yyyy")
+                  ? (fallecido.fecha_exhumacion | date: "dd MMM yyyy": "UTC")
                   : "--"
                   }}
                 </span>
