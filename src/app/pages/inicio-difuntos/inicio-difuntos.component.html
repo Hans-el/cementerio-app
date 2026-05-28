@@ -8,7 +8,7 @@
       <i class="bi bi-people-fill me-2 text-success"></i>Gestión de Fallecidos
     </h5>
     <span class="badge bg-light text-dark px-3 py-2 rounded-pill d-none d-sm-flex align-items-center">
-      <i class="bi bi-calendar3 me-2"></i>{{ today | date: "dd/MM/yyyy" }}
+      <i class="bi bi-calendar3 me-2"></i>{{ today | date: "dd/MM/yyyy":"UTC" }}
     </span>
   </div>
 
@@ -134,7 +134,7 @@
                   <span class="fw-medium small">
                     {{
                     fallecido.fecha_fallecimiento
-                    ? (fallecido.fecha_fallecimiento | date: "dd/MM/yyyy")
+                    ? (fallecido.fecha_fallecimiento | date: "dd/MM/yyyy":"UTC")
                     : "--"
                     }}
                   </span>
@@ -144,7 +144,7 @@
                   <span class="fw-medium small">
                     {{
                     fallecido.fecha_inhumacion
-                    ? (fallecido.fecha_inhumacion | date: "dd MMM yyyy")
+                    ? (fallecido.fecha_inhumacion | date: "dd MMM yyyy":"UTC")
                     : "--"
                     }}
                   </span>
@@ -154,7 +154,7 @@
                   <span class="fw-medium small">
                     {{
                     fallecido.fecha_exhumacion
-                    ? (fallecido.fecha_exhumacion | date: "dd/MM/yyyy")
+                    ? (fallecido.fecha_exhumacion | date: "dd/MM/yyyy":"UTC")
                     : "--"
                     }}
                   </span>
