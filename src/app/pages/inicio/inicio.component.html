@@ -270,7 +270,7 @@
               <td>
                 <ng-container *ngIf="o.fechas.length > 0; else sinFecha">
                   <div *ngFor="let fecha of o.fechas" class="small">
-                    {{ fecha ? (fecha | date: "dd MMM yyyy") : "—" }}
+                    {{ fecha ? (fecha | date: "dd MMM yyyy": "UTC") : "—" }}
                   </div>
                 </ng-container>
                 <ng-template #sinFecha>
