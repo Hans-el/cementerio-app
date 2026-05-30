@@ -15,27 +15,37 @@ import { AdminSolicitudesComponent } from './pages/admin-solicitudes/admin-solic
 import { SolicitudInhumacionComponent } from './pages/solicitud-inhumacion/solicitud-inhumacion.component';
 import { SolicitudExhumacionComponent } from './pages/solicitud-exhumacion/solicitud-exhumacion.component';
 import { TramitesComponent } from './pages/tramites/tramites.component';
+import { CementeriosComponent } from './pages/cementerios/cementerios.component';
 
 //rutas de la aplicación
 export const routes: Routes = [
-    { path: '', redirectTo: '/login', pathMatch: 'full' },
+    // Ruta raíz redirige a selección de cementerio
+    { path: '', redirectTo: 'login', pathMatch: 'full' },
+
+    // Pantallas sin sidebar
+    { path: 'cementerios', component: CementeriosComponent },
     { path: 'login', component: LoginComponent },
     { path: 'registro', component: RegistroComponent },
+
+    // Pantallas con sidebar
     {
-        //Definimos el layout, que es el sidebar, y dentro van las rutas hijas, es decir, todas las rutas que van a tener el sidebar.
-        path: '', component: LayoutComponent, children: [
+        path: '',
+        component: LayoutComponent,
+        children: [
             { path: 'mapa', component: MapaBovedasComponent },
-            { path: 'inicio', component: InicioComponent, canActivate: [authGuard, adminGuard] }, //Gestión de bovedas. Uso guardia de admin para que solo el admin pueda acceder.
-            { path: 'difuntos', component: InicioDifuntosComponent, canActivate: [authGuard, adminGuard] }, //Gestión de difuntos. Se usa también la guardia de admin.
-            { path: 'contacto', component: ContactoComponent }, // para contactarse con la administracion del cementerio
-            { path: 'perfil', component: PerfilComponent }, //no puede acceder si no está autenticado, es decir, no podrá editar sus datos ya que no está logueado (si es que quiero usar el authGuard)
-            { path: 'reportes', component: ReportesComponent, canActivate: [authGuard, adminGuard] }, //para generar reportes de difuntos y ocupaciones. Uso para auditoría. Solo el admin puede acceder.
-            { path: 'dashboard', component: DashboardComponent, canActivate: [adminGuard] }, //para mostrar un dashboard con estadísticas y gráficos. Solo el admin puede acceder.,
-            { path: 'tramites', component: TramitesComponent, canActivate: [authGuard] }, //para mostrar los trámites disponibles (inhumación y exhumación). Solo usuarios autenticados pueden acceder.
+            { path: 'inicio', component: InicioComponent, canActivate: [authGuard, adminGuard] },
+            { path: 'difuntos', component: InicioDifuntosComponent, canActivate: [authGuard, adminGuard] },
+            { path: 'contacto', component: ContactoComponent },
+            { path: 'perfil', component: PerfilComponent },
+            { path: 'reportes', component: ReportesComponent, canActivate: [authGuard, adminGuard] },
+            { path: 'dashboard', component: DashboardComponent, canActivate: [adminGuard] },
+            { path: 'tramites', component: TramitesComponent, canActivate: [authGuard] },
             { path: 'exhumaciones', component: SolicitudExhumacionComponent, canActivate: [authGuard] },
             { path: 'inhumaciones', component: SolicitudInhumacionComponent, canActivate: [authGuard] },
-            { path: 'admin/solicitudes', component: AdminSolicitudesComponent, canActivate: [authGuard, adminGuard] }
-
+            { path: 'admin/solicitudes', component: AdminSolicitudesComponent, canActivate: [authGuard, adminGuard] },
         ]
     },
+
+    // Ruta comodín — redirige a selección si no existe la ruta
+    { path: '**', redirectTo: 'login' },
 ];

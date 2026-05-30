@@ -59,7 +59,7 @@ export class RegistroComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   togglePasswordVisibility(): void {
     this.showPassword = !this.showPassword;

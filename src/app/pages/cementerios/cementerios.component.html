@@ -1,0 +1,51 @@
+<div class="min-vh-100 d-flex align-items-center justify-content-center"
+    style="background: linear-gradient(135deg, #163212 0%, #30422e 100%);">
+
+    <div class="container" style="max-width: 680px;">
+
+        <!-- Logo y título -->
+        <div class="text-center mb-5">
+            <img src="assets/faviconblanco.png" alt="Logo" width="80" class="mb-3" />
+            <h3 class="text-white fw-semibold mb-1">Sistema de Gestión</h3>
+            <p class="text-white-50 small mb-0">Selecciona el cementerio al que deseas acceder</p>
+        </div>
+
+        <!-- Spinner -->
+        <div *ngIf="cargando" class="text-center py-5">
+            <div class="spinner-border text-white"></div>
+        </div>
+
+        <!-- Lista de cementerios -->
+        <div class="row g-3" *ngIf="!cargando">
+            <div class="col-md-6" *ngFor="let c of cementerios">
+                <div class="card border-0 h-100" style="cursor: pointer; transition: transform 0.15s, box-shadow 0.15s;"
+                    (click)="seleccionar(c)">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="rounded-3 d-flex align-items-center justify-content-center shrink-0"
+                                style="width:48px; height:48px; background: rgba(22,50,18,0.08);">
+                                <i class="bi bi-geo-alt-fill text-success fs-4"></i>
+                            </div>
+                            <div>
+                                <h6 class="fw-semibold mb-1">{{ c.nombre }}</h6>
+                                <p class="text-muted small mb-0">{{ c.descripcion || 'Cementerio municipal' }}</p>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-end mt-3">
+                            <span class="badge bg-success bg-opacity-10 text-success px-3 py-2 rounded-pill small">
+                                Ingresar <i class="bi bi-arrow-right ms-1"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sin cementerios -->
+        <div *ngIf="!cargando && !cementerios.length" class="text-center text-white-50 py-5">
+            <i class="bi bi-exclamation-circle fs-1 d-block mb-3"></i>
+            <p>No hay cementerios disponibles en este momento.</p>
+        </div>
+
+    </div>
+</div>

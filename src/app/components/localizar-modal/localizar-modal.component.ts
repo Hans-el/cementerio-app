@@ -10,6 +10,7 @@ import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators'; 
 import { Subject } from 'rxjs';
 import Swal from 'sweetalert2';
 import { environment } from '../../../environments/environment';
+import { BloquesService } from '../../services/bloques.service';
 
 @Component({
   selector: 'app-localizar-modal',
@@ -27,11 +28,21 @@ export class LocalizarModalComponent implements OnInit {
   selectedImageUrl: string | null = null; // URL de la imagen seleccionada para el modal
   private searchTerms = new Subject<string>(); // Para el autocompletado, sugerido por angular docs
   environment = environment; // Para acceder a la URL del API en el template
+  imagenBloqueUrl: string = '';
+  imagenError: boolean = false;
+
+  filtros = {
+    busqueda: '',
+    sector: null as number | null,
+    manzana: null as number | null,
+    bloque: null as number | null,
+  };
 
   constructor(
     public activeModal: NgbActiveModal,
     private modalService: NgbModal, // Servicio para abrir modales
-    private fallecidoService: FallecidoService, // Servicio para buscar fallecidos
+    private fallecidoService: FallecidoService,
+    private bloquesService: BloquesService,
   ) { }
 
   ngOnInit(): void {
@@ -60,17 +71,39 @@ export class LocalizarModalComponent implements OnInit {
   }
 
   openImageModal() {
-    if (!this.resultadoBusqueda || this.resultadoBusqueda.length === 0) {
-      this.mensajeError = 'No hay resultados para mostrar la imagen.';
+    if (!this.imagenBloqueUrl) {
+      this.mensajeError = 'No hay imagen disponible para este bloque.';
       return;
     }
-    // Construye la URL de la imagen basada en los datos del resultado de búsqueda, nos sirve perfecto para localizar la carpeta correcta
-    const url = `${environment.apiUrl}/images/bloques/${this.formatoDosDigitos(this.resultadoBusqueda[0].sector)}${this.formatoDosDigitos(this.resultadoBusqueda[0].manzana)}/${this.formatoDosDigitos(this.resultadoBusqueda[0].sector)}${this.formatoDosDigitos(this.resultadoBusqueda[0].manzana)}${this.formatoDosDigitos(this.resultadoBusqueda[0].bloque)}.jpg`;
     const modalRef = this.modalService.open(ImageModalComponent, {
       size: 'lg',
       centered: true,
     });
-    modalRef.componentInstance.selectedImageUrl = url;
+    modalRef.componentInstance.selectedImageUrl = this.imagenBloqueUrl;
+  }
+
+  cargarFotoBloque(
+    sector: number | string,
+    manzana: number | string,
+    bloque: number | string
+  ): void {
+
+    const s = String(sector).padStart(2, '0');
+    const m = String(manzana).padStart(2, '0');
+    const b = String(bloque).padStart(2, '0');
+
+    this.bloquesService.getFotoBloque(s, m, b).subscribe({
+      next: (response) => {
+        this.imagenBloqueUrl = response.foto_url ?? '';
+        this.imagenError = !response.foto_url;
+      },
+      error: () => {
+        this.imagenBloqueUrl = '';
+        this.imagenError = true;
+        this.mensajeError = 'Ocurrió un error al buscar la bóveda.';
+        this.cargando = false;
+      }
+    });
   }
 
   // Método para buscar la ubicación por el nombre del fallecido
@@ -96,18 +129,30 @@ export class LocalizarModalComponent implements OnInit {
               bloque: item.bloque_lote,
               espacio: item.numero,
             }));
+
+            // Cargar imagen del bloque desde Supabase
+            const boveda = this.resultadoBusqueda[0];
+
+            this.cargarFotoBloque(
+              boveda.sector,
+              boveda.manzana,
+              boveda.bloque
+            );
+
           } else {
+            this.resultadoBusqueda = [];
+            this.imagenBloqueUrl = '';
+            this.imagenError = true;
+
             this.mensajeError =
               'No se encontró ninguna bóveda para el fallecido ingresado.';
           }
-          this.cargando = false;
-        },
-        error: () => {
-          this.mensajeError = 'Ocurrió un error al buscar la bóveda.';
+
           this.cargando = false;
         },
       });
   }
+
 
   openDisponibilidadModal() {
     // Abre el modal de disponibilidad que está puesto en el localizar para agilizar la adquisición de una bóveda
