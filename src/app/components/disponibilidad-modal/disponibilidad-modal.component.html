@@ -70,8 +70,13 @@
           </h6>
           <!-- Imagen del bloque -->
           <div class="text-center my-3">
-            <img [src]="espacio.imagenUrl" class="img-fluid rounded" alt="Imagen del bloque" style="max-height: 150px"
-              onerror="this.src = 'assets/default.jpg'" />
+            <img *ngIf="espacio.imagenUrl" [src]="espacio.imagenUrl" class="img-fluid rounded" alt="Imagen del bloque"
+              style="max-height: 150px" />
+
+            <div *ngIf="!espacio.imagenUrl" class="py-3 text-muted">
+              <i class="bi bi-image fs-2 d-block mb-2"></i>
+              <small>Sin imagen disponible</small>
+            </div>
           </div>
           <!-- Descripción del bloque -->
           <p class="text-muted small">Detalles</p>
@@ -80,8 +85,7 @@
           </p>
           <!-- Botones de acción -->
           <div class="d-flex justify-content-between">
-            <button class="btn btn-outline-success fw-bold btn-sm w-50 me-2"
-            (click)="localizarEnMapa(espacio)">
+            <button class="btn btn-outline-success fw-bold btn-sm w-50 me-2" (click)="localizarEnMapa(espacio)">
               Localizar
             </button>
 

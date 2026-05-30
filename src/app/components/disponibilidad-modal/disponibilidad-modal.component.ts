@@ -41,7 +41,7 @@ export class DisponibilidadModalComponent {
     private manzanasService: ManzanasService,
     private bloquesService: BloquesService,
     private authService: AuthService,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.userRole = this.authService.getUserRole(); // Obtiene el rol al inicializar, si sí es...
@@ -87,20 +87,20 @@ export class DisponibilidadModalComponent {
       },
     });
   }
- localizarEnMapa(boveda: any) {
-     // Cerrar el modal actual
-     this.activeModal.dismiss();
-     //Solo mostraremos una alerta Swal con el codigo del SECTOR y la MANZANA pero en negritas para que resalte, y un mensaje que diga "LOCALIZADO EN EL MAPA"
-     Swal.fire({
-       title: 'LOCALIZADO EN EL MAPA',
-       html: `El bloque se encuentra en: <h1> <strong> ${this.formatoDosDigitos(boveda.sector)}.${this.formatoDosDigitos(boveda.manzana)}</strong> </h1> 
+  localizarEnMapa(boveda: any) {
+    // Cerrar el modal actual
+    this.activeModal.dismiss();
+    //Solo mostraremos una alerta Swal con el codigo del SECTOR y la MANZANA pero en negritas para que resalte, y un mensaje que diga "LOCALIZADO EN EL MAPA"
+    Swal.fire({
+      title: 'LOCALIZADO EN EL MAPA',
+      html: `El bloque se encuentra en: <h1> <strong> ${this.formatoDosDigitos(boveda.sector)}.${this.formatoDosDigitos(boveda.manzana)}</strong> </h1> 
        Con el código: <h4> <strong> ${this.formatoDosDigitos(boveda.sector)}.${this.formatoDosDigitos(boveda.manzana)}.${this.formatoDosDigitos(boveda.bloque)}</strong> </h4>
        <em> <h6> Nota: Los códigos están anotados en cada bloque. </h6> </em>`,
-       icon: 'success',
-       confirmButtonText: 'Aceptar',
-       confirmButtonColor: '#28a745',
-     });
-   }
+      icon: 'success',
+      confirmButtonText: 'Aceptar',
+      confirmButtonColor: '#28a745',
+    });
+  }
 
   formatoDosDigitos(value: number | string): string {
     const strValue = value.toString();
@@ -151,20 +151,36 @@ export class DisponibilidadModalComponent {
       }
     });
   }
-
+  //fotos desde supabase
   cargarBloquesEnVenta(): void {
     this.bloquesService.getBloquesEnVenta().subscribe({
       next: (bloques) => {
+
         this.espaciosDisponibles = bloques.map((bloque) => ({
           id_bloque_venta: bloque.id_bloque_venta,
           sector: bloque.sector,
           manzana: bloque.numero_manzana,
           bloque: bloque.numero_bloque,
           descripcion: bloque.descripcion,
-          imagenUrl: `${this.environment.apiUrl}/images/bloques/${this.formatoDosDigitos(bloque.sector)}${this.formatoDosDigitos(bloque.numero_manzana)}/${this.formatoDosDigitos(bloque.sector)}${this.formatoDosDigitos(bloque.numero_manzana)}${this.formatoDosDigitos(bloque.numero_bloque)}.jpg`,
+          imagenUrl: '',
         }));
+
+        this.espaciosDisponibles.forEach((espacio) => {
+          const s = String(espacio.sector).padStart(2, '0');
+          const m = String(espacio.manzana).padStart(2, '0');
+          const b = String(espacio.bloque).padStart(2, '0');
+
+          this.bloquesService.getFotoBloque(s, m, b).subscribe({
+            next: (response) => {
+              espacio.imagenUrl = response.foto_url ?? '';
+            },
+            error: () => {
+              espacio.imagenUrl = '';
+            },
+          });
+        });
       },
-      //ponemos el error en un sweetalert2, pero dentro de un toast para que no moleste tanto al usuario, ya que no es algo tan grave como para mostrar un modal
+
       error: () => {
         Swal.fire({
           toast: true,
