@@ -8,7 +8,6 @@ import { ManzanasService } from '../../services/manzanas.service';
 import { BloquesService } from '../../services/bloques.service';
 import { EspacioService } from '../../services/espacio.service';
 import { FallecidoService } from '../../services/fallecido.service';
-import { environment } from '../../../environments/environment';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -22,7 +21,8 @@ export class EditarEspacioFallecidoComponent {
   nombreFallecido: string = '';
   fallecidoSeleccionado: any = null;
   sugerenciasFallecidos: any[] = [];
-  environment = environment; // Para acceder a la URL del API en el template
+  imagenBloqueUrl: string = '';
+  imagenError: boolean = false;
 
   sectores: any[] = [];
   nuevasManzanas: any[] = [];
@@ -43,7 +43,7 @@ export class EditarEspacioFallecidoComponent {
     private manzanasService: ManzanasService,
     private bloquesService: BloquesService,
     private espaciosService: EspacioService,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.cargarSectores();
@@ -80,7 +80,14 @@ export class EditarEspacioFallecidoComponent {
       bloque: fallecido.codigo_bloque.split('.')[2],
       espacio: fallecido.numero,
     };
+
     this.sugerenciasFallecidos = [];
+
+    this.cargarFotoBloque(
+      this.fallecidoSeleccionado.sector,
+      this.fallecidoSeleccionado.manzana,
+      this.fallecidoSeleccionado.bloque
+    );
   }
 
   onNuevoSectorChange(): void {
@@ -131,6 +138,27 @@ export class EditarEspacioFallecidoComponent {
   formatoDosDigitos(value: number | string): string {
     const strValue = value.toString();
     return strValue.length === 1 ? `0${strValue}` : strValue;
+  }
+  cargarFotoBloque(
+    sector: number | string,
+    manzana: number | string,
+    bloque: number | string
+  ): void {
+
+    const s = String(sector).padStart(2, '0');
+    const m = String(manzana).padStart(2, '0');
+    const b = String(bloque).padStart(2, '0');
+
+    this.bloquesService.getFotoBloque(s, m, b).subscribe({
+      next: (response) => {
+        this.imagenBloqueUrl = response.foto_url ?? '';
+        this.imagenError = !response.foto_url;
+      },
+      error: () => {
+        this.imagenBloqueUrl = '';
+        this.imagenError = true;
+      },
+    });
   }
   //usamos Swal alert para mostrar mensajes de éxito o error al guardar los cambios. En caso de éxito, se cierra el modal y se muestra un mensaje de confirmación. En caso de error, se muestra un mensaje con el detalle del error.
   guardarCambios(): void {

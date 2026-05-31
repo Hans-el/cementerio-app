@@ -13,12 +13,7 @@
       </p>
     </div>
   </div>
-  <button
-    type="button"
-    class="btn-close"
-    aria-label="Cerrar"
-    (click)="activeModal.dismiss()"
-  ></button>
+  <button type="button" class="btn-close" aria-label="Cerrar" (click)="activeModal.dismiss()"></button>
 </div>
 
 <div class="modal-body px-4 py-3">
@@ -33,37 +28,26 @@
       <span class="input-group-text bg-light border-end-0">
         <i class="bi bi-person-fill text-muted"></i>
       </span>
-      <input
-        type="text"
-        class="form-control form-control-lg bg-light border-start-0 ps-0 fs-6"
-        [(ngModel)]="nombreFallecido"
-        (input)="buscarFallecido()"
-        placeholder="Ingrese el nombre del fallecido"
-        [class.border-primary]="sugerenciasFallecidos.length > 0"
-      />
+      <input type="text" class="form-control form-control-lg bg-light border-start-0 ps-0 fs-6"
+        [(ngModel)]="nombreFallecido" (input)="buscarFallecido()" placeholder="Ingrese el nombre del fallecido"
+        [class.border-primary]="sugerenciasFallecidos.length > 0" />
       <span class="input-group-text bg-light border-0" *ngIf="nombreFallecido">
         <i class="bi bi-pencil-fill text-primary"></i>
       </span>
     </div>
 
     <!-- Sugerencias mejoradas -->
-    <div
-      *ngIf="sugerenciasFallecidos.length > 0 && nombreFallecido.length > 0"
+    <div *ngIf="sugerenciasFallecidos.length > 0 && nombreFallecido.length > 0"
       class="list-group position-absolute w-100 shadow-lg rounded-3 overflow-hidden"
-      style="z-index: 1000; max-height: 250px; overflow-y: auto"
-    >
-      <button
-        *ngFor="let fallecido of sugerenciasFallecidos"
-        type="button"
-        class="list-group-item list-group-item-action border-0"
-        (click)="seleccionarFallecido(fallecido)"
-      >
+      style="z-index: 1000; max-height: 250px; overflow-y: auto">
+      <button *ngFor="let fallecido of sugerenciasFallecidos" type="button"
+        class="list-group-item list-group-item-action border-0" (click)="seleccionarFallecido(fallecido)">
         <div class="d-flex justify-content-between align-items-center">
           <div class="d-flex align-items-center">
             <div>
               <span class="fw-semibold d-block">{{
                 fallecido.nombre_completo
-              }}</span>
+                }}</span>
               <small class="text-muted">
                 <i class="bi me-1"></i>Código: {{ fallecido.codigo_bloque }} |
                 Espacio: {{ fallecido.numero }}
@@ -83,15 +67,10 @@
   <!-- =======================
        INFORMACIÓN DEL FALLECIDO SELECCIONADO
   ======================== -->
-  <div
-    *ngIf="fallecidoSeleccionado"
-    class="card border-0 shadow-sm mb-4 hover-lift"
-  >
+  <div *ngIf="fallecidoSeleccionado" class="card border-0 shadow-sm mb-4 hover-lift">
     <div class="card-header bg-white border-0 py-3">
       <div class="d-flex align-items-center">
-        <span class="fw-semibold text-secondary"
-          >Información del Fallecido</span
-        >
+        <span class="fw-semibold text-secondary">Información del Fallecido</span>
       </div>
     </div>
     <div class="card-body pt-0">
@@ -104,9 +83,7 @@
                 <i class="bi bi-person-fill fs-4 text-success"></i>
               </div>
               <div>
-                <span class="text-muted small text-uppercase fw-semibold"
-                  >Nombre completo</span
-                >
+                <span class="text-muted small text-uppercase fw-semibold">Nombre completo</span>
                 <h4 class="fw-bold text-dark mb-0">
                   {{ fallecidoSeleccionado.nombre_completo }}
                 </h4>
@@ -125,7 +102,7 @@
                   <span class="text-muted small d-block">Sector</span>
                   <span class="fw-semibold">{{
                     fallecidoSeleccionado.sector
-                  }}</span>
+                    }}</span>
                 </div>
               </div>
               <div class="col-6">
@@ -133,7 +110,7 @@
                   <span class="text-muted small d-block">Manzana</span>
                   <span class="fw-semibold">{{
                     fallecidoSeleccionado.manzana
-                  }}</span>
+                    }}</span>
                 </div>
               </div>
               <div class="col-6">
@@ -141,7 +118,7 @@
                   <span class="text-muted small d-block">Bloque</span>
                   <span class="fw-semibold">{{
                     fallecidoSeleccionado.bloque
-                  }}</span>
+                    }}</span>
                 </div>
               </div>
               <div class="col-6">
@@ -149,7 +126,7 @@
                   <span class="text-muted small d-block">Espacio</span>
                   <span class="fw-semibold">{{
                     fallecidoSeleccionado.espacio
-                  }}</span>
+                    }}</span>
                 </div>
               </div>
             </div>
@@ -158,30 +135,20 @@
 
         <!-- Imagen o información adicional (opcional) -->
         <!-- Para este caso pondremos la imagen traida desde el backend -->
-        <div
-          class="col-md-6 d-flex flex-column align-items-center justify-content-center"
-        >
-          <img
-            [src]="
-              environment.apiUrl +
-              '/images/bloques/' +
-              formatoDosDigitos(fallecidoSeleccionado.sector) +
-              formatoDosDigitos(fallecidoSeleccionado.manzana) +
-              '/' +
-              formatoDosDigitos(fallecidoSeleccionado.sector) +
-              formatoDosDigitos(fallecidoSeleccionado.manzana) +
-              formatoDosDigitos(fallecidoSeleccionado.bloque) +
-              '.jpg'
-            "
-            class="img-fluid rounded-3 shadow-sm"
-            alt="Imagen del Bloque"
-            style="max-height: 150px; cursor: pointer"
-            onerror="this.src = 'assets/default.jpg'"
-          />
+        <div class="col-md-6 d-flex flex-column align-items-center justify-content-center">
+
+          <img *ngIf="!imagenError" [src]="imagenBloqueUrl" class="img-fluid rounded-3 shadow-sm"
+            alt="Imagen del Bloque" style="max-height: 150px;" />
+
+          <div *ngIf="imagenError" class="text-center text-muted py-3">
+            <i class="bi bi-image fs-2 d-block mb-2"></i>
+            <small>No hay imagen disponible para este bloque</small>
+          </div>
 
           <p class="text-muted small text-center">
             {{ fallecidoSeleccionado.fecha_fallecimiento | date: "longDate" }}
           </p>
+
         </div>
       </div>
     </div>
@@ -192,9 +159,7 @@
     <div *ngIf="fallecidoSeleccionado" class="card border-0 shadow-sm">
       <div class="card-header bg-white border-0 py-3">
         <div class="d-flex align-items-center">
-          <span class="fw-semibold text-secondary"
-            >Nuevo Espacio a Asignar</span
-          >
+          <span class="fw-semibold text-secondary">Nuevo Espacio a Asignar</span>
         </div>
       </div>
       <div class="card-body pt-0">
@@ -204,16 +169,10 @@
             <label class="form-label text-muted small fw-semibold mb-1">
               <i class="bi bi-grid-3x3-gap-fill me-1 text-primary"></i>Sector
             </label>
-            <select
-              class="form-select form-select-lg bg-light border-0"
-              [(ngModel)]="nuevoSector"
-              (change)="onNuevoSectorChange()"
-            >
+            <select class="form-select form-select-lg bg-light border-0" [(ngModel)]="nuevoSector"
+              (change)="onNuevoSectorChange()">
               <option value="" selected>Seleccione...</option>
-              <option
-                *ngFor="let sector of sectores"
-                [value]="sector.id_sector"
-              >
+              <option *ngFor="let sector of sectores" [value]="sector.id_sector">
                 {{ sector.codigo }}
               </option>
             </select>
@@ -224,17 +183,10 @@
             <label class="form-label text-muted small fw-semibold mb-1">
               <i class="bi bi-square-fill me-1 text-primary"></i>Manzana
             </label>
-            <select
-              class="form-select form-select-lg bg-light border-0"
-              [(ngModel)]="nuevaManzana"
-              (change)="onNuevaManzanaChange()"
-              [disabled]="!nuevoSector"
-            >
+            <select class="form-select form-select-lg bg-light border-0" [(ngModel)]="nuevaManzana"
+              (change)="onNuevaManzanaChange()" [disabled]="!nuevoSector">
               <option value="" selected>Seleccione...</option>
-              <option
-                *ngFor="let manzana of nuevasManzanas"
-                [value]="manzana.id_manzana"
-              >
+              <option *ngFor="let manzana of nuevasManzanas" [value]="manzana.id_manzana">
                 {{ manzana.numero_manzana }}
               </option>
             </select>
@@ -245,17 +197,10 @@
             <label class="form-label text-muted small fw-semibold mb-1">
               <i class="bi bi-layers-fill me-1 text-primary"></i>Bloque
             </label>
-            <select
-              class="form-select form-select-lg bg-light border-0"
-              [(ngModel)]="nuevoBloque"
-              (change)="onNuevoBloqueChange()"
-              [disabled]="!nuevaManzana"
-            >
+            <select class="form-select form-select-lg bg-light border-0" [(ngModel)]="nuevoBloque"
+              (change)="onNuevoBloqueChange()" [disabled]="!nuevaManzana">
               <option value="" selected>Seleccione...</option>
-              <option
-                *ngFor="let bloque of nuevosBloques"
-                [value]="bloque.id_bloque"
-              >
+              <option *ngFor="let bloque of nuevosBloques" [value]="bloque.id_bloque">
                 {{ bloque.numero_bloque }}
               </option>
             </select>
@@ -266,16 +211,10 @@
             <label class="form-label text-muted small fw-semibold mb-1">
               <i class="bi bi-pin-map-fill me-1 text-primary"></i>Espacio
             </label>
-            <select
-              class="form-select form-select-lg bg-light border-0"
-              [(ngModel)]="nuevoEspacio"
-              [disabled]="!nuevoBloque"
-            >
+            <select class="form-select form-select-lg bg-light border-0" [(ngModel)]="nuevoEspacio"
+              [disabled]="!nuevoBloque">
               <option value="" selected>Seleccione...</option>
-              <option
-                *ngFor="let espacio of nuevosEspacios"
-                [value]="espacio.id_espacio"
-              >
+              <option *ngFor="let espacio of nuevosEspacios" [value]="espacio.id_espacio">
                 {{ espacio.numero_espacio }}
               </option>
             </select>
@@ -288,29 +227,16 @@
 
 <!-- MODAL FOOTER - DISEÑO MEJORADO-->
 <div class="modal-footer border-0">
-  <button
-    type="button"
-    class="btn btn-danger fw-semibold"
-    (click)="activeModal.dismiss()"
-  >
+  <button type="button" class="btn btn-danger fw-semibold" (click)="activeModal.dismiss()">
     <i class="bi me-2"></i>Cancelar
   </button>
 
-  <button
-    *ngIf="fallecidoSeleccionado && nuevoEspacio"
-    type="button"
-    class="btn btn-success fw-semibold"
-    (click)="guardarCambios()"
-  >
+  <button *ngIf="fallecidoSeleccionado && nuevoEspacio" type="button" class="btn btn-success fw-semibold"
+    (click)="guardarCambios()">
     <i class="bi bi-check-lg"></i>
     Guardar Cambios
   </button>
-  <button
-    *ngIf="!fallecidoSeleccionado || !nuevoEspacio"
-    type="button"
-    class="btn btn-success"
-    disabled
-  >
+  <button *ngIf="!fallecidoSeleccionado || !nuevoEspacio" type="button" class="btn btn-success" disabled>
     <i class="bi me-2"></i>
     Seleccione ubicación
   </button>
