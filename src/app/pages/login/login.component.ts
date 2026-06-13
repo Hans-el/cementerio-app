@@ -10,6 +10,8 @@ import { AuthService } from '../../services/auth.service';
 import Swal from 'sweetalert2';
 import { NgbAlertModule } from '@ng-bootstrap/ng-bootstrap';
 import { CommonModule } from '@angular/common';
+import { CementerioService } from '../../services/cementerio.service';
+import { Cementerio } from '../../models/cementerio.model';
 
 @Component({
   selector: 'app-login',
@@ -22,11 +24,17 @@ export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   showPassword: boolean = false;
   errorMessage: string = '';
+  cementerios: Cementerio[] = [];
+  cargando = false;
+  error = false;
+
+
 
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
+    private cementerioService: CementerioService,
   ) {
     this.loginForm = this.fb.group({
       cedula: ['', Validators.required],
@@ -36,6 +44,9 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit() {
+    const token = localStorage.getItem('token');
+    const cementerio = this.cementerioService.getCementerioActivoSnapshot();
+
     const savedCedula = localStorage.getItem('rememberedCedula');
     const savedContrasena = localStorage.getItem('rememberedContrasena');
     const rememberMe = localStorage.getItem('rememberMe') === 'true';
@@ -47,6 +58,16 @@ export class LoginComponent implements OnInit {
         rememberMe: true,
       });
     }
+    this.cementerioService.getCementerios().subscribe({
+      next: (data) => {
+        this.cementerios = data;
+        this.cargando = false;
+      },
+      error: () => {
+        this.error = true;
+        this.cargando = false;
+      },
+    });
   }
 
   togglePasswordVisibility() {

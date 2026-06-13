@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { CementerioService } from './cementerio.service';
 
 @Injectable({
   providedIn: 'root',
@@ -9,17 +10,19 @@ import { environment } from '../../environments/environment';
 export class ReportesService {
   private apiUrl = environment.apiUrl + '/reportes'; // Usamos la URL del entorno
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private cementerioService: CementerioService) { }
 
   // Reportes de ocupaciones
   getReporteOcupaciones(
     startDate?: string,
     endDate?: string,
   ): Observable<any[]> {
+    const slug = this.cementerioService.getSlugActivo();
     let params: any = {};
     if (startDate && endDate) {
       params.startDate = startDate;
       params.endDate = endDate;
+      params.slug = slug;
     }
     return this.http.get<any[]>(`${this.apiUrl}/ocupaciones`, { params });
   }

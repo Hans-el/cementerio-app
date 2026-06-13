@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { ApiService } from './api.service';
 import { environment } from '../../environments/environment';
+import { CementerioService } from './cementerio.service';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -13,11 +15,29 @@ export class AuthService {
   constructor(
     private http: HttpClient,
     private apiService: ApiService,
+    private cementerioService: CementerioService,
+    private router: Router
   ) { }
 
   // Método para iniciar sesión
   login(cedula: string, contrasena: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/auth/login`, { cedula, contrasena });
+    const slug = this.cementerioService.getSlugActivo();
+
+    if (!slug) {
+      // Redirigir a selección de cementerio si no hay slug
+      this.router.navigate(['/cementerios']);
+      throw new Error('No hay cementerio seleccionado.');
+    }
+
+    return this.http.post<any>(`${this.apiUrl}/auth/login`, {
+      cedula,
+      contrasena,
+      slug,  // <-- enviar al backend
+    }).pipe(
+      tap(response => {
+        localStorage.setItem('token', response.token);
+      })
+    );
   }
 
   // Método para registrar un nuevo usuario
@@ -43,6 +63,7 @@ export class AuthService {
   logout(): void {
     localStorage.removeItem('token');
     localStorage.removeItem('userRole');
+    this.cementerioService.limpiar();
   }
 
   // Método para verificar si el usuario está autenticado

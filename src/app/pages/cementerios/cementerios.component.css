@@ -1,13 +1,31 @@
-:host {
-  display: block;
+.seleccionar-wrapper {
+  background-image: url('/assets/cementerios.svg');
+  background-size: cover;
+  background-position: center;
+  min-height: 100vh;
+  padding: 2rem 1rem;
+}
+
+.cementerio-card {
+  background-color: rgba(255, 255, 255, 0.9);  
+  border-radius: 35px;
+  padding: 1.5rem;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
   height: 100%;
 }
 
-.card {
-  border-radius: 12px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+.cementerio-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
 }
 
-.card:hover {
-  box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+.cementerio-logo {
+  display: flex;
+  justify-content: center;
+}
+
+.logo-placeholder {
+  margin: 0 auto;
 }

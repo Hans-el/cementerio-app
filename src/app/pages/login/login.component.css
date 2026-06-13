@@ -1,6 +1,6 @@
 /* Fondo general con imagen */
 .login-wrapper {
-  background: url('/assets/fondoia.png') no-repeat center center fixed;
+  background: url('/assets/fondoia.webp') no-repeat center center fixed;
   background-size: cover;
   min-height: 100vh;
   display: flex;
@@ -18,12 +18,11 @@
   max-width: 420px;
   background-color: rgba(255, 255, 255, 0.95);
   border: 8px solid #2d5a3d;
-  /* border-radius: 20px;  No hace falta ser definido ya que tiene rounded-4 en el html */
 }
 
 /* Logo */
 .logo {
-  max-width: 120px;
+  max-width: 100px;
 }
 
 /* Inputs */

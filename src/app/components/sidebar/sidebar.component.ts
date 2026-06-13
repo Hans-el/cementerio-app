@@ -14,6 +14,8 @@ import { ExhumacionService } from '../../services/exhumacion.service';
 import { InhumacionService } from '../../services/inhumacion.service';
 import { forkJoin } from 'rxjs';
 import { filter } from 'rxjs/operators';
+import { CementerioService } from '../../services/cementerio.service';
+import { Cementerio } from '../../models/cementerio.model';
 
 
 @Component({
@@ -30,6 +32,8 @@ export class SidebarComponent implements OnInit {
   isCollapsed = false; // Estado del sidebar
   isMobile = false; // Estado para dispositivos móviles
   hover: boolean = false;
+  cementerioActivo: Cementerio | null = null;
+
 
   constructor(
     private authService: AuthService,
@@ -38,7 +42,8 @@ export class SidebarComponent implements OnInit {
     private usuarioService: UsuarioService,
     private exhumacionService: ExhumacionService,
     private inhumacionService: InhumacionService,
-    private elementRef: ElementRef
+    private elementRef: ElementRef,
+    private cementerioService: CementerioService
   ) { }
 
   // Este HostListener escucha los cambios en el tamaño de la ventana para adaptar el sidebar a dispositivos móviles
@@ -68,6 +73,9 @@ export class SidebarComponent implements OnInit {
   ngOnInit(): void {
     this.userRole = this.authService.getUserRole(); // Obtiene el rol al inicializar
     this.checkIfMobile();
+    this.cementerioService.getCementerioActivo().subscribe(c => {
+      this.cementerioActivo = c;
+    });
     // Cierra el sidebar automáticamente al navegar en móvil
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
@@ -83,6 +91,7 @@ export class SidebarComponent implements OnInit {
         setInterval(() => this.cargarPendientes(), 60000);
       }, 500);
     }
+
   }
   //para las notificaciones de solicitudes pendientes en el admin
   cargarPendientes(): void {
@@ -136,6 +145,7 @@ export class SidebarComponent implements OnInit {
 
   logout(): void {
     this.authService.logout();
+    this.cementerioService.limpiar();
     Swal.fire({
       toast: true,
       position: 'top-end',
@@ -146,7 +156,7 @@ export class SidebarComponent implements OnInit {
       icon: 'success',
       confirmButtonText: 'OK',
     }).then(() => {
-      this.router.navigate(['/login']);
+      this.router.navigate(['/cementerios']);
     });
   }
 }

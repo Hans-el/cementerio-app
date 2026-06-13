@@ -13,8 +13,10 @@ import { Cementerio } from '../../models/cementerio.model';
   styleUrl: './cementerios.component.css'
 })
 export class CementeriosComponent implements OnInit {
+
   cementerios: Cementerio[] = [];
-  cargando = false;
+  cargando = true;
+  error = false;
 
   constructor(
     private cementerioService: CementerioService,
@@ -22,27 +24,33 @@ export class CementeriosComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    const slugGuardado = this.cementerioService.obtenerSlug();
-    if (slugGuardado) {
-      this.router.navigate(['/login']); // ya eligió cementerio antes
+    // Si ya hay cementerio seleccionado y hay token, ir directo al mapa
+    const token = localStorage.getItem('token');
+    const cementerio = this.cementerioService.getCementerioActivoSnapshot();
+
+    if (token && cementerio) {
+      this.router.navigate(['/mapa']);
       return;
     }
-    this.cargarCementerios();
-  }
 
-  cargarCementerios(): void {
-    this.cargando = true;
     this.cementerioService.getCementerios().subscribe({
       next: (data) => {
         this.cementerios = data;
         this.cargando = false;
       },
-      error: () => { this.cargando = false; },
+      error: () => {
+        this.error = true;
+        this.cargando = false;
+      },
     });
+  }
+  recargar() {
+    // Tu lógica para recargar los cementerios
+    this.cementerioService.getCementerios(); // o el método que uses para cargar
   }
 
   seleccionar(cementerio: Cementerio): void {
-    this.cementerioService.guardarSlug(cementerio.slug);
+    this.cementerioService.seleccionar(cementerio);
     this.router.navigate(['/login']);
   }
-}                             
+}

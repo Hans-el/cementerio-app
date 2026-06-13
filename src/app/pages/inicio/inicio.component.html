@@ -128,7 +128,7 @@
           <label class="form-label text-muted small fw-semibold mb-1">Sector</label>
           <select class="form-select form-select bg-light" [(ngModel)]="filtros.sector" (change)="onSectorChange()">
             <option [ngValue]="null">Todos</option>
-            <option *ngFor="let s of sectores" [ngValue]="s.id_sector">
+            <option *ngFor="let s of sectores" [ngValue]="s.codigo">
               {{ ("0" + s.codigo).slice(-2) }}
             </option>
           </select>
@@ -270,7 +270,7 @@
               <td>
                 <ng-container *ngIf="o.fechas.length > 0; else sinFecha">
                   <div *ngFor="let fecha of o.fechas" class="small">
-                    {{ fecha ? (fecha | date: "dd MMM yyyy": "UTC") : "—" }}
+                    {{ fecha ? (fecha | date: "dd MMM yyyy" : "UTC") : "—" }}
                   </div>
                 </ng-container>
                 <ng-template #sinFecha>

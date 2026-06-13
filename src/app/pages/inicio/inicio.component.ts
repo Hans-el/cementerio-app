@@ -328,8 +328,11 @@ export class InicioComponent implements OnInit {
       this.cargarOcupaciones();
       return;
     }
-
-    this.cargarManzanas(this.filtros.sector);
+    // Buscar el id_sector correspondiente al codigo seleccionado
+    const sectorSeleccionado = this.sectores.find(s => s.codigo === this.filtros.sector);
+    if (sectorSeleccionado) {
+      this.cargarManzanas(sectorSeleccionado.id_sector);
+    }
     this.aplicarFiltros();
   }
 

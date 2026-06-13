@@ -25,11 +25,7 @@
   >
     <!-- En este div tenemos la imagen del mapa. -->
     <div class="mapa-canvas" [style.transform]="transform">
-      <img
-        src="assets/mapa.png"
-        alt="Croquis del cementerio de Colón"
-        draggable="false"
-      />
+      <img [src]="mapaUrl" alt="Croquis del cementerio" draggable="false" />
     </div>
   </div>
 </div>

@@ -4,6 +4,8 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AuthService } from './auth.service';
 import { environment } from '../../environments/environment';
+import { CementerioService } from './cementerio.service';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -14,7 +16,9 @@ export class FallecidoService {
   constructor(
     private http: HttpClient,
     private authService: AuthService,
-  ) {}
+    private cementerioService: CementerioService,
+    private router: Router
+  ) { }
 
   // Obtener fallecidos paginados
   getFallecidos(
@@ -67,8 +71,10 @@ export class FallecidoService {
 
   //este es usado en el modal de localizar exclusivamente, para buscar unicamente por nombre.
   buscarBovedaPorNombre(nombre: string): Observable<any[]> {
+    const slug = this.cementerioService.getSlugActivo();
+
     return this.http.get<any[]>(`${this.apiUrl}/buscar-boveda`, {
-      params: { nombre },
+      params: { nombre, cementerio: slug || '' },
     });
   }
   //nuevo metodo para autocompletado de nombres en el modal de localizar. ESTA FUNCION ES MUY IMPORTANTE PARA FACILITAR LA BUSQUEDA EXACTA Y NO METER VALORES ERRONEOS.

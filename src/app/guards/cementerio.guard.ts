@@ -3,18 +3,16 @@ import { CanActivateFn, Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { CementerioService } from '../services/cementerio.service';
 
-export const authGuard: CanActivateFn = (route, state) => {
+export const cementerioGuard: CanActivateFn = () => {
   const authService = inject(AuthService);
-  const router = inject(Router);
   const cementerioService = inject(CementerioService);
+  const router = inject(Router);
 
-  if (!authService.isLoggedIn()) {
-    router.navigate(['/login']);
-    return false;
-  }
-  // Si no hay cementerio seleccionado, volver a la selección
-  if (!cementerioService.getCementerioActivoSnapshot()) {
-    router.navigate(['/seleccionar-cementerio']);
+  const tieneSesion = authService.isLoggedIn();
+  const tieneCementerio = cementerioService.getCementerioActivoSnapshot();
+
+  if (tieneSesion && tieneCementerio) {
+    router.navigate(['/mapa']);
     return false;
   }
 

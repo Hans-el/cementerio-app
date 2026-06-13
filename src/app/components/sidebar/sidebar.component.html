@@ -14,13 +14,14 @@
     z-index: 1000;
     transition: transform 0.3s ease;
   ">
-  <div class="sidebar-header p-3">
+  <div class="sidebar-header p-3 ">
     <div class="d-flex align-items-center">
       <div class="logo me-3">
-        <img src="assets/faviconblanco.png" alt="Logo Cementerio Colón" class="d-inline-block align-top" width="70" />
+        <img [src]="cementerioActivo?.logo_url || 'assets/faviconblanco.png'"
+          [alt]="cementerioActivo?.nombre || 'Cementerio'" class="d-inline-block align-top" width="70" />
       </div>
       <div class="logo-text">
-        <h4 class="mb-0">Cementerio de Colón</h4>
+        <h4 class="mb-0">{{ cementerioActivo?.nombre || 'Cementerio' }}</h4>
         <small class="text-white">Servicios y Gestión</small>
       </div>
     </div>

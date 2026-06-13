@@ -5,6 +5,7 @@ import { PerfilComponent } from './pages/perfil/perfil.component';
 import { ContactoComponent } from './pages/contacto/contacto.component';
 import { InicioComponent } from './pages/inicio/inicio.component';
 import { authGuard } from './guards/auth.guard';
+import { cementerioGuard } from './guards/cementerio.guard';
 import { MapaBovedasComponent } from './pages/mapa-bovedas/mapa-bovedas.component';
 import { LayoutComponent } from './components/layout/layout.component';
 import { adminGuard } from './guards/admin.guard';
@@ -20,10 +21,10 @@ import { CementeriosComponent } from './pages/cementerios/cementerios.component'
 //rutas de la aplicación
 export const routes: Routes = [
     // Ruta raíz redirige a selección de cementerio
-    { path: '', redirectTo: 'login', pathMatch: 'full' },
+    { path: '', redirectTo: 'cementerios', pathMatch: 'full' },
 
     // Pantallas sin sidebar
-    { path: 'cementerios', component: CementeriosComponent },
+    { path: 'cementerios', component: CementeriosComponent, canActivate: [cementerioGuard] },
     { path: 'login', component: LoginComponent },
     { path: 'registro', component: RegistroComponent },
 
@@ -47,5 +48,5 @@ export const routes: Routes = [
     },
 
     // Ruta comodín — redirige a selección si no existe la ruta
-    { path: '**', redirectTo: 'login' },
+    { path: '**', redirectTo: 'cementerios' },
 ];

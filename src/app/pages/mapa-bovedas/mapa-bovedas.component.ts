@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { CementerioService } from '../../services/cementerio.service';
 
 @Component({
   selector: 'app-mapa-bovedas',
@@ -14,15 +15,23 @@ export class MapaBovedasComponent {
   maxScale = 4;
   translateX = 0;
   translateY = 0;
+  mapaUrl: string = 'assets/sinmapa.webp';
 
   // Para arrastrar con mouse
   private dragging = false;
   private lastX = 0;
   private lastY = 0;
-
   // Para touch (pinch)
   private lastTouchDist = 0;
 
+  constructor(private cementerioService: CementerioService) { }
+
+  ngOnInit(): void {
+    const cementerio = this.cementerioService.getCementerioActivoSnapshot();
+    if (cementerio?.mapa_url) {
+      this.mapaUrl = cementerio.mapa_url;
+    }
+  }
   get transform(): string {
     return `translate(${this.translateX}px, ${this.translateY}px) scale(${this.scale})`;
   }
