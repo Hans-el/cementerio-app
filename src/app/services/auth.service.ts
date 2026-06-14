@@ -42,6 +42,14 @@ export class AuthService {
 
   // Método para registrar un nuevo usuario
   registrar(userData: any): Observable<any> {
+    const slug = this.cementerioService.getSlugActivo();
+    if (!slug) {
+      // Redirigir a selección de cementerio si no hay slug
+      this.router.navigate(['/cementerios']);
+      throw new Error('No hay cementerio seleccionado.');
+    }
+
+    userData.slug = slug; // Agregar el slug al objeto de datos del usuario
     return this.http.post(`${this.apiUrl}/auth/registrar`, userData);
   }
 

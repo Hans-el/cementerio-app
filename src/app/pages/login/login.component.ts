@@ -26,7 +26,9 @@ export class LoginComponent implements OnInit {
   errorMessage: string = '';
   cementerios: Cementerio[] = [];
   cargando = false;
+  loading = false;
   error = false;
+  cementerioActivo: Cementerio | null = null;
 
 
 
@@ -45,7 +47,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     const token = localStorage.getItem('token');
-    const cementerio = this.cementerioService.getCementerioActivoSnapshot();
+    this.cementerioActivo = this.cementerioService.getCementerioActivoSnapshot();
 
     const savedCedula = localStorage.getItem('rememberedCedula');
     const savedContrasena = localStorage.getItem('rememberedContrasena');
@@ -75,6 +77,7 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit() {
+    this.loading = true;
     if (this.loginForm.valid) {
       const { cedula, contrasena, rememberMe } = this.loginForm.value;
 
@@ -93,6 +96,7 @@ export class LoginComponent implements OnInit {
             localStorage.removeItem('rememberedContrasena');
             localStorage.removeItem('rememberMe');
           }
+          this.loading = false;
 
           Swal.fire({
             toast: true, //Con este atributo se muestra como una notificación en la esquina, es mucho más elegante que un alert tradicional
@@ -118,6 +122,7 @@ export class LoginComponent implements OnInit {
             icon: 'error',
           });
           console.error('Error al iniciar sesión:', error);
+          this.loading = false;
         },
       );
     } else {

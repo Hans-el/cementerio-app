@@ -1,111 +1,73 @@
 <section class="login-wrapper">
-  <div class="card border border-primary shadow-lg rounded-4 login-card">
+  <div class="card border border-white shadow-lg rounded-4 login-card">
     <div class="card-body p-4 p-md-5">
       <h3 class="mb-3 text-center fw-bold">Registrarse</h3>
-
-      <!-- Mensaje de error -->
-      <ngb-alert
-        *ngIf="errorMessage"
-        type="danger"
-        (closed)="errorMessage = ''"
-        class="mb-3"
-      >
+      <!-- Error -->
+      <ngb-alert *ngIf="errorMessage" type="danger" (closed)="errorMessage = ''" class="mb-3">
         {{ errorMessage }}
+      </ngb-alert>
+
+      <!-- Éxito -->
+      <ngb-alert *ngIf="successMessage" type="success" class="mb-3">
+        <div class="d-flex align-items-center">
+          <i class="bi bi-check-circle-fill me-2 fs-5"></i>
+          <div>
+            <strong>Cuenta creada correctamente.</strong>
+            <div>Serás redirigido al inicio de sesión en unos segundos.</div>
+          </div>
+        </div>
       </ngb-alert>
 
       <form [formGroup]="registroForm" (ngSubmit)="onSubmit()" class="mt-4">
         <!-- Nombre -->
         <div class="mb-3 form-floating">
-          <input
-            type="text"
-            class="form-control"
-            id="nombre"
-            formControlName="nombre"
-            placeholder="Nombre Completo"
-          />
+          <input type="text" class="form-control" id="nombre" formControlName="nombre" placeholder="Nombre Completo" />
           <label for="nombre">Nombre Completo</label>
-          <div
-            *ngIf="
+          <div *ngIf="
               registroForm.get('nombre')?.invalid &&
               registroForm.get('nombre')?.touched
-            "
-            class="text-danger"
-          >
+            " class="text-danger mt-1">
             Solo se permiten letras y espacios.
           </div>
         </div>
-
-        <!-- Cédula -->
+        <!-- Cedula -->
         <div class="mb-3 form-floating">
-          <input
-            type="text"
-            class="form-control"
-            id="cedula"
-            formControlName="cedula"
-            placeholder="Cédula"
-            maxlength="10"
-            (input)="limitCedulaLength()"
-          />
+          <input type="text" class="form-control" id="cedula" formControlName="cedula" placeholder="Cédula"
+            maxlength="10" inputmode="numeric" (input)="onlyNumbers($event)" />
           <label for="cedula">Cédula</label>
-          <div
-            *ngIf="
+          <div *ngIf="
               registroForm.get('cedula')?.invalid &&
               registroForm.get('cedula')?.touched
-            "
-            class="text-danger"
-          >
-            La cédula debe tener exactamente 10 dígitos.
+            " class="text-danger mt-1">
+            La cédula debe contener exactamente 10 dígitos.
           </div>
         </div>
-
         <!-- Correo -->
         <div class="mb-3 form-floating">
-          <input
-            type="email"
-            class="form-control"
-            id="correo"
-            formControlName="correo"
-            placeholder="Correo electrónico"
-          />
+          <input type="email" class="form-control" id="correo" formControlName="correo"
+            placeholder="Correo electrónico" />
           <label for="correo">Correo electrónico</label>
-          <div
-            *ngIf="
+          <div *ngIf="
               registroForm.get('correo')?.invalid &&
               registroForm.get('correo')?.touched
-            "
-            class="text-danger"
-          >
-            Por favor, introduce un correo electrónico válido.
+            " class="text-danger mt-1">
+            Introduce un correo electrónico válido.
           </div>
         </div>
-
         <!-- Contraseña -->
         <div class="mb-3 position-relative form-floating">
-          <input
-            [type]="showPassword ? 'text' : 'password'"
-            class="form-control"
-            id="contrasena"
-            formControlName="contrasena"
-            placeholder="Contraseña"
-          />
+          <input [type]="showPassword ? 'text' : 'password'" class="form-control" id="contrasena"
+            formControlName="contrasena" placeholder="Contraseña" />
           <label for="contrasena">Contraseña</label>
-          <button
-            type="button"
-            class="toggle-password btn btn-link position-absolute end-5 top-5 h-100"
-            (click)="togglePasswordVisibility()"
-          >
-            <i
-              class="bi"
-              [ngClass]="showPassword ? 'bi-eye-slash' : 'bi-eye'"
-            ></i>
+          <button type="button" class="toggle-password btn btn-link position-absolute end-5 top-5 h-100"
+            (click)="togglePasswordVisibility()">
+            <i class="bi" [ngClass]="showPassword ? 'bi-eye-slash' : 'bi-eye'">
+            </i>
           </button>
-          <div
-            *ngIf="
+          <div *ngIf="
               registroForm.get('contrasena')?.invalid &&
               registroForm.get('contrasena')?.touched
-            "
-            class="text-danger"
-          >
+            " class="text-danger mt-1">
             La contraseña es obligatoria.
           </div>
         </div>
@@ -118,79 +80,67 @@
             <option value="femenino">Femenino</option>
             <option value="otro">Otro</option>
           </select>
+
           <label for="genero">Género</label>
-          <div
-            *ngIf="
+          <div *ngIf="
               registroForm.get('genero')?.invalid &&
               registroForm.get('genero')?.touched
-            "
-            class="text-danger"
-          >
+            " class="text-danger mt-1">
             Selecciona un género.
           </div>
         </div>
 
-        <!-- Fecha de nacimiento -->
+        <!-- Fecha nacimiento -->
         <div class="mb-3 form-floating">
-          <input
-            type="date"
-            class="form-control"
-            id="fechaNacimiento"
-            formControlName="fechaNacimiento"
-            placeholder="Selecciona tu fecha de nacimiento"
-          />
-          <label for="fechaNacimiento">Fecha de nacimiento</label>
-          <div
-            *ngIf="
+          <input type="date" class="form-control" id="fechaNacimiento" formControlName="fechaNacimiento"
+            placeholder="Fecha de nacimiento" />
+          <label for="fechaNacimiento">
+            Fecha de nacimiento
+          </label>
+          <div *ngIf="
               registroForm.get('fechaNacimiento')?.invalid &&
               registroForm.get('fechaNacimiento')?.touched
-            "
-            class="text-danger"
-          >
+            " class="text-danger mt-1">
             Selecciona tu fecha de nacimiento.
           </div>
         </div>
 
-        <!-- Términos -->
+        <!-- Terminos -->
         <div class="form-check mb-3">
-          <input
-            class="form-check-input"
-            type="checkbox"
-            id="acceptTerms"
-            formControlName="acceptTerms"
-          />
+          <input class="form-check-input" type="checkbox" id="acceptTerms" formControlName="acceptTerms" />
           <label class="form-check-label" for="acceptTerms">
             Acepto los
-            <a href="../../assets/politicas.html" target="_blank"
-              >Términos y Condiciones</a
-            >
+            <a href="../../assets/politicas.html" target="_blank">
+              Términos y Condiciones
+            </a>
           </label>
-          <div
-            *ngIf="
+
+          <div *ngIf="
               registroForm.get('acceptTerms')?.invalid &&
               registroForm.get('acceptTerms')?.touched
-            "
-            class="text-danger"
-          >
+            " class="text-danger mt-1">
             Debes aceptar los términos y condiciones.
           </div>
         </div>
 
         <!-- Botón -->
         <div class="d-grid">
-          <button class="btn btn-primary btn-lg" type="submit">
-            Registrarse
+          <button class="btn btn-primary btn-lg" type="submit" [disabled]="registroForm.invalid || loading">
+            <ng-container *ngIf="!loading">
+              Registrarse
+            </ng-container>
+            <ng-container *ngIf="loading">
+              <span class="spinner-border spinner-border-sm me-2" role="status">
+              </span>
+              Creando cuenta...
+            </ng-container>
           </button>
         </div>
       </form>
 
-      <!-- Ir al Login -->
       <div class="mt-3 text-center">
         ¿Ya tienes cuenta?
-        <a
-          [routerLink]="['/login']"
-          class="text-decoration-none fw-bold text-secondary"
-        >
+        <a [routerLink]="['/login']" class="text-decoration-none fw-bold text-white">
           Inicia sesión
         </a>
       </div>

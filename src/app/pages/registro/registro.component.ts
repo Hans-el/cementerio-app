@@ -32,6 +32,8 @@ export class RegistroComponent implements OnInit {
   showPassword: boolean = false;
   errorMessage: string = '';
   model: any; // Para el datepicker
+  loading = false;
+  successMessage = '';
 
   constructor(
     private fb: FormBuilder,
@@ -63,6 +65,15 @@ export class RegistroComponent implements OnInit {
 
   togglePasswordVisibility(): void {
     this.showPassword = !this.showPassword;
+  }
+  onlyNumbers(event: Event): void {
+    const input = event.target as HTMLInputElement;
+
+    input.value = input.value.replace(/\D/g, '');
+
+    this.registroForm.patchValue({
+      cedula: input.value
+    });
   }
 
   // Función de validar cédula matemáticamente. Me la pasó Anderson por whatsapp.
@@ -192,6 +203,7 @@ export class RegistroComponent implements OnInit {
   }
 
   onSubmit(): void {
+
     if (this.registroForm.invalid) {
       this.errorMessage = 'Por favor, completa todos los campos correctamente.';
       return;
@@ -199,9 +211,10 @@ export class RegistroComponent implements OnInit {
 
     // Validar cédula ecuatoriana
     const cedulaValue = this.registroForm.get('cedula')?.value;
+
     if (!this.validar_cedula(cedulaValue)) {
       Swal.fire({
-        title: 'Error!',
+        title: 'Error',
         text: 'La cédula ingresada no es válida.',
         icon: 'error',
         confirmButtonText: 'OK',
@@ -212,7 +225,7 @@ export class RegistroComponent implements OnInit {
     // Validar mayoría de edad
     if (!this.checkAdult()) {
       Swal.fire({
-        title: 'Error!',
+        title: 'Error',
         text: 'Debes ser mayor de edad para registrarte.',
         icon: 'error',
         confirmButtonText: 'OK',
@@ -223,7 +236,7 @@ export class RegistroComponent implements OnInit {
     // Validar dominio del correo
     if (!this.isValidEmailDomain()) {
       Swal.fire({
-        title: 'Error!',
+        title: 'Error',
         text: 'Por favor, introduce un correo electrónico válido.',
         icon: 'error',
         confirmButtonText: 'OK',
@@ -241,33 +254,58 @@ export class RegistroComponent implements OnInit {
       rol: 'usuario',
     };
 
-    this.authService.registrar(userData).subscribe(
-      (response) => {
-        Swal.fire({
-          title: 'Registro exitoso!',
-          text: 'Usuario registrado correctamente.',
-          icon: 'success',
-          timerProgressBar: true,
-          timer: 2500,
-          confirmButtonText: 'OK',
-        }).then(() => {
-          this.router.navigate(['/login']);
-        });
+    // Limpiar mensajes anteriores
+    this.errorMessage = '';
+    this.successMessage = '';
+
+    // Activar spinner
+    this.loading = true;
+
+    // Evitar doble envío
+    this.registroForm.disable();
+
+    this.authService.registrar(userData).subscribe({
+
+      next: (response) => {
+
         console.log('Usuario registrado:', response);
+
+        this.loading = false;
+
+        this.successMessage =
+          'Cuenta creada correctamente. Serás redirigido al inicio de sesión.';
+
+        // Esperar 2.5 segundos antes de redirigir
+        setTimeout(() => {
+          this.router.navigate(['/login']);
+        }, 2500);
+
       },
-      (error) => {
-        let errorMessage = 'Error al registrar usuario.';
-        if (error.error && error.error.mensaje) {
-          errorMessage = error.error.mensaje;
+
+      error: (error) => {
+
+        this.loading = false;
+
+        this.registroForm.enable();
+
+        let mensaje = 'Error al registrar usuario.';
+
+        if (error.error?.mensaje) {
+          mensaje = error.error.mensaje;
         }
+
         Swal.fire({
-          title: 'Error!',
-          text: errorMessage,
+          title: 'Error',
+          text: mensaje,
           icon: 'error',
           confirmButtonText: 'OK',
         });
+
         console.error('Error al registrar usuario:', error);
-      },
-    );
+
+      }
+
+    });
+
   }
 }
