@@ -40,9 +40,9 @@ export const routes: Routes = [
             { path: 'perfil', component: PerfilComponent },
             { path: 'reportes', component: ReportesComponent, canActivate: [authGuard, adminGuard] },
             { path: 'dashboard', component: DashboardComponent, canActivate: [adminGuard] },
-            { path: 'tramites', component: TramitesComponent, canActivate: [authGuard] },
-            { path: 'exhumaciones', component: SolicitudExhumacionComponent, canActivate: [authGuard] },
-            { path: 'inhumaciones', component: SolicitudInhumacionComponent, canActivate: [authGuard] },
+            { path: 'tramites', component: TramitesComponent },
+            { path: 'exhumaciones', component: SolicitudExhumacionComponent },
+            { path: 'inhumaciones', component: SolicitudInhumacionComponent },
             { path: 'admin/solicitudes', component: AdminSolicitudesComponent, canActivate: [authGuard, adminGuard] },
         ]
     },

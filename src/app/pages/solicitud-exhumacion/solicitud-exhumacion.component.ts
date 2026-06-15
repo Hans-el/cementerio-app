@@ -38,7 +38,7 @@ export class SolicitudExhumacionComponent implements OnInit {
   readonly PRECIO = 27.03;
   readonly apiBase = new URL(environment.apiUrl).origin;
 
-  constructor(private exhumacionService: ExhumacionService) {}
+  constructor(private exhumacionService: ExhumacionService) { }
 
   ngOnInit(): void {
     this.verificarSolicitudActiva();
@@ -177,7 +177,7 @@ export class SolicitudExhumacionComponent implements OnInit {
         error: (err) => {
           this.enviando = false;
           Swal.fire(
-            'Error',
+            'Ups!',
             err.error?.message || 'No se pudo enviar la solicitud.',
             'error',
           );
@@ -226,7 +226,7 @@ export class SolicitudExhumacionComponent implements OnInit {
           },
           error: (err) => {
             Swal.fire(
-              'Error',
+              'Ups!',
               err.error?.message || 'No se pudo reemplazar el documento.',
               'error',
             );
