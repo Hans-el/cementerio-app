@@ -1,16 +1,9 @@
-<div
-  class="seleccionar-wrapper d-flex align-items-center justify-content-center min-vh-100"
->
+<div class="seleccionar-wrapper d-flex align-items-center justify-content-center min-vh-100">
   <div class="container" style="max-width: 800px">
     <!-- Header -->
     <div class="text-center mb-5">
-      <img
-        src="assets/faviconblanco.png"
-        alt="Logo"
-        width="80"
-        class="mb-3"
-        style="filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.2))"
-      />
+      <img src="assets/faviconblanco.png" alt="Logo" width="80" class="mb-3"
+        style="filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.2))" />
       <h2 class="fw-bold text-white mb-1">Sistema de Gestión de Cementerios</h2>
       <p class="text-white-50">
         Selecciona el cementerio al que deseas acceder
@@ -31,30 +24,12 @@
     <!-- Lista de cementerios -->
     <div *ngIf="!cargando && !error" class="row g-4 justify-content-center">
       <div *ngFor="let c of cementerios" class="col-md-6 col-lg-4">
-        <div
-          class="cementerio-card"
-          (click)="seleccionar(c)"
-          style="cursor: pointer"
-        >
-          <!-- Logo o ícono por defecto -->
-          <!-- <div class="cementerio-logo mb-3">
-            <img
-              *ngIf="c.logo_url"
-              [src]="c.logo_url"
-              [alt]="c.nombre"
-              class="img-fluid rounded-circle"
-              style="width: 64px; height: 64px; object-fit: cover"
-            />
-          </div> -->
-
+        <div class="cementerio-card" (click)="seleccionar(c)" style="cursor: pointer">
           <h5 class="fw-semibold mb-1">
             {{ c.nombre }}
           </h5>
 
-          <div
-            class="d-flex flex-column gap-1 text-muted small"
-            *ngIf="c.direccion || c.telefono"
-          >
+          <div class="d-flex flex-column gap-1 text-muted small" *ngIf="c.direccion || c.telefono">
             <span *ngIf="c.direccion">
               <i class="bi bi-geo-alt me-1"></i>{{ c.direccion }}
             </span>
@@ -63,18 +38,7 @@
             </span>
           </div>
 
-          <button
-            class="btn btn-sm w-50 fw-bold"
-            [style.background]="c.color_primario"
-            style="
-              color: white;
-              border: solid 2px white;
-              border-radius: 10px;
-              margin-top: 7px;
-            "
-          >
-            Ingresar <i class="bi bi-arrow-right"></i>
-          </button>
+
         </div>
       </div>
     </div>

@@ -1,25 +1,43 @@
 .seleccionar-wrapper {
-  background-image: url('/assets/cementerios.webp');
+  background-image: url('/assets/cementerioss.webp');
   background-size: cover;
   background-position: center;
   min-height: 100vh;
   padding: 2rem 1rem;
+  background-color: rgba(0, 0, 0, 0.5);
+  background-blend-mode: darken;
 }
 
 .cementerio-card {
-  background-color: rgba(255, 255, 255, 0.9);  
-  border-radius: 35px;
-  padding: 1.5rem;
-  text-align: center;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  width: 100%;
   height: 100%;
+  /* Glassmorphism */
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 .cementerio-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  transform: translateY(-6px);
+  background: rgba(255, 255, 255, 0.2);
+  box-shadow:
+    0 12px 40px rgba(0, 0, 0, 0.35);
 }
+.nombre-cementerio {
+  color: white;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
 
 .cementerio-logo {
   display: flex;
