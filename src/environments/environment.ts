@@ -2,5 +2,5 @@
 export const environment = {
   production: true,
 
-  apiUrl: 'https://cementerio-app-backend.onrender.com/api',
+  apiUrl: 'https://localhost:3000/api',
 };
