@@ -1,50 +1,75 @@
-<div class="seleccionar-wrapper d-flex align-items-center justify-content-center min-vh-100">
-  <div class="container" style="max-width: 800px">
-    <!-- Header -->
-    <div class="text-center mb-5">
-      <img src="assets/faviconblanco.png" alt="Logo" width="80" class="mb-3"
-        style="filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.2))" />
-      <h2 class="fw-bold text-white mb-1">Sistema de Gestión de Cementerios</h2>
-      <p class="text-white-50">
-        Selecciona el cementerio al que deseas acceder
-      </p>
+<div class="seleccionar-wrapper">
+
+  <!-- Overlay oscuro sobre la imagen -->
+  <div class="overlay"></div>
+
+  <div class="contenido">
+
+    <!-- Header institucional -->
+    <div class="header-institucional">
+      <img src="assets/faviconblanco.png" alt="Logo institucional" class="logo-institucional" />
+      <div class="header-texto">
+        <p class="header-subtitulo">"INSTITUCIÓN"</p>
+        <h1 class="header-titulo">Sistema de Gestión de Cementerios Municipales</h1>
+        <p class="header-descripcion">Administración General de Portoviejo</p>
+      </div>
     </div>
+
+    <!-- Divisor -->
+    <div class="divisor"></div>
+
+    <!-- Instrucción -->
+    <p class="instruccion">
+      Seleccione la unidad administrativa a la que desea acceder
+    </p>
 
     <!-- Cargando -->
-    <div *ngIf="cargando" class="text-center py-5">
-      <div class="spinner-border text-white"></div>
-    </div>
+    <div *ngIf="cargando" class="estado-centro">
+      <div class="spinner-border text-white" style="width: 2rem; height: 2rem;"></div>
+      <p class="text-white-50 mt-3 small">Cargando unidades administrativas...</p>
+    </div>|
 
     <!-- Error -->
-    <div *ngIf="error" class="alert alert-danger text-center">
-      <i class="bi bi-exclamation-circle me-2"></i>
-      No se pudieron cargar los cementerios. Intenta de nuevo.
+    <div *ngIf="error" class="estado-centro">
+      <i class="bi bi-exclamation-triangle fs-1 text-warning d-block mb-3"></i>
+      <p class="text-white mb-2">No se pudieron cargar los cementerios.</p>
+      <button class="btn btn-outline-light btn-sm" (click)="ngOnInit()">
+        <i class="bi bi-arrow-clockwise me-1"></i>Reintentar
+      </button>
     </div>
 
     <!-- Lista de cementerios -->
-    <div *ngIf="!cargando && !error" class="row g-4 justify-content-center">
-      <div *ngFor="let c of cementerios" class="col-md-6 col-lg-4">
-        <div class="cementerio-card" (click)="seleccionar(c)" style="cursor: pointer">
-          <h5 class="fw-semibold mb-1">
-            {{ c.nombre }}
-          </h5>
+    <div *ngIf="!cargando && !error" class="lista-cementerios">
+      <div *ngFor="let c of cementerios; let i = index" class="cementerio-card" (click)="seleccionar(c)">
 
-          <div class="d-flex flex-column gap-1 text-muted small" *ngIf="c.direccion || c.telefono">
-            <span *ngIf="c.direccion">
-              <i class="bi bi-geo-alt me-1"></i>{{ c.direccion }}
+        <!-- Número de unidad -->
+        <span class="numero-unidad">{{ (i + 1).toString().padStart(2, '0') }}</span>
+
+        <!-- Info principal -->
+        <div class="card-info">
+          <h5 class="card-nombre">{{ c.nombre }}</h5>
+          <div class="card-detalles" *ngIf="c.direccion || c.telefono">
+            <span *ngIf="c.direccion" class="card-detalle">
+              <i class="bi bi-geo-alt"></i> {{ c.direccion }}
             </span>
-            <span *ngIf="c.telefono">
-              <i class="bi bi-telephone me-1"></i>{{ c.telefono }}
+            <span *ngIf="c.telefono" class="card-detalle">
+              <i class="bi bi-telephone"></i> {{ c.telefono }}
             </span>
           </div>
-          <!-- Botón de selección en la parte derecha -->
-          <button class="btn btn-outline-light mt-3 fw-bold w-20 text-uppercase align-self-end">
-            <i class=" bi bi-box-arrow-in-right me-1"></i>
-          </button>
-
-
         </div>
+
+        <!-- Acción -->
+        <div class="card-accion">
+          <i class="bi bi-arrow-right-circle-fill card-icono-accion"></i>
+        </div>
+
       </div>
     </div>
+
+    <!-- Footer -->
+    <p class="footer-texto">
+      © {{ anioActual }} · Administración General de Portoviejo
+    </p>
+
   </div>
 </div>

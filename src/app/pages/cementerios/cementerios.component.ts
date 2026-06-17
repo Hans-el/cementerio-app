@@ -17,6 +17,7 @@ export class CementeriosComponent implements OnInit {
   cementerios: Cementerio[] = [];
   cargando = true;
   error = false;
+  anioActual = new Date().getFullYear();
 
   constructor(
     private cementerioService: CementerioService,
