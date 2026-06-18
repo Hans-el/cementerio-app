@@ -73,7 +73,7 @@
     <br />
 
     <!-- Menú de administrador -->
-    <div class="sidebar-nav px-2" *ngIf="userRole === 'admin'">
+    <div class="sidebar-nav px-2" *ngIf="userRole === 'admin' || userRole === 'superadmin'">
       <p class="nav-title px-3 text-uppercase text-white small">
         Administración
       </p>

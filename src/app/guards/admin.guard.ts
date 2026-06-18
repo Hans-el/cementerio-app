@@ -7,13 +7,11 @@ import { CanActivateFn, Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 
 export const adminGuard: CanActivateFn = (route, state) => {
-  const authService = inject(AuthService);
   const router = inject(Router);
+  const authService = inject(AuthService);
 
-  if (authService.isAdmin()) {
-    return true;
-  } else {
-    router.navigate(['/mapa']);
-    return false;
-  }
+  const rol = authService.getUserRole();
+  if (['admin', 'superadmin', 'supervisor'].includes(rol)) return true;
+  router.navigate(['/mapa']);
+  return false;
 };

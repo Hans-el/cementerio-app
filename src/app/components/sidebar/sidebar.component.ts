@@ -84,7 +84,7 @@ export class SidebarComponent implements OnInit {
           this.isCollapsed = true;
         }
       });
-    if (this.userRole === 'admin') {
+    if (this.userRole === 'admin' || this.userRole === 'superadmin') {
       setTimeout(() => {
         this.cargarPendientes();
         // Refrescar cada 60 segundos para mantener el badge actualizado
@@ -156,6 +156,7 @@ export class SidebarComponent implements OnInit {
       icon: 'success',
       confirmButtonText: 'OK',
     }).then(() => {
+      // Redirige al usuario a la página de inicio después de cerrar sesión
       this.router.navigate(['/cementerios']);
     });
   }

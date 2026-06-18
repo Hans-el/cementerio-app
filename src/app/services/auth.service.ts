@@ -82,7 +82,7 @@ export class AuthService {
 
   // Método para verificar si el usuario es administrador (mas sencillo y practico)
   isAdmin(): boolean {
-    return this.getUserRole() === 'admin';
+    return this.getUserRole() === 'admin' || this.getUserRole() === 'superadmin'; // Consideramos superadmin como admin también
   }
 
   // Método para verificar si el usuario es administrador
@@ -93,7 +93,7 @@ export class AuthService {
     }
     try {
       const payload = JSON.parse(atob(token.split('.')[1]));
-      return payload.rol === 'admin';
+      return payload.rol === 'admin' || payload.rol === 'superadmin';
     } catch (e) {
       return false;
     }
