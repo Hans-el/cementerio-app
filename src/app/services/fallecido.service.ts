@@ -79,9 +79,12 @@ export class FallecidoService {
   }
   //nuevo metodo para autocompletado de nombres en el modal de localizar. ESTA FUNCION ES MUY IMPORTANTE PARA FACILITAR LA BUSQUEDA EXACTA Y NO METER VALORES ERRONEOS.
   obtenerSugerenciasNombres(term: string): Observable<string[]> {
-    return this.http.get<string[]>(`${this.apiUrl}/sugerencias-nombres`, {
-      params: { term },
-    });
+    const cementerio = this.cementerioService.getCementerioActivoSnapshot();
+    let params: any = { term };
+    if (cementerio) {
+      params.id_cementerio = cementerio.id_cementerio;
+    }
+    return this.http.get<string[]>(`${this.apiUrl}/sugerencias-nombres`, { params });
   }
   //crear un nuevo fallecido, usado en el modal de añadir difunto
   crearFallecido(data: any): Observable<any> {

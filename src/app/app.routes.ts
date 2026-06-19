@@ -17,16 +17,19 @@ import { SolicitudInhumacionComponent } from './pages/solicitud-inhumacion/solic
 import { SolicitudExhumacionComponent } from './pages/solicitud-exhumacion/solicitud-exhumacion.component';
 import { TramitesComponent } from './pages/tramites/tramites.component';
 import { CementeriosComponent } from './pages/cementerios/cementerios.component';
+import { InformacionComponent } from './pages/informacion/informacion.component';
 
 //rutas de la aplicación
 export const routes: Routes = [
     // Ruta raíz redirige a selección de cementerio
-    { path: '', redirectTo: 'cementerios', pathMatch: 'full' },
+    { path: '', redirectTo: 'informacion', pathMatch: 'full' },
 
     // Pantallas sin sidebar
     { path: 'cementerios', component: CementeriosComponent, canActivate: [cementerioGuard] },
     { path: 'login', component: LoginComponent },
     { path: 'registro', component: RegistroComponent },
+    { path: 'informacion', component: InformacionComponent },
+
 
     // Pantallas con sidebar
     {

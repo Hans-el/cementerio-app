@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { CementerioService } from '../../services/cementerio.service';
 import { Cementerio } from '../../models/cementerio.model';
 
@@ -8,7 +8,7 @@ import { Cementerio } from '../../models/cementerio.model';
 @Component({
   selector: 'app-cementerios',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './cementerios.component.html',
   styleUrl: './cementerios.component.css'
 })

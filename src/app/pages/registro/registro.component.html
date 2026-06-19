@@ -7,17 +7,6 @@
         {{ errorMessage }}
       </ngb-alert>
 
-      <!-- Éxito -->
-      <ngb-alert *ngIf="successMessage" type="success" class="mb-3">
-        <div class="d-flex align-items-center">
-          <i class="bi bi-check-circle-fill me-2 fs-5"></i>
-          <div>
-            <strong>Cuenta creada correctamente.</strong>
-            <div>Serás redirigido al inicio de sesión en unos segundos.</div>
-          </div>
-        </div>
-      </ngb-alert>
-
       <form [formGroup]="registroForm" (ngSubmit)="onSubmit()" class="mt-4">
         <!-- Nombre -->
         <div class="mb-3 form-floating">
@@ -122,6 +111,16 @@
             Debes aceptar los términos y condiciones.
           </div>
         </div>
+        <!-- Éxito -->
+        <ngb-alert *ngIf="successMessage" type="success" class="mb-3">
+          <div class="d-flex align-items-center">
+            <i class="bi bi-check-circle-fill me-2 fs-5"></i>
+            <div>
+              <strong>Cuenta creada correctamente.</strong>
+              <div>Serás redirigido al inicio de sesión en unos segundos.</div>
+            </div>
+          </div>
+        </ngb-alert>
 
         <!-- Botón -->
         <div class="d-grid">

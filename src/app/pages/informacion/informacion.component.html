@@ -1,0 +1,172 @@
+<div class="info-wrapper">
+
+    <!-- ══ HERO ══════════════════════════════════════════════════ -->
+    <section class="hero">
+        <div class="hero-badge">
+            <i class="bi bi-building"></i> Plataforma Municipal
+        </div>
+        <h1>Sistema de Gestión de Cementerios</h1>
+        <p>Accede a los servicios administrativos de tu cementerio de manera fácil, rápida y segura desde cualquier
+            dispositivo.</p>
+        <div class="hero-btns">
+            <a href="#servicios" class="btn-prim">
+                <i class="bi bi-grid"></i> Ver servicios
+            </a>
+            <a href="#como-funciona" class="btn-sec">
+                <i class="bi bi-question-circle"></i> ¿Cómo funciona?
+            </a>
+        </div>
+    </section>
+
+    <!-- ══ BUSCADOR ══════════════════════════════════════════════ -->
+    <section class="section" id="buscador">
+        <div class="section-label">Localizar fallecidos</div>
+        <div class="section-title">¿Busca a un familiar?</div>
+        <div class="section-sub">
+            Ingrese el nombre para ver sugerencias. Para ver la ubicación exacta, debe iniciar sesión.
+        </div>
+
+        <div class="buscador-wrap">
+            <div class="search-row">
+                <input type="text" [(ngModel)]="terminoBusqueda" (ngModelChange)="onBusquedaChange()"
+                    (keyup.enter)="buscar()" placeholder="Ingrese el nombre del fallecido..." autocomplete="off" />
+                <button (click)="buscar()">
+                    <i class="bi bi-search"></i> Buscar
+                </button>
+            </div>
+
+            <!-- Sugerencias -->
+            <div *ngIf="mostrarSugerencias" class="sugerencias-wrap">
+                <p class="sug-label">Sugerencias</p>
+                <div class="sugerencias">
+                    <span *ngFor="let s of sugerencias" class="sug-chip" (click)="seleccionarSugerencia(s)">
+                        {{ s }}
+                    </span>
+                </div>
+            </div>
+
+            <!-- Resultado bloqueado -->
+            <div *ngIf="mostrarResultadoBloqueado" class="resultado-bloqueado">
+                <i class="bi bi-lock-fill"></i>
+                <span>
+                    Para ver la <strong>ubicación exacta</strong> de este fallecido,
+                    debe iniciar sesión en su cementerio.
+                    <a (click)="irALogin()" class="link-login">Iniciar sesión</a>
+                </span>
+            </div>
+
+            <p class="search-hint">
+                <i class="bi bi-info-circle"></i>
+                Esta búsqueda es solo orientativa. El acceso completo requiere registro.
+            </p>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- ══ SERVICIOS ═════════════════════════════════════════════ -->
+    <section class="section" id="servicios">
+        <div class="section-label">Lo que ofrecemos</div>
+        <div class="section-title">Servicios disponibles</div>
+        <div class="section-sub">Todos los trámites y consultas que puede realizar desde esta plataforma.</div>
+
+        <div class="services-grid">
+            <div *ngFor="let s of servicios" class="service-card" (click)="abrirModal(s.key)">
+
+                <div class="service-icon">
+                    <i class="bi" [class]="s.icono"></i>
+                </div>
+
+                <div class="tipo-tag">
+                    <i class="bi" [class]="s.tipoIcono"></i> {{ s.tipo }}
+                </div>
+
+                <h3>{{ s.titulo }}</h3>
+                <p>{{ s.descripcion }}</p>
+
+                <span class="service-tag" [class]="s.tagClase">
+                    <i class="bi" [class]="s.tagIcono"></i> {{ s.tag }}
+                </span>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- ══ CÓMO FUNCIONA ═════════════════════════════════════════ -->
+    <section class="section" id="como-funciona">
+        <div class="section-label">Guía de uso</div>
+        <div class="section-title">¿Cómo funciona?</div>
+        <div class="section-sub">Siga estos pasos para acceder a todos los servicios del sistema.</div>
+
+        <div class="pasos-grid">
+            <div *ngFor="let p of pasos" class="paso-card">
+                <div class="paso-num">PASO {{ p.num }}</div>
+                <h4>{{ p.titulo }}</h4>
+                <p>{{ p.desc }}</p>
+            </div>
+        </div>
+    </section>
+    <!-- ponemos el boton de registrarse para hacerlo más facil -->
+    <div class="text-center mt-4">
+        <a [routerLink]="['/cementerios']" class="btn btn-success mb-3">
+            <i class="bi bi-person-plus"></i> Registrarme ahora
+        </a>
+        <h6 class="text-muted mb-3">Recuerda seleccionar el cementerio donde quieres usar los servicios. </h6>
+    </div>
+
+    <div class="divider"></div>
+
+
+
+    <!-- ══ FAQ ═══════════════════════════════════════════════════ -->
+    <section class="section">
+        <div class="section-label">Preguntas frecuentes</div>
+        <div class="section-title">Dudas comunes</div>
+
+        <div class="faq-list">
+            <div *ngFor="let f of faqs; let i = index" class="faq-item" (click)="toggleFaq(i)">
+                <div class="faq-q">
+                    <span>{{ f.pregunta }}</span>
+                    <i class="bi" [class]="faqAbierto === i ? 'bi-dash' : 'bi-plus'"></i>
+                </div>
+                <div class="faq-a" [class.open]="faqAbierto === i">
+                    {{ f.respuesta }}
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══ FOOTER ════════════════════════════════════════════════ -->
+    <footer class="footer-info">
+        <p>© {{ anioActual }} · Sistema de Gestión de Cementerios</p>
+    </footer>
+
+</div>
+
+<!-- ══ MODAL REUTILIZABLE ═══════════════════════════════════════ -->
+<div class="modal-overlay" [class.show]="modalVisible" (click)="cerrarModal()">
+    <div class="modal-box" (click)="$event.stopPropagation()">
+
+        <div class="modal-icono">
+            <i class="bi" [class]="modalConfig.icono"></i>
+        </div>
+
+        <h3>{{ modalConfig.titulo }}</h3>
+        <p>{{ modalConfig.descripcion }}</p>
+
+        <div class="modal-btns">
+            <button *ngIf="!modalConfig.esLibre" class="btn-modal-prim" (click)="irALogin()">
+                <i class="bi bi-box-arrow-in-right"></i> Iniciar sesión
+            </button>
+            <button *ngIf="!modalConfig.esLibre" class="btn-modal-sec"
+                [routerLink]="cementerioActivo ? '/registro' : '/cementerios'">
+                <i class="bi bi-person-plus"></i> Registrarse
+            </button>
+            <button class="btn-modal-cancel" (click)="cerrarModal()">
+                Cerrar
+            </button>
+        </div>
+
+    </div>
+</div>
