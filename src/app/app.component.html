@@ -1,1 +1,5 @@
-<app-layout></app-layout>
+<div class="loading-overlay" *ngIf="loading">
+    <img src="assets/faviconnegro.gif" alt="Cargando">
+</div>
+
+<router-outlet></router-outlet>
