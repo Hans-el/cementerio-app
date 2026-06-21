@@ -1,0 +1,328 @@
+<div class="sa-wrapper">
+
+    <!-- ══ HEADER ════════════════════════════════════════════ -->
+    <div class="sa-header">
+        <div>
+            <h4 class="sa-titulo">
+                <i class="bi bi-shield-fill-check me-2 text-success"></i>
+                Panel de Superadministrador
+            </h4>
+            <p class="sa-subtitulo">Gestiona cementerios y administradores del sistema.</p>
+        </div>
+    </div>
+
+    <!-- ══ TABS ══════════════════════════════════════════════ -->
+    <div class="sa-tabs">
+        <button class="sa-tab" [class.activo]="tabActivo === 'cementerios'"
+            (click)="tabActivo = 'cementerios'; cargarCementerios()">
+            <i class="bi bi-building"></i> Cementerios
+            <span class="sa-tab-badge">{{ cementerios.length }}</span>
+        </button>
+        <button class="sa-tab" [class.activo]="tabActivo === 'admins'" (click)="tabActivo = 'admins'; cargarAdmins()">
+            <i class="bi bi-person-gear"></i> Administradores
+            <span class="sa-tab-badge">{{ admins.length }}</span>
+        </button>
+    </div>
+
+    <!-- ══ TAB: CEMENTERIOS ══════════════════════════════════ -->
+    <div *ngIf="tabActivo === 'cementerios'">
+
+        <div class="sa-toolbar">
+            <div class="sa-search">
+                <i class="bi bi-search"></i>
+                <input type="text" [(ngModel)]="filtroCementerio" placeholder="Buscar cementerio..." />
+            </div>
+            <button class="btn-nuevo" (click)="abrirModalCementerio()">
+                <i class="bi bi-plus-lg"></i> Nuevo cementerio
+            </button>
+        </div>
+
+        <div *ngIf="cargando" class="sa-loading">
+            <div class="spinner-border spinner-border-sm text-success"></div>
+            Cargando...
+        </div>
+
+        <div class="sa-grid" *ngIf="!cargando">
+            <div *ngFor="let c of cementeriosFiltrados" class="sa-card">
+
+                <!-- Indicador de color -->
+                <div class="sa-card-color" [style.background]="c.color_primario"></div>
+
+                <div class="sa-card-body">
+                    <div class="sa-card-top">
+                        <div>
+                            <h6 class="sa-card-nombre">{{ c.nombre }}</h6>
+                            <span class="sa-card-slug">{{ c.slug }}</span>
+                        </div>
+                        <span class="sa-estado" [class.activo]="c.activo" [class.inactivo]="!c.activo">
+                            {{ c.activo ? 'Activo' : 'Inactivo' }}
+                        </span>
+                    </div>
+
+                    <div class="sa-card-stats">
+                        <div class="sa-stat">
+                            <span class="sa-stat-val">{{ c.total_admins }}</span>
+                            <span class="sa-stat-label">Admins</span>
+                        </div>
+                        <div class="sa-stat">
+                            <span class="sa-stat-val">{{ c.total_usuarios }}</span>
+                            <span class="sa-stat-label">Usuarios</span>
+                        </div>
+                        <div class="sa-stat">
+                            <span class="sa-stat-val">{{ c.total_sectores }}</span>
+                            <span class="sa-stat-label">Sectores</span>
+                        </div>
+                    </div>
+
+                    <div class="sa-card-info" *ngIf="c.direccion || c.telefono">
+                        <span *ngIf="c.direccion" class="sa-info-item">
+                            <i class="bi bi-geo-alt"></i> {{ c.direccion }}
+                        </span>
+                        <span *ngIf="c.telefono" class="sa-info-item">
+                            <i class="bi bi-telephone"></i> {{ c.telefono }}
+                        </span>
+                    </div>
+
+                    <div class="sa-card-acciones">
+                        <button class="btn-accion editar" (click)="abrirModalCementerio(c)" title="Editar">
+                            <i class="bi bi-pencil"></i> Editar
+                        </button>
+                        <button class="btn-accion" [class.desactivar]="c.activo" [class.activar]="!c.activo"
+                            (click)="toggleActivo(c)" [title]="c.activo ? 'Desactivar' : 'Activar'">
+                            <i class="bi" [class]="c.activo ? 'bi-toggle-on' : 'bi-toggle-off'"></i>
+                            {{ c.activo ? 'Desactivar' : 'Activar' }}
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+            <div *ngIf="!cementeriosFiltrados.length" class="sa-empty">
+                <i class="bi bi-building fs-1"></i>
+                <p>No hay cementerios registrados.</p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ══ TAB: ADMINISTRADORES ══════════════════════════════ -->
+    <div *ngIf="tabActivo === 'admins'">
+
+        <div class="sa-toolbar">
+            <div class="sa-search">
+                <i class="bi bi-search"></i>
+                <input type="text" [(ngModel)]="filtroAdmin" placeholder="Buscar administrador..." />
+            </div>
+            <button class="btn-nuevo" (click)="abrirModalAdmin()">
+                <i class="bi bi-plus-lg"></i> Nuevo administrador
+            </button>
+        </div>
+
+        <div class="sa-table-wrap">
+            <table class="sa-table">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Cédula</th>
+                        <th>Correo</th>
+                        <th>Cementerio</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let a of adminsFiltrados">
+                        <td>
+                            <div class="admin-avatar-row">
+                                <div class="admin-avatar">{{ a.nombre[0] }}</div>
+                                <div>
+                                    <div class="fw-medium small">{{ a.nombre }}</div>
+                                    <div class="text-muted" style="font-size:11px">{{ a.telefono || '—' }}</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="small">{{ a.cedula }}</td>
+                        <td class="small">{{ a.correo }}</td>
+                        <td>
+                            <span class="cementerio-badge"
+                                [style.background]="a.cementerio_activo ? '#e9f4e9' : '#fef2f2'"
+                                [style.color]="a.cementerio_activo ? '#2d5a27' : '#dc2626'">
+                                {{ a.nombre_cementerio }}
+                            </span>
+                        </td>
+                        <td>
+                            <div class="sa-acciones-row">
+                                <button class="btn-icon editar" (click)="abrirModalAdmin(a)" title="Editar">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                                <button class="btn-icon reset" (click)="resetContrasena(a)"
+                                    title="Restablecer contraseña">
+                                    <i class="bi bi-key"></i>
+                                </button>
+                                <button class="btn-icon eliminar" (click)="eliminarAdmin(a)" title="Eliminar">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="!adminsFiltrados.length">
+                        <td colspan="5" class="sa-empty-row">
+                            <i class="bi bi-person-x me-2"></i> No hay administradores registrados.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ══ MODAL CEMENTERIO ══════════════════════════════════════ -->
+<div class="modal-overlay" [class.show]="modalCementerio" (click)="cerrarModales()">
+    <div class="modal-box" (click)="$event.stopPropagation()">
+
+        <div class="modal-header">
+            <h5>{{ editandoCementerio ? 'Editar cementerio' : 'Nuevo cementerio' }}</h5>
+            <button class="modal-close" (click)="cerrarModales()">
+                <i class="bi bi-x-lg"></i>
+            </button>
+        </div>
+
+        <form [formGroup]="cementerioForm" (ngSubmit)="guardarCementerio()">
+            <div class="modal-body">
+                <div class="modal-grid">
+
+                    <div class="campo-wrap full">
+                        <label class="campo-label">Nombre <span class="req">*</span></label>
+                        <input type="text" formControlName="nombre" class="campo-input"
+                            [class.error]="campo('nombre')?.invalid && campo('nombre')?.touched"
+                            placeholder="Nombre del cementerio" />
+                    </div>
+
+                    <div class="campo-wrap">
+                        <label class="campo-label">Slug <span class="req">*</span></label>
+                        <input type="text" formControlName="slug" class="campo-input"
+                            [class.error]="campo('slug')?.invalid && campo('slug')?.touched"
+                            placeholder="ej: colon, portoviejo" />
+                        <span class="campo-hint">Solo letras minúsculas, números y guiones.</span>
+                    </div>
+
+                    <div class="campo-wrap">
+                        <label class="campo-label">Color primario</label>
+                        <div class="color-wrap">
+                            <input type="color" formControlName="color_primario" class="campo-color" />
+                            <span class="color-val">{{ cementerioForm.get('color_primario')?.value }}</span>
+                        </div>
+                    </div>
+
+                    <div class="campo-wrap full">
+                        <label class="campo-label">Descripción</label>
+                        <input type="text" formControlName="descripcion" class="campo-input"
+                            placeholder="Descripción breve" />
+                    </div>
+
+                    <div class="campo-wrap full">
+                        <label class="campo-label">Dirección</label>
+                        <input type="text" formControlName="direccion" class="campo-input"
+                            placeholder="Dirección del cementerio" />
+                    </div>
+
+                    <div class="campo-wrap">
+                        <label class="campo-label">Teléfono</label>
+                        <input type="tel" formControlName="telefono" class="campo-input" placeholder="0999999999" />
+                    </div>
+
+                    <div class="campo-wrap">
+                        <label class="campo-label">Correo</label>
+                        <input type="email" formControlName="correo" class="campo-input"
+                            placeholder="correo@cementerio.com" />
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn-cancelar" (click)="cerrarModales()">Cancelar</button>
+                <button type="submit" class="btn-guardar">
+                    <i class="bi bi-check-lg me-1"></i>
+                    {{ editandoCementerio ? 'Guardar cambios' : 'Crear cementerio' }}
+                </button>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+<!-- ══ MODAL ADMIN ════════════════════════════════════════════ -->
+<div class="modal-overlay" [class.show]="modalAdmin" (click)="cerrarModales()">
+    <div class="modal-box" (click)="$event.stopPropagation()">
+
+        <div class="modal-header">
+            <h5>{{ editandoAdmin ? 'Editar administrador' : 'Nuevo administrador' }}</h5>
+            <button class="modal-close" (click)="cerrarModales()">
+                <i class="bi bi-x-lg"></i>
+            </button>
+        </div>
+
+        <form [formGroup]="adminForm" (ngSubmit)="guardarAdmin()">
+            <div class="modal-body">
+                <div class="modal-grid">
+
+                    <div class="campo-wrap full">
+                        <label class="campo-label">Nombre completo <span class="req">*</span></label>
+                        <input type="text" formControlName="nombre" class="campo-input"
+                            [class.error]="campoAdmin('nombre')?.invalid && campoAdmin('nombre')?.touched"
+                            placeholder="Nombre del administrador" />
+                    </div>
+
+                    <div class="campo-wrap">
+                        <label class="campo-label">Cédula <span class="req">*</span></label>
+                        <input type="text" formControlName="cedula" class="campo-input"
+                            [class.error]="campoAdmin('cedula')?.invalid && campoAdmin('cedula')?.touched"
+                            placeholder="0000000000" maxlength="10" />
+                    </div>
+
+                    <div class="campo-wrap">
+                        <label class="campo-label">Teléfono</label>
+                        <input type="tel" formControlName="telefono" class="campo-input" placeholder="0999999999" />
+                    </div>
+
+                    <div class="campo-wrap full">
+                        <label class="campo-label">Correo <span class="req">*</span></label>
+                        <input type="email" formControlName="correo" class="campo-input"
+                            [class.error]="campoAdmin('correo')?.invalid && campoAdmin('correo')?.touched"
+                            placeholder="correo@ejemplo.com" />
+                    </div>
+
+                    <div class="campo-wrap full" *ngIf="!editandoAdmin">
+                        <label class="campo-label">Contraseña <span class="req">*</span></label>
+                        <input type="password" formControlName="contrasena" class="campo-input"
+                            [class.error]="campoAdmin('contrasena')?.invalid && campoAdmin('contrasena')?.touched"
+                            placeholder="Mínimo 6 caracteres" />
+                    </div>
+
+                    <div class="campo-wrap full">
+                        <label class="campo-label">Cementerio <span class="req">*</span></label>
+                        <select formControlName="id_cementerio" class="campo-input"
+                            [class.error]="campoAdmin('id_cementerio')?.invalid && campoAdmin('id_cementerio')?.touched">
+                            <option [ngValue]="null">Selecciona un cementerio</option>
+                            <option *ngFor="let c of cementerios" [ngValue]="c.id_cementerio">
+                                {{ c.nombre }}
+                            </option>
+                        </select>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn-cancelar" (click)="cerrarModales()">Cancelar</button>
+                <button type="submit" class="btn-guardar">
+                    <i class="bi bi-check-lg me-1"></i>
+                    {{ editandoAdmin ? 'Guardar cambios' : 'Crear administrador' }}
+                </button>
+            </div>
+        </form>
+
+    </div>
+</div>

@@ -15,9 +15,8 @@ export class PerfilService {
   constructor(
     private http: HttpClient,
     private authService: AuthService,
-  ) {}
+  ) { }
 
-  //obtener el perfil de un usuario por el ID
   getPerfil(id: number): Observable<any> {
     const token = this.authService.getToken(); // Obtener el token de autenticación
     const headers = new HttpHeaders({
@@ -26,7 +25,6 @@ export class PerfilService {
     return this.http.get(`${this.apiUrl}/${id}`, { headers });
   }
 
-  // editar el perfil del usuario
   updatePerfil(id: number, data: any): Observable<any> {
     const token = this.authService.getToken();
     const headers = new HttpHeaders({
@@ -34,6 +32,18 @@ export class PerfilService {
     });
     return this.http.put(`${this.apiUrl}/${id}`, data, { headers });
   }
+
+  cambiarContrasena(contrasenaActual: string, contrasenaNueva: string): Observable<any> {
+    const token = this.authService.getToken();
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+    return this.http.put(`${this.apiUrl}/cambiar-contrasena`, {
+      contrasenaActual,
+      contrasenaNueva,
+    }, { headers });
+  }
+
 }
 
 // Nota: En las dos funciones se ha incluido el token de autenticación en los encabezados

@@ -1,90 +1,223 @@
-<div class="container py-4">
-    <h3 class="fw-bold text-success">Configuración de Perfil</h3>
-    <p class="text-muted">Actualiza tu información personal y datos de facturación</p>
+<div class="perfil-wrapper">
+    <div class="perfil-container">
 
-    <!-- Tabs -->
-    <ul ngbNav #nav="ngbNav" [(activeId)]="activeTab" class="nav-tabs mb-3">
-        <li [ngbNavItem]="1">
-            <a ngbNavLink><i class="bi bi-person"></i> Datos Personales</a>
-            <ng-template ngbNavContent>
-                <!-- Card de Datos Personales -->
-                <div class="card shadow-sm border-0">
-                    <div class="card-body">
-                        <h5><i class="bi bi-person-lines-fill me-2"></i> Información Personal</h5>
-                        <p class="text-muted">Mantén actualizada tu información de contacto</p>
+        <!-- ══ HEADER ════════════════════════════════════════════ -->
+        <div class="perfil-header">
+            <div class="perfil-avatar">
+                <span>{{ inicialesNombre }}</span>
+            </div>
+            <div class="perfil-header-info">
+                <h2 class="perfil-nombre">{{ datosForm.get('nombre')?.value || 'Mi perfil' }}</h2>
+                <div class="perfil-meta">
+                    <span class="perfil-rol">{{ rolLabel }}</span>
+                    <span class="perfil-sep">·</span>
+                    <span class="perfil-cementerio" *ngIf="cementerioActivo">
+                        <i class="bi bi-building me-1"></i>{{ cementerioActivo.nombre }}
+                    </span>
+                </div>
+            </div>
+        </div>
 
-                        <!-- Usamos Reactive Forms -->
-                        <form [formGroup]="perfilForm" (ngSubmit)="guardarCambios()">
-                            <div class="row g-3">
-                                <div class="col-md-6">
-                                    <label class="form-label">Nombre Completo</label>
-                                    <input type="text" class="form-control" formControlName="nombre"
-                                        placeholder="Ingresa tu nombre completo">
-                                </div>
+        <!-- ══ TABS ══════════════════════════════════════════════ -->
+        <div class="perfil-tabs">
+            <button class="perfil-tab" [class.activo]="tabActivo === 'datos'" (click)="tabActivo = 'datos'">
+                <i class="bi bi-person"></i> Datos personales
+            </button>
+            <button class="perfil-tab" [class.activo]="tabActivo === 'contrasena'" (click)="tabActivo = 'contrasena'">
+                <i class="bi bi-shield-lock"></i> Contraseña
+            </button>
+        </div>
 
-                                <div class="col-md-6">
-                                    <label class="form-label">Cédula</label>
-                                    <input type="text" class="form-control" formControlName="cedula"
-                                        placeholder="Número de cédula">
-                                </div>
+        <!-- ══ CARGANDO ══════════════════════════════════════════ -->
+        <div *ngIf="cargando" class="perfil-loading">
+            <div class="spinner-border spinner-border-sm text-success"></div>
+            <span>Cargando perfil...</span>
+        </div>
 
-                                <div class="col-md-6">
-                                    <label class="form-label"><i class="bi bi-envelope me-1"></i>Correo
-                                        Electrónico</label>
-                                    <input type="email" class="form-control" formControlName="correo"
-                                        placeholder="correo@ejemplo.com">
-                                </div>
+        <!-- ══ TAB: DATOS PERSONALES ═════════════════════════════ -->
+        <div *ngIf="!cargando && tabActivo === 'datos'" class="perfil-card">
 
-                                <div class="col-md-6">
-                                    <label class="form-label"><i class="bi bi-telephone me-1"></i>Teléfono</label>
-                                    <input type="text" class="form-control" formControlName="telefono"
-                                        placeholder="0987654321">
-                                </div>
+            <div class="perfil-card-header">
+                <h5><i class="bi bi-person-badge me-2"></i>Información personal</h5>
+                <p>Actualiza tus datos de contacto y emergencia.</p>
+            </div>
 
-                                <div class="col-12">
-                                    <label class="form-label"><i class="bi bi-geo-alt me-1"></i>Dirección</label>
-                                    <textarea class="form-control" formControlName="direccion"
-                                        placeholder="Dirección de su residencia"></textarea>
-                                </div>
+            <form [formGroup]="datosForm" (ngSubmit)="guardarDatos()">
+                <div class="perfil-grid">
 
-                                <!-- Los Nuevos campos que no son implementados en el formulario de registro -->
-                                <!-- Se los colocó aquí para no aburmar el registro.-->
-                                <div class="col-md-6">
-                                    <label class="form-label">Contacto de Emergencia</label>
-                                    <input type="text" class="form-control" formControlName="contactoEmergencia"
-                                        placeholder="Nombre del contacto">
-                                </div>
+                    <!-- Nombre -->
+                    <div class="campo-wrap full">
+                        <label class="campo-label">Nombre completo <span class="req">*</span></label>
+                        <input type="text" formControlName="nombre" class="campo-input"
+                            [class.error]="campo('nombre')?.invalid && campo('nombre')?.touched"
+                            placeholder="Tu nombre completo" />
+                        <span class="campo-error" *ngIf="campo('nombre')?.invalid && campo('nombre')?.touched">
+                            El nombre es obligatorio.
+                        </span>
+                    </div>
 
-                                <div class="col-md-6">
-                                    <label class="form-label">Teléfono de Emergencia</label>
-                                    <input type="text" class="form-control" formControlName="telefonoEmergencia"
-                                        placeholder="09...">
-                                </div>
-                            </div>
+                    <!-- Cédula -->
+                    <div class="campo-wrap">
+                        <label class="campo-label">Cédula <span class="req">*</span></label>
+                        <input type="text" formControlName="cedula" class="campo-input"
+                            [class.error]="campo('cedula')?.invalid && campo('cedula')?.touched"
+                            placeholder="0000000000" maxlength="10" />
+                        <span class="campo-error" *ngIf="campo('cedula')?.invalid && campo('cedula')?.touched">
+                            Ingresa una cédula válida de 10 dígitos.
+                        </span>
+                    </div>
 
-                            <div class="mt-4 text-end">
-                                <button class="btn btn-success px-4" type="submit">Guardar Cambios</button>
-                            </div>
-                        </form>
+                    <!-- Correo -->
+                    <div class="campo-wrap">
+                        <label class="campo-label">Correo electrónico <span class="req">*</span></label>
+                        <input type="email" formControlName="correo" class="campo-input"
+                            [class.error]="campo('correo')?.invalid && campo('correo')?.touched"
+                            placeholder="correo@ejemplo.com" />
+                        <span class="campo-error" *ngIf="campo('correo')?.invalid && campo('correo')?.touched">
+                            Ingresa un correo válido.
+                        </span>
+                    </div>
+
+                    <!-- Teléfono -->
+                    <div class="campo-wrap">
+                        <label class="campo-label">Teléfono</label>
+                        <input type="tel" formControlName="telefono" class="campo-input" placeholder="0999999999" />
+                    </div>
+
+                    <!-- Dirección -->
+                    <div class="campo-wrap full">
+                        <label class="campo-label">Dirección</label>
+                        <input type="text" formControlName="direccion" class="campo-input" placeholder="Tu dirección" />
+                    </div>
+
+                </div>
+
+                <!-- Separador contacto emergencia -->
+                <div class="seccion-separador">
+                    <span>Contacto de emergencia</span>
+                </div>
+
+                <div class="perfil-grid">
+                    <div class="campo-wrap">
+                        <label class="campo-label">Nombre</label>
+                        <input type="text" formControlName="contactoEmergencia" class="campo-input"
+                            placeholder="Nombre del contacto" />
+                    </div>
+                    <div class="campo-wrap">
+                        <label class="campo-label">Teléfono</label>
+                        <input type="tel" formControlName="telefonoEmergencia" class="campo-input"
+                            placeholder="0999999999" />
                     </div>
                 </div>
-            </ng-template>
-        </li>
 
-        <li [ngbNavItem]="2">
-            <a ngbNavLink><i class="bi bi-credit-card"></i> Facturación</a>
-            <ng-template ngbNavContent>
-                <div class="card shadow-sm border-0">
-                    <br>
-                    <div class="card-body">
-                        <h5><i class="bi bi-gear me-2"></i>Módulo en Desarrollo</h5>
-                        <p class="text-muted">Próximamente podrás adquirir <strong>un espacio en el cementerio</strong>
-                            con un par de clics.</p>
-                    </div>
+                <!-- Acción -->
+                <div class="perfil-accion">
+                    <button type="submit" class="btn-guardar" [disabled]="guardando">
+                        <span *ngIf="guardando" class="spinner-border spinner-border-sm me-2"></span>
+                        <i *ngIf="!guardando" class="bi bi-check-lg me-2"></i>
+                        {{ guardando ? 'Guardando...' : 'Guardar cambios' }}
+                    </button>
                 </div>
-            </ng-template>
-        </li>
-    </ul>
 
-    <div [ngbNavOutlet]="nav"></div>
+            </form>
+        </div>
+
+        <!-- ══ TAB: CONTRASEÑA ════════════════════════════════════ -->
+        <div *ngIf="!cargando && tabActivo === 'contrasena'" class="perfil-card">
+
+            <div class="perfil-card-header">
+                <h5><i class="bi bi-shield-lock me-2"></i>Cambiar contraseña</h5>
+                <p>Usa una contraseña segura de al menos 6 caracteres.</p>
+            </div>
+
+            <form [formGroup]="contrasenaForm" (ngSubmit)="cambiarContrasena()">
+                <div class="perfil-grid-single">
+
+                    <!-- Contraseña actual -->
+                    <div class="campo-wrap full">
+                        <label class="campo-label">Contraseña actual <span class="req">*</span></label>
+                        <div class="campo-password">
+                            <input [type]="verActual ? 'text' : 'password'" formControlName="contrasenaActual"
+                                class="campo-input"
+                                [class.error]="campoClave('contrasenaActual')?.invalid && campoClave('contrasenaActual')?.touched"
+                                placeholder="Tu contraseña actual" />
+                            <button type="button" class="toggle-ver" (click)="verActual = !verActual">
+                                <i class="bi" [class]="verActual ? 'bi-eye-slash' : 'bi-eye'"></i>
+                            </button>
+                        </div>
+                        <span class="campo-error"
+                            *ngIf="campoClave('contrasenaActual')?.invalid && campoClave('contrasenaActual')?.touched">
+                            Ingresa tu contraseña actual.
+                        </span>
+                    </div>
+
+                    <!-- Nueva contraseña -->
+                    <div class="campo-wrap full">
+                        <label class="campo-label">Nueva contraseña <span class="req">*</span></label>
+                        <div class="campo-password">
+                            <input [type]="verNueva ? 'text' : 'password'" formControlName="contrasenaNueva"
+                                class="campo-input"
+                                [class.error]="campoClave('contrasenaNueva')?.invalid && campoClave('contrasenaNueva')?.touched"
+                                placeholder="Mínimo 6 caracteres" />
+                            <button type="button" class="toggle-ver" (click)="verNueva = !verNueva">
+                                <i class="bi" [class]="verNueva ? 'bi-eye-slash' : 'bi-eye'"></i>
+                            </button>
+                        </div>
+                        <span class="campo-error"
+                            *ngIf="campoClave('contrasenaNueva')?.invalid && campoClave('contrasenaNueva')?.touched">
+                            Mínimo 6 caracteres.
+                        </span>
+                    </div>
+
+                    <!-- Confirmar contraseña -->
+                    <div class="campo-wrap full">
+                        <label class="campo-label">Confirmar nueva contraseña <span class="req">*</span></label>
+                        <div class="campo-password">
+                            <input [type]="verConfirm ? 'text' : 'password'" formControlName="confirmarContrasena"
+                                class="campo-input"
+                                [class.error]="(campoClave('confirmarContrasena')?.touched && contrasenaForm.errors?.['noCoinciden'])"
+                                placeholder="Repite la nueva contraseña" />
+                            <button type="button" class="toggle-ver" (click)="verConfirm = !verConfirm">
+                                <i class="bi" [class]="verConfirm ? 'bi-eye-slash' : 'bi-eye'"></i>
+                            </button>
+                        </div>
+                        <span class="campo-error"
+                            *ngIf="campoClave('confirmarContrasena')?.touched && contrasenaForm.errors?.['noCoinciden']">
+                            Las contraseñas no coinciden.
+                        </span>
+                    </div>
+
+                    <!-- Indicador de seguridad -->
+                    <div class="campo-wrap full" *ngIf="campoClave('contrasenaNueva')?.value">
+                        <div class="seguridad-wrap">
+                            <div class="seguridad-barra">
+                                <div class="seguridad-fill" [style.width]="seguridadPorcentaje + '%'"
+                                    [class]="seguridadClase">
+                                </div>
+                            </div>
+                            <span class="seguridad-label" [class]="seguridadClase">{{ seguridadTexto }}</span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Aviso de seguridad -->
+                <div class="info-aviso">
+                    <i class="bi bi-info-circle-fill"></i>
+                    <span>Al cambiar tu contraseña, deberás iniciar sesión nuevamente en otros dispositivos.</span>
+                </div>
+
+                <!-- Acción -->
+                <div class="perfil-accion">
+                    <button type="submit" class="btn-guardar" [disabled]="cambiando || contrasenaForm.invalid">
+                        <span *ngIf="cambiando" class="spinner-border spinner-border-sm me-2"></span>
+                        <i *ngIf="!cambiando" class="bi bi-shield-check me-2"></i>
+                        {{ cambiando ? 'Actualizando...' : 'Actualizar contraseña' }}
+                    </button>
+                </div>
+
+            </form>
+        </div>
+
+    </div>
 </div>

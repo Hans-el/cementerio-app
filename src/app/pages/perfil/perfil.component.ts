@@ -2,9 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
-import Swal from 'sweetalert2';
 import { PerfilService } from '../../services/perfil.service';
 import { AuthService } from '../../services/auth.service';
+import { CementerioService } from '../../services/cementerio.service';
+import { Cementerio } from '../../models/cementerio.model';
+import Swal from 'sweetalert2';
+
 
 @Component({
   selector: 'app-perfil',
@@ -15,82 +18,182 @@ import { AuthService } from '../../services/auth.service';
 })
 export class PerfilComponent implements OnInit {
 
-  activeTab = 1;
-  perfilForm!: FormGroup;  // Aquí guardamos el formulario reactivo
-  private userId: number = 0;
+  tabActivo: 'datos' | 'contrasena' = 'datos';
+  guardando = false;
+  cambiando = false;
+  cargando = true;
+  userId: number = 0;
+  userRol = '';
+  cementerioActivo: Cementerio | null = null;
+
+  // Mostrar/ocultar contraseñas
+  verActual = false;
+  verNueva = false;
+  verConfirm = false;
+
+  datosForm!: FormGroup;
+  contrasenaForm!: FormGroup;
 
   constructor(
     private fb: FormBuilder,
     private perfilService: PerfilService,
-    private authService: AuthService
+    private authService: AuthService,
+    private cementerioService: CementerioService,
   ) { }
 
   ngOnInit(): void {
-    //Inicializamos el formulario con valores vacíos
-    this.perfilForm = this.fb.group({
+    this.cementerioActivo = this.cementerioService.getCementerioActivoSnapshot();
+    this.userRol = this.authService.getUserRole();
+
+    this.datosForm = this.fb.group({
       nombre: ['', Validators.required],
-      cedula: ['', Validators.required],
+      cedula: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(10)]],
       correo: ['', [Validators.required, Validators.email]],
-      telefono: ['', Validators.required],
-      direccion: ['', Validators.required],
-      contactoEmergencia: ['',],
-      telefonoEmergencia: ['']
+      telefono: [''],
+      direccion: [''],
+      contactoEmergencia: [''],
+      telefonoEmergencia: [''],
     });
 
-    //Cargamos datos del usuario autenticado
+    this.contrasenaForm = this.fb.group({
+      contrasenaActual: ['', Validators.required],
+      contrasenaNueva: ['', [Validators.required, Validators.minLength(6)]],
+      confirmarContrasena: ['', Validators.required],
+    }, { validators: this.contrasenasIguales });
+
     const user = this.authService.getUserFromToken();
-    if (user && user.id) {
+    if (user?.id) {
       this.userId = user.id;
       this.cargarPerfil(user.id);
-    } else {
-      Swal.fire('Error', 'Para editar primero debes iniciar sesión', 'error');
     }
   }
 
   cargarPerfil(id: number): void {
+    this.cargando = true;
     this.perfilService.getPerfil(id).subscribe({
       next: (data) => {
-        // Rellenamos el formulario con los datos del backend
-        this.perfilForm.patchValue(data);
+        this.datosForm.patchValue(data);
+        this.cargando = false;
       },
-      error: (err) => {
-        console.error('Error al cargar perfil:', err);
-        Swal.fire('Error', 'No se pudo cargar la información del perfil', 'error');
-      }
+      error: () => {
+        this.cargando = false;
+        Swal.fire('Error', 'No se pudo cargar el perfil.', 'error');
+      },
     });
   }
 
-  guardarCambios(): void {
-    if (!this.userId) return;
+  // Validador personalizado — contraseñas deben coincidir
+  contrasenasIguales(form: FormGroup) {
+    const nueva = form.get('contrasenaNueva')?.value;
+    const confirmar = form.get('confirmarContrasena')?.value;
+    return nueva === confirmar ? null : { noCoinciden: true };
+  }
 
-    if (this.perfilForm.invalid) {
-      Swal.fire('Error', 'Por favor completa todos los campos obligatorios', 'error');
+  guardarDatos(): void {
+    if (this.datosForm.invalid) {
+      this.datosForm.markAllAsTouched();
       return;
     }
 
-    // Con esto enviamos los valores del formulario al backend clicqueando en guardar cambios.
-    // Usaremos swal para confirmar si realmente quiere guardar los cambios
     Swal.fire({
       title: '¿Guardar cambios?',
       icon: 'question',
       showCancelButton: true,
       confirmButtonText: 'Sí, guardar',
-      cancelButtonText: 'Cancelar'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.updatePerfil();
-      }
+      cancelButtonText: 'Cancelar',
+      confirmButtonColor: '#2d5a27',
+    }).then(result => {
+      if (!result.isConfirmed) return;
+      this.guardando = true;
+
+      this.perfilService.updatePerfil(this.userId, this.datosForm.value).subscribe({
+        next: () => {
+          this.guardando = false;
+          Swal.fire({
+            toast: true,
+            position: 'top-end',
+            icon: 'success',
+            title: 'Perfil actualizado correctamente.',
+            timer: 2500,
+            showConfirmButton: false,
+          });
+        },
+        error: (err) => {
+          this.guardando = false;
+          Swal.fire('Error', err.error?.mensaje || 'No se pudo actualizar el perfil.', 'error');
+        },
+      });
     });
   }
-  updatePerfil(): void {
-    this.perfilService.updatePerfil(this.userId, this.perfilForm.value).subscribe({
+
+  cambiarContrasena(): void {
+    if (this.contrasenaForm.invalid) {
+      this.contrasenaForm.markAllAsTouched();
+      return;
+    }
+
+    const { contrasenaActual, contrasenaNueva } = this.contrasenaForm.value;
+    this.cambiando = true;
+
+    this.perfilService.cambiarContrasena(contrasenaActual, contrasenaNueva).subscribe({
       next: () => {
-        Swal.fire('Éxito', 'Perfil actualizado correctamente', 'success');
+        this.cambiando = false;
+        this.contrasenaForm.reset();
+        Swal.fire({
+          toast: true,
+          position: 'top-end',
+          icon: 'success',
+          title: 'Contraseña actualizada correctamente.',
+          timer: 2500,
+          showConfirmButton: false,
+        });
       },
       error: (err) => {
-        console.error('Error al actualizar perfil:', err);
-        Swal.fire('Error', 'No se pudieron guardar los cambios', 'error');
-      }
+        this.cambiando = false;
+        Swal.fire('Error', err.error?.mensaje || 'No se pudo cambiar la contraseña.', 'error');
+      },
     });
+  }
+
+  // Helpers para validación en el HTML
+  campo(nombre: string) { return this.datosForm.get(nombre); }
+  campoClave(nombre: string) { return this.contrasenaForm.get(nombre); }
+
+  get rolLabel(): string {
+    switch (this.userRol) {
+      case 'admin': return 'Administrador';
+      case 'superadmin': return 'Super Administrador';
+      default: return 'Usuario';
+    }
+  }
+
+  get inicialesNombre(): string {
+    const nombre = this.datosForm.get('nombre')?.value || '';
+    return nombre.split(' ').slice(0, 2).map((n: string) => n[0]).join('').toUpperCase() || '?';
+  }
+  get seguridadPorcentaje(): number {
+    const val = this.contrasenaForm.get('contrasenaNueva')?.value || '';
+    let puntos = 0;
+    if (val.length >= 6) puntos += 25;
+    if (val.length >= 10) puntos += 25;
+    if (/[A-Z]/.test(val) && /[a-z]/.test(val)) puntos += 25;
+    if (/[0-9]/.test(val) || /[^a-zA-Z0-9]/.test(val)) puntos += 25;
+    return puntos;
+  }
+
+  get seguridadClase(): string {
+    const p = this.seguridadPorcentaje;
+    if (p <= 25) return 'seg-debil';
+    if (p <= 50) return 'seg-media';
+    if (p <= 75) return 'seg-buena';
+    return 'seg-fuerte';
+  }
+
+  get seguridadTexto(): string {
+    const p = this.seguridadPorcentaje;
+    if (p <= 25) return 'Débil';
+    if (p <= 50) return 'Media';
+    if (p <= 75) return 'Buena';
+    return 'Fuerte';
   }
 }

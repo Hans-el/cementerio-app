@@ -1,0 +1,54 @@
+<div class="nf-wrapper">
+
+    <div class="nf-overlay"></div>
+
+    <div class="nf-contenido">
+
+        <!-- Código -->
+        <div class="nf-codigo">404</div>
+
+        <!-- Ícono -->
+        <div class="nf-icono">
+            <i class="bi bi-signpost-split"></i>
+        </div>
+
+        <!-- Texto -->
+        <h1 class="nf-titulo">Página no encontrada</h1>
+        <p class="nf-desc">
+            La página que buscas no existe o fue movida.<br>
+            Verifica la dirección o regresa al inicio.
+        </p>
+
+        <!-- Acciones -->
+        <div class="nf-btns">
+            <button class="btn-prim" (click)="volver()">
+                <i class="bi bi-house-fill"></i>
+                Ir al inicio
+            </button>
+            <a class="btn-sec" routerLink="/informacion">
+                <i class="bi bi-question-circle"></i>
+                Ayuda
+            </a>
+        </div>
+
+        <!-- Sugerencias según estado de sesión -->
+        <div class="nf-sugerencias">
+            <p class="nf-sug-titulo">Quizás buscabas:</p>
+            <div class="nf-sug-lista">
+                <ng-container *ngIf="tieneSesion">
+                    <a routerLink="/mapa" class="nf-sug-chip"><i class="bi bi-map"></i> Mapa</a>
+                    <a routerLink="/tramites" class="nf-sug-chip"><i class="bi bi-file-earmark-text"></i> Trámites</a>
+                    <a routerLink="/contacto" class="nf-sug-chip"><i class="bi bi-telephone"></i> Contacto</a>
+                </ng-container>
+                <ng-container *ngIf="!tieneSesion">
+                    <a routerLink="/cementerios" class="nf-sug-chip"><i class="bi bi-building"></i> Cementerios</a>
+                    <a routerLink="/informacion" class="nf-sug-chip"><i class="bi bi-info-circle"></i> Información</a>
+                    <a routerLink="/login" class="nf-sug-chip"><i class="bi bi-box-arrow-in-right"></i> Iniciar
+                        sesión</a>
+                </ng-container>
+            </div>
+        </div>
+
+    </div>
+
+</div>

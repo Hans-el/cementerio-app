@@ -18,6 +18,9 @@ import { SolicitudExhumacionComponent } from './pages/solicitud-exhumacion/solic
 import { TramitesComponent } from './pages/tramites/tramites.component';
 import { CementeriosComponent } from './pages/cementerios/cementerios.component';
 import { InformacionComponent } from './pages/informacion/informacion.component';
+import { NotFoundComponent } from './pages/not-found/not-found.component';
+import { SuperadminComponent } from './pages/superadmin/superadmin.component';
+import { superadminGuard } from './guards/superadmin.guard';
 
 //rutas de la aplicación
 export const routes: Routes = [
@@ -29,6 +32,8 @@ export const routes: Routes = [
     { path: 'login', component: LoginComponent },
     { path: 'registro', component: RegistroComponent },
     { path: 'informacion', component: InformacionComponent },
+    { path: 'NotFoundComponent', component: NotFoundComponent },
+
 
 
     // Pantallas con sidebar
@@ -47,9 +52,11 @@ export const routes: Routes = [
             { path: 'exhumaciones', component: SolicitudExhumacionComponent },
             { path: 'inhumaciones', component: SolicitudInhumacionComponent },
             { path: 'admin/solicitudes', component: AdminSolicitudesComponent, canActivate: [authGuard, adminGuard] },
+            { path: 'superadmin', component: SuperadminComponent, canActivate: [authGuard, superadminGuard] },
+
         ]
     },
 
     // Ruta comodín — redirige a selección si no existe la ruta
-    { path: '**', redirectTo: 'cementerios' },
+    { path: '**', redirectTo: 'NotFoundComponent' },
 ];
