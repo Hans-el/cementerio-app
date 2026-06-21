@@ -1,7 +1,0 @@
-Aquí iran la ESTRUCTURA DE LOS DATOS. 
-Con la finalidad de ESTRCUTURAR MEJOR EL SISTEMA Y HACERLO MAS ENTENDIBLE.
-
-Es decir, ponemos la estructura de los datos de "boveda", definiendo los campos y sus tipos de datos que esperan recibir.
-Posteriormente, para usar esta estrucuta en otra clase simplemente importamos el modelo boveda y listo, ya toma la estrcutra definida en estos archivos.
-
-

@@ -1,2 +1,0 @@
-creamos este interceptor para el token del usuario, para que se envie automaticamente el token y valide la informacion.
-Esta recomendación fue dada por mi compañero Anderson
