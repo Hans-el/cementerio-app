@@ -72,6 +72,19 @@
     <br />
     <br />
 
+    <!-- Menú de superadmin -->
+    <div class="sidebar-nav px-2" *ngIf="userRole === 'superadmin'">
+      <p class="nav-title px-3 text-uppercase text-white small">Super Admin</p>
+      <ul class="nav-list list-unstyled mb-0">
+        <li class="nav-item">
+          <a routerLink="/superadmin" routerLinkActive="active" class="nav-link d-flex align-items-center px-3 py-2"
+            (click)="cerrarEnMovil()">
+            <i class="bi bi-shield-fill-check nav-icon"></i>
+            <span class="nav-text ms-3 fw-semibold">PANEL GLOBAL</span>
+          </a>
+        </li>
+      </ul>
+    </div>
     <!-- Menú de administrador -->
     <div class="sidebar-nav px-2" *ngIf="userRole === 'admin' || userRole === 'superadmin'">
       <p class="nav-title px-3 text-uppercase text-white small">
@@ -137,39 +150,10 @@
     </div>
     <!-- Inicio del menú desplegable en la parte derecha-->
 
-    <div class="dropdown-menu custom-dropdown" aria-labelledby="userDropdown" ngbDropdownMenu>
-      <div class="sidebar-nav px-2" *ngIf="userRole === 'superadmin'">
-        <p class="nav-title px-3 text-uppercase text-white small">
-          Super Admin
-        </p>
-        <ul class="nav-list list-unstyled mb-0">
-          <li class="nav-item">
-            <a routerLink="/superadmin" routerLinkActive="active" class="nav-link d-flex align-items-center px-3 py-2"
-              (click)="cerrarEnMovil()">
-              <i class="bi bi-shield-fill-check nav-icon"></i>
-              <span class="nav-text ms-3 fw-semibold">
-                Panel Global
-              </span>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a routerLink="/perfil" class="nav-link d-flex align-items-center px-3 py-2">
-              <i class="bi bi-pencil-fill nav-icon"></i>
-              <span class="nav-text ms-3 fw-semibold">
-                Editar Perfil
-              </span>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link d-flex align-items-center px-3 py-2" (click)="logout()" style="cursor: pointer;">
-              <i class="bi bi-box-arrow-right nav-icon"></i>
-              <span class="nav-text ms-3 fw-semibold">
-                Cerrar Sesión
-              </span>
-            </a>
-          </li>
-        </ul>
-      </div>
+    <div class="dropdown-menu" aria-labelledby="userDropdown" ngbDropdownMenu>
+      <a class="dropdown-item bi-pencil-fill m-2 fw-semibold" href="/perfil"> Editar Perfil</a>
+      <div class="dropdown-divider"></div> <a class="dropdown-item bi-arrow-bar-right m-2 fw-semibold"
+        (click)="logout()"> Cerrar Sesión</a>
     </div>
     <!-- Fin del menu desplegable -->
   </div>
