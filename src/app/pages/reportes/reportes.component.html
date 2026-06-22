@@ -33,7 +33,7 @@
 
           <select id="reportType" class="form-select form-control-institucional" [(ngModel)]="reportType"
             name="reportType">
-            <option value="Espacios">Espacios</option>
+            <option value="Espacios">Bloques</option>
             <option value="Fallecidos">Fallecidos</option>
             <option value="Solicitudes">Solicitudes</option>
           </select>
@@ -154,14 +154,19 @@
           </select>
         </div>
         <div class="col-md-2 d-flex align-items-end gap-2">
-          <button class="btn btn-institucional btn-sm flex-grow-1" (click)="aplicarFiltrosBitacora()">
+          <button class="btn btn-institucional btn-sm grow" (click)="aplicarFiltrosBitacora()">
             <i class="bi bi-search me-1"></i>Filtrar
+          </button>
+          <button class="btn btn-institucional btn-sm grow" (click)=" exportarBitacora()" [disabled]="!bitacora.length">
+            <i class="bi bi-file-earmark-excel me-1"></i>Exportar Excel
           </button>
           <button class="btn btn-outline-secondary btn-sm" (click)="limpiarFiltrosBitacora()" title="Limpiar">
             <i class="bi bi-x-circle"></i>
           </button>
         </div>
+
       </div>
+
 
       <!-- Tabla -->
       <div class="table-responsive">

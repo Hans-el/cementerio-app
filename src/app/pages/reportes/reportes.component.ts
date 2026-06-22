@@ -323,4 +323,80 @@ export class ReportesComponent {
       : '';
     XLSX.writeFile(wb, `${fileName}${dateRange}.xlsx`);
   }
+  exportarBitacora(): void {
+    if (!this.bitacora.length) {
+      Swal.fire('Sin datos', 'No hay registros en la bitácora para exportar.', 'info');
+      return;
+    }
+
+    const headers = [[
+      'Fecha',
+      'Usuario',
+      'Cédula',
+      'Rol',
+      'Acción',
+      'Entidad',
+      'ID Entidad',
+      'Descripción',
+      'Valor Anterior',
+      'Valor Nuevo',
+    ]];
+
+    const dataForExcel = this.bitacora.map(item => [
+      item.fecha
+        ? new Date(item.fecha).toLocaleString('es-EC')
+        : '—',
+      item.nombre_usuario,
+      item.cedula_usuario,
+      item.rol_usuario,
+      item.accion,
+      item.entidad,
+      item.id_entidad ?? '—',
+      item.descripcion ?? '—',
+      item.valor_anterior
+        ? JSON.stringify(item.valor_anterior)
+        : '—',
+      item.valor_nuevo
+        ? JSON.stringify(item.valor_nuevo)
+        : '—',
+    ]);
+
+    const ws: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet([
+      ...headers,
+      ...dataForExcel,
+    ]);
+
+    // Ajustar ancho de columnas automáticamente
+    ws['!cols'] = [
+      { wch: 20 }, // Fecha
+      { wch: 25 }, // Usuario
+      { wch: 12 }, // Cédula
+      { wch: 12 }, // Rol
+      { wch: 15 }, // Acción
+      { wch: 22 }, // Entidad
+      { wch: 10 }, // ID Entidad
+      { wch: 45 }, // Descripción
+      { wch: 35 }, // Valor Anterior
+      { wch: 35 }, // Valor Nuevo
+    ];
+
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Bitácora');
+
+    // Nombre del archivo con fecha actual
+    const hoy = new Date().toISOString().slice(0, 10);
+
+    // Incluir filtros activos en el nombre si aplica
+    const filtroFecha = this.filtrosBitacora.startDate && this.filtrosBitacora.endDate
+      ? `_${this.filtrosBitacora.startDate}_${this.filtrosBitacora.endDate}`
+      : '';
+    const filtroEntidad = this.filtrosBitacora.entidad !== 'TODOS'
+      ? `_${this.filtrosBitacora.entidad}`
+      : '';
+    const filtroAccion = this.filtrosBitacora.accion !== 'TODOS'
+      ? `_${this.filtrosBitacora.accion}`
+      : '';
+
+    XLSX.writeFile(wb, `Bitacora${filtroFecha}${filtroEntidad}${filtroAccion}_${hoy}.xlsx`);
+  }
 }

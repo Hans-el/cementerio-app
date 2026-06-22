@@ -8,7 +8,7 @@
 
 <div class="modal-body pt-0">
   <!-- SECCIÓN ADMIN -->
-  <div *ngIf="userRole === 'admin'" class="mb-4">
+  <div *ngIf="userRole === 'admin' || userRole === 'superadmin'" class="mb-4">
     <p class="fw-semibold text-muted mb-2">
       Seleccione el bloque para poner en disponibilidad de compra:
     </p>

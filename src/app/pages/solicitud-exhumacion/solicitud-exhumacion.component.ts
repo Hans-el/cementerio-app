@@ -8,6 +8,7 @@ import {
 } from '../../models/exhumacion.model';
 import { environment } from '../../../environments/environment';
 import Swal from 'sweetalert2';
+import { PuedeSalir } from '../../guards/unsaved-changes.guard';
 
 const DOCUMENTOS_REQUERIDOS = [
   'Documento 1',
@@ -23,18 +24,14 @@ const DOCUMENTOS_REQUERIDOS = [
   templateUrl: './solicitud-exhumacion.component.html',
   styleUrl: './solicitud-exhumacion.component.css',
 })
-export class SolicitudExhumacionComponent implements OnInit {
+export class SolicitudExhumacionComponent implements OnInit, PuedeSalir {
   documentosRequeridos = DOCUMENTOS_REQUERIDOS;
-  archivos: (File | null)[] = new Array(DOCUMENTOS_REQUERIDOS.length).fill(
-    null,
-  );
+  archivos: (File | null)[] = new Array(DOCUMENTOS_REQUERIDOS.length).fill(null,);
   solicitudActiva: SolicitudExhumacion | null = null;
   documentosActivos: DocumentoExhumacion[] = [];
-
   cargando = false;
   enviando = false;
   modoNuevaSolicitud = false;
-
   readonly PRECIO = 27.03;
   readonly apiBase = new URL(environment.apiUrl).origin;
 
@@ -260,5 +257,10 @@ export class SolicitudExhumacionComponent implements OnInit {
       default:
         return 'bi-clock-fill text-warning';
     }
+  }
+  tieneCambiosSinGuardar(): boolean {
+    const hayArchivos = this.archivos.some(a => a !== null);
+    const enModoEdicion = this.modoNuevaSolicitud || !this.solicitudActiva;
+    return hayArchivos && enModoEdicion && !this.enviando;
   }
 }

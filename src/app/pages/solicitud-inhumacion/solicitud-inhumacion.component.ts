@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { InhumacionService } from '../../services/inhumacion.service';
@@ -9,6 +9,7 @@ import {
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { environment } from '../../../environments/environment';
+import { PuedeSalir } from '../../guards/unsaved-changes.guard';
 
 //archivos necesarios
 const DOCUMENTOS_REQUERIDOS = [
@@ -26,25 +27,19 @@ const DOCUMENTOS_REQUERIDOS = [
   templateUrl: './solicitud-inhumacion.component.html',
   styleUrl: './solicitud-inhumacion.component.css',
 })
-export class SolicitudInhumacionComponent {
+export class SolicitudInhumacionComponent implements OnInit, PuedeSalir {
   documentosRequeridos = DOCUMENTOS_REQUERIDOS;
-  archivos: (File | null)[] = new Array(DOCUMENTOS_REQUERIDOS.length).fill(
-    null,
-  );
-
-  // Estado de la solicitud activa
+  archivos: (File | null)[] = new Array(DOCUMENTOS_REQUERIDOS.length).fill(null,);
   solicitudActiva: SolicitudInhumacion | null = null;
   documentosActivos: DocumentoInhumacion[] = [];
-
   cargando = false;
   enviando = false;
   reenviando = false;
   modoNuevaSolicitud = false;
-
   readonly PRECIO = 10.81;
   readonly apiBase = new URL(environment.apiUrl).origin;
 
-  constructor(private inhumacionService: InhumacionService) {}
+  constructor(private inhumacionService: InhumacionService) { }
 
   ngOnInit(): void {
     this.verificarSolicitudActiva();
@@ -277,4 +272,14 @@ export class SolicitudInhumacionComponent {
         return 'bi-clock-fill text-warning';
     }
   }
+  // Agregar este único método al final
+  tieneCambiosSinGuardar(): boolean {
+    // Hay cambios sin guardar si:
+    // 1. Está en modo nueva solicitud Y subió al menos un archivo
+    // 2. No tiene solicitud activa (es la primera vez) Y subió al menos un archivo
+    const hayArchivos = this.archivos.some(a => a !== null);
+    const enModoEdicion = this.modoNuevaSolicitud || !this.solicitudActiva;
+    return hayArchivos && enModoEdicion && !this.enviando;
+  }
+
 }
