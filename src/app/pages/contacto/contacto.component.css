@@ -12,12 +12,10 @@
 }
 
 
-/* CARD WHATSAPP*/
-
 .card-whatsapp {
   background: linear-gradient(
     180deg,
-    #1e4620 0%,
+    #1e4620 50%,
     #2f5e33 100%
   );
   border-radius: 18px;

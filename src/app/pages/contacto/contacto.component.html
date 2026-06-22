@@ -8,7 +8,8 @@
       </h4>
 
       <p class="text-muted">
-        Estamos aquí para ayudarte con cualquier consulta sobre nuestros
+        La Administración General de los cementerios de Portoviejo está aquí para ayudarte con cualquier consulta sobre
+        nuestros
         servicios.
       </p>
 
@@ -16,18 +17,18 @@
       <div class="contact-info mt-4">
         <div class="d-flex align-items-start mb-3">
           <i class="bi bi-telephone-fill text-success me-3 fs-5"></i>
-          <span class="text-secondary">099 848 4760</span>
+          <span class="text-secondary">098 765 4321</span>
         </div>
 
         <div class="d-flex align-items-start mb-3">
           <i class="bi bi-envelope-fill text-success me-3 fs-5"></i>
-          <span class="text-secondary">coloncementerio&#64;gmail.com</span>
+          <span class="text-secondary">cementeriosportoviejoec&#64;gmail.com</span>
         </div>
 
         <div class="d-flex align-items-start mb-3">
           <i class="bi bi-geo-alt-fill text-success me-3 fs-5"></i>
           <span class="text-secondary">
-            Colón - Portoviejo, Manabí, Ecuador
+            San Pablo - Portoviejo, Manabí, Ecuador
           </span>
         </div>
       </div>
@@ -36,11 +37,11 @@
       <div class="card card-contact-info mt-4">
         <div class="card-body">
           <h6 class="fw-semibold text-white mb-3">Horarios de Atención</h6>
-          <p class="mb-1 text-light small">
-            Lunes a Viernes: 8:00 AM - 5:00 PM
+          <p class="mb-1 text-light ">
+            Lunes a Viernes: 8:00 AM - 4:00 PM
           </p>
-          <p class="mb-1 text-light small">Sábados: 8:00 AM - 3:00 PM</p>
-          <p class="mb-0 text-light small">Domingos: 8:00 AM - 12:00 PM</p>
+          <p class="mb-1 text-light ">Sábados: 8:00 AM - 3:00 PM</p>
+
         </div>
       </div>
 
@@ -48,25 +49,15 @@
       <div class="card card-whatsapp mt-4">
         <div class="card-body text-center">
           <h6 class="fw-semibold text-white mb-2">Atención vía WhatsApp</h6>
-
           <p class="text-light small mb-3">
             Escanea el código QR o envíanos un mensaje directo.
           </p>
-
-          <img
-            class="img-fluid mb-3 rounded-3 shadow-sm"
-            src="/assets/qrfinalya.jpg"
-            alt="Código QR"
-            width="170"
-          />
-
-          <a
-            href="https://wa.me/+593998484760?text=Hola.%20¿Me%20comunico%20con%20la%20ADMINISTRACIÓN%20DEL%20CEMENTERIO%20DE%20COLÓN?"
-            target="_blank"
-            class="btn btn-light fw-semibold w-100"
-          >
+          <img class="img-fluid mb-2 rounded-3 shadow-sm" src="/assets/qrfinalya.jpg" alt="Código QR" width="100" />
+          <br />
+          <a href="https://wa.me/+593987654321?text=Hola,%20¿Me%20comunico%20con%20la%20Administración%20General%20de%20los%20Cementerios%20de%20Portoviejo?"
+            target="_blank" class="btn btn-outline-light fw-semibold w-50 mt-2">
             <i class="bi bi-whatsapp me-2"></i>
-            Enviar mensaje
+            Contactar
           </a>
         </div>
       </div>
@@ -89,26 +80,16 @@
                 <label class="form-label small fw-semibold text-muted">
                   Nombre completo *
                 </label>
-                <input
-                  type="text"
-                  class="form-control form-control-institucional"
-                  name="nombre"
-                  [(ngModel)]="formData.nombre"
-                  required
-                />
+                <input type="text" class="form-control form-control-institucional" name="nombre"
+                  [(ngModel)]="formData.nombre" required />
               </div>
 
               <div class="col-md-6 mb-3">
                 <label class="form-label small fw-semibold text-muted">
                   Correo electrónico *
                 </label>
-                <input
-                  type="email"
-                  class="form-control form-control-institucional"
-                  name="correo"
-                  [(ngModel)]="formData.email"
-                  required
-                />
+                <input type="email" class="form-control form-control-institucional" name="correo"
+                  [(ngModel)]="formData.email" required />
               </div>
             </div>
 
@@ -116,44 +97,27 @@
               <label class="form-label small fw-semibold text-muted">
                 Teléfono
               </label>
-              <input
-                type="text"
-                class="form-control form-control-institucional"
-                name="telefono"
-                [(ngModel)]="formData.telefono"
-              />
+              <input type="text" class="form-control form-control-institucional" name="telefono"
+                [(ngModel)]="formData.telefono" />
             </div>
 
             <div class="mb-3">
               <label class="form-label small fw-semibold text-muted">
                 Asunto
               </label>
-              <input
-                type="text"
-                class="form-control form-control-institucional"
-                name="asunto"
-                [(ngModel)]="formData.asunto"
-              />
+              <input type="text" class="form-control form-control-institucional" name="asunto"
+                [(ngModel)]="formData.asunto" />
             </div>
 
             <div class="mb-4">
               <label class="form-label small fw-semibold text-muted">
                 Mensaje *
               </label>
-              <textarea
-                class="form-control form-control-institucional"
-                rows="4"
-                name="mensaje"
-                [(ngModel)]="formData.mensaje"
-                required
-              ></textarea>
+              <textarea class="form-control form-control-institucional" rows="4" name="mensaje"
+                [(ngModel)]="formData.mensaje" required></textarea>
             </div>
 
-            <button
-              type="submit"
-              class="btn btn-institucional w-100 fw-semibold"
-              [disabled]="!formContact.valid"
-            >
+            <button type="submit" class="btn btn-outline-success w-100 fw-semibold" [disabled]="!formContact.valid">
               <i class="bi bi-send me-2"></i>
               Enviar mensaje
             </button>

@@ -25,7 +25,7 @@ import { superadminGuard } from './guards/superadmin.guard';
 //rutas de la aplicación
 export const routes: Routes = [
     // Ruta raíz redirige a selección de cementerio
-    { path: '', redirectTo: 'informacion', pathMatch: 'full' },
+    { path: '', redirectTo: 'cementerios', pathMatch: 'full' },
 
     // Pantallas sin sidebar
     { path: 'cementerios', component: CementeriosComponent, canActivate: [cementerioGuard] },
