@@ -16,7 +16,161 @@
   height: auto;
   animation: pulse 1.2s infinite ease-in-out;
 }
+/* ── Loader ────────────────────────────────────────────── */
+.nav-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.nav-loader-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(10,30,15,0.55);
+  backdrop-filter: blur(4px);
+}
+.nav-loader-box {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .75rem;
+}
+.nav-loader-gif {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 16px rgba(0,0,0,0.4));
+  animation: pulso 1.4s ease-in-out infinite;
+}
+@keyframes pulso {
+  0%, 100% { transform: scale(1);    opacity: 1;    }
+  50%       { transform: scale(1.08); opacity: 0.85; }
+}
+.nav-loader-texto {
+  font-size: 13px;
+  color: rgba(255,255,255,0.7);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  margin: 0;
+}
 
+/* ── Banner PWA ────────────────────────────────────────── */
+.pwa-banner {
+  position: fixed;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9998;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: .875rem 1.25rem;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+  width: calc(100% - 2rem);
+  max-width: 500px;
+  animation: slideUp .3s ease;
+}
+
+.pwa-banner.instalar {
+  background: #163212;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+.pwa-banner.actualizar {
+  background: #1e3a5f;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+@keyframes slideUp {
+  from { transform: translateX(-50%) translateY(20px); opacity: 0; }
+  to   { transform: translateX(-50%) translateY(0);    opacity: 1; }
+}
+
+.pwa-banner-contenido {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.pwa-banner-logo {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.pwa-banner-icon {
+  font-size: 24px;
+  color: white;
+  flex-shrink: 0;
+}
+
+.pwa-banner-texto {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.pwa-banner-texto strong {
+  font-size: 14px;
+  font-weight: 600;
+  color: white;
+  line-height: 1.3;
+}
+
+.pwa-banner-texto span {
+  font-size: 12px;
+  color: rgba(255,255,255,0.6);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pwa-banner-acciones {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.pwa-btn-instalar {
+  background: white;
+  color: #163212;
+  border: none;
+  border-radius: 8px;
+  padding: 7px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: opacity .2s;
+}
+.pwa-btn-instalar:hover { opacity: .9; }
+
+.pwa-btn-cerrar {
+  background: rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.7);
+  border: none;
+  border-radius: 8px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background .2s;
+}
+.pwa-btn-cerrar:hover { background: rgba(255,255,255,0.2); }
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -37,3 +191,4 @@
     transform: scale(.95);
   }
 }
+

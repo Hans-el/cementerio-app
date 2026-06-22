@@ -32,7 +32,7 @@ export const routes: Routes = [
     { path: 'login', component: LoginComponent },
     { path: 'registro', component: RegistroComponent },
     { path: 'informacion', component: InformacionComponent },
-    { path: 'NotFoundComponent', component: NotFoundComponent },
+    { path: '404', component: NotFoundComponent },
 
 
 
@@ -58,5 +58,5 @@ export const routes: Routes = [
     },
 
     // Ruta comodín — redirige a selección si no existe la ruta
-    { path: '**', redirectTo: 'NotFoundComponent' },
+    { path: '**', redirectTo: '404' },
 ];
