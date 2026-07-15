@@ -1,21 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { InhumacionService } from '../../services/inhumacion.service';
-import { ExhumacionService } from '../../services/exhumacion.service';
-import {
-  DocumentoInhumacion,
-  SolicitudInhumacion,
-} from '../../models/inhumacion.model';
-import {
-  DocumentoExhumacion,
-  SolicitudExhumacion,
-} from '../../models/exhumacion.model';
-import { environment } from '../../../environments/environment';
+import { TramiteService } from '../../services/tramite.service';
+import { TipoTramite, Solicitud, DocumentoSolicitud } from '../../models/tramite.model';
 import Swal from 'sweetalert2';
-
-type TipoSolicitud = 'inhumacion' | 'exhumacion';
-type Solicitud = SolicitudInhumacion | SolicitudExhumacion;
 
 @Component({
   selector: 'app-admin-solicitudes',
@@ -25,33 +13,47 @@ type Solicitud = SolicitudInhumacion | SolicitudExhumacion;
   styleUrl: './admin-solicitudes.component.css',
 })
 export class AdminSolicitudesComponent implements OnInit {
-  tipoActivo: TipoSolicitud = 'inhumacion';
+
+  // Tipos de trámite disponibles
+  tipos: TipoTramite[] = [];
+  tipoActivo: TipoTramite | null = null;
+
+  // Solicitudes
   solicitudes: Solicitud[] = [];
-  documentosSolicitudActual: any[] = [];
+  documentosSolicitudActual: DocumentoSolicitud[] = [];
   solicitudSeleccionada: Solicitud | null = null;
 
+  // Flags
   loading = false;
   loadingDocumentos = false;
+  subiendoRespuesta = false;
+
+  // Filtros
   filtroEstado = 'TODOS';
   filtroFechaInicio = '';
   filtroFechaFin = '';
 
-  readonly apiBase = new URL(environment.apiUrl).origin;
-  readonly PRECIO_INHUMACION = 10.9;
-  readonly PRECIO_EXHUMACION = 27.03;
-
-  constructor(
-    private inhumacionService: InhumacionService,
-    private exhumacionService: ExhumacionService,
-  ) { }
+  constructor(private tramiteService: TramiteService) { }
 
   ngOnInit(): void {
-    this.cargarSolicitudes();
+    this.cargarTipos();
   }
 
-  // Cambia entre inhumaciones y exhumaciones
-  cambiarTipo(tipo: TipoSolicitud): void {
-    if (this.tipoActivo === tipo) return;
+  // ── Tipos 
+
+  cargarTipos(): void {
+    this.tramiteService.getTipos().subscribe({
+      next: (tipos) => {
+        this.tipos = tipos;
+        this.tipoActivo = tipos[0] ?? null;
+        if (this.tipoActivo) this.cargarSolicitudes();
+      },
+      error: () => Swal.fire('Error', 'No se pudieron cargar los tipos de trámite.', 'error'),
+    });
+  }
+
+  cambiarTipo(tipo: TipoTramite): void {
+    if (this.tipoActivo?.id_tipo_tramite === tipo.id_tipo_tramite) return;
     this.tipoActivo = tipo;
     this.solicitudSeleccionada = null;
     this.documentosSolicitudActual = [];
@@ -59,20 +61,15 @@ export class AdminSolicitudesComponent implements OnInit {
     this.cargarSolicitudes();
   }
 
+  // ── Solicitudes 
+
   cargarSolicitudes(): void {
+    if (!this.tipoActivo) return;
     this.loading = true;
     this.solicitudes = [];
 
-    const obs$ =
-      this.tipoActivo === 'inhumacion'
-        ? this.inhumacionService.getSolicitudes()
-        : this.exhumacionService.getSolicitudes();
-
-    obs$.subscribe({
-      next: (data) => {
-        this.solicitudes = data;
-        this.loading = false;
-      },
+    this.tramiteService.getSolicitudes(this.tipoActivo.id_tipo_tramite).subscribe({
+      next: (data) => { this.solicitudes = data; this.loading = false; },
       error: () => {
         this.loading = false;
         Swal.fire('Error', 'No se pudieron cargar las solicitudes.', 'error');
@@ -81,17 +78,14 @@ export class AdminSolicitudesComponent implements OnInit {
   }
 
   get solicitudesFiltradas(): Solicitud[] {
-    return this.solicitudes.filter((s) => {
-      if (this.filtroEstado !== 'TODOS' && s.estado !== this.filtroEstado)
-        return false;
+    return this.solicitudes.filter(s => {
+      if (this.filtroEstado !== 'TODOS' && s.estado !== this.filtroEstado) return false;
       if (this.filtroFechaInicio) {
-        const inicio = new Date(this.filtroFechaInicio);
-        inicio.setHours(0, 0, 0, 0);
+        const inicio = new Date(this.filtroFechaInicio); inicio.setHours(0, 0, 0, 0);
         if (new Date(s.fecha_solicitud) < inicio) return false;
       }
       if (this.filtroFechaFin) {
-        const fin = new Date(this.filtroFechaFin);
-        fin.setHours(23, 59, 59, 999);
+        const fin = new Date(this.filtroFechaFin); fin.setHours(23, 59, 59, 999);
         if (new Date(s.fecha_solicitud) > fin) return false;
       }
       return true;
@@ -104,21 +98,15 @@ export class AdminSolicitudesComponent implements OnInit {
     this.filtroFechaFin = '';
   }
 
+  // ── Detalle 
+
   verDocumentos(solicitud: Solicitud): void {
     this.solicitudSeleccionada = solicitud;
     this.loadingDocumentos = true;
     this.documentosSolicitudActual = [];
 
-    const obs$ =
-      this.tipoActivo === 'inhumacion'
-        ? this.inhumacionService.getDocumentos(solicitud.id_solicitud)
-        : this.exhumacionService.getDocumentos(solicitud.id_solicitud);
-
-    obs$.subscribe({
-      next: (docs) => {
-        this.documentosSolicitudActual = docs;
-        this.loadingDocumentos = false;
-      },
+    this.tramiteService.getDocumentos(solicitud.id_solicitud).subscribe({
+      next: (docs) => { this.documentosSolicitudActual = docs; this.loadingDocumentos = false; },
       error: () => {
         this.loadingDocumentos = false;
         Swal.fire('Error', 'No se pudieron cargar los documentos.', 'error');
@@ -126,51 +114,29 @@ export class AdminSolicitudesComponent implements OnInit {
     });
   }
 
-  urlDocumento(ruta: string): string {
-    return `${this.apiBase}${ruta}`;
-  }
-
-  get precioActual(): number {
-    return this.tipoActivo === 'inhumacion'
-      ? this.PRECIO_INHUMACION
-      : this.PRECIO_EXHUMACION;
-  }
+  // ── Aprobar / Rechazar 
 
   aprobar(solicitud: Solicitud): void {
+    const esPago = !this.tipoActivo?.es_gratuito;
     Swal.fire({
       title: '¿Aprobar solicitud?',
-      html: `Confirmas que <strong>${solicitud.nombre_usuario}</strong> realizó el pago de <strong>$${this.precioActual}</strong>.`,
+      html: esPago
+        ? `Confirmas que <strong>${solicitud.nombre_usuario}</strong> realizó el pago de <strong>$${this.tipoActivo?.costo}</strong>.`
+        : `¿Confirmas la aprobación de la solicitud de <strong>${solicitud.nombre_usuario}</strong>?`,
       icon: 'question',
       showCancelButton: true,
       confirmButtonText: 'Sí, aprobar',
       cancelButtonText: 'Cancelar',
       confirmButtonColor: '#2d5a27',
-    }).then((result) => {
+    }).then(result => {
       if (!result.isConfirmed) return;
-
-      const obs$ =
-        this.tipoActivo === 'inhumacion'
-          ? this.inhumacionService.cambiarEstado(
-            solicitud.id_solicitud,
-            'APROBADA',
-          )
-          : this.exhumacionService.cambiarEstado(
-            solicitud.id_solicitud,
-            'APROBADA',
-          );
-
-      obs$.subscribe({
+      this.tramiteService.cambiarEstado(solicitud.id_solicitud, 'APROBADA').subscribe({
         next: () => {
-          Swal.fire(
-            'Aprobada',
-            'La solicitud fue aprobada correctamente.',
-            'success',
-          );
+          Swal.fire('Aprobada', 'La solicitud fue aprobada correctamente.', 'success');
           this.cargarSolicitudes();
           this.solicitudSeleccionada = null;
         },
-        error: () =>
-          Swal.fire('Error', 'No se pudo aprobar la solicitud.', 'error'),
+        error: () => Swal.fire('Error', 'No se pudo aprobar la solicitud.', 'error'),
       });
     });
   }
@@ -185,43 +151,72 @@ export class AdminSolicitudesComponent implements OnInit {
       confirmButtonText: 'Rechazar',
       cancelButtonText: 'Cancelar',
       confirmButtonColor: '#dc3545',
-      inputValidator: (value) => (!value ? 'Debes ingresar un motivo.' : null),
-    }).then((result) => {
+      inputValidator: (v) => !v ? 'Debes ingresar un motivo.' : null,
+    }).then(result => {
       if (!result.isConfirmed) return;
-
-      const obs$ =
-        this.tipoActivo === 'inhumacion'
-          ? this.inhumacionService.cambiarEstado(
-            solicitud.id_solicitud,
-            'RECHAZADA',
-            result.value,
-          )
-          : this.exhumacionService.cambiarEstado(
-            solicitud.id_solicitud,
-            'RECHAZADA',
-            result.value,
-          );
-
-      obs$.subscribe({
+      this.tramiteService.cambiarEstado(solicitud.id_solicitud, 'RECHAZADA', result.value).subscribe({
         next: () => {
           Swal.fire('Rechazada', 'La solicitud fue rechazada.', 'info');
           this.cargarSolicitudes();
           this.solicitudSeleccionada = null;
         },
-        error: () =>
-          Swal.fire('Error', 'No se pudo rechazar la solicitud.', 'error'),
+        error: () => Swal.fire('Error', 'No se pudo rechazar la solicitud.', 'error'),
       });
     });
   }
 
+  // ── Documento de respuesta 
+
+  onSubirRespuesta(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (!input.files?.[0] || !this.solicitudSeleccionada) return;
+    const archivo = input.files[0];
+
+    if (archivo.type !== 'application/pdf') {
+      Swal.fire('Formato inválido', 'Solo se permiten archivos PDF.', 'warning');
+      input.value = ''; return;
+    }
+
+    Swal.fire({
+      title: '¿Subir documento de respuesta?',
+      text: 'Este documento será visible para el usuario como validación del trámite.',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, subir',
+      cancelButtonText: 'Cancelar',
+      confirmButtonColor: '#2d5a27',
+    }).then(result => {
+      if (!result.isConfirmed) { input.value = ''; return; }
+
+      this.subiendoRespuesta = true;
+      this.tramiteService.subirDocumentoRespuesta(
+        this.solicitudSeleccionada!.id_solicitud, archivo
+      ).subscribe({
+        next: () => {
+          this.subiendoRespuesta = false;
+          input.value = '';
+          Swal.fire({
+            toast: true, position: 'top-end', icon: 'success',
+            title: 'Documento de respuesta subido.', timer: 2500, showConfirmButton: false,
+          });
+          this.cargarSolicitudes();
+        },
+        error: () => {
+          this.subiendoRespuesta = false;
+          input.value = '';
+          Swal.fire('Error', 'No se pudo subir el documento.', 'error');
+        },
+      });
+    });
+  }
+
+  // ── Helpers 
+
   badgeClass(estado: string): string {
     switch (estado) {
-      case 'APROBADA':
-        return 'bg-success bg-opacity-10 text-success';
-      case 'RECHAZADA':
-        return 'bg-danger bg-opacity-10 text-danger';
-      default:
-        return 'bg-warning bg-opacity-10 text-warning';
+      case 'APROBADA': return 'bg-success bg-opacity-10 text-success';
+      case 'RECHAZADA': return 'bg-danger bg-opacity-10 text-danger';
+      default: return 'bg-warning bg-opacity-10 text-warning';
     }
   }
 }

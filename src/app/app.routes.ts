@@ -22,6 +22,8 @@ import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { SuperadminComponent } from './pages/superadmin/superadmin.component';
 import { superadminGuard } from './guards/superadmin.guard';
 import { unsavedChangesGuard } from './guards/unsaved-changes.guard';
+import { SolicitudTramiteComponent } from './pages/solicitud-tramite/solicitud-tramite.component';
+
 
 //rutas de la aplicación
 export const routes: Routes = [
@@ -50,10 +52,15 @@ export const routes: Routes = [
             { path: 'reportes', component: ReportesComponent, canActivate: [authGuard, adminGuard] },
             { path: 'dashboard', component: DashboardComponent, canActivate: [adminGuard] },
             { path: 'tramites', component: TramitesComponent },
+            {
+                path: 'tramites/:id_tipo', component: SolicitudTramiteComponent,
+                canDeactivate: [unsavedChangesGuard]
+            },
             { path: 'exhumaciones', component: SolicitudExhumacionComponent, canDeactivate: [unsavedChangesGuard] },
             { path: 'inhumaciones', component: SolicitudInhumacionComponent, canDeactivate: [unsavedChangesGuard] },
             { path: 'admin/solicitudes', component: AdminSolicitudesComponent, canActivate: [authGuard, adminGuard] },
             { path: 'superadmin', component: SuperadminComponent, canActivate: [authGuard, superadminGuard] },
+
 
         ]
     },

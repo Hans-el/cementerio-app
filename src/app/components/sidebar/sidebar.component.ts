@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter, HostListener, ElementRef } from '@angular/core';
+import { Component, HostListener, ElementRef } from '@angular/core';
 import { NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import Swal from 'sweetalert2';
@@ -16,6 +16,8 @@ import { forkJoin } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { CementerioService } from '../../services/cementerio.service';
 import { Cementerio } from '../../models/cementerio.model';
+import { TramiteService } from '../../services/tramite.service';
+
 
 
 @Component({
@@ -39,11 +41,11 @@ export class SidebarComponent implements OnInit {
     private authService: AuthService,
     private router: Router,
     private modalService: NgbModal,
-    private usuarioService: UsuarioService,
     private exhumacionService: ExhumacionService,
     private inhumacionService: InhumacionService,
     private elementRef: ElementRef,
-    private cementerioService: CementerioService
+    private cementerioService: CementerioService,
+    private tramiteService: TramiteService
   ) { }
 
   // Este HostListener escucha los cambios en el tamaño de la ventana para adaptar el sidebar a dispositivos móviles
@@ -95,18 +97,12 @@ export class SidebarComponent implements OnInit {
   }
   //para las notificaciones de solicitudes pendientes en el admin
   cargarPendientes(): void {
-    forkJoin({
-      inhumaciones: this.inhumacionService.getPendientesCount(),
-      exhumaciones: this.exhumacionService.getPendientesCount(),
-    }).subscribe({
-      next: ({ inhumaciones, exhumaciones }) => {
-        this.solicitudesPendientes = inhumaciones.total + exhumaciones.total;
+    // Usar solo el nuevo endpoint genérico
+    this.tramiteService.getPendientesCount().subscribe({
+      next: (res) => {
+        this.solicitudesPendientes = res.total;
       },
-      error: (err) => {
-        console.error('Error al cargar pendientes:', err);
-        console.error('Status:', err.status);
-        console.error('Mensaje:', err.error);
-      }
+      error: () => { }
     });
   }
   toggleSidebar() {

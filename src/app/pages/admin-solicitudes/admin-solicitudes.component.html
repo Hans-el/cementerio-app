@@ -1,5 +1,4 @@
 <div class="container-fluid py-4 px-4">
-
   <!-- Header -->
   <div class="d-flex align-items-center justify-content-between mb-4">
     <h5 class="fw-semibold text-secondary mb-0">
@@ -11,19 +10,22 @@
     </span>
   </div>
 
-  <!-- Selector de tipo -->
+  <!-- Selector de tipo — dinámico -->
   <div class="card border-0 shadow-sm mb-3">
-    <div class="card-body py-4 px-4">
-      <div class="d-flex gap-2">
-        <button class="btn btn-sm fw-semibold px-4" [class.btn-success]="tipoActivo === 'inhumacion'"
-          [class.btn-outline-secondary]="tipoActivo !== 'inhumacion'" (click)="cambiarTipo('inhumacion')">
-          <i class="bi bi-file-earmark-arrow-up me-2"></i>
-          Inhumaciones
-        </button>
-        <button class="btn btn-sm fw-semibold px-4" [class.btn-success]="tipoActivo === 'exhumacion'"
-          [class.btn-outline-secondary]="tipoActivo !== 'exhumacion'" (click)="cambiarTipo('exhumacion')">
-          <i class="bi bi-file-earmark-arrow-down me-2"></i>
-          Exhumaciones
+    <div class="card-body py-3 px-4">
+      <div class="d-flex gap-2 flex-wrap">
+        <button
+          *ngFor="let t of tipos"
+          class="btn btn-sm fw-semibold px-4"
+          [class.btn-success]="
+            tipoActivo?.id_tipo_tramite === t.id_tipo_tramite
+          "
+          [class.btn-outline-secondary]="
+            tipoActivo?.id_tipo_tramite !== t.id_tipo_tramite
+          "
+          (click)="cambiarTipo(t)"
+        >
+          {{ t.nombre }}
         </button>
       </div>
     </div>
@@ -31,11 +33,16 @@
 
   <!-- Filtros -->
   <div class="card border-0 shadow-sm mb-4">
-    <div class="card-body py-4 px-4">
+    <div class="card-body py-3 px-4">
       <div class="row g-3 align-items-end">
         <div class="col-md-3">
-          <label class="form-label text-muted small fw-semibold mb-1">Estado</label>
-          <select class="form-select form-select-sm bg-light" [(ngModel)]="filtroEstado">
+          <label class="form-label text-muted small fw-semibold mb-1"
+            >Estado</label
+          >
+          <select
+            class="form-select form-select-sm bg-light"
+            [(ngModel)]="filtroEstado"
+          >
             <option value="TODOS">Todos</option>
             <option value="PENDIENTE">Pendientes</option>
             <option value="APROBADA">Aprobadas</option>
@@ -43,15 +50,30 @@
           </select>
         </div>
         <div class="col-md-3">
-          <label class="form-label text-muted small fw-semibold mb-1">Desde</label>
-          <input type="date" class="form-control form-control-sm bg-light" [(ngModel)]="filtroFechaInicio" />
+          <label class="form-label text-muted small fw-semibold mb-1"
+            >Desde</label
+          >
+          <input
+            type="date"
+            class="form-control form-control-sm bg-light"
+            [(ngModel)]="filtroFechaInicio"
+          />
         </div>
         <div class="col-md-3">
-          <label class="form-label text-muted small fw-semibold mb-1">Hasta</label>
-          <input type="date" class="form-control form-control-sm bg-light" [(ngModel)]="filtroFechaFin" />
+          <label class="form-label text-muted small fw-semibold mb-1"
+            >Hasta</label
+          >
+          <input
+            type="date"
+            class="form-control form-control-sm bg-light"
+            [(ngModel)]="filtroFechaFin"
+          />
         </div>
         <div class="col-md-3">
-          <button class="btn btn-outline-secondary btn-sm w-100" (click)="limpiarFiltros()">
+          <button
+            class="btn btn-outline-secondary btn-sm w-100"
+            (click)="limpiarFiltros()"
+          >
             <i class="bi bi-x-circle me-1"></i>Limpiar filtros
           </button>
         </div>
@@ -60,40 +82,51 @@
   </div>
 
   <div class="row g-3">
-
-    <!-- Lista de solicitudes -->
+    <!-- Lista -->
     <div [class]="solicitudSeleccionada ? 'col-md-5' : 'col-12'">
       <div class="card border shadow-sm">
-        <div class="card-body py-3 px-3 ">
-
+        <div class="card-body py-3 px-3">
           <div *ngIf="loading" class="text-center py-5">
             <div class="spinner-border text-success"></div>
           </div>
 
-          <div *ngIf="!loading && !solicitudesFiltradas.length" class="text-center py-5 text-muted">
+          <div
+            *ngIf="!loading && !solicitudesFiltradas.length"
+            class="text-center py-5 text-muted"
+          >
             <i class="bi bi-inbox fs-1 d-block mb-2"></i>
-            No hay solicitudes de {{ tipoActivo === 'inhumacion' ? 'inhumación' : 'exhumación' }}
+            No hay solicitudes de {{ tipoActivo?.nombre }}
           </div>
 
-          <div *ngFor="let s of solicitudesFiltradas"
-            class="d-flex align-items-center justify-content-between px-4 py-3 border-bottom" style="cursor: pointer;"
-            [class.bg-light]="solicitudSeleccionada?.id_solicitud === s.id_solicitud" (click)="verDocumentos(s)">
+          <div
+            *ngFor="let s of solicitudesFiltradas"
+            class="d-flex align-items-center justify-content-between px-4 py-3 border-bottom"
+            style="cursor: pointer"
+            [class.bg-light]="
+              solicitudSeleccionada?.id_solicitud === s.id_solicitud
+            "
+            (click)="verDocumentos(s)"
+          >
             <div>
               <div class="fw-medium small">{{ s.nombre_usuario }}</div>
-              <div class="text-muted" style="font-size: 11px;">
-                {{ s.cedula_usuario }} · {{ s.fecha_solicitud | date:'dd/MM/yyyy HH:mm' }}
+              <div class="text-muted" style="font-size: 11px">
+                {{ s.cedula_usuario }} ·
+                {{ s.fecha_solicitud | date: "dd/MM/yyyy HH:mm" : "UTC" }}
               </div>
             </div>
+
             <div class="d-flex flex-column align-items-end gap-1">
-              <span class="badge rounded-pill px-2 py-1 small" [class]="badgeClass(s.estado)">
+              <span
+                class="badge rounded-pill px-2 py-1 small"
+                [class]="badgeClass(s.estado)"
+              >
                 {{ s.estado }}
               </span>
-              <span class="text-muted" style="font-size: 10px;">
-                {{ s.total_documentos }}/{{ tipoActivo === 'inhumacion' ? 7 : 4 }} docs
+              <span class="text-muted" style="font-size: 10px">
+                {{ s.total_documentos }} docs
               </span>
             </div>
           </div>
-
         </div>
       </div>
     </div>
@@ -101,60 +134,83 @@
     <!-- Panel de detalle -->
     <div class="col-md-7" *ngIf="solicitudSeleccionada">
       <div class="card border-0 shadow-sm">
-        <div class="card-header bg-white border-0 py-3 d-flex justify-content-between align-items-center">
+        <div
+          class="card-header bg-white border-0 py-3 d-flex justify-content-between align-items-center"
+        >
           <h6 class="fw-semibold text-secondary mb-0">
-            <i class="bi bi-person me-2"></i>{{ solicitudSeleccionada.nombre_usuario }}
+            <i class="bi bi-person me-2"></i
+            >{{ solicitudSeleccionada.nombre_usuario }}
           </h6>
-          <button class="btn btn-sm btn-light" (click)="solicitudSeleccionada = null">
+          <button
+            class="btn btn-sm btn-light"
+            (click)="solicitudSeleccionada = null"
+          >
             <i class="bi bi-x"></i>
           </button>
         </div>
-        <div class="card-body">
 
-          <!-- Info del solicitante -->
+        <div class="card-body">
+          <!-- Info -->
           <div class="row g-2 mb-4">
             <div class="col-6">
               <div class="text-muted small">Cédula</div>
-              <div class="fw-medium small">{{ solicitudSeleccionada.cedula_usuario }}</div>
+              <div class="fw-medium small">
+                {{ solicitudSeleccionada.cedula_usuario }}
+              </div>
             </div>
             <div class="col-6">
               <div class="text-muted small">Correo</div>
-              <div class="fw-medium small">{{ solicitudSeleccionada.correo_usuario }}</div>
+              <div class="fw-medium small">
+                {{ solicitudSeleccionada.correo_usuario }}
+              </div>
             </div>
             <div class="col-6">
               <div class="text-muted small">Teléfono</div>
               <div class="fw-medium small">
-                {{ solicitudSeleccionada.telefono_usuario || '—' }}
+                {{ solicitudSeleccionada.telefono_usuario || "—" }}
               </div>
             </div>
             <div class="col-6">
               <div class="text-muted small">Fecha solicitud</div>
               <div class="fw-medium small">
-                {{ solicitudSeleccionada.fecha_solicitud | date:'dd/MM/yyyy HH:mm' }}
+                {{
+                  solicitudSeleccionada.fecha_solicitud
+                    | date: "dd/MM/yyyy HH:mm" : "UTC"
+                }}
               </div>
             </div>
             <div class="col-6">
               <div class="text-muted small">Estado</div>
-              <span class="badge rounded-pill px-2 py-1 small" [class]="badgeClass(solicitudSeleccionada.estado)">
+              <span
+                class="badge rounded-pill px-2 py-1 small"
+                [class]="badgeClass(solicitudSeleccionada.estado)"
+              >
                 {{ solicitudSeleccionada.estado }}
               </span>
-            </div>
-            <div class="col-12" *ngIf="solicitudSeleccionada.observaciones">
-              <div class="text-muted small">Observaciones</div>
-              <div class="fw-medium small">{{ solicitudSeleccionada.observaciones }}</div>
             </div>
             <div class="col-6">
               <div class="text-muted small">Tipo de trámite</div>
               <div class="fw-medium small">
-                {{ tipoActivo === 'inhumacion' ? 'Inhumación' : 'Exhumación' }}
-                — <strong>${{ precioActual }}</strong>
+                {{ tipoActivo?.nombre }}
+                <span *ngIf="!tipoActivo?.es_gratuito">
+                  — <strong>${{ tipoActivo?.costo }}</strong>
+                </span>
+                <span *ngIf="tipoActivo?.es_gratuito" class="text-info">
+                  — Gratuito</span
+                >
+              </div>
+            </div>
+            <div class="col-12" *ngIf="solicitudSeleccionada.observaciones">
+              <div class="text-muted small">Observaciones</div>
+              <div class="fw-medium small">
+                {{ solicitudSeleccionada.observaciones }}
               </div>
             </div>
           </div>
 
-          <!-- Documentos -->
+          <!-- Documentos del usuario -->
           <h6 class="fw-semibold text-secondary mb-3">
-            <i class="bi bi-paperclip me-2"></i>Documentos
+            <i class="bi bi-paperclip me-2"></i>Documentos del usuario
           </h6>
 
           <div *ngIf="loadingDocumentos" class="text-center py-3">
@@ -162,31 +218,89 @@
           </div>
 
           <div *ngIf="!loadingDocumentos">
-            <div *ngFor="let doc of documentosSolicitudActual"
-              class="d-flex align-items-center justify-content-between py-2 border-bottom">
+            <div
+              *ngFor="let doc of documentosSolicitudActual"
+              class="d-flex align-items-center justify-content-between py-2 border-bottom"
+            >
               <div class="d-flex align-items-center gap-2">
                 <i class="bi bi-file-earmark-pdf text-danger"></i>
                 <span class="small fw-medium">{{ doc.nombre_documento }}</span>
               </div>
-              <a [href]="doc.url_firmada" target="_blank" [class.disabled]="!doc.url_firmada">
+              <a
+                [href]="doc.url_firmada"
+                target="_blank"
+                class="btn btn-outline-secondary btn-sm"
+                [class.disabled]="!doc.url_firmada"
+              >
                 <i class="bi bi-eye me-1"></i>Ver
               </a>
             </div>
           </div>
 
-          <!-- Acciones -->
-          <div class="d-flex gap-2 justify-content-end mt-4" *ngIf="solicitudSeleccionada.estado === 'PENDIENTE'">
-            <button class="btn btn-outline-danger btn-sm fw-semibold" (click)="rechazar(solicitudSeleccionada)">
+          <!-- Documento de respuesta del admin -->
+          <div class="mt-4">
+            <h6 class="fw-semibold text-secondary mb-3">
+              <i class="bi bi-file-earmark-check me-2"></i>Documento de
+              respuesta
+            </h6>
+
+            <div
+              *ngIf="solicitudSeleccionada.documento_respuesta"
+              class="alert alert-success d-flex align-items-center gap-2 py-2 mb-2"
+            >
+              <i class="bi bi-check-circle-fill"></i>
+              <span class="small"
+                >Ya existe un documento de respuesta subido.</span
+              >
+            </div>
+
+            <label
+              class="btn btn-outline-primary btn-sm mb-0"
+              style="cursor: pointer"
+            >
+              <span
+                *ngIf="subiendoRespuesta"
+                class="spinner-border spinner-border-sm me-1"
+              ></span>
+              <i *ngIf="!subiendoRespuesta" class="bi bi-upload me-1"></i>
+              {{
+                solicitudSeleccionada.documento_respuesta
+                  ? "Reemplazar documento"
+                  : "Subir documento de respuesta"
+              }}
+              <input
+                type="file"
+                accept="application/pdf"
+                class="d-none"
+                (change)="onSubirRespuesta($event)"
+                [disabled]="subiendoRespuesta"
+              />
+            </label>
+            <div class="text-muted mt-1" style="font-size: 11px">
+              PDF que el usuario verá como validación del trámite.
+            </div>
+          </div>
+
+          <!-- Acciones aprobar/rechazar -->
+          <div
+            class="d-flex gap-2 justify-content-end mt-4"
+            *ngIf="solicitudSeleccionada.estado === 'PENDIENTE'"
+          >
+            <button
+              class="btn btn-outline-danger btn-sm fw-semibold"
+              (click)="rechazar(solicitudSeleccionada)"
+            >
               <i class="bi bi-x-circle me-1"></i>Rechazar
             </button>
-            <button class="btn btn-success btn-sm fw-semibold" (click)="aprobar(solicitudSeleccionada)">
+            <button
+              class="btn btn-success btn-sm fw-semibold"
+              (click)="aprobar(solicitudSeleccionada)"
+            >
               <i class="bi bi-check-circle me-1"></i>Aprobar
             </button>
           </div>
-
         </div>
       </div>
     </div>
-
   </div>
 </div>
