@@ -6,7 +6,6 @@ import { TramiteService } from '../../services/tramite.service';
 import { TipoTramite, DocumentoTipo, Solicitud, DocumentoSolicitud } from '../../models/tramite.model';
 import { PuedeSalir } from '../../guards/unsaved-changes.guard';
 import Swal from 'sweetalert2';
-import * as bootstrap from 'bootstrap';
 
 @Component({
   selector: 'app-solicitud-tramite',
