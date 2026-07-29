@@ -24,6 +24,20 @@ export class CementeriosComponent implements OnInit {
     private router: Router,
   ) { }
 
+  // Agrega este método dentro de export class CementeriosComponent
+  getAccentoCard(index: number): string {
+    const colores = [
+      'rgba(59, 130, 246, 0.35)',  // Azul
+      'rgba(20, 184, 166, 0.35)',  // Turquesa
+      'rgba(30, 64, 175, 0.35)',   // Azul Oscuro
+      'rgba(180, 83, 9, 0.35)',    // Ámbar/Dorado
+      'rgba(16, 185, 129, 0.35)',  // Verde Esmeralda
+      'rgba(124, 58, 237, 0.35)',  // Violeta
+      'rgba(217, 119, 6, 0.35)'    // Dorado
+    ];
+    return colores[index % colores.length];
+  }
+
   ngOnInit(): void {
     // Si ya hay cementerio seleccionado y hay token, ir directo al mapa
     const token = localStorage.getItem('token');

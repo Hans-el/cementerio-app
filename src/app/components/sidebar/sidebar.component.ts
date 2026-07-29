@@ -41,8 +41,6 @@ export class SidebarComponent implements OnInit {
     private authService: AuthService,
     private router: Router,
     private modalService: NgbModal,
-    private exhumacionService: ExhumacionService,
-    private inhumacionService: InhumacionService,
     private elementRef: ElementRef,
     private cementerioService: CementerioService,
     private tramiteService: TramiteService
@@ -95,9 +93,8 @@ export class SidebarComponent implements OnInit {
     }
 
   }
-  //para las notificaciones de solicitudes pendientes en el admin
+
   cargarPendientes(): void {
-    // Usar solo el nuevo endpoint genérico
     this.tramiteService.getPendientesCount().subscribe({
       next: (res) => {
         this.solicitudesPendientes = res.total;
@@ -105,21 +102,24 @@ export class SidebarComponent implements OnInit {
       error: () => { }
     });
   }
+
   toggleSidebar() {
     this.isCollapsed = !this.isCollapsed;
   }
-  // Cierra el sidebar al hacer click en cualquier nav-link en móvil
+
   cerrarEnMovil(): void {
     if (this.isMobile) {
       this.isCollapsed = true;
     }
   }
+
   openLocalizarModal() {
     this.modalService.open(LocalizarModalComponent, {
       centered: true,
       size: 'md',
     });
   }
+
   openDisponibilidadModal() {
     this.modalService.open(DisponibilidadModalComponent, {
       centered: true,
@@ -127,7 +127,6 @@ export class SidebarComponent implements OnInit {
     });
   }
 
-  // Este método es para que el administrador pueda agregar o editar bóvedas
   editarBovedas() {
     this.modalService.open(GestionBovedasComponent, {
       centered: true,
