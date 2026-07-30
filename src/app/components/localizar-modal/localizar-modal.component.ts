@@ -186,19 +186,21 @@ export class LocalizarModalComponent implements OnInit {
         <div style="text-align:left;">
           <p style="margin:0 0 1rem 0; color:#6c757d;">El fallecido se encuentra en:</p>
 
-          <div style="display:flex; gap:.75rem; margin-bottom:1rem;">
+          <div style="display:flex; gap:.75rem; ">
             <div style="flex:1; background:#f8f9fa; border:1px solid #e9ecef; border-radius:14px; padding:1rem; text-align:center;">
               <div style="font-size:.75rem; font-weight:700; letter-spacing:.08em; color:#6c757d; text-transform:uppercase;">Sector.Manzana</div>
               <div style="font-size:2rem; font-weight:800; color:#198754; line-height:1.1;">${sector}.${manzana}</div>
             </div>            
           </div>
+          <p style="margin-bottom:1rem; font-size:.92rem; color:#6c757d;">Este código hace referencia a tu lugar en el mapa.</p>
 
-          <div style="background:#e9f7ef; border:1px solid #cdebd8; border-radius:14px; padding:.9rem 1rem; margin-bottom:1rem;">
+
+          <div style="background:#e9f7ef; border:1px solid #cdebd8; border-radius:14px; padding:.9rem 1rem;">
             <div style="font-size:.75rem; font-weight:700; letter-spacing:.08em; color:#198754; text-transform:uppercase; margin-bottom:.35rem;">Código completo</div>
             <div style="font-size:1.25rem; font-weight:800; color:#14532d;">${codigoBoveda}</div>
           </div>
 
-          <p style="margin:0; font-size:.92rem; color:#6c757d;">El primer código hace referencia a tu lugar en el mapa.<br>El codigo completo corresponde a tu ubicacion precisa.</p>
+          <p style="margin:0; font-size:.92rem; color:#6c757d;">El codigo completo corresponde a tu ubicacion precisa.</p>
         </div>
       `,
       icon: 'success',

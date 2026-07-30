@@ -55,7 +55,8 @@
     </div>
     <div class="card-body pt-0">
       <div class="row g-3">
-        <!-- BUSCADOR PRINCIPAL - CORREGIDO: ahora llama a onSearch() -->
+
+        <!-- Buscador principal — igual que antes -->
         <div class="col-12">
           <label class="form-label text-muted small fw-semibold mb-1">
             <i class="bi bi-search me-1"></i>Buscar Fallecido
@@ -64,19 +65,44 @@
             <span class="input-group-text bg-light border-end-0">
               <i class="bi bi-search text-muted"></i>
             </span>
-            <input type="text" class="form-control form-control bg-light border-start-1 ps-2"
-              placeholder="Código o Nombre del fallecido" [(ngModel)]="searchQuery" (ngModelChange)="onSearch()" />
-            <!-- Botón para limpiar búsqueda -->
-            <span class="input-group-text bg-light border-0" *ngIf="searchQuery" style="cursor: pointer"
+            <input type="text" class="form-control bg-light border-start-1 ps-2" placeholder="Nombre o código de bloque"
+              [(ngModel)]="searchQuery" (ngModelChange)="onSearch()" />
+            <span class="input-group-text bg-light border-0" *ngIf="searchQuery" style="cursor:pointer"
               (click)="searchQuery = ''; onSearch()">
               <i class="bi bi-x-circle-fill text-muted"></i>
             </span>
           </div>
-          <!-- Indicador de búsqueda activa -->
           <small class="text-muted mt-1 d-block" *ngIf="searchQuery">
             <i class="bi bi-info-circle me-1"></i>Buscando: "{{ searchQuery }}"
           </small>
         </div>
+
+        <!-- Fecha inicio -->
+        <div class="col-md-4">
+          <label class="form-label text-muted small fw-semibold mb-1">
+            <i class="bi bi-calendar me-1"></i>Fallecimiento desde
+          </label>
+          <input type="date" class="form-control form-control-sm bg-light" [(ngModel)]="fechaInicio"
+            (change)="onSearch()" />
+        </div>
+
+        <!-- Fecha fin -->
+        <div class="col-md-4">
+          <label class="form-label text-muted small fw-semibold mb-1">
+            <i class="bi bi-calendar me-1"></i>Fallecimiento hasta
+          </label>
+          <input type="date" class="form-control form-control-sm bg-light" [(ngModel)]="fechaFin"
+            (change)="onSearch()" />
+        </div>
+
+        <!-- Limpiar filtros -->
+        <div class="col-md-4 d-flex align-items-end">
+          <button class="btn btn-outline-secondary btn-sm w-100" (click)="limpiarFiltros()"
+            *ngIf="searchQuery || fechaInicio || fechaFin">
+            <i class="bi bi-x-circle me-1"></i>Limpiar filtros
+          </button>
+        </div>
+
       </div>
     </div>
   </div>

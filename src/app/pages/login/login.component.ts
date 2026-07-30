@@ -101,10 +101,10 @@ export class LoginComponent implements OnInit {
           Swal.fire({
             toast: true, //Con este atributo se muestra como una notificación en la esquina, es mucho más elegante que un alert tradicional
             position: 'top-end',
-            title: 'Inicio de sesión exitoso!',
+            title: 'Bienvenido!',
             text: 'Has iniciado sesión correctamente.',
             timerProgressBar: true,
-            timer: 1000,
+            timer: 1200,
             icon: 'success',
             showConfirmButton: false,
           }).then(() => {
@@ -115,10 +115,10 @@ export class LoginComponent implements OnInit {
           Swal.fire({
             toast: true,
             position: 'top-end',
-            title: 'Error!',
-            text: 'Credenciales inválidas. Por favor, intenta de nuevo.',
+            title: 'Ups!',
+            text: 'Usuario o contraseña incorrecta.',
             timerProgressBar: true,
-            timer: 1000,
+            timer: 2200,
             icon: 'error',
           });
           console.error('Error al iniciar sesión:', error);

@@ -20,11 +20,12 @@ export class FallecidoService {
     private router: Router
   ) { }
 
-  // Obtener fallecidos paginados
   getFallecidos(
     page: number,
     limit: number,
     q?: string,
+    fechaInicio?: string,
+    fechaFin?: string,
   ): Observable<{
     data: any[];
     total: number;
@@ -36,33 +37,23 @@ export class FallecidoService {
       .set('page', page.toString())
       .set('limit', limit.toString());
 
-    if (q) {
-      params = params.set('q', q);
-    }
+    if (q) params = params.set('q', q);
+    if (fechaInicio) params = params.set('fechaInicio', fechaInicio);
+    if (fechaFin) params = params.set('fechaFin', fechaFin);
 
     return this.http.get<{
-      data: any[];
-      total: number;
-      page: number;
-      limit: number;
-      totalPages: number;
+      data: any[]; total: number; page: number; limit: number; totalPages: number;
     }>(this.apiUrl, { params });
   }
 
-  // Obtener el total de fallecidos (sin paginación)
-  getTotalFallecidos(q?: string): Observable<{ total: number }> {
+  getTotalFallecidos(q?: string, fechaInicio?: string, fechaFin?: string): Observable<{ total: number }> {
     let params = new HttpParams();
-    if (q) {
-      params = params.set('q', q);
-    }
+    if (q) params = params.set('q', q);
+    if (fechaInicio) params = params.set('fechaInicio', fechaInicio);
+    if (fechaFin) params = params.set('fechaFin', fechaFin);
     return this.http.get<{ total: number }>(`${this.apiUrl}/total`, { params });
   }
 
-  // getTotalFallecidos(): Observable<{ total: number }> {
-  //   return this.http.get<{ total: number }>(`${this.apiUrl}/total`);
-  // }
-
-  //este es usado en la pagina de fallecidos
   buscarFallecidos(q: string): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/buscar`, {
       params: { q },

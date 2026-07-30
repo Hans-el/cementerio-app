@@ -18,53 +18,59 @@ export class InicioDifuntosComponent implements OnInit {
   difuntos: any[] = [];
   totalFallecidos: number = 0;
   loading = false;
-  currentPage: number = 1; // Página actual
-  limit: number = 30; // Número de registros por página
-  totalPages: number = 0; // Total de páginas
-  searchQuery: string = ''; // Consulta de búsqueda
+  currentPage: number = 1;
+  limit: number = 30;
+  totalPages: number = 0;
+  searchQuery: string = '';
   today: Date = new Date();
+  fechaInicio: string = '';
+  fechaFin: string = '';
 
-  // Filtros
-  filtros = {
-    busqueda: '',
-  };
+  filtros = { busqueda: '' };
 
   constructor(
     private modalService: NgbModal,
     private fallecidoService: FallecidoService,) { }
 
   ngOnInit(): void {
-    this.cargarDifuntos(); // Cargar difuntos al iniciar el componente, lo usamos para el buscador
+    this.cargarDifuntos();
   }
 
+
   cargarDifuntos(): void {
+    this.loading = true;
     this.fallecidoService
-      .getFallecidos(this.currentPage, this.limit, this.searchQuery)
+      .getFallecidos(
+        this.currentPage,
+        this.limit,
+        this.searchQuery || undefined,
+        this.fechaInicio || undefined,
+        this.fechaFin || undefined,
+      )
       .subscribe({
         next: (response) => {
-          this.difuntos = response.data.filter(
-            (difunto) => difunto.nombre_completo.toUpperCase() !== 'S/N',
-          );
+          this.difuntos = response.data.filter(d => d.nombre_completo.toUpperCase() !== 'S/N');
           this.totalFallecidos = response.total;
           this.totalPages = response.totalPages;
+          this.loading = false;
         },
         error: () => {
           console.error('Error al cargar los difuntos');
+          this.loading = false;
         },
       });
   }
   cargarTotalFallecidos(): void {
-    this.fallecidoService.getTotalFallecidos(this.searchQuery).subscribe({
-      next: (data) => {
-        this.totalFallecidos = data.total;
-      },
-      error: () => {
-        console.error('Error al cargar el total de difuntos');
-      },
+    this.fallecidoService.getTotalFallecidos(
+      this.searchQuery || undefined,
+      this.fechaInicio || undefined,
+      this.fechaFin || undefined,
+    ).subscribe({
+      next: (data) => { this.totalFallecidos = data.total; },
+      error: () => { console.error('Error al cargar el total de difuntos'); },
     });
   }
-  // Método para manejar el cambio de página. Se llama cuando el usuario navega entre páginas.
-  // En el html se encuentra abajo en los botones de paginación
+
   onPageChange(page: number): void {
     if (page >= 1 && page <= this.totalPages) {
       this.currentPage = page;
@@ -75,18 +81,20 @@ export class InicioDifuntosComponent implements OnInit {
     this.currentPage = 1;
     this.cargarDifuntos();
   }
-  // Obtener difuntos filtrados según la búsqueda
+  // Nuevo — limpiar todos los filtros
+  limpiarFiltros(): void {
+    this.searchQuery = '';
+    this.fechaInicio = '';
+    this.fechaFin = '';
+    this.currentPage = 1;
+    this.cargarDifuntos();
+  }
+
+
   get difuntosFiltrados(): any[] {
-    if (!this.filtros.busqueda) {
-      return this.difuntos;
-    }
-    return this.difuntos.filter(
-      (difunto) =>
-        difunto.nombre_completo
-          .toLowerCase()
-          .includes(this.filtros.busqueda.toLowerCase()) ||
-        (difunto.fecha_fallecimiento_raw &&
-          difunto.fecha_fallecimiento_raw.includes(this.filtros.busqueda)),
+    if (!this.filtros.busqueda) return this.difuntos;
+    return this.difuntos.filter(d =>
+      d.nombre_completo.toLowerCase().includes(this.filtros.busqueda.toLowerCase())
     );
   }
 
