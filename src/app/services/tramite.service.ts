@@ -41,6 +41,9 @@ export class TramiteService {
   getDocumentos(id_solicitud: number): Observable<DocumentoSolicitud[]> {
     return this.http.get<DocumentoSolicitud[]>(`${this.apiUrl}/${id_solicitud}/documentos`);
   }
+  getHistorial(id_tipo: number): Observable<Solicitud[]> {
+    return this.http.get<Solicitud[]>(`${this.apiUrl}/historial/${id_tipo}`);
+  }
 
   cambiarEstado(id_solicitud: number, estado: string, observaciones?: string): Observable<any> {
     return this.http.put<any>(`${this.apiUrl}/${id_solicitud}/estado`, { estado, observaciones });
@@ -50,6 +53,12 @@ export class TramiteService {
     const formData = new FormData();
     formData.append('documento', archivo);
     return this.http.post<any>(`${this.apiUrl}/${id_solicitud}/documento-respuesta`, formData);
+  }
+  getMisSolicitudes(estado?: string, id_tipo_tramite?: number): Observable<Solicitud[]> {
+    let params = new HttpParams();
+    if (estado) params = params.set('estado', estado);
+    if (id_tipo_tramite) params = params.set('id_tipo_tramite', id_tipo_tramite.toString());
+    return this.http.get<Solicitud[]>(`${this.apiUrl}/mis-solicitudes`, { params });
   }
 
   getUrlRespuesta(id_solicitud: number): Observable<{ url: string }> {

@@ -1,72 +1,243 @@
 <div class="container py-5" style="max-width: 700px">
-  <div class="mb-5">
+
+  <!-- Header -->
+  <div class="mb-4">
     <h3 class="fw-semibold text-secondary mb-1">
       <i class="bi bi-file-earmark-text me-2 text-success"></i>Trámites
     </h3>
     <p class="text-muted small mb-0">
-      Selecciona el tipo de trámite que deseas realizar.
+      Gestiona tus solicitudes y consulta el historial de trámites.
     </p>
   </div>
-  <div
-    class="alert alert-info d-flex align-items-start gap-2 mt-4"
-    *ngIf="!cargando"
-  >
-    <i class="bi bi-info-circle-fill mt-1 shrink-0"></i>
-    <div class="small">
-      Una vez enviada tu solicitud, la administración la revisará. Los trámites
-      con costo requieren pago presencial en la administración.
+
+  <!-- Tabs -->
+  <div class="d-flex gap-2 mb-4 border-bottom pb-0">
+    <button class="btn btn-sm fw-semibold px-4 pb-2 border-0 border-bottom rounded-0"
+      [class.text-success]="tabActivo === 'tramites'" [class.border-success]="tabActivo === 'tramites'"
+      [class.text-muted]="tabActivo !== 'tramites'" style="border-bottom-width: 2px !important;"
+      (click)="cambiarTab('tramites')">
+      <i class="bi bi-grid me-1"></i>Trámites disponibles
+    </button>
+    <button class="btn btn-sm fw-semibold px-4 pb-2 border-0 border-bottom rounded-0"
+      [class.text-success]="tabActivo === 'historial'" [class.border-success]="tabActivo === 'historial'"
+      [class.text-muted]="tabActivo !== 'historial'" style="border-bottom-width: 2px !important;"
+      (click)="cambiarTab('historial')">
+      <i class="bi bi-clock-history me-1"></i>Mis solicitudes
+    </button>
+  </div>
+
+  <!-- ══ TAB: TRÁMITES ════════════════════════════════════ -->
+  <ng-container *ngIf="tabActivo === 'tramites'">
+
+    <div class="alert alert-info d-flex align-items-start gap-2 mb-4" *ngIf="!cargando">
+      <i class="bi bi-info-circle-fill mt-1 shrink-0"></i>
+      <div class="small">
+        Una vez enviada tu solicitud, la administración la revisará.
+        Los trámites con costo requieren pago presencial en la administración.
+      </div>
     </div>
-  </div>
 
-  <!-- Cargando -->
-  <div *ngIf="cargando" class="text-center py-5">
-    <div class="spinner-border text-success"></div>
-  </div>
+    <div *ngIf="cargando" class="text-center py-5">
+      <div class="spinner-border text-success"></div>
+    </div>
 
-  <!-- Grid de trámites -->
-  <div *ngIf="!cargando" class="row g-4">
-    <div *ngFor="let t of tipos" class="col-md-6">
-      <div
-        class="card border shadow-sm h-100 hover-lift"
-        style="cursor: pointer"
-        (click)="irATramite(t.id_tipo_tramite)"
-      >
-        <div class="card-body p-4 d-flex flex-column">
-          <div
-            class="rounded-3 p-3 mb-3"
-            style="width: fit-content"
-            [class]="'bg-' + colorPorTipo(t.nombre) + ' bg-opacity-25'"
-          >
-            <i
-              class="bi fs-2"
-              [class]="iconoPorTipo(t.nombre)"
-              [class.text-success]="colorPorTipo(t.nombre) === 'success'"
-              [class.text-warning]="colorPorTipo(t.nombre) === 'warning'"
-              [class.text-primary]="colorPorTipo(t.nombre) === 'primary'"
-              [class.text-info]="colorPorTipo(t.nombre) === 'info'"
-            >
-            </i>
-          </div>
+    <div *ngIf="!cargando" class="row g-4">
+      <div *ngFor="let t of tipos" class="col-md-6">
+        <div class="card border shadow-sm h-100 hover-lift" style="cursor:pointer;"
+          (click)="irATramite(t.id_tipo_tramite)">
+          <div class="card-body p-4 d-flex flex-column">
 
-          <h5 class="fw-semibold mb-2">{{ t.nombre }}</h5>
-          <p class="text-muted small mb-3 grow">{{ t.descripcion }}</p>
+            <div class="rounded-3 p-3 mb-3" style="width:fit-content;"
+              [class]="'bg-' + colorPorTipo(t.nombre) + ' bg-opacity-25'">
+              <i class="bi fs-2" [class]="iconoPorTipo(t.nombre)"
+                [class.text-success]="colorPorTipo(t.nombre) === 'success'"
+                [class.text-warning]="colorPorTipo(t.nombre) === 'warning'"
+                [class.text-primary]="colorPorTipo(t.nombre) === 'primary'"
+                [class.text-info]="colorPorTipo(t.nombre)    === 'info'">
+              </i>
+            </div>
 
-          <div
-            class="d-flex align-items-center justify-content-between mt-auto"
-          >
-            <span
-              class="badge px-3 py-2 rounded-pill bg-light border text-secondary fw-semibold"
-            >
-              {{ t.es_gratuito ? "Gratuito" : "$" + t.costo }}
-            </span>
-            <button class="btn btn-sm btn-success fw-semibold">
-              Solicitar
-            </button>
+            <h5 class="fw-semibold mb-2">{{ t.nombre }}</h5>
+            <p class="text-muted small mb-3 grow">{{ t.descripcion }}</p>
+
+            <div class="d-flex align-items-center justify-content-between mt-auto">
+              <span class="badge px-3 py-2 rounded-pill bg-light border text-secondary fw-semibold">
+                {{ t.es_gratuito ? 'Gratuito' : '$' + t.costo }}
+              </span>
+              <button class="btn btn-sm btn-success fw-semibold">
+                Solicitar
+              </button>
+            </div>
+
           </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- Info -->
+  </ng-container>
+
+  <!-- ══ TAB: HISTORIAL -->
+  <ng-container *ngIf="tabActivo === 'historial'">
+
+    <!-- Filtros -->
+    <div class="card border-0 shadow-sm mb-4">
+      <div class="card-body py-3">
+        <div class="row g-3 align-items-end">
+
+          <div class="col-md-5">
+            <label class="form-label text-muted small fw-semibold mb-1">Tipo</label>
+            <select class="form-select form-select-sm bg-light" [(ngModel)]="filtroTipo" (change)="aplicarFiltros()">
+              <option [ngValue]="null">Todos los trámites</option>
+              <option *ngFor="let t of tipos" [ngValue]="t.id_tipo_tramite">
+                {{ t.nombre }}
+              </option>
+            </select>
+          </div>
+
+          <div class="col-md-5">
+            <label class="form-label text-muted small fw-semibold mb-1">Estado</label>
+            <select class="form-select form-select-sm bg-light" [(ngModel)]="filtroEstado" (change)="aplicarFiltros()">
+              <option value="TODOS">Todos</option>
+              <option value="PENDIENTE">Pendientes</option>
+              <option value="APROBADA">Aprobadas</option>
+              <option value="RECHAZADA">Rechazadas</option>
+            </select>
+          </div>
+
+          <div class="col-md-2 d-flex align-items-end">
+            <button class="btn btn-outline-secondary btn-sm w-100" *ngIf="hayFiltros" (click)="limpiarFiltros()">
+              <i class="bi bi-x-circle me-1"></i>Limpiar
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Cargando -->
+    <div *ngIf="cargandoHistorial" class="text-center py-5">
+      <div class="spinner-border text-success"></div>
+    </div>
+
+    <!-- Sin resultados -->
+    <div *ngIf="!cargandoHistorial && !solicitudes.length" class="text-center py-5">
+      <i class="bi bi-inbox fs-1 text-muted d-block mb-3"></i>
+      <p class="text-muted mb-1">
+        {{ hayFiltros
+        ? 'No hay solicitudes con los filtros seleccionados.'
+        : 'Aún no has realizado ningún trámite.' }}
+      </p>
+      <button class="btn btn-success btn-sm mt-2" (click)="cambiarTab('tramites')">
+        <i class="bi bi-plus-circle me-1"></i>Iniciar un trámite
+      </button>
+    </div>
+
+    <!-- Lista -->
+    <div *ngIf="!cargandoHistorial && solicitudes.length" class="card border-0 shadow-sm">
+      <div class="card-body p-0">
+
+        <div *ngFor="let s of solicitudes; let ultimo = last" [class.border-bottom]="!ultimo">
+
+          <!-- Fila principal -->
+          <div class="px-4 py-3 d-flex align-items-center gap-3" style="cursor:pointer;" (click)="toggleDetalle(s)"
+            [class.bg-light]="solicitudExpandida === s.id_solicitud">
+
+            <div class="rounded-circle d-flex align-items-center justify-content-center shrink-0"
+              style="width:40px; height:40px; background:#e9f4e9;">
+              <i class="bi text-success" [class]="iconoPorTipo(s.tipo_tramite)"></i>
+            </div>
+
+            <div class="grow" style="min-width:0;">
+              <div class="fw-medium small">{{ s.tipo_tramite }}</div>
+              <div class="text-muted" style="font-size:11px;">
+                {{ s.fecha_solicitud | date:'dd/MM/yyyy HH:mm':'UTC' }}
+                · {{ s.total_documentos }} docs
+                <span *ngIf="!s.es_gratuito"> · ${{ s.costo }}</span>
+                <span *ngIf="s.es_gratuito"> · Gratuito</span>
+              </div>
+            </div>
+
+            <div class="d-flex align-items-center gap-2 shrink-0">
+              <span class="badge rounded-pill px-2 py-1 small" [class]="badgeClass(s.estado)">
+                <i class="bi me-1" [class]="badgeIcon(s.estado)"></i>
+                {{ s.estado }}
+              </span>
+              <i class="bi text-muted" [class]="solicitudExpandida === s.id_solicitud
+                  ? 'bi-chevron-up' : 'bi-chevron-down'">
+              </i>
+            </div>
+
+          </div>
+
+          <!-- Detalle expandible -->
+          <div *ngIf="solicitudExpandida === s.id_solicitud" class="px-4 pb-4 pt-2 border-top bg-light">
+
+            <!-- Motivo rechazo -->
+            <div *ngIf="s.estado === 'RECHAZADA'" class="alert alert-danger py-2 mb-3 small">
+              <i class="bi bi-x-circle me-1"></i>
+              <strong>Motivo:</strong>
+              {{ s.observaciones || 'No se especificó. Contacta a la administración.' }}
+            </div>
+
+            <!-- Fecha resolución -->
+            <div *ngIf="s.fecha_actualizacion" class="text-muted small mb-3">
+              <i class="bi bi-calendar-check me-1"></i>
+              Resuelta el {{ s.fecha_actualizacion | date:'dd/MM/yyyy HH:mm':'UTC' }}
+            </div>
+
+            <!-- Documentos -->
+            <h6 class="fw-semibold text-secondary small mb-2">
+              <i class="bi bi-paperclip me-1"></i>Documentos enviados
+            </h6>
+
+            <div *ngIf="cargandoDocumentos[s.id_solicitud]" class="text-center py-2">
+              <div class="spinner-border spinner-border-sm text-success"></div>
+            </div>
+
+            <div *ngIf="documentosCache[s.id_solicitud]">
+              <div *ngFor="let doc of documentosCache[s.id_solicitud]" class="d-flex align-items-center justify-content-between
+                  py-2 border-bottom bg-white px-3 rounded mb-1">
+                <div class="d-flex align-items-center gap-2">
+                  <i class="bi bi-file-earmark-pdf text-danger small"></i>
+                  <span class="small">{{ doc.nombre_documento }}</span>
+                </div>
+                <a [href]="doc.url_firmada" target="_blank" class="btn btn-outline-secondary btn-sm"
+                  [class.disabled]="!doc.url_firmada">
+                  <i class="bi bi-eye me-1"></i>Ver
+                </a>
+              </div>
+              <div *ngIf="!documentosCache[s.id_solicitud].length" class="text-muted small py-2">
+                Sin documentos registrados.
+              </div>
+            </div>
+
+            <!-- Documento de respuesta -->
+            <div *ngIf="s.estado === 'APROBADA'" class="mt-3">
+              <a *ngIf="urlsRespuestaCache[s.id_solicitud]" [href]="urlsRespuestaCache[s.id_solicitud]!" target="_blank"
+                class="btn btn-sm btn-outline-success">
+                <i class="bi bi-file-earmark-check me-1"></i>
+                Ver documento de aprobación
+              </a>
+              <span *ngIf="urlsRespuestaCache[s.id_solicitud] === null" class="text-muted small">
+                <i class="bi bi-info-circle me-1"></i>
+                Sin documento de respuesta adjunto.
+              </span>
+            </div>
+
+            <!-- Acción -->
+            <div class="mt-3 d-flex justify-content-end" *ngIf="s.estado === 'PENDIENTE' || s.estado === 'RECHAZADA'">
+              <button class="btn btn-success btn-sm fw-semibold" (click)="irATramite(s.id_tipo_tramite)">
+                <i class="bi bi-arrow-right me-1"></i>
+                {{ s.estado === 'RECHAZADA' ? 'Reenviar solicitud' : 'Ver solicitud activa' }}
+              </button>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </ng-container>
+
 </div>
