@@ -14,7 +14,8 @@ import { BloquesService } from '../../services/bloques.service';
 import { GestionBovedasComponent } from '../../components/gestion-bloques/gestion-bovedas.component';
 import { Ocupacion } from '../../models/ocupacion.model';
 import { EspacioService } from '../../services/espacio.service';
-import { environment } from '../../../environments/environment.development';
+import { CementerioService } from '../../services/cementerio.service';
+import * as QRCode from 'qrcode';
 
 @Component({
   selector: 'app-inicio',
@@ -34,7 +35,7 @@ export class InicioComponent implements OnInit {
   //propiedas para subir imagenes
   imagenBloqueUrl: string = '';
   imagenError: boolean = false;
-
+  qrUrl: string = '';
   // Resumen de espacios para los badges
   resumenEspacios: { bovedas: number; nichos: number; cruces: number; lote: number } = {
     bovedas: 0,
@@ -42,7 +43,6 @@ export class InicioComponent implements OnInit {
     cruces: 0,
     lote: 0,
   };
-
   // FILTROS (Se inicializan como vacíos o nulos para que no apliquen al cargar la página)
   filtros = {
     busqueda: '',
@@ -50,7 +50,6 @@ export class InicioComponent implements OnInit {
     manzana: null as number | null,
     bloque: null as number | null,
   };
-
   // PAGINACIÓN (De 50 en 50)
   page: number = 1;
   limit: number = 50;
@@ -64,6 +63,7 @@ export class InicioComponent implements OnInit {
     private bloquesService: BloquesService,
     private modalService: NgbModal,
     private espacioService: EspacioService,
+    private cementerioService: CementerioService,
   ) { }
 
   ngOnInit(): void {
@@ -231,40 +231,11 @@ export class InicioComponent implements OnInit {
         },
       });
   }
-  // cargar foto del bloque de manera local, usar cuando estemos haciendo pruebas sin supabase, es decir, cuando la URL de la imagen del bloque se construya a partir de la URL base del backend + la ruta de la imagen guardada en la BD
-  // cargarFotoBloque(): void {
-  //   if (!this.filtros.sector || !this.filtros.manzana || !this.filtros.bloque) {
-  //     this.imagenBloqueUrl = '';
-  //     return;
-  //   }
 
-  //   const s = String(this.filtros.sector).padStart(2, '0');
-  //   const m = String(this.filtros.manzana).padStart(2, '0');
-  //   const b = String(this.filtros.bloque).padStart(2, '0');
-
-  //   this.bloquesService.getFotoBloque(s, m, b).subscribe({
-  //     next: (response) => {
-  //       if (response.foto_url) {
-  //    
-  //         const origen = new URL(environment.apiUrl).origin;
-  //         this.imagenBloqueUrl = `${origen}${response.foto_url}`;
-  //         this.imagenError = false;
-  //       } else {
-  //         this.imagenBloqueUrl = '';
-  //         this.imagenError = true;
-  //       }
-  //     },
-  //     error: () => {
-  //       this.imagenBloqueUrl = '';
-  //       this.imagenError = true;
-  //     },
-  //   });
-  // }
-
-  //Para cargarla desde supabase, ya que supabase nos devuelve la URL completa con el dominio incluido.
   cargarFotoBloque(): void {
     if (!this.filtros.sector || !this.filtros.manzana || !this.filtros.bloque) {
       this.imagenBloqueUrl = '';
+      this.qrUrl = '';
       return;
     }
 
@@ -274,15 +245,51 @@ export class InicioComponent implements OnInit {
 
     this.bloquesService.getFotoBloque(s, m, b).subscribe({
       next: (response) => {
-        // La URL de Supabase ya es absoluta — no necesita apiBase
         this.imagenBloqueUrl = response.foto_url ?? '';
         this.imagenError = !response.foto_url;
+        this.generarQR();  // <-- generar QR al cargar la foto
       },
       error: () => {
         this.imagenBloqueUrl = '';
         this.imagenError = true;
       },
     });
+  }
+  // Agregar método — llamarlo cuando se selecciona un bloque
+  async generarQR(): Promise<void> {
+    if (!this.filtros.sector || !this.filtros.manzana || !this.filtros.bloque) return;
+
+    const cementerio = this.cementerioService.getCementerioActivoSnapshot();
+    const slug = cementerio?.slug ?? 'colon';
+
+    const sector = String(this.filtros.sector).padStart(2, '0');
+    const manzana = String(this.filtros.manzana).padStart(2, '0');
+    const bloque = String(this.filtros.bloque).replace(/[^0-9a-zA-Z]/g, '').padStart(2, '0');
+    const codigo = `${sector}${manzana}${bloque}`;
+
+    const url = `${window.location.origin}/bloque/${slug}/${codigo}`;
+
+    this.qrUrl = await QRCode.toDataURL(url, {
+      width: 250,
+      margin: 2,
+      color: {
+        dark: '#163212',
+        light: '#ffffff',
+      },
+    });
+  }
+
+  descargarQR(): void {
+    if (!this.qrUrl) return;
+
+    const s = String(this.filtros.sector).padStart(2, '0');
+    const m = String(this.filtros.manzana).padStart(2, '0');
+    const b = String(this.filtros.bloque).padStart(2, '0');
+
+    const link = document.createElement('a');
+    link.href = this.qrUrl;
+    link.download = `QR_${s}.${m}.${b}.png`;
+    link.click();
   }
 
   verImagenBloque(): void {

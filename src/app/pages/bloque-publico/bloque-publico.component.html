@@ -1,0 +1,132 @@
+<div class="bloque-publico-wrapper">
+
+    <!-- Header institucional -->
+    <div class="bp-header">
+        <div class="bp-header-contenido">
+            <i class="bi bi-building fs-4 text-white opacity-75"></i>
+            <div>
+                <p class="bp-header-sub">Sistema de Gestión</p>
+                <h1 class="bp-header-titulo">{{ datos?.cementerio ?? 'Cementerio' }}</h1>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cargando -->
+    <div *ngIf="cargando" class="text-center py-5">
+        <div class="spinner-border text-success mt-5"></div>
+        <p class="text-muted mt-3 small">Cargando información del bloque...</p>
+    </div>
+
+    <!-- Error -->
+    <div *ngIf="error" class="bp-error">
+        <i class="bi bi-exclamation-triangle fs-1 text-warning d-block mb-3"></i>
+        <h5>Bloque no encontrado</h5>
+        <p class="text-muted small">El código QR puede estar desactualizado o el bloque no existe.</p>
+    </div>
+
+    <!-- Contenido -->
+    <div *ngIf="!cargando && !error && datos" class="bp-contenido">
+
+        <!-- Info del bloque -->
+        <div class="bp-card">
+            <div class="bp-card-header">
+                <div>
+                    <div class="bp-label">Código de bloque</div>
+                    <div class="bp-codigo">{{ datos.codigo_bloque }}</div>
+                    <div class="bp-sector">{{ datos.sector }}</div>
+                </div>
+                <div class="d-flex gap-3">
+                    <div class="text-center">
+                        <div class="bp-stat-num text-success">{{ espaciosOcupados }}</div>
+                        <div class="bp-stat-label">Ocupados</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="bp-stat-num text-muted">{{ espaciosLibres }}</div>
+                        <div class="bp-stat-label">Libres</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Foto del bloque -->
+            <div *ngIf="datos.foto_url" class="bp-foto-wrap">
+                <img [src]="datos.foto_url" [alt]="'Bloque ' + datos.codigo_bloque" class="bp-foto" />
+            </div>
+            <div *ngIf="!datos.foto_url" class="bp-foto-placeholder">
+                <i class="bi bi-image text-muted fs-1"></i>
+                <p class="text-muted small mt-2 mb-0">Sin fotografía disponible</p>
+            </div>
+        </div>
+
+        <!-- Lista de fallecidos -->
+        <div class="bp-card mt-3">
+            <h6 class="bp-section-titulo">
+                <i class="bi bi-people me-2"></i>Personas inhumadas
+            </h6>
+
+            <!-- Sin fallecidos -->
+            <div *ngIf="!datos.fallecidos.length" class="text-center py-4">
+                <p class="text-muted small mb-0">No hay registros de fallecidos en este bloque.</p>
+            </div>
+
+            <!-- Lista -->
+            <div *ngFor="let f of datos.fallecidos; let ultimo = last" class="bp-fallecido"
+                [class.border-bottom]="!ultimo">
+
+                <!-- Espacio libre -->
+                <ng-container *ngIf="!f.nombre_completo">
+                    <div class="bp-espacio-libre">
+                        <div class="bp-espacio-num">Espacio {{ f.numero_espacio }}</div>
+                        <span class="badge bg-success bg-opacity-10 text-success small">
+                            Disponible
+                        </span>
+                    </div>
+                </ng-container>
+
+                <!-- Espacio ocupado -->
+                <ng-container *ngIf="f.nombre_completo">
+                    <div class="bp-fallecido-header">
+                        <div class="bp-fallecido-icono">
+                            <i class="bi bi-person-fill text-secondary"></i>
+                        </div>
+                        <div class="grow">
+                            <div class="bp-fallecido-nombre">{{ f.nombre_completo }}</div>
+                            <div class="bp-fallecido-espacio">
+                                Espacio {{ f.numero_espacio }} · {{ f.tipo_espacio }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bp-fallecido-fechas">
+                        <div *ngIf="f.fecha_fallecimiento" class="bp-fecha">
+                            <span class="bp-fecha-label">Fallecimiento</span>
+                            <span class="bp-fecha-val">{{ formatearFecha(f.fecha_fallecimiento) }}</span>
+                        </div>
+                        <div *ngIf="f.fecha_inhumacion" class="bp-fecha">
+                            <span class="bp-fecha-label">Inhumación</span>
+                            <span class="bp-fecha-val">{{ formatearFecha(f.fecha_inhumacion) }}</span>
+                        </div>
+                        <div *ngIf="f.fecha_exhumacion" class="bp-fecha">
+                            <span class="bp-fecha-label">Exhumación</span>
+                            <span class="bp-fecha-val">{{ formatearFecha(f.fecha_exhumacion) }}</span>
+                        </div>
+                    </div>
+                </ng-container>
+
+            </div>
+        </div>
+        <!-- boton para que los usuarios nuevos puedan acceder al sistema y crearse cuenta -->
+        <div class="text-center mt-4">
+            <a routerLink="/cementerios" class="btn btn-success">
+                <i class="bi bi-person-plus me-2"></i>Registrarse en el sistema
+            </a>
+        </div>
+
+
+        <!-- Footer -->
+        <div class="bp-footer">
+            <p>Información generada por el Sistema de Gestión de Cementerios</p>
+            <p>{{ datos.cementerio }}</p>
+        </div>
+
+    </div>
+</div>

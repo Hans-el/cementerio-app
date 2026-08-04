@@ -207,6 +207,22 @@
           <small>No hay imagen disponible para este bloque</small>
         </div>
       </div>
+      <!-- QR del bloque — aparece cuando hay bloque seleccionado -->
+      <div *ngIf="qrUrl" class="card border-0 shadow-sm mt-3">
+        <div class="card-body text-center py-3">
+          <p class="text-muted small fw-semibold mb-2">
+            <i class="bi bi-qr-code me-1"></i>Código QR del bloque
+          </p>
+          <div>
+            <button class="btn btn-outline-success btn-sm" (click)="descargarQR()">
+              <i class="bi bi-download me-1"></i>Descargar QR
+            </button>
+          </div>
+          <p class="text-muted mt-2 mb-0" style="font-size:11px;">
+            Escanea para ver la información pública del bloque
+          </p>
+        </div>
+      </div>
     </div>
     <!-- TAbla de registros -->
     <div class="card-body p-0">

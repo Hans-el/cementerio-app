@@ -3,6 +3,7 @@ import { CanActivateFn, Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { CementerioService } from '../services/cementerio.service';
 
+
 export const cementerioGuard: CanActivateFn = () => {
   const authService = inject(AuthService);
   const cementerioService = inject(CementerioService);

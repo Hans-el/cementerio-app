@@ -23,6 +23,7 @@ import { SuperadminComponent } from './pages/superadmin/superadmin.component';
 import { superadminGuard } from './guards/superadmin.guard';
 import { unsavedChangesGuard } from './guards/unsaved-changes.guard';
 import { SolicitudTramiteComponent } from './pages/solicitud-tramite/solicitud-tramite.component';
+import { BloquePublicoComponent } from './pages/bloque-publico/bloque-publico.component';
 
 
 //rutas de la aplicación
@@ -36,6 +37,7 @@ export const routes: Routes = [
     { path: 'registro', component: RegistroComponent },
     { path: 'informacion', component: InformacionComponent },
     { path: '404', component: NotFoundComponent },
+    { path: 'bloque/:slug/:codigo', component: BloquePublicoComponent },
 
 
 
