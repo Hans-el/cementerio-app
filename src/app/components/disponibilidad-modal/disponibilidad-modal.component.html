@@ -94,8 +94,8 @@
               Visualizar
             </button>
 
-            <button *ngIf="userRole === 'admin'" class="btn btn-outline-danger fw-bold btn-sm w-50"
-              (click)="borrarBloqueEnVenta(espacio.id_bloque_venta)">
+            <button *ngIf="userRole === 'admin' || userRole === 'superadmin'"
+              class="btn btn-outline-danger fw-bold btn-sm w-50" (click)="borrarBloqueEnVenta(espacio.id_bloque_venta)">
               Borrar
             </button>
           </div>
