@@ -14,7 +14,7 @@ export const authGuard: CanActivateFn = (route, state) => {
   }
   // Si no hay cementerio seleccionado, volver a la selección
   if (!cementerioService.getCementerioActivoSnapshot()) {
-    router.navigate(['/seleccionar-cementerio']);
+    router.navigate(['/cementerios']);
     return false;
   }
 

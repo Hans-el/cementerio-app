@@ -1,16 +1,20 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, tap } from 'rxjs';
+import { Observable, BehaviorSubject, throwError } from 'rxjs';
+import { tap, catchError, switchMap } from 'rxjs/operators';
 import { ApiService } from './api.service';
 import { environment } from '../../environments/environment';
 import { CementerioService } from './cementerio.service';
 import { Router } from '@angular/router';
+
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   private apiUrl = environment.apiUrl; // Usamos la URL del entorno
+  private renovando$ = new BehaviorSubject<boolean>(false);
+
 
   constructor(
     private http: HttpClient,
@@ -19,20 +23,17 @@ export class AuthService {
     private router: Router
   ) { }
 
-  // Método para iniciar sesión
   login(cedula: string, contrasena: string): Observable<any> {
     const slug = this.cementerioService.getSlugActivo();
-
     if (!slug) {
-      // Redirigir a selección de cementerio si no hay slug
       this.router.navigate(['/cementerios']);
-      throw new Error('No hay cementerio seleccionado.');
+      return throwError(() => new Error('No hay cementerio seleccionado.'));
     }
 
     return this.http.post<any>(`${this.apiUrl}/auth/login`, {
-      cedula,
-      contrasena,
-      slug,  // <-- enviar al backend
+      cedula, contrasena, slug,
+    }, {
+      withCredentials: true, // necesario para recibir la cookie
     }).pipe(
       tap(response => {
         localStorage.setItem('token', response.token);
@@ -40,13 +41,14 @@ export class AuthService {
     );
   }
 
+
   // Método para registrar un nuevo usuario
   registrar(userData: any): Observable<any> {
     const slug = this.cementerioService.getSlugActivo();
     if (!slug) {
       // Redirigir a selección de cementerio si no hay slug
       this.router.navigate(['/cementerios']);
-      throw new Error('No hay cementerio seleccionado.');
+      return throwError(() => new Error('No hay cementerio seleccionado.'));
     }
 
     userData.slug = slug; // Agregar el slug al objeto de datos del usuario
@@ -67,13 +69,32 @@ export class AuthService {
     return this.http.get(`${this.apiUrl}/usuarios`, { headers });
   }
 
-  // Método para cerrar sesión, eliminando el token del almacenamiento local
+  renovarToken(): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/auth/refresh`, {}, {
+      withCredentials: true, // envía la cookie automáticamente
+    }).pipe(
+      tap(response => {
+        localStorage.setItem('token', response.token);
+      }),
+      catchError(err => {
+        // Si el refresh falla — cerrar sesión
+        this.logout();
+        this.router.navigate(['/login']);
+        return throwError(() => err);
+      })
+    );
+  }
+
   logout(): void {
+    // Notificar al backend para invalidar el refresh token
+    this.http.post(`${this.apiUrl}/auth/logout`, {}, {
+      withCredentials: true,
+    }).subscribe({ error: () => { } }); // silencioso si falla
+
     localStorage.removeItem('token');
     localStorage.removeItem('userRole');
     this.cementerioService.limpiar();
   }
-
   // Método para verificar si el usuario está autenticado
   isAuthenticated(): boolean {
     const token = localStorage.getItem('token');

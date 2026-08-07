@@ -1,35 +1,67 @@
 //creamos este interceptor para el token del usuario, para que se envie automaticamente el token y valide la informacion.
-import { HttpInterceptorFn } from '@angular/common/http';
+//tambien renovamos el token automaticamente si el token expira
+import { HttpInterceptorFn, HttpRequest, HttpHandlerFn, HttpErrorResponse } from '@angular/common/http';
 import { inject } from '@angular/core';
+import { catchError, switchMap, throwError } from 'rxjs';
+import { AuthService } from '../services/auth.service';
 import { CementerioService } from '../services/cementerio.service';
 
 
-export const authInterceptor: HttpInterceptorFn = (req, next) => {
+export const authInterceptor: HttpInterceptorFn = (req: HttpRequest<any>, next: HttpHandlerFn) => {
+  const authService = inject(AuthService);
   const cementerioService = inject(CementerioService);
   const token = localStorage.getItem('token');
 
-  if (!token) return next(req);
 
-  // Decodificar el rol del token
-  let rol: string | null = null;
-  try {
-    const payload = JSON.parse(atob(token.split('.')[1]));
-    rol = payload.rol;
-  } catch { }
-
-  // Construir headers base
-  const headers: Record<string, string> = {
-    Authorization: `Bearer ${token}`,
-  };
-
-  // Si es superadmin, agregar el id_cementerio activo como header
-  if (rol === 'superadmin') {
-    const cementerio = cementerioService.getCementerioActivoSnapshot();
-    if (cementerio?.id_cementerio) {
-      headers['x-cementerio-id'] = String(cementerio.id_cementerio);
-    }
+  // No interceptar el endpoint de refresh para evitar bucles
+  if (req.url.includes('/auth/refresh') || req.url.includes('/auth/login')) {
+    return next(req);
   }
 
-  const authReq = req.clone({ setHeaders: headers });
-  return next(authReq);
+  let headers: Record<string, string> = {};
+
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+
+    // Superadmin — agregar cementerio activo
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      if (payload.rol === 'superadmin') {
+        const cementerio = cementerioService.getCementerioActivoSnapshot();
+        if (cementerio?.id_cementerio) {
+          headers['x-cementerio-id'] = String(cementerio.id_cementerio);
+        }
+      }
+    } catch { }
+  }
+
+  const authReq = req.clone({
+    setHeaders: headers,
+    withCredentials: true, // enviar cookies en todas las requests
+  });
+
+  return next(authReq).pipe(
+    catchError((error: HttpErrorResponse) => {
+      console.log('Error status:', error.status, 'URL:', req.url);
+      // Si recibimos 401 — intentar renovar el token automáticamente
+      if (error.status === 401 && token && !req.url.includes('/auth/')) {
+        console.log('Intentando renovar token...');
+        return authService.renovarToken().pipe(
+          switchMap(response => {
+            // Reintentar la request original con el nuevo token
+            const retryReq = req.clone({
+              setHeaders: { Authorization: `Bearer ${response.token}` },
+              withCredentials: true,
+            });
+            return next(retryReq);
+          }),
+          catchError(refreshError => {
+            // Si el refresh también falla — sesión expirada definitivamente
+            return throwError(() => refreshError);
+          })
+        );
+      }
+      return throwError(() => error);
+    })
+  );
 };
