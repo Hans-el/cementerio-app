@@ -9,14 +9,12 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { LocalizarModalComponent } from '../localizar-modal/localizar-modal.component';
 import { DisponibilidadModalComponent } from '../disponibilidad-modal/disponibilidad-modal.component';
 import { GestionBovedasComponent } from '../gestion-bloques/gestion-bovedas.component';
-import { UsuarioService } from '../../services/usuario.service';
-import { ExhumacionService } from '../../services/exhumacion.service';
-import { InhumacionService } from '../../services/inhumacion.service';
-import { forkJoin } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { CementerioService } from '../../services/cementerio.service';
 import { Cementerio } from '../../models/cementerio.model';
+import { PushService } from '../../services/push.service';
 import { TramiteService } from '../../services/tramite.service';
+
 
 
 
@@ -43,7 +41,9 @@ export class SidebarComponent implements OnInit {
     private modalService: NgbModal,
     private elementRef: ElementRef,
     private cementerioService: CementerioService,
-    private tramiteService: TramiteService
+    private tramiteService: TramiteService,
+    private pushService: PushService,
+
   ) { }
 
   // Este HostListener escucha los cambios en el tamaño de la ventana para adaptar el sidebar a dispositivos móviles
@@ -90,6 +90,14 @@ export class SidebarComponent implements OnInit {
         // Refrescar cada 60 segundos para mantener el badge actualizado
         setInterval(() => this.cargarPendientes(), 60000);
       }, 500);
+    }
+    if (this.userRole !== 'Invitado') {
+      this.pushService.estasSuscrito().then(suscrito => {
+        if (!suscrito) {
+          // Pequeño delay para no interrumpir la carga
+          setTimeout(() => this.pushService.suscribir(), 3000);
+        }
+      });
     }
 
   }
