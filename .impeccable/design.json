@@ -1,0 +1,184 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-08-11T20:50:00.000Z",
+  "title": "Design System: Cementerio App",
+  "extensions": {
+    "colorMeta": {
+      "primary": {
+        "role": "primary",
+        "displayName": "Verdant Core",
+        "canonical": "#2d5a27",
+        "tonalRamp": ["#1a3518", "#224a1f", "#2d5a27", "#3a7233", "#4a8a40", "#6ba862", "#8fc488", "#b8e0b2"]
+      },
+      "primary-dark": {
+        "role": "primary",
+        "displayName": "Forest Deep",
+        "canonical": "#163212",
+        "tonalRamp": ["#0a1a09", "#101f0e", "#163212", "#1e4219", "#285221", "#346529", "#427a33", "#529040"]
+      },
+      "primary-hover": {
+        "role": "primary",
+        "displayName": "Verdant Hover",
+        "canonical": "#3a7233",
+        "tonalRamp": ["#254a22", "#2e5c2a", "#3a7233", "#488940", "#58a050", "#6ab862", "#7fd078", "#98e892"]
+      },
+      "neutral-bg": {
+        "role": "neutral",
+        "displayName": "Page Background",
+        "canonical": "#f8f9fa",
+        "tonalRamp": ["#1a1b1c", "#2d2f31", "#404345", "#545859", "#696d6f", "#7f8385", "#969a9c", "#adb1b3"]
+      },
+      "text-primary": {
+        "role": "neutral",
+        "displayName": "Text Primary",
+        "canonical": "#111827",
+        "tonalRamp": ["#030405", "#0a0c10", "#111827", "#1a2536", "#243245", "#2f4055", "#3b4f66", "#485f77"]
+      },
+      "success": {
+        "role": "success",
+        "displayName": "Success Green",
+        "canonical": "#28a745",
+        "tonalRamp": ["#0f3d1a", "#175c28", "#28a745", "#35c454", "#52d46e", "#72e08c", "#95ecac", "#bbf7d0"]
+      },
+      "danger": {
+        "role": "danger",
+        "displayName": "Danger Red",
+        "canonical": "#dc2626",
+        "tonalRamp": ["#4a0e0e", "#7a1a1a", "#dc2626", "#e54545", "#eb6868", "#f18e8e", "#f6b3b3", "#fcd5d5"]
+      }
+    },
+    "typographyMeta": {
+      "body": {
+        "displayName": "Body",
+        "purpose": "Texto principal de interfaz, formularios, descripciones"
+      },
+      "heading": {
+        "displayName": "Heading",
+        "purpose": "Títulos de página, secciones, cards"
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Etiquetas de formulario, headers de tabla"
+      },
+      "small": {
+        "displayName": "Small",
+        "purpose": "Badges, hints, metadata, micro-etiquetas"
+      }
+    },
+    "shadows": [
+      { "name": "subtle", "value": "0 1px 4px rgba(0,0,0,0.04)", "purpose": "Tabs, cards en reposo, stats" },
+      { "name": "card", "value": "0 1px 4px rgba(0,0,0,0.05)", "purpose": "Cards superadmin, bloque público" },
+      { "name": "hover-lift", "value": "0 0.5rem 1rem rgba(0,0,0,0.08)", "purpose": "Estado hover de cards y filas" },
+      { "name": "card-hover", "value": "0 12px 24px rgba(0,0,0,0.25)", "purpose": "Cards en hover (inicio, dashboard)" },
+      { "name": "sidebar", "value": "4px 0 20px rgba(0,0,0,0.15)", "purpose": "Sombra lateral del sidebar" },
+      { "name": "dropdown", "value": "0 4px 12px rgba(0,0,0,0.2)", "purpose": "Menús desplegables" },
+      { "name": "modal", "value": "0 20px 60px rgba(0,0,0,0.2)", "purpose": "Cajas modales" },
+      { "name": "glass", "value": "0 8px 32px rgba(0,0,0,0.3)", "purpose": "Elementos glassmorphism (login, registro)" }
+    ],
+    "motion": [
+      { "name": "ease-standard", "value": "cubic-bezier(0.4, 0, 0.2, 1)", "purpose": "Transiciones estándar de estado" },
+      { "name": "duration-fast", "value": "0.15s", "purpose": "Feedback inmediato (hover, focus)" },
+      { "name": "duration-normal", "value": "0.2s", "purpose": "Transiciones de componente" },
+      { "name": "duration-slow", "value": "0.3s", "purpose": "Animaciones de entrada (fadeIn, slideUp)" }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "576px" },
+      { "name": "md", "value": "768px" },
+      { "name": "lg", "value": "992px" },
+      { "name": "xl", "value": "1200px" },
+      { "name": "sidebar-collapse", "value": "767.98px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Botón principal de acción para formularios y acciones primarias",
+      "html": "<button class=\"ds-btn-primary\">Guardar</button>",
+      "css": ".ds-btn-primary { background-color: #2d5a27; color: #ffffff; padding: 10px 20px; border: none; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease; } .ds-btn-primary:hover { background-color: #3a7233; transform: translateY(-1px); box-shadow: 0 4px 8px rgba(45,90,39,0.2); } .ds-btn-primary:focus-visible { outline: 2px solid #28a745; outline-offset: 2px; } .ds-btn-primary:active { transform: translateY(0); }"
+    },
+    {
+      "name": "Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Contenedor estándar para contenido agrupado",
+      "html": "<div class=\"ds-card\"><h3 class=\"ds-card-title\">Título</h3><p class=\"ds-card-body\">Contenido de ejemplo</p></div>",
+      "css": ".ds-card { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 16px; padding: 20px; box-shadow: 0 1px 4px rgba(0,0,0,0.05); transition: box-shadow 0.2s ease, transform 0.2s ease; } .ds-card:hover { box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.08); transform: translateY(-2px); } .ds-card-title { font-size: 1.1rem; font-weight: 600; color: #111827; margin: 0 0 12px 0; } .ds-card-body { font-size: 14px; color: #374151; margin: 0; line-height: 1.5; }"
+    },
+    {
+      "name": "Input Field",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Campo de entrada de texto para formularios",
+      "html": "<div class=\"ds-input-group\"><label class=\"ds-input-label\">Etiqueta</label><input type=\"text\" class=\"ds-input\" placeholder=\"Placeholder\"></div>",
+      "css": ".ds-input-group { display: flex; flex-direction: column; gap: 6px; } .ds-input-label { font-size: 12px; font-weight: 500; color: #374151; } .ds-input { padding: 10px 14px; border: 1px solid #e5e7eb; border-radius: 10px; font-size: 14px; color: #111827; background-color: #ffffff; transition: border-color 0.2s ease, box-shadow 0.2s ease; } .ds-input:focus { outline: none; border-color: #28a745; box-shadow: 0 0 0 3px rgba(40,167,69,0.15); } .ds-input::placeholder { color: #9ca3af; } .ds-input:disabled { background-color: #f9fafb; cursor: not-allowed; opacity: 0.7; }"
+    },
+    {
+      "name": "Badge",
+      "kind": "chip",
+      "refersTo": "badge",
+      "description": "Etiqueta de estado para mostrar información contextual",
+      "html": "<span class=\"ds-badge ds-badge-success\">Activo</span>",
+      "css": ".ds-badge { display: inline-flex; align-items: center; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 500; line-height: 1.3; } .ds-badge-success { background-color: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; } .ds-badge-danger { background-color: #fef2f2; color: #dc2626; border: 1px solid #fecaca; } .ds-badge-warning { background-color: #fffbeb; color: #92400e; border: 1px solid #fde68a; } .ds-badge-info { background-color: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }"
+    },
+    {
+      "name": "Navigation Link",
+      "kind": "nav",
+      "refersTo": "nav-link",
+      "description": "Elemento de navegación del sidebar",
+      "html": "<a class=\"ds-nav-link\" href=\"#\"><i class=\"bi bi-house\"></i><span>Inicio</span></a>",
+      "css": ".ds-nav-link { display: flex; align-items: center; gap: 12px; padding: 12px 16px; color: rgba(255,255,255,0.8); text-decoration: none; font-size: 14px; font-weight: 500; border-radius: 6px; transition: background-color 0.2s ease, color 0.2s ease; } .ds-nav-link:hover { background-color: rgba(255,255,255,0.1); color: #ffffff; } .ds-nav-link.active { background-color: #2d5a3d; color: #ffffff; } .ds-nav-link i { font-size: 18px; width: 20px; text-align: center; }"
+    },
+    {
+      "name": "Modal",
+      "kind": "custom",
+      "refersTo": "modal",
+      "description": "Cuadro de diálogo superpuesto para formularios y confirmaciones",
+      "html": "<div class=\"ds-modal-overlay\"><div class=\"ds-modal\"><div class=\"ds-modal-header\"><h5>Título del Modal</h5></div><div class=\"ds-modal-body\"><p>Contenido del modal</p></div></div></div>",
+      "css": ".ds-modal-overlay { position: fixed; inset: 0; background-color: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 1050; animation: fadeIn 0.2s ease; } .ds-modal { background-color: #ffffff; border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.2); max-width: 600px; width: 90%; max-height: 90vh; overflow-y: auto; animation: slideUp 0.25s ease; } .ds-modal-header { padding: 16px 20px; border-bottom: 1px solid #f3f4f6; background-color: #f8f9fa; border-radius: 16px 16px 0 0; } .ds-modal-header h5 { margin: 0; font-size: 1rem; font-weight: 600; color: #111827; } .ds-modal-body { padding: 20px; } @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } } @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }"
+    },
+    {
+      "name": "Table",
+      "kind": "custom",
+      "refersTo": "data-table",
+      "description": "Tabla de datos con header, filas y estados hover",
+      "html": "<table class=\"ds-table\"><thead><tr><th>Columna 1</th><th>Columna 2</th></tr></thead><tbody><tr><td>Dato 1</td><td>Dato 2</td></tr></tbody></table>",
+      "css": ".ds-table { width: 100%; border-collapse: collapse; font-size: 14px; } .ds-table thead th { background-color: #f9fafb; padding: 12px 16px; text-align: left; font-size: 11px; font-weight: 500; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid #e5e7eb; } .ds-table tbody td { padding: 12px 16px; color: #111827; border-bottom: 1px solid #f3f4f6; } .ds-table tbody tr:hover { background-color: #fafafa; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Verdant Sanctuary",
+    "overview": "Una interfaz que transmite calma, respeto y profesionalismo — cualidades esenciales en el contexto funerario. El sistema utiliza verdes profundos como identidad principal, evocando naturaleza, vida eterna y serenidad. La paleta terrosa y los tonos neutros cálidos crean un ambiente acogedor sin ser informal. La jerarquía visual es clara y funcional, priorizando la escaneabilidad en dashboards y la simplicidad en flujos ciudadanos.",
+    "keyCharacteristics": [
+      "Identidad verde profunda que evoca naturaleza y eternidad",
+      "Superficies limpias con sombras sutiles para profundidad",
+      "Tipografía del sistema para máxima legibilidad y rendimiento",
+      "Glassmorphism selectivo en elementos de entrada (login, selección de cementerio)",
+      "Componentes consistentes con border-radius generoso (12-16px)",
+      "Background layout suave en verde grisáceo"
+    ],
+    "rules": [
+      { "name": "The Verdant Identity Rule", "body": "El verde (#2d5a27) es el único color de marca. Se usa con moderación — su rareza le da autoridad. No más del 15% de cualquier pantalla debe ser verde saturado.", "section": "colors" },
+      { "name": "The Functional Type Rule", "body": "La tipografía existe para servir, no para decorar. Sin fuentes decorativas, sin pesos experimentales. La jerarquía se logra con tamaño y peso, no con estilo.", "section": "typography" },
+      { "name": "The Flat-By-Default Rule", "body": "Las superficies están planas en reposo. Las sombras aparecen solo como respuesta a estado (hover, elevación, focus). Esto mantiene la interfaz limpia y reduce carga visual.", "section": "elevation" },
+      { "name": "The Rounded Hierarchy Rule", "body": "Cuanto más importante es el elemento, más redondeado está. Inputs (12px) < Cards (16px) < Cards institucionales (18px) < Glass panels (24px). Los avatares siempre son circulares.", "section": "shapes" }
+    ],
+    "dos": [
+      "Do usar verde (#2d5a27) con moderación — es el color de autoridad",
+      "Do mantener border-radius consistente por jerarquía de elemento",
+      "Do usar sombras sutiles en reposo, hover lift en interacción",
+      "Do priorizar legibilidad sobre estética — este es un sistema de gestión",
+      "Do mantener spacing consistente (múltiplos de 4px)",
+      "Do usar transiciones suaves (0.2s) para feedback de interacción"
+    ],
+    "donts": [
+      "Don't usar más de 15% de verde saturado en cualquier pantalla",
+      "Don't agregar sombras excesivas — la claridad supera la profundidad",
+      "Don't usar fuentes decorativas — la tipografía del sistema es suficiente",
+      "Don't mezclar border-radius inconsistentes en el mismo contexto",
+      "Don't ignorar el estado hover — es esencial para feedback visual",
+      "Don't usar colores de marca en elementos que no son de acción"
+    ]
+  }
+}
