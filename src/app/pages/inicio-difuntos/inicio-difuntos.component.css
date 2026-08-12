@@ -1,3 +1,202 @@
+/* Header icon */
+.header-icon {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #2d5a27 0%, #1a3a16 100%);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.1rem;
+}
+
+/* Cards de resumen - compactas y elegantes */
+.card-resumen {
+  background: linear-gradient(135deg, #2d5a27 0%, #1a3a16 100%);
+  color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.card-resumen::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.card-resumen:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.resumen-icon {
+  width: 44px;
+  height: 44px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  transition: transform 0.3s ease;
+}
+
+.card-resumen:hover .resumen-icon {
+  transform: scale(1.08);
+}
+
+.resumen-label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  opacity: 0.85;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.resumen-valor {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+/* Botón de agregar fallecido */
+.btn-accion-fallecidos {
+  background: linear-gradient(135deg, #28a745 0%, #218838 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(40, 167, 69, 0.25);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-accion-fallecidos::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.btn-accion-fallecidos:hover::before {
+  left: 100%;
+}
+
+.btn-accion-fallecidos:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(40, 167, 69, 0.35);
+}
+
+.btn-accion-fallecidos i {
+  font-size: 1.3rem;
+}
+
+/* Card de filtros */
+.card-filtros {
+  border-radius: 12px;
+}
+
+.card-filtros .card-header {
+  border-radius: 12px 12px 0 0;
+}
+
+/* Input group búsqueda */
+.input-group-buscar {
+  border-radius: 8px;
+  overflow: hidden;
+  transition: box-shadow 0.2s ease;
+}
+
+.input-group-buscar:focus-within {
+  box-shadow: 0 0 0 2px rgba(40, 167, 69, 0.15);
+}
+
+/* Botón limpiar filtros */
+.btn-limpiar {
+  background-color: rgba(108, 117, 125, 0.1);
+  color: #6c757d;
+  border: none;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.btn-limpiar:hover {
+  background-color: #6c757d;
+  color: white;
+}
+
+/* Card de tabla */
+.card-tabla {
+  border-radius: 12px;
+}
+
+.card-tabla .card-header {
+  border-radius: 12px 12px 0 0;
+}
+
+/* Badge de código */
+.badge-codigo {
+  background-color: rgba(40, 167, 69, 0.1);
+  color: #155724;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+/* Botones de acción en tabla */
+.btn-editar {
+  background-color: rgba(255, 193, 7, 0.1);
+  color: #856404;
+  border: none;
+  border-radius: 8px;
+  padding: 0.4rem 0.6rem;
+  transition: all 0.2s ease;
+}
+
+.btn-editar:hover {
+  background-color: #ffc107;
+  color: #212529;
+  transform: scale(1.05);
+}
+
+.btn-eliminar {
+  background-color: rgba(220, 53, 69, 0.1);
+  color: #dc3545;
+  border: none;
+  border-radius: 8px;
+  padding: 0.4rem 0.6rem;
+  transition: all 0.2s ease;
+}
+
+.btn-eliminar:hover {
+  background-color: #dc3545;
+  color: white;
+  transform: scale(1.05);
+}
+
+/* Card mobile */
+.card-mobile {
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.card-mobile:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+}
+
 /* Efectos hover para tarjetas */
 .hover-lift {
   transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
@@ -14,6 +213,7 @@
   text-transform: uppercase;
   font-size: 0.7rem;
 }
+
 .table tbody tr {
   transition: background-color 0.15s ease-in-out;
 }
@@ -28,23 +228,12 @@
   padding: 0.5rem 0.75rem;
 }
 
-/* Mejoras para las cards en móvil */
-@media (max-width: 767px) {
-  .card-body {
-    padding: 1rem;
-  }
-  
-  .btn-group-sm .btn {
-    padding: 0.25rem 0.5rem;
-  }
-}
-
 /* Input group mejorado */
 .input-group-text {
   background-color: #f8faf8;
 }
 
-.form-control-lg:focus {
+.form-control:focus {
   border-color: #28a745;
   box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.15);
 }
@@ -54,6 +243,7 @@
   border-radius: 8px;
   margin: 0 2px;
   padding: 0.5rem 0.75rem;
+  transition: all 0.2s ease;
 }
 
 .page-link:hover {
@@ -65,12 +255,12 @@
   border-color: #28a745;
 }
 
+/* Botones de acción en filtros */
+.btn-outline-success, .btn-outline-secondary {
+  transition: all 0.2s ease;
+  border-radius: 8px;
+}
 
-.card-resumen {
-  background: linear-gradient(135deg, #2d5a27 0%, #1a3a16 100%);
-  font-weight: 500;
-  color: #ffffff;
-  border-radius: 16px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
-  transition: all 0.25s ease;
+.btn-outline-success:hover, .btn-outline-secondary:hover {
+  transform: translateY(-1px);
 }

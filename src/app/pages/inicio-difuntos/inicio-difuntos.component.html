@@ -1,67 +1,66 @@
-<!-- Reusamos código de bóvedas para lograr uniformidad en las interfaces -->
 <div class="container-fluid py-4 px-4">
-  <!-- =======================
-       HEADER CON BADGES DE RESUMEN - Diseño mejorado
-  ======================== -->
+  <!-- Header compacto -->
   <div class="d-flex align-items-center justify-content-between mb-4">
-    <h5 class="fw-semibold text-secondary mb-0">
-      <i class="bi bi-people-fill me-2 text-success"></i>Gestión de Fallecidos
-    </h5>
+    <div class="d-flex align-items-center">
+
+      <div>
+        <h5 class="fw-semibold text-dark mb-0">Gestión de Fallecidos</h5>
+        <small class="text-muted">Inhumación, Editar y Exhumación</small>
+      </div>
+    </div>
     <span class="badge bg-light text-dark px-3 py-2 rounded-pill d-none d-sm-flex align-items-center">
       <i class="bi bi-calendar3 me-2"></i>{{ today | date: "dd/MM/yyyy"}}
     </span>
   </div>
 
-  <!-- =======================
-       CARDS RESUMEN - Diseño profesional
-  ======================== -->
-  <div class="row g-4 mb-3">
+  <!-- Cards resumen compactas -->
+  <div class="row g-3 mb-4">
     <!-- Total Fallecidos -->
     <div class="col-6 col-md-3">
       <div class="card card-resumen border-0 h-100">
         <div class="card-body p-3">
           <div class="d-flex align-items-center">
-            <div class="bg-success bg-opacity-10 p-3 rounded-3 me-3">
-              <i class="bi bi-box-seam fs-4 text-success"></i>
+            <div class="resumen-icon me-3">
+              <i class="bi bi-people"></i>
             </div>
             <div>
-              <h6 class="text-white mb-1 small">Total Fallecidos</h6>
-              <h4 class="fw-bold text-white mb-0">
-                {{ totalFallecidos }}
-              </h4>
+              <h6 class="resumen-label mb-1">Total Fallecidos</h6>
+              <h4 class="resumen-valor mb-0">{{ totalFallecidos }}</h4>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="col-12 col-md-3 offset-md-6">
-      <button
-        class="btn btn-success w-100 h-100 d-flex flex-column align-items-center justify-content-center border-0 rounded-3 shadow-sm"
+    <!-- Espacio vacío para desktop -->
+    <div class="col-md-6 d-none d-md-block"></div>
+
+    <!-- Botón de acción -->
+    <div class="col-6 col-md-3">
+      <button class="btn btn-accion-fallecidos w-100 h-100 d-flex flex-column align-items-center justify-content-center"
         (click)="abrirModalAnadirDifunto()">
-        <i class="bi bi-pencil-square fs-4 mb-1"></i>
-        <span class="small fw-semibold">Fallecidos</span>
+        <i class="bi bi-plus-circle mb-1"></i>
+        <span class="small fw-semibold">Nuevo Fallecido</span>
       </button>
     </div>
   </div>
 
-  <!--=======================FILTROS Y BÚSQUEDA - Diseño elegante========================-->
-  <div class="card border-0 shadow-sm mb-4">
+  <!-- Filtros compactos -->
+  <div class="card card-filtros border-0 shadow-sm mb-4">
     <div class="card-header bg-white border-0 py-3">
       <div class="d-flex align-items-center">
-        <i class="bi bi-funnel me-2 text-success"></i>
-        <h6 class="fw-semibold text-secondary mb-0">Filtros de búsqueda</h6>
+        <i class="bi bi-funnel me-2 text-muted"></i>
+        <h6 class="fw-semibold text-dark mb-0">Filtros de búsqueda</h6>
       </div>
     </div>
     <div class="card-body pt-0">
       <div class="row g-3">
-
-        <!-- Buscador principal — igual que antes -->
+        <!-- Buscador principal -->
         <div class="col-12">
           <label class="form-label text-muted small fw-semibold mb-1">
             <i class="bi bi-search me-1"></i>Buscar Fallecido
           </label>
-          <div class="input-group">
+          <div class="input-group input-group-buscar">
             <span class="input-group-text bg-light border-end-0">
               <i class="bi bi-search text-muted"></i>
             </span>
@@ -97,30 +96,26 @@
 
         <!-- Limpiar filtros -->
         <div class="col-md-4 d-flex align-items-end">
-          <button class="btn btn-outline-secondary btn-sm w-100" (click)="limpiarFiltros()"
+          <button class="btn btn-limpiar btn-sm w-100" (click)="limpiarFiltros()"
             *ngIf="searchQuery || fechaInicio || fechaFin">
             <i class="bi bi-x-circle me-1"></i>Limpiar filtros
           </button>
         </div>
-
       </div>
     </div>
   </div>
 
-  <!-- =======================
-       TABLA DE DIFUNTOS - Con diseño responsivo
-  ======================== -->
-  <div class="card border-0 shadow-sm">
+  <!-- Tabla de difuntos -->
+  <div class="card card-tabla border-0 shadow-sm">
     <div class="card-header bg-white border-0 py-3 d-flex flex-wrap justify-content-between align-items-center gap-2">
-      <h6 class="fw-semibold text-secondary mb-0 d-flex align-items-center">
-        <i class="bi bi-table me-2"></i>Listado de Fallecidos
-      </h6>
+      <div class="d-flex align-items-center">
+        <i class="bi bi-table me-2 text-muted"></i>
+        <h6 class="fw-semibold text-dark mb-0">Listado de Fallecidos</h6>
+      </div>
       <div class="d-flex align-items-center gap-2">
         <span class="badge bg-light text-dark px-3 py-2 rounded-pill d-none d-sm-block">
-          <i class="bi bi-list-ol me-2"></i>{{ difuntos.length }} de
-          {{ totalFallecidos }} registros
+          <i class="bi bi-list-ol me-2"></i>{{ difuntos.length }} de {{ totalFallecidos }} registros
         </span>
-        <!-- Vista en móvil: contador compacto -->
         <span class="badge bg-success text-white px-2 py-1 rounded-pill d-sm-none">
           {{ difuntos.length }}/{{ totalFallecidos }}
         </span>
@@ -128,61 +123,45 @@
     </div>
 
     <div class="card-body p-0">
-      <!-- Vista para móviles (cards) - se muestra en pantallas pequeñas -->
+      <!-- Vista para móviles (cards) -->
       <div class="d-block d-md-none">
         <div class="p-3">
-          <div *ngFor="let fallecido of difuntos" class="card mb-3 border-0 shadow-sm hover-lift">
+          <div *ngFor="let fallecido of difuntos" class="card card-mobile mb-3 border-0 shadow-sm">
             <div class="card-body">
-              <!-- Cabecera de la tarjeta con código y acciones -->
               <div class="d-flex justify-content-between align-items-start mb-2">
-                <span class="badge bg-success bg-opacity-10 text-success px-3 py-2 rounded-3 fw-semibold">
+                <span class="badge badge-codigo px-3 py-2 rounded-3 fw-semibold">
                   {{ fallecido.codigo_bloque }}
                 </span>
-                <div class="btn-group btn-group">
-                  <button class="btn btn-warning border-1px border-warning"
-                    (click)="abrirModalEditarDifunto(fallecido)">
+                <div class="d-flex gap-2">
+                  <button class="btn btn-editar btn-sm" (click)="abrirModalEditarDifunto(fallecido)">
                     <i class="bi bi-pencil"></i>
                   </button>
-                  <button class="btn btn-danger border-1px border-danger"
-                    (click)="eliminarFallecido(fallecido.id_fallecido)">
+                  <button class="btn btn-eliminar btn-sm" (click)="eliminarFallecido(fallecido.id_fallecido)">
                     <i class="bi bi-trash"></i>
                   </button>
                 </div>
               </div>
 
-              <!-- Nombre del fallecido (destacado) -->
               <h6 class="fw-bold mb-2">{{ fallecido.nombre_completo }}</h6>
 
-              <!-- Grid de información -->
               <div class="row g-2 mt-2">
                 <div class="col-6">
                   <small class="text-muted d-block">F. Fallecimiento</small>
                   <span class="fw-medium small">
-                    {{
-                    fallecido.fecha_fallecimiento
-                    ? (fallecido.fecha_fallecimiento | date: "dd/MM/yyyy":"UTC")
-                    : "--"
+                    {{ fallecido.fecha_fallecimiento ? (fallecido.fecha_fallecimiento | date: "dd/MM/yyyy":"UTC") : "--"
                     }}
                   </span>
                 </div>
                 <div class="col-6">
                   <small class="text-muted d-block">F. Inhumación</small>
                   <span class="fw-medium small">
-                    {{
-                    fallecido.fecha_inhumacion
-                    ? (fallecido.fecha_inhumacion | date: "dd MMM yyyy":"UTC")
-                    : "--"
-                    }}
+                    {{ fallecido.fecha_inhumacion ? (fallecido.fecha_inhumacion | date: "dd MMM yyyy":"UTC") : "--" }}
                   </span>
                 </div>
                 <div class="col-6">
                   <small class="text-muted d-block">F. Exhumación</small>
                   <span class="fw-medium small">
-                    {{
-                    fallecido.fecha_exhumacion
-                    ? (fallecido.fecha_exhumacion | date: "dd/MM/yyyy":"UTC")
-                    : "--"
-                    }}
+                    {{ fallecido.fecha_exhumacion ? (fallecido.fecha_exhumacion | date: "dd/MM/yyyy":"UTC") : "--" }}
                   </span>
                 </div>
                 <div class="col-6">
@@ -195,7 +174,6 @@
             </div>
           </div>
 
-          <!-- Mensaje sin resultados para móvil -->
           <div *ngIf="!difuntos.length && !loading" class="text-center py-5">
             <i class="bi bi-inbox fs-1 text-muted"></i>
             <p class="text-muted mb-0 mt-3">No se encontraron resultados</p>
@@ -204,7 +182,6 @@
             </button>
           </div>
 
-          <!-- Loader para móvil -->
           <div *ngIf="loading" class="text-center py-5">
             <div class="spinner-border text-success" role="status">
               <span class="visually-hidden">Cargando...</span>
@@ -213,58 +190,43 @@
         </div>
       </div>
 
-      <!-- Vista para desktop (tabla) - CORREGIDO: usa difuntos en lugar de difuntosFiltrados -->
+      <!-- Vista para desktop (tabla) -->
       <div class="table-responsive d-none d-md-block">
         <table class="table table-hover align-middle mb-0">
           <thead class="bg-light">
             <tr>
-              <th class="px-4 py-3 text-muted small fw-semibold">Código Bloque</th>
-              <th class="py-3 text-muted small fw-semibold">Nombre Completo</th>
-              <th class="py-3 text-muted small fw-semibold">
-                F. Fallecimiento
-              </th>
-              <th class="py-3 text-muted small fw-semibold">F. Inhumación</th>
-              <th class="py-3 text-muted small fw-semibold">F. Exhumación</th>
-              <th class="py-3 text-muted small fw-semibold">Observaciones</th>
-              <th class="px-4 py-3 text-muted small fw-semibold text-end">
-                Acciones
-              </th>
+              <th class="px-4 py-3 text-muted small fw-bold">Código Bloque</th>
+              <th class="py-3 text-muted small fw-bold">Nombre Completo</th>
+              <th class="py-3 text-muted small fw-bold">F. Fallecimiento</th>
+              <th class="py-3 text-muted small fw-bold">F. Inhumación</th>
+              <th class="py-3 text-muted small fw-bold">F. Exhumación</th>
+              <th class="py-3 text-muted small fw-bold">Observaciones</th>
+              <th class="px-4 py-3 text-muted small fw-semibold text-end">Acciones</th>
             </tr>
           </thead>
 
           <tbody class="border-0">
             <tr *ngFor="let fallecido of difuntos" class="border-bottom">
               <td class="px-4">
-                <span class="badge bg-success bg-opacity-10 text-success px-3 py-2 rounded-3">
+                <span class="badge badge-codigo px-3 py-2 rounded-3">
                   {{ fallecido.codigo_bloque }}
                 </span>
               </td>
               <td class="fw-medium">{{ fallecido.nombre_completo }}</td>
               <td>
                 <span [class.text-muted]="!fallecido.fecha_fallecimiento">
-                  {{
-                  fallecido.fecha_fallecimiento
-                  ? (fallecido.fecha_fallecimiento | date: "dd MMM yyyy": "UTC")
-                  : "--"
+                  {{ fallecido.fecha_fallecimiento ? (fallecido.fecha_fallecimiento | date: "dd MMM yyyy": "UTC") : "--"
                   }}
                 </span>
               </td>
               <td>
                 <span [class.text-muted]="!fallecido.fecha_inhumacion">
-                  {{
-                  fallecido.fecha_inhumacion
-                  ? (fallecido.fecha_inhumacion | date: "dd MMM yyyy": "UTC")
-                  : "--"
-                  }}
+                  {{ fallecido.fecha_inhumacion ? (fallecido.fecha_inhumacion | date: "dd MMM yyyy": "UTC") : "--" }}
                 </span>
               </td>
               <td>
                 <span [class.text-muted]="!fallecido.fecha_exhumacion">
-                  {{
-                  fallecido.fecha_exhumacion
-                  ? (fallecido.fecha_exhumacion | date: "dd MMM yyyy": "UTC")
-                  : "--"
-                  }}
+                  {{ fallecido.fecha_exhumacion ? (fallecido.fecha_exhumacion | date: "dd MMM yyyy": "UTC") : "--" }}
                 </span>
               </td>
               <td>
@@ -274,26 +236,22 @@
               </td>
               <td class="px-4">
                 <div class="d-flex gap-2 justify-content-end">
-                  <button class="btn btn btn-warning border-1px border-warning"
-                    (click)="abrirModalEditarDifunto(fallecido)" title="Editar">
+                  <button class="btn btn-editar btn-sm" (click)="abrirModalEditarDifunto(fallecido)" title="Editar">
                     <i class="bi bi-pencil"></i>
                   </button>
-                  <button class="btn btn btn-danger border-1px border-danger"
-                    (click)="eliminarFallecido(fallecido.id_fallecido)" title="Eliminar">
+                  <button class="btn btn-eliminar btn-sm" (click)="eliminarFallecido(fallecido.id_fallecido)"
+                    title="Eliminar">
                     <i class="bi bi-trash"></i>
                   </button>
                 </div>
               </td>
             </tr>
 
-            <!-- Fila sin resultados para desktop -->
             <tr *ngIf="!difuntos.length && !loading">
               <td colspan="7" class="text-center py-5">
                 <div class="py-4">
                   <i class="bi bi-inbox fs-1 text-muted"></i>
-                  <p class="text-muted mb-0 mt-3">
-                    No se encontraron resultados
-                  </p>
+                  <p class="text-muted mb-0 mt-3">No se encontraron resultados</p>
                   <button *ngIf="searchQuery" class="btn btn-link text-success mt-2"
                     (click)="searchQuery = ''; onSearch()">
                     <i class="bi bi-x-circle me-1"></i>Limpiar búsqueda
@@ -302,7 +260,6 @@
               </td>
             </tr>
 
-            <!-- Loader para desktop -->
             <tr *ngIf="loading">
               <td colspan="7" class="text-center py-5">
                 <div class="spinner-border text-success" role="status">
@@ -316,21 +273,16 @@
     </div>
   </div>
 
-  <!-- =======================
-       PAGINACIÓN - CORREGIDA para funcionar con el servidor
-  ======================== -->
+  <!-- Paginación -->
   <div class="d-flex flex-column flex-sm-row justify-content-between align-items-center mt-4 gap-3">
     <div class="text-muted small order-2 order-sm-1">
       Mostrando <span class="fw-semibold">{{ difuntos.length }}</span> de
       <span class="fw-semibold">{{ totalFallecidos }}</span> registros
-      <span *ngIf="searchQuery" class="text-muted">
-        · Filtrado por: "{{ searchQuery }}"
-      </span>
+      <span *ngIf="searchQuery" class="text-muted"> · Filtrado por: "{{ searchQuery }}"</span>
     </div>
 
     <nav aria-label="Navegación de páginas" class="order-1 order-sm-2">
       <ul class="pagination pagination-sm flex-wrap justify-content-center mb-0">
-        <!-- Botón Anterior -->
         <li class="page-item" [class.disabled]="currentPage === 1">
           <button class="page-link border-0 bg-light text-dark" (click)="onPageChange(currentPage - 1)"
             [disabled]="currentPage === 1">
@@ -339,16 +291,12 @@
           </button>
         </li>
 
-        <!-- Números de página para desktop -->
-
-        <!-- Indicador de página para móvil -->
         <li class="page-item d-sm-none">
           <span class="page-link border-0 bg-success text-white fw-semibold">
             {{ currentPage }} / {{ totalPages || 1 }}
           </span>
         </li>
 
-        <!-- Botón Siguiente -->
         <li class="page-item" [class.disabled]="currentPage === totalPages">
           <button class="page-link border-0 bg-light text-dark" (click)="onPageChange(currentPage + 1)"
             [disabled]="currentPage === totalPages">
@@ -360,7 +308,6 @@
     </nav>
   </div>
 
-  <!-- Mensaje informativo cuando no hay resultados en la página actual -->
   <div *ngIf="!difuntos.length && !loading && totalFallecidos > 0" class="text-center text-muted mt-3 small">
     <i class="bi bi-info-circle me-1"></i>
     No hay resultados en esta página.
