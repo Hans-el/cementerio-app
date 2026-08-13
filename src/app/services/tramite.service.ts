@@ -75,4 +75,8 @@ export class TramiteService {
     return this.http.get<{ total: number }>(`${this.apiUrl}/pendientes/count`);
   }
 
+  getPendientesCountByTipo(): Observable<{ id_tipo_tramite: number, pendientes: number }[]> {
+    return this.http.get<{ id_tipo_tramite: number, pendientes: number }[]>(`${this.apiUrl}/pendientes/count-by-tipo`);
+  }
+
 }

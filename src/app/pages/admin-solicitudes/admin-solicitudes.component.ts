@@ -1,3 +1,5 @@
+
+
 import { Component, OnInit } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -23,6 +25,9 @@ export class AdminSolicitudesComponent implements OnInit {
   documentosSolicitudActual: DocumentoSolicitud[] = [];
   solicitudSeleccionada: Solicitud | null = null;
 
+  // Conteo de pendientes por tipo
+  pendientesPorTipo: Map<number, number> = new Map();
+
   // Flags
   loading = false;
   loadingDocumentos = false;
@@ -37,6 +42,7 @@ export class AdminSolicitudesComponent implements OnInit {
 
   ngOnInit(): void {
     this.cargarTipos();
+    this.cargarPendientesPorTipo();
   }
 
   // ── Tipos 
@@ -59,6 +65,24 @@ export class AdminSolicitudesComponent implements OnInit {
     this.documentosSolicitudActual = [];
     this.limpiarFiltros();
     this.cargarSolicitudes();
+  }
+
+  // ── Pendientes por tipo 
+
+  cargarPendientesPorTipo(): void {
+    this.tramiteService.getPendientesCountByTipo().subscribe({
+      next: (data) => {
+        this.pendientesPorTipo.clear();
+        data.forEach(item => {
+          this.pendientesPorTipo.set(item.id_tipo_tramite, item.pendientes);
+        });
+      },
+      error: () => { }
+    });
+  }
+
+  getPendientes(id_tipo: number): number {
+    return this.pendientesPorTipo.get(id_tipo) || 0;
   }
 
   // ── Solicitudes 
@@ -134,6 +158,7 @@ export class AdminSolicitudesComponent implements OnInit {
         next: () => {
           Swal.fire('Aprobada', 'La solicitud fue aprobada correctamente.', 'success');
           this.cargarSolicitudes();
+          this.cargarPendientesPorTipo();
           this.solicitudSeleccionada = null;
         },
         error: () => Swal.fire('Error', 'No se pudo aprobar la solicitud.', 'error'),
@@ -158,6 +183,7 @@ export class AdminSolicitudesComponent implements OnInit {
         next: () => {
           Swal.fire('Rechazada', 'La solicitud fue rechazada.', 'info');
           this.cargarSolicitudes();
+          this.cargarPendientesPorTipo();
           this.solicitudSeleccionada = null;
         },
         error: () => Swal.fire('Error', 'No se pudo rechazar la solicitud.', 'error'),
@@ -220,3 +246,4 @@ export class AdminSolicitudesComponent implements OnInit {
     }
   }
 }
+
