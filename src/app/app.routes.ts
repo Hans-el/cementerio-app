@@ -1,72 +1,168 @@
 import { Routes } from '@angular/router';
-import { LoginComponent } from './pages/login/login.component';
-import { RegistroComponent } from './pages/registro/registro.component';
-import { PerfilComponent } from './pages/perfil/perfil.component';
-import { ContactoComponent } from './pages/contacto/contacto.component';
-import { InicioComponent } from './pages/inicio/inicio.component';
+// Solo se importan estáticamente los guards y el Layout principal
 import { authGuard } from './guards/auth.guard';
 import { cementerioGuard } from './guards/cementerio.guard';
-import { MapaBovedasComponent } from './pages/mapa-bovedas/mapa-bovedas.component';
-import { LayoutComponent } from './components/layout/layout.component';
 import { adminGuard } from './guards/admin.guard';
-import { InicioDifuntosComponent } from './pages/inicio-difuntos/inicio-difuntos.component';
-import { ReportesComponent } from './pages/reportes/reportes.component';
-import { DashboardComponent } from './pages/dashboard/dashboard.component';
-import { AdminSolicitudesComponent } from './pages/admin-solicitudes/admin-solicitudes.component';
-import { SolicitudInhumacionComponent } from './pages/solicitud-inhumacion/solicitud-inhumacion.component';
-import { SolicitudExhumacionComponent } from './pages/solicitud-exhumacion/solicitud-exhumacion.component';
-import { TramitesComponent } from './pages/tramites/tramites.component';
-import { CementeriosComponent } from './pages/cementerios/cementerios.component';
-import { InformacionComponent } from './pages/informacion/informacion.component';
-import { NotFoundComponent } from './pages/not-found/not-found.component';
-import { SuperadminComponent } from './pages/superadmin/superadmin.component';
 import { superadminGuard } from './guards/superadmin.guard';
 import { unsavedChangesGuard } from './guards/unsaved-changes.guard';
-import { SolicitudTramiteComponent } from './pages/solicitud-tramite/solicitud-tramite.component';
-import { BloquePublicoComponent } from './pages/bloque-publico/bloque-publico.component';
+import { LayoutComponent } from './components/layout/layout.component';
 
-
-//rutas de la aplicación
+//Lazy Loading
 export const routes: Routes = [
-    // Ruta raíz redirige a selección de cementerio
-    { path: '', redirectTo: 'cementerios', pathMatch: 'full' },
+  // Ruta raíz redirige a selección de cementerio
+  { path: '', redirectTo: 'cementerios', pathMatch: 'full' },
 
-    // Pantallas sin sidebar
-    { path: 'cementerios', component: CementeriosComponent, canActivate: [cementerioGuard] },
-    { path: 'login', component: LoginComponent },
-    { path: 'registro', component: RegistroComponent },
-    { path: 'informacion', component: InformacionComponent },
-    { path: '404', component: NotFoundComponent },
-    { path: 'bloque/:slug/:codigo', component: BloquePublicoComponent },
+  // Pantallas sin sidebar
+  {
+    path: 'cementerios',
+    loadComponent: () =>
+      import('./pages/cementerios/cementerios.component').then(
+        (m) => m.CementeriosComponent,
+      ),
+    canActivate: [cementerioGuard],
+  },
+  {
+    path: 'login',
+    loadComponent: () =>
+      import('./pages/login/login.component').then((m) => m.LoginComponent),
+  },
+  {
+    path: 'registro',
+    loadComponent: () =>
+      import('./pages/registro/registro.component').then(
+        (m) => m.RegistroComponent,
+      ),
+  },
+  {
+    path: 'informacion',
+    loadComponent: () =>
+      import('./pages/informacion/informacion.component').then(
+        (m) => m.InformacionComponent,
+      ),
+  },
+  {
+    path: '404',
+    loadComponent: () =>
+      import('./pages/not-found/not-found.component').then(
+        (m) => m.NotFoundComponent,
+      ),
+  },
+  {
+    path: 'bloque/:slug/:codigo',
+    loadComponent: () =>
+      import('./pages/bloque-publico/bloque-publico.component').then(
+        (m) => m.BloquePublicoComponent,
+      ),
+  },
 
+  // Pantallas con sidebar
+  {
+    path: '',
+    component: LayoutComponent,
+    children: [
+      {
+        path: 'mapa',
+        loadComponent: () =>
+          import('./pages/mapa-bovedas/mapa-bovedas.component').then(
+            (m) => m.MapaBovedasComponent,
+          ),
+      },
+      {
+        path: 'inicio',
+        loadComponent: () =>
+          import('./pages/inicio/inicio.component').then(
+            (m) => m.InicioComponent,
+          ),
+        canActivate: [authGuard, adminGuard],
+      },
+      {
+        path: 'difuntos',
+        loadComponent: () =>
+          import('./pages/inicio-difuntos/inicio-difuntos.component').then(
+            (m) => m.InicioDifuntosComponent,
+          ),
+        canActivate: [authGuard, adminGuard],
+      },
+      {
+        path: 'contacto',
+        loadComponent: () =>
+          import('./pages/contacto/contacto.component').then(
+            (m) => m.ContactoComponent,
+          ),
+      },
+      {
+        path: 'perfil',
+        loadComponent: () =>
+          import('./pages/perfil/perfil.component').then(
+            (m) => m.PerfilComponent,
+          ),
+      },
+      {
+        path: 'reportes',
+        loadComponent: () =>
+          import('./pages/reportes/reportes.component').then(
+            (m) => m.ReportesComponent,
+          ),
+        canActivate: [authGuard, adminGuard],
+      },
+      {
+        path: 'dashboard',
+        loadComponent: () =>
+          import('./pages/dashboard/dashboard.component').then(
+            (m) => m.DashboardComponent,
+          ),
+        canActivate: [adminGuard],
+      },
+      {
+        path: 'tramites',
+        loadComponent: () =>
+          import('./pages/tramites/tramites.component').then(
+            (m) => m.TramitesComponent,
+          ),
+      },
+      {
+        path: 'tramites/:id_tipo',
+        loadComponent: () =>
+          import('./pages/solicitud-tramite/solicitud-tramite.component').then(
+            (m) => m.SolicitudTramiteComponent,
+          ),
+        canDeactivate: [unsavedChangesGuard],
+      },
+      {
+        path: 'exhumaciones',
+        loadComponent: () =>
+          import('./pages/solicitud-exhumacion/solicitud-exhumacion.component').then(
+            (m) => m.SolicitudExhumacionComponent,
+          ),
+        canDeactivate: [unsavedChangesGuard],
+      },
+      {
+        path: 'inhumaciones',
+        loadComponent: () =>
+          import('./pages/solicitud-inhumacion/solicitud-inhumacion.component').then(
+            (m) => m.SolicitudInhumacionComponent,
+          ),
+        canDeactivate: [unsavedChangesGuard],
+      },
+      {
+        path: 'admin/solicitudes',
+        loadComponent: () =>
+          import('./pages/admin-solicitudes/admin-solicitudes.component').then(
+            (m) => m.AdminSolicitudesComponent,
+          ),
+        canActivate: [authGuard, adminGuard],
+      },
+      {
+        path: 'superadmin',
+        loadComponent: () =>
+          import('./pages/superadmin/superadmin.component').then(
+            (m) => m.SuperadminComponent,
+          ),
+        canActivate: [authGuard, superadminGuard],
+      },
+    ],
+  },
 
-
-    // Pantallas con sidebar
-    {
-        path: '',
-        component: LayoutComponent,
-        children: [
-            { path: 'mapa', component: MapaBovedasComponent },
-            { path: 'inicio', component: InicioComponent, canActivate: [authGuard, adminGuard] },
-            { path: 'difuntos', component: InicioDifuntosComponent, canActivate: [authGuard, adminGuard] },
-            { path: 'contacto', component: ContactoComponent },
-            { path: 'perfil', component: PerfilComponent },
-            { path: 'reportes', component: ReportesComponent, canActivate: [authGuard, adminGuard] },
-            { path: 'dashboard', component: DashboardComponent, canActivate: [adminGuard] },
-            { path: 'tramites', component: TramitesComponent },
-            {
-                path: 'tramites/:id_tipo', component: SolicitudTramiteComponent,
-                canDeactivate: [unsavedChangesGuard]
-            },
-            { path: 'exhumaciones', component: SolicitudExhumacionComponent, canDeactivate: [unsavedChangesGuard] },
-            { path: 'inhumaciones', component: SolicitudInhumacionComponent, canDeactivate: [unsavedChangesGuard] },
-            { path: 'admin/solicitudes', component: AdminSolicitudesComponent, canActivate: [authGuard, adminGuard] },
-            { path: 'superadmin', component: SuperadminComponent, canActivate: [authGuard, superadminGuard] },
-
-
-        ]
-    },
-
-    // Ruta comodín — redirige a selección si no existe la ruta
-    { path: '**', redirectTo: '404' },
+  // Ruta comodín — redirige a selección si no existe la ruta
+  { path: '**', redirectTo: '404' },
 ];

@@ -1,4 +1,3 @@
-//Cada vez que nos conectemos a un nuevo internet debemos poner la IP aquí, es la IP de tu PC en la red local. Revisamos con ipcomfig en windows o ipa en linux. Luego ponemos la ip y listo
 export const environment = {
   production: false,
 
