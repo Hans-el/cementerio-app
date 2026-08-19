@@ -11,6 +11,8 @@
   overflow: hidden;
   background:  rgb(234, 241, 237);
   user-select: none; 
+  border: #f0f0f0  1px solid;
+  border-radius: 8px;
 }
 
 .mapa-viewport {
