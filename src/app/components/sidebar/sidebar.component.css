@@ -6,14 +6,24 @@
   box-sizing: border-box;
   z-index: 1000;
   transition: width 0.3s;
-  background: linear-gradient(
-    180deg,
-    #163212 0%,
-    #30422e 100%
-  );
+  background:
+    radial-gradient(at 67% 70%, #30422e 0%, transparent 50%),
+    radial-gradient(at 62% 11%, #0b170b 0%, transparent 55%),
+    radial-gradient(at 50% 84%, #0b170b 0%, transparent 55%),
+    radial-gradient(at 1% 25%, #163212 0%, transparent 55%),
+    radial-gradient(at 4% 97%, #071007 0%, transparent 55%),
+    radial-gradient(at 1% 72%, #071007 0%, transparent 55%),
+    radial-gradient(at 87% 25%, #30422e 0%, transparent 50%),
+    radial-gradient(at 62% 3%, #0b170b 0%, transparent 55%),
+    radial-gradient(at 43% 67%, #071007 0%, transparent 55%),
+    radial-gradient(at 78% 96%, #163212 0%, transparent 55%),
+    radial-gradient(at 85% 46%, #0b170b 0%, transparent 55%),
+    #16470f;
+  background-size: cover;
+  background-position: center;
   border-top-right-radius: 20px;
   border-bottom-right-radius: 20px;
-  box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15);
+  box-shadow: 4px 0 20px rgba(0, 0, 0, 0.798);
 }
 
 
@@ -99,15 +109,9 @@ Con esto logramos que sea más fácil de usar en pantallas pequeñas */
   border-radius: 6px;
   transition: all 0.2s ease;
   margin: 0.5rem 0;
-    background: linear-gradient(
-    90deg,
-    #163212 0%,
-    #30422e 100%
-  );
   color: #e5e7eb;
 }
-.user-section:hover {
-   
+.user-section:hover {   
   color: #e5e7eb;
   background-color: rgba(255, 255, 255, 0.08);
 }
@@ -135,11 +139,6 @@ Con esto logramos que sea más fácil de usar en pantallas pequeñas */
   transform: translate3d(0, 0, 0);
   z-index: 1050;
   overflow: hidden;
-  background: linear-gradient(
-    180deg,
-    #163212 0%,
-    #30422e 100%
-  );
   color: #e5e7eb;
 }
 
