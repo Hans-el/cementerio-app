@@ -499,14 +499,351 @@
   transition: background .2s;
 }
 .btn-guardar:hover { background: #3a7233; }
+/* ── Dashboard Global ──────────────────────────────────── */
+.dg-grid-resumen {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: .75rem;
+}
 
-/* ── Responsivo ────────────────────────────────────────── */
+.dg-card {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  padding: 1.1rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+}
+
+.dg-card-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: .75rem;
+  font-size: 15px;
+}
+
+.dg-card-val {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #111827;
+  line-height: 1.1;
+}
+
+.dg-card-label {
+  font-size: 11px;
+  color: #9ca3af;
+  margin-top: 2px;
+}
+
+.dg-panel {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 1.25rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  height: 100%;
+}
+
+.dg-panel-titulo {
+  font-size: .9rem;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 1rem;
+}
+
+/* Totales de solicitudes */
+.dg-totales {
+  display: flex;
+  gap: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.dg-total-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.dg-total-item .badge {
+  font-size: 1rem;
+  padding: 6px 12px;
+  border-radius: 10px;
+}
+
+/* Tipo de trámite */
+.dg-tipo-row {
+  padding: .625rem 0;
+  border-bottom: 1px solid #f9fafb;
+}
+
+.dg-tipo-nombre {
+  font-size: 13px;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 4px;
+}
+
+.dg-tipo-barras {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.dg-mini-badge {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+}
+.dg-mini-badge.pendiente { background: #fffbeb; color: #92400e; }
+.dg-mini-badge.aprobada  { background: #f0fdf4; color: #166534; }
+.dg-mini-badge.rechazada { background: #fef2f2; color: #991b1b; }
+
+/* Ranking ocupación */
+.dg-ranking-item {
+  margin-bottom: 1rem;
+}
+
+.dg-ranking-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.dg-ranking-nombre {
+  font-size: 13px;
+  font-weight: 500;
+  color: #374151;
+}
+
+.dg-ranking-pct {
+  font-size: 13px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.dg-ranking-barra {
+  height: 8px;
+  background: #f3f4f6;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.dg-ranking-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width .4s ease;
+}
+
+.dg-ranking-detalle {
+  font-size: 11px;
+  color: #9ca3af;
+  margin-top: 2px;
+}
+
+/* Pendientes grid */
+.dg-pendientes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: .75rem;
+}
+
+.dg-pendiente-card {
+  text-align: center;
+  padding: .875rem;
+  background: #f9fafb;
+  border-radius: 12px;
+}
+
+.dg-pendiente-num {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.dg-pendiente-nombre {
+  font-size: 11px;
+  color: #6b7280;
+  margin-top: 2px;
+}
+/* ══════════════════════════════════════════════════════════
+   RESPONSIVE — Tablet y Móvil
+   ══════════════════════════════════════════════════════════ */
+
+@media (max-width: 991px) {
+
+  .sa-wrapper {
+    padding: 1.5rem 1rem;
+  }
+
+  /* Tabs — scroll horizontal en vez de wrap */
+  .sa-tabs {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .sa-tabs::-webkit-scrollbar { display: none; }
+
+  .sa-tab {
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  /* Dashboard — resumen 3 columnas en tablet */
+  .dg-grid-resumen {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  /* Panels de dashboard apilados */
+  .row.g-3 > .col-lg-6 {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+
+}
+
 @media (max-width: 576px) {
-  .sa-wrapper  { padding: 1.25rem 1rem; }
-  .sa-toolbar  { flex-direction: column; align-items: stretch; }
-  .sa-search   { max-width: 100%; }
-  .modal-grid  { grid-template-columns: 1fr; }
-  .sa-table    { font-size: 13px; }
-  .sa-table th,
-  .sa-table td { padding: 10px 12px; }
+
+  .sa-wrapper {
+    padding: 1rem .75rem;
+  }
+
+  .sa-titulo {
+    font-size: 1rem;
+  }
+
+  .sa-subtitulo {
+    font-size: 12px;
+  }
+
+  /* ── Dashboard resumen — 2 columnas en móvil ─────────── */
+  .dg-grid-resumen {
+    grid-template-columns: repeat(2, 1fr);
+    gap: .5rem;
+  }
+
+  .dg-card {
+    padding: .875rem;
+  }
+
+  .dg-card-val {
+    font-size: 1.25rem;
+  }
+
+  .dg-card-label {
+    font-size: 10px;
+  }
+
+  .dg-panel {
+    padding: 1rem;
+  }
+
+  .dg-totales {
+    gap: .75rem;
+    flex-wrap: wrap;
+  }
+
+  .dg-pendientes-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* ── Toolbar — apilar búsqueda y botón ───────────────── */
+  .sa-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: .75rem;
+  }
+
+  .sa-search {
+    max-width: 100%;
+  }
+
+  .btn-nuevo {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* ── Grid de cementerios — una columna ───────────────── */
+  .sa-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .sa-card-stats {
+    gap: .5rem;
+  }
+
+  .sa-card-acciones {
+    flex-direction: column;
+  }
+
+  /* ── Tabla de admins — scroll horizontal ─────────────── */
+  .sa-table-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .sa-table {
+    min-width: 560px;
+  }
+
+  /* ── Modales — full width en móvil ───────────────────── */
+  .modal-box {
+    max-width: calc(100% - 1.5rem);
+    margin: 0 .75rem;
+    max-height: 85vh;
+  }
+
+  .modal-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .modal-header {
+    padding: 1rem 1.25rem;
+  }
+
+  .modal-body {
+    padding: 1.25rem;
+  }
+
+  .modal-footer {
+    padding: .875rem 1.25rem;
+    flex-direction: column-reverse;
+  }
+
+  .modal-footer .btn-cancelar,
+  .modal-footer .btn-guardar {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .color-wrap {
+    flex-wrap: wrap;
+  }
+
+}
+
+@media (max-width: 400px) {
+
+  .dg-grid-resumen {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .dg-pendientes-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .sa-tab {
+    padding: 8px 14px;
+    font-size: 13px;
+  }
+
+  .sa-tab-badge {
+    font-size: 10px;
+  }
+
 }

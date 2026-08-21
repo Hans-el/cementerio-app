@@ -73,13 +73,13 @@
 
     <!-- Menú de superadmin -->
     <div class="sidebar-nav px-2" *ngIf="userRole === 'superadmin'">
-      <p class="nav-title px-3 text-uppercase text-white small">Super Admin</p>
+      <p class="nav-title px-3 text-uppercase text-white small">Administración</p>
       <ul class="nav-list list-unstyled mb-0">
         <li class="nav-item">
           <a routerLink="/superadmin" routerLinkActive="active" class="nav-link d-flex align-items-center px-3 py-2"
             (click)="cerrarEnMovil()">
             <i class="bi bi-shield-fill-check nav-icon"></i>
-            <span class="nav-text ms-3 fw-semibold">PANEL GLOBAL</span>
+            <span class="nav-text ms-3 fw-semibold">CEMENTERIOS</span>
           </a>
         </li>
       </ul>
@@ -88,7 +88,7 @@
     <!-- Menú de administrador -->
     <div class="sidebar-nav px-2" *ngIf="userRole === 'admin' || userRole === 'superadmin'">
       <p class="nav-title px-3 text-uppercase text-white small">
-        Administración
+        Gestión
       </p>
       <ul class="nav-list list-unstyled mb-0">
         <li class="nav-item">

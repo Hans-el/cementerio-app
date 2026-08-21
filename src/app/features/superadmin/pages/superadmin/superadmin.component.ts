@@ -18,7 +18,7 @@ import Swal from 'sweetalert2';
   styleUrl: './superadmin.component.css',
 })
 export class SuperadminComponent implements OnInit {
-  tabActivo: 'cementerios' | 'admins' = 'cementerios';
+  tabActivo: 'dashboard' | 'cementerios' | 'admins' = 'dashboard';
 
   // Datos
   cementerios: any[] = [];
@@ -39,13 +39,19 @@ export class SuperadminComponent implements OnInit {
   filtroCementerio = '';
   filtroAdmin = '';
 
+  // Propiedades nuevas para el dashboard superadmin
+  dashboardGlobal: any = null;
+  cargandoDashboard = false;
+
+
   constructor(
     private fb: FormBuilder,
     private superadminService: SuperadminService,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.iniciarForms();
+    this.cargarDashboardGlobal(); // <-- cargar al inicio
     this.cargarCementerios();
     this.cargarAdmins();
   }
@@ -78,6 +84,22 @@ export class SuperadminComponent implements OnInit {
     });
   }
 
+
+  cargarDashboardGlobal(): void {
+    this.cargandoDashboard = true;
+    this.superadminService.getDashboardGlobal().subscribe({
+      next: (data) => { this.dashboardGlobal = data; this.cargandoDashboard = false; },
+      error: () => { this.cargandoDashboard = false; },
+    });
+  }
+
+  // Actualizar cambiarTipo del tab para incluir dashboard
+  cambiarTab(tab: 'dashboard' | 'cementerios' | 'admins'): void {
+    this.tabActivo = tab;
+    if (tab === 'dashboard' && !this.dashboardGlobal) {
+      this.cargarDashboardGlobal();
+    }
+  }
   // ── Cementerios ───────────────────────────────────────────
 
   cargarCementerios(): void {
@@ -123,9 +145,9 @@ export class SuperadminComponent implements OnInit {
     const datos = this.cementerioForm.getRawValue();
     const obs$ = this.editandoCementerio
       ? this.superadminService.editarCementerio(
-          this.editandoCementerio.id_cementerio,
-          datos,
-        )
+        this.editandoCementerio.id_cementerio,
+        datos,
+      )
       : this.superadminService.crearCementerio(datos);
 
     obs$.subscribe({
@@ -178,7 +200,7 @@ export class SuperadminComponent implements OnInit {
       next: (data) => {
         this.admins = data;
       },
-      error: () => {},
+      error: () => { },
     });
   }
 

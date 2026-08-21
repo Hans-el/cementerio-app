@@ -9,7 +9,7 @@ import { environment } from '../../../../environments/environment';
 export class SuperadminService {
   private apiUrl = environment.apiUrl + '/superadmin';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   // Cementerios
   getCementerios(): Observable<any[]> {
@@ -42,5 +42,9 @@ export class SuperadminService {
     return this.http.put<any>(`${this.apiUrl}/admins/${id}/reset-pass`, {
       contrasenaNueva,
     });
+  }
+  //superadmins
+  getDashboardGlobal(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/dashboard-global`);
   }
 }
