@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { CementerioService } from './services/cementerio.service';
+import { CementerioService } from './features/publico/services/cementerio.service';
 import {
   Router,
   NavigationStart,
   NavigationEnd,
   NavigationCancel,
   NavigationError,
-  RouterOutlet
+  RouterOutlet,
 } from '@angular/router';
-import { LayoutComponent } from './components/layout/layout.component';
+import { LayoutComponent } from './shared/components/layout/layout.component';
 import { CommonModule } from '@angular/common';
 import { SwUpdate, VersionReadyEvent } from '@angular/service-worker';
 import { filter } from 'rxjs/operators';
@@ -18,10 +18,9 @@ import { filter } from 'rxjs/operators';
   standalone: true,
   imports: [RouterOutlet, LayoutComponent, CommonModule],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  styleUrl: './app.component.css',
 })
 export class AppComponent implements OnInit {
-
   title = 'cementerio-app';
   isSidebarCollapsed = false;
   loading = false;
@@ -35,7 +34,7 @@ export class AppComponent implements OnInit {
     private cementerioService: CementerioService,
     private router: Router,
     private swUpdate: SwUpdate,
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     // Restaurar tema del cementerio al recargar
@@ -45,7 +44,7 @@ export class AppComponent implements OnInit {
     }
 
     // Loader entre navegaciones — igual que antes
-    this.router.events.subscribe(event => {
+    this.router.events.subscribe((event) => {
       if (event instanceof NavigationStart) {
         this.loading = true;
       }
@@ -54,7 +53,9 @@ export class AppComponent implements OnInit {
         event instanceof NavigationCancel ||
         event instanceof NavigationError
       ) {
-        setTimeout(() => { this.loading = false; }, 700);
+        setTimeout(() => {
+          this.loading = false;
+        }, 700);
       }
     });
 
@@ -88,8 +89,12 @@ export class AppComponent implements OnInit {
     window.location.reload();
   }
 
-  cerrarBannerInstalar(): void { this.mostrarBannerInstalar = false; }
-  cerrarBannerUpdate(): void { this.mostrarBannerUpdate = false; }
+  cerrarBannerInstalar(): void {
+    this.mostrarBannerInstalar = false;
+  }
+  cerrarBannerUpdate(): void {
+    this.mostrarBannerUpdate = false;
+  }
 
   onToggleSidebar(collapsed: boolean): void {
     this.isSidebarCollapsed = collapsed;
