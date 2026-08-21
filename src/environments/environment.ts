@@ -2,6 +2,6 @@
 export const environment = {
   production: true,
 
-  apiUrl: 'https://cementerio-app-backend.onrender.com/api', //prod => descomentar antes de desplegar en producción
+  apiUrl: 'https://cementerio-app-backend.onrender.com/api', //prod => descomentar antes de desplegar en producciónnn
   // apiUrl: 'http://localhost:3000/api', //para desarrollo
 };
