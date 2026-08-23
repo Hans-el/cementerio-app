@@ -9,7 +9,7 @@ import {
 import { AuthService } from '../../../auth/services/auth.service';
 import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { PerfilService } from '../../services/perfil.service';
-import { CementerioService } from '../../../../features/publico/services/cementerio.service';
+import { CementerioService } from '../../../../features/auth/services/cementerio.service';
 import { Cementerio } from '../../models/cementerio.model';
 import Swal from 'sweetalert2';
 

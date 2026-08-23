@@ -1,3 +1,4 @@
+//modal de editar espacio de fallecido, permite seleccionar un fallecido y cambiar su espacio a otro.
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';

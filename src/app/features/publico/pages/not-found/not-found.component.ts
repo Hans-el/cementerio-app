@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
-import { CementerioService } from '../../services/cementerio.service';
+import { CementerioService } from '../../../auth/services/cementerio.service';
 
 @Component({
   selector: 'app-not-found',

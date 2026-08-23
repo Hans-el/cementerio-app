@@ -27,12 +27,19 @@
 
         <!-- TIPO DE REPORTE -->
         <div class="mb-4">
-          <label for="reportType" class="form-label fw-semibold small text-muted">
+          <label
+            for="reportType"
+            class="form-label fw-semibold small text-muted"
+          >
             Tipo de reporte
           </label>
 
-          <select id="reportType" class="form-select form-control-institucional" [(ngModel)]="reportType"
-            name="reportType">
+          <select
+            id="reportType"
+            class="form-select form-control-institucional"
+            [(ngModel)]="reportType"
+            name="reportType"
+          >
             <option value="Espacios">Bloques</option>
             <option value="Fallecidos">Fallecidos</option>
             <option value="Solicitudes">Solicitudes</option>
@@ -42,9 +49,14 @@
         <ng-container *ngIf="reportType === 'Solicitudes'">
           <div class="row mt-3">
             <div class="col-md-6 mb-3">
-              <label class="form-label small fw-semibold text-muted">Tipo de trámite</label>
-              <select class="form-select form-control-institucional" [(ngModel)]="filtroTipoSolicitud"
-                name="filtroTipo">
+              <label class="form-label small fw-semibold text-muted"
+                >Tipo de trámite</label
+              >
+              <select
+                class="form-select form-control-institucional"
+                [(ngModel)]="filtroTipoSolicitud"
+                name="filtroTipo"
+              >
                 <option value="TODOS">Todos</option>
                 <option value="inhumacion">Inhumación</option>
                 <option value="exhumacion">Exhumación</option>
@@ -52,25 +64,36 @@
             </div>
 
             <div class="col-md-6 mb-3">
-              <label class="form-label small fw-semibold text-muted">Estado</label>
-              <select class="form-select form-control-institucional" [(ngModel)]="filtroEstadoSolicitud"
-                name="filtroEstado">
+              <label class="form-label small fw-semibold text-muted"
+                >Estado</label
+              >
+              <select
+                class="form-select form-control-institucional"
+                [(ngModel)]="filtroEstadoSolicitud"
+                name="filtroEstado"
+              >
                 <option value="TODOS">Todos</option>
                 <option value="PENDIENTE">Pendientes</option>
                 <option value="APROBADA">Aprobadas</option>
                 <option value="RECHAZADA">Rechazadas</option>
               </select>
             </div>
-
           </div>
         </ng-container>
 
-
         <!-- CHECK RANGO -->
         <div class="form-check mb-3">
-          <input type="checkbox" class="form-check-input" id="useDateRange" [(ngModel)]="useDateRange"
-            name="useDateRange" />
-          <label class="form-check-label small fw-semibold text-muted" for="useDateRange">
+          <input
+            type="checkbox"
+            class="form-check-input"
+            id="useDateRange"
+            [(ngModel)]="useDateRange"
+            name="useDateRange"
+          />
+          <label
+            class="form-check-label small fw-semibold text-muted"
+            for="useDateRange"
+          >
             Usar rango de fechas
           </label>
         </div>
@@ -78,25 +101,45 @@
         <!-- FECHAS -->
         <div *ngIf="useDateRange" class="row">
           <div class="col-md-6 mb-4">
-            <label for="startDate" class="form-label small fw-semibold text-muted">
+            <label
+              for="startDate"
+              class="form-label small fw-semibold text-muted"
+            >
               Fecha inicio
             </label>
-            <input type="date" id="startDate" class="form-control form-control-institucional" [(ngModel)]="startDate"
-              name="startDate" />
+            <input
+              type="date"
+              id="startDate"
+              class="form-control form-control-institucional"
+              [(ngModel)]="startDate"
+              name="startDate"
+            />
           </div>
 
           <div class="col-md-6 mb-4">
-            <label for="endDate" class="form-label small fw-semibold text-muted">
+            <label
+              for="endDate"
+              class="form-label small fw-semibold text-muted"
+            >
               Fecha fin
             </label>
-            <input type="date" id="endDate" class="form-control form-control-institucional" [(ngModel)]="endDate"
-              name="endDate" />
+            <input
+              type="date"
+              id="endDate"
+              class="form-control form-control-institucional"
+              [(ngModel)]="endDate"
+              name="endDate"
+            />
           </div>
         </div>
 
         <!-- BOTÓN -->
         <div class="d-flex justify-content-end mt-4">
-          <button type="button" class="btn btn-institucional fw-semibold" (click)="generateReport()">
+          <button
+            type="button"
+            class="btn btn-institucional fw-semibold"
+            (click)="generateReport()"
+          >
             <i class="bi bi-filetype-xlsx text me-2 fs-5"></i>
             Generar reporte
           </button>
@@ -107,13 +150,15 @@
   <!-- ======================== BITÁCORA ======================== -->
   <div class="card card-form-institucional border-0 mt-4">
     <div class="card-body p-4">
-
       <div class="d-flex align-items-center justify-content-between mb-4">
         <div>
           <h6 class="fw-semibold text-secondary mb-1">
-            <i class="bi bi-journal-text me-2 text-success"></i>Bitácora de acciones
+            <i class="bi bi-journal-text me-2 text-success"></i>Bitácora de
+            acciones
           </h6>
-          <small class="text-muted">Registro de cambios realizados por la administración.</small>
+          <small class="text-muted"
+            >Registro de cambios realizados por la administración.</small
+          >
         </div>
         <span class="badge bg-light text-dark px-3 py-2 rounded-pill">
           {{ bitacoraTotal }} registros
@@ -124,17 +169,29 @@
       <div class="row g-3 mb-4">
         <div class="col-md-3">
           <label class="form-label small fw-semibold text-muted">Desde</label>
-          <input type="date" class="form-control form-control-institucional" [(ngModel)]="filtrosBitacora.startDate"
-            name="bStartDate" />
+          <input
+            type="date"
+            class="form-control form-control-institucional"
+            [(ngModel)]="filtrosBitacora.startDate"
+            name="bStartDate"
+          />
         </div>
         <div class="col-md-3">
           <label class="form-label small fw-semibold text-muted">Hasta</label>
-          <input type="date" class="form-control form-control-institucional" [(ngModel)]="filtrosBitacora.endDate"
-            name="bEndDate" />
+          <input
+            type="date"
+            class="form-control form-control-institucional"
+            [(ngModel)]="filtrosBitacora.endDate"
+            name="bEndDate"
+          />
         </div>
         <div class="col-md-2">
           <label class="form-label small fw-semibold text-muted">Entidad</label>
-          <select class="form-select form-control-institucional" [(ngModel)]="filtrosBitacora.entidad" name="bEntidad">
+          <select
+            class="form-select form-control-institucional"
+            [(ngModel)]="filtrosBitacora.entidad"
+            name="bEntidad"
+          >
             <option value="TODOS">Todas</option>
             <option value="FALLECIDO">Fallecido</option>
             <option value="BLOQUE">Bloque</option>
@@ -145,28 +202,42 @@
         </div>
         <div class="col-md-2">
           <label class="form-label small fw-semibold text-muted">Acción</label>
-          <select class="form-select form-control-institucional" [(ngModel)]="filtrosBitacora.accion" name="bAccion">
+          <select
+            class="form-select form-control-institucional"
+            [(ngModel)]="filtrosBitacora.accion"
+            name="bAccion"
+          >
             <option value="TODOS">Todas</option>
             <option value="CREAR">Crear</option>
             <option value="EDITAR">Editar</option>
             <option value="ELIMINAR">Eliminar</option>
+            <option value="TRASLADO">Traslado</option>
             <option value="CAMBIAR_ESTADO">Cambiar estado</option>
           </select>
         </div>
         <div class="col-md-2 d-flex align-items-end gap-2">
-          <button class="btn btn-institucional btn-sm grow" (click)="aplicarFiltrosBitacora()">
+          <button
+            class="btn btn-institucional btn-sm grow"
+            (click)="aplicarFiltrosBitacora()"
+          >
             <i class="bi bi-search me-1"></i>Filtrar
           </button>
-          <button class="btn btn-institucional btn-sm grow" (click)=" exportarBitacora()" [disabled]="!bitacora.length">
+          <button
+            class="btn btn-institucional btn-sm grow"
+            (click)="exportarBitacora()"
+            [disabled]="!bitacora.length"
+          >
             <i class="bi bi-file-earmark-excel me-1"></i>Exportar Excel
           </button>
-          <button class="btn btn-outline-secondary btn-sm" (click)="limpiarFiltrosBitacora()" title="Limpiar">
+          <button
+            class="btn btn-outline-secondary btn-sm"
+            (click)="limpiarFiltrosBitacora()"
+            title="Limpiar"
+          >
             <i class="bi bi-x-circle"></i>
           </button>
         </div>
-
       </div>
-
 
       <!-- Tabla -->
       <div class="table-responsive">
@@ -182,10 +253,11 @@
             </tr>
           </thead>
           <tbody>
-
             <tr *ngIf="loadingBitacora">
               <td colspan="6" class="text-center py-4">
-                <div class="spinner-border spinner-border-sm text-success"></div>
+                <div
+                  class="spinner-border spinner-border-sm text-success"
+                ></div>
               </td>
             </tr>
 
@@ -197,28 +269,41 @@
             </tr>
 
             <tr *ngFor="let r of bitacora" class="border-bottom">
-              <td class="small text-muted" style="white-space: nowrap;">
-                {{ r.fecha | date:'dd/MM/yyyy HH:mm' }}
+              <td class="small text-muted" style="white-space: nowrap">
+                {{ r.fecha | date: "dd/MM/yyyy HH:mm" }}
               </td>
               <td>
                 <div class="fw-medium small">{{ r.nombre_usuario }}</div>
-                <div class="text-muted" style="font-size: 11px;">{{ r.cedula_usuario }}</div>
+                <div class="text-muted" style="font-size: 11px">
+                  {{ r.cedula_usuario }}
+                </div>
               </td>
               <td>
-                <span class="badge rounded-pill px-2 py-1 small" [class]="badgeAccion(r.accion)">
+                <span
+                  class="badge rounded-pill px-2 py-1 small"
+                  [class]="badgeAccion(r.accion)"
+                >
                   {{ r.accion }}
                 </span>
               </td>
               <td>
-                <span class="badge rounded-pill px-2 py-1 small" [class]="badgeEntidad(r.entidad)">
+                <span
+                  class="badge rounded-pill px-2 py-1 small"
+                  [class]="badgeEntidad(r.entidad)"
+                >
                   {{ r.entidad | titlecase }}
                 </span>
               </td>
               <td class="small">{{ r.descripcion }}</td>
               <td>
                 <!-- Muestra valor anterior y nuevo en tooltip expandible -->
-                <button class="btn btn-outline-secondary btn-sm" *ngIf="r.valor_anterior || r.valor_nuevo" type="button"
-                  data-bs-toggle="collapse" [attr.data-bs-target]="'#detalle-' + r.id_bitacora">
+                <button
+                  class="btn btn-outline-secondary btn-sm"
+                  *ngIf="r.valor_anterior || r.valor_nuevo"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  [attr.data-bs-target]="'#detalle-' + r.id_bitacora"
+                >
                   <i class="bi bi-eye"></i>
                 </button>
               </td>
@@ -231,21 +316,38 @@
                   <div class="p-3 bg-light border-bottom">
                     <div class="row g-3">
                       <div class="col-md-6" *ngIf="r.valor_anterior">
-                        <div class="small fw-semibold text-muted mb-1">Valor anterior</div>
-                        <pre class="small bg-white p-2 rounded border mb-0"
-                          style="font-size: 11px; max-height: 120px; overflow-y: auto;">{{ r.valor_anterior | json }}</pre>
+                        <div class="small fw-semibold text-muted mb-1">
+                          Valor anterior
+                        </div>
+                        <pre
+                          class="small bg-white p-2 rounded border mb-0"
+                          style="
+                            font-size: 11px;
+                            max-height: 120px;
+                            overflow-y: auto;
+                          "
+                          >{{ r.valor_anterior | json }}</pre
+                        >
                       </div>
                       <div class="col-md-6" *ngIf="r.valor_nuevo">
-                        <div class="small fw-semibold text-muted mb-1">Valor nuevo</div>
-                        <pre class="small bg-white p-2 rounded border mb-0"
-                          style="font-size: 11px; max-height: 120px; overflow-y: auto;">{{ r.valor_nuevo | json }}</pre>
+                        <div class="small fw-semibold text-muted mb-1">
+                          Valor nuevo
+                        </div>
+                        <pre
+                          class="small bg-white p-2 rounded border mb-0"
+                          style="
+                            font-size: 11px;
+                            max-height: 120px;
+                            overflow-y: auto;
+                          "
+                          >{{ r.valor_nuevo | json }}</pre
+                        >
                       </div>
                     </div>
                   </div>
                 </div>
               </td>
             </tr>
-
           </tbody>
         </table>
       </div>
@@ -258,24 +360,34 @@
         <nav>
           <ul class="pagination pagination-sm mb-0">
             <li class="page-item" [class.disabled]="bitacoraPage === 1">
-              <button class="page-link border-0 bg-light text-dark" (click)="paginaAnteriorBitacora()">
+              <button
+                class="page-link border-0 bg-light text-dark"
+                (click)="paginaAnteriorBitacora()"
+              >
                 <i class="bi bi-chevron-left"></i>
               </button>
             </li>
             <li class="page-item">
-              <span class="page-link border-0 bg-success text-white fw-semibold">
+              <span
+                class="page-link border-0 bg-success text-white fw-semibold"
+              >
                 {{ bitacoraPage }}
               </span>
             </li>
-            <li class="page-item" [class.disabled]="bitacoraPage === bitacoraTotalPages">
-              <button class="page-link border-0 bg-light text-dark" (click)="siguientePaginaBitacora()">
+            <li
+              class="page-item"
+              [class.disabled]="bitacoraPage === bitacoraTotalPages"
+            >
+              <button
+                class="page-link border-0 bg-light text-dark"
+                (click)="siguientePaginaBitacora()"
+              >
                 <i class="bi bi-chevron-right"></i>
               </button>
             </li>
           </ul>
         </nav>
       </div>
-
     </div>
   </div>
 </div>

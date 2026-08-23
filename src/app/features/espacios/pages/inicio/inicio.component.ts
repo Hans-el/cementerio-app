@@ -13,7 +13,7 @@ import { ManzanasService } from '../../services/manzanas.service';
 import { BloquesService } from '../../services/bloques.service';
 import { Ocupacion } from '../../models/ocupacion.model';
 import { EspacioService } from '../../services/espacio.service';
-import { CementerioService } from '../../../../features/publico/services/cementerio.service';
+import { CementerioService } from '../../../../features/auth/services/cementerio.service';
 import * as QRCode from 'qrcode';
 import { GestionBovedasComponent } from '../../components/gestion-bloques/gestion-bovedas.component';
 

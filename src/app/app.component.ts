@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CementerioService } from './features/publico/services/cementerio.service';
+import { CementerioService } from './features/auth/services/cementerio.service';
 import {
   Router,
   NavigationStart,
@@ -8,7 +8,6 @@ import {
   NavigationError,
   RouterOutlet,
 } from '@angular/router';
-import { LayoutComponent } from './shared/components/layout/layout.component';
 import { CommonModule } from '@angular/common';
 import { SwUpdate, VersionReadyEvent } from '@angular/service-worker';
 import { filter } from 'rxjs/operators';
@@ -16,7 +15,7 @@ import { filter } from 'rxjs/operators';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, LayoutComponent, CommonModule],
+  imports: [RouterOutlet, CommonModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })

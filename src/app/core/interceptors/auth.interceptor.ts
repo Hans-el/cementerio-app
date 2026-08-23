@@ -9,7 +9,7 @@ import {
 import { inject } from '@angular/core';
 import { AuthService } from '../../features/auth/services/auth.service';
 import { catchError, switchMap, throwError } from 'rxjs';
-import { CementerioService } from '../../features/publico/services/cementerio.service';
+import { CementerioService } from '../../features/auth/services/cementerio.service';
 
 export const authInterceptor: HttpInterceptorFn = (
   req: HttpRequest<any>,

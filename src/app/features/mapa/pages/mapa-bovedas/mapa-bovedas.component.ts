@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CementerioService } from '../../../publico/services/cementerio.service';
+import { CementerioService } from '../../../auth/services/cementerio.service';
 
 @Component({
   selector: 'app-mapa-bovedas',

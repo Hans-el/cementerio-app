@@ -15,7 +15,7 @@ import { LocalizarModalComponent } from '../../modals/localizar-modal/localizar-
 import { DisponibilidadModalComponent } from '../../modals/disponibilidad-modal/disponibilidad-modal.component';
 import { GestionBovedasComponent } from '../../../features/espacios/components/gestion-bloques/gestion-bovedas.component';
 import { filter } from 'rxjs/operators';
-import { CementerioService } from '../../../features/publico/services/cementerio.service';
+import { CementerioService } from '../../../features/auth/services/cementerio.service';
 import { Cementerio } from '../../../features/publico/models/cementerio.model';
 import { PushService } from '../../../core/services/push.service';
 import { TramiteService } from '../../../features/tramites/services/tramite.service';

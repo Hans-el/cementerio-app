@@ -5,7 +5,7 @@ import { tap, catchError, switchMap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { ApiService } from '../../../core/services/api.service';
 import { environment } from '../../../../environments/environment';
-import { CementerioService } from '../../../features/publico/services/cementerio.service';
+import { CementerioService } from '../services/cementerio.service';
 
 @Injectable({
   providedIn: 'root',

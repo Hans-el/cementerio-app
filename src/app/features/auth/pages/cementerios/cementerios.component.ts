@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterLink } from '@angular/router';
-import { CementerioService } from '../../../../features/publico/services/cementerio.service';
+import { Router } from '@angular/router';
+import { CementerioService } from '../../services/cementerio.service';
 import { Cementerio } from '../../../publico/models/cementerio.model';
 
 @Component({
   selector: 'app-cementerios',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule],
   templateUrl: './cementerios.component.html',
   styleUrl: './cementerios.component.css',
 })
@@ -22,7 +22,6 @@ export class CementeriosComponent implements OnInit {
     private router: Router,
   ) {}
 
-  // Agrega este método dentro de export class CementeriosComponent
   getAccentoCard(index: number): string {
     const colores = [
       'rgba(59, 130, 246, 0.35)', // Azul

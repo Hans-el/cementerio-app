@@ -70,7 +70,7 @@ export const routes: Routes = [
           ),
       },
       {
-        path: 'inicio',
+        path: 'bloques',
         loadComponent: () =>
           import('./features/espacios/pages/inicio/inicio.component').then(
             (m) => m.InicioComponent,
@@ -78,7 +78,7 @@ export const routes: Routes = [
         canActivate: [authGuard, adminGuard],
       },
       {
-        path: 'difuntos',
+        path: 'fallecidos',
         loadComponent: () =>
           import('./features/fallecidos/pages/inicio-difuntos/inicio-difuntos.component').then(
             (m) => m.InicioDifuntosComponent,

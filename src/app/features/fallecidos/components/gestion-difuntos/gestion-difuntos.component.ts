@@ -5,6 +5,7 @@ import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Fallecido } from '../../models/fallecido.models';
 import { AnadirDifuntoComponent } from '../anadir-difunto/anadir-difunto.component';
 import Swal from 'sweetalert2';
+import { SeleccionarAccionExhumacionComponent } from '../seleccionar-accion-exhumacion/seleccionar-accion-exhumacion.component';
 import { EditarEspacioFallecidoComponent } from '../editar-espacio-fallecido/editar-espacio-fallecido.component';
 
 @Component({
@@ -39,9 +40,9 @@ export class GestionDifuntosComponent {
   }
 
   abrirModalEditar(): void {
-    const modalRef = this.modalService.open(EditarEspacioFallecidoComponent, {
+    this.modalService.open(SeleccionarAccionExhumacionComponent, {
       centered: true,
-      size: 'lg',
+      size: 'md',
     });
   }
 }

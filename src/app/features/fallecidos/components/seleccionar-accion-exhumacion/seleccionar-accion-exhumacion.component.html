@@ -1,0 +1,56 @@
+<div class="modal-header border-0 pb-0">
+  <h5 class="modal-title fw-semibold">
+    <i class="bi bi-signpost-split me-2"></i>Exhumar fallecido
+  </h5>
+  <button
+    type="button"
+    class="btn-close ms-auto"
+    aria-label="Cerrar"
+    (click)="activeModal.dismiss()"
+  ></button>
+</div>
+
+<div class="modal-body py-4">
+  <p class="text-muted small mb-4">
+    Selecciona qué acción deseas realizar con el fallecido a exhumar.
+  </p>
+
+  <div class="row g-3">
+    <!-- Editar espacio -->
+    <div class="col-md-6">
+      <div class="accion-card" (click)="elegirEditarEspacio()">
+        <div class="accion-icono bg-success bg-opacity-10">
+          <i class="bi bi-arrow-left-right text-success"></i>
+        </div>
+        <h6 class="fw-semibold mb-1">Editar espacio</h6>
+        <p class="text-muted small mb-0">
+          Mueve al fallecido a otro espacio dentro del mismo cementerio.
+        </p>
+      </div>
+    </div>
+
+    <!-- Traslado -->
+    <div class="col-md-6">
+      <div class="accion-card" (click)="elegirTraslado()">
+        <div class="accion-icono bg-warning bg-opacity-10">
+          <i class="bi bi-truck text-warning"></i>
+        </div>
+        <h6 class="fw-semibold mb-1">Traslado</h6>
+        <p class="text-muted small mb-0">
+          Registra que el fallecido fue trasladado a otro lugar fuera del
+          sistema.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-footer border-0 justify-content-end">
+  <button
+    type="button"
+    class="btn btn-outline-secondary btn-sm"
+    (click)="activeModal.dismiss()"
+  >
+    Cancelar
+  </button>
+</div>

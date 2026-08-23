@@ -2,14 +2,15 @@
   <!-- Header compacto -->
   <div class="d-flex align-items-center justify-content-between mb-4">
     <div class="d-flex align-items-center">
-
       <div>
         <h5 class="fw-semibold text-dark mb-0">Gestión de Fallecidos</h5>
         <small class="text-muted">Inhumación, Editar y Exhumación</small>
       </div>
     </div>
-    <span class="badge bg-light text-dark px-3 py-2 rounded-pill d-none d-sm-flex align-items-center">
-      <i class="bi bi-calendar3 me-2"></i>{{ today | date: "dd/MM/yyyy"}}
+    <span
+      class="badge bg-light text-dark px-3 py-2 rounded-pill d-none d-sm-flex align-items-center"
+    >
+      <i class="bi bi-calendar3 me-2"></i>{{ today | date: "dd/MM/yyyy" }}
     </span>
   </div>
 
@@ -37,10 +38,12 @@
 
     <!-- Botón de acción -->
     <div class="col-6 col-md-3">
-      <button class="btn btn-accion-fallecidos w-100 h-100 d-flex flex-column align-items-center justify-content-center"
-        (click)="abrirModalAnadirDifunto()">
+      <button
+        class="btn btn-accion-fallecidos w-100 h-100 d-flex flex-column align-items-center justify-content-center"
+        (click)="abrirModalAnadirDifunto()"
+      >
         <i class="bi bi-plus-circle mb-1"></i>
-        <span class="small fw-semibold">Nuevo Fallecido</span>
+        <span class="small fw-semibold">Fallecidos</span>
       </button>
     </div>
   </div>
@@ -64,10 +67,19 @@
             <span class="input-group-text bg-light border-end-0">
               <i class="bi bi-search text-muted"></i>
             </span>
-            <input type="text" class="form-control bg-light border-start-1 ps-2" placeholder="Nombre o código de bloque"
-              [(ngModel)]="searchQuery" (ngModelChange)="onSearch()" />
-            <span class="input-group-text bg-light border-0" *ngIf="searchQuery" style="cursor:pointer"
-              (click)="searchQuery = ''; onSearch()">
+            <input
+              type="text"
+              class="form-control bg-light border-start-1 ps-2"
+              placeholder="Nombre o código de bloque"
+              [(ngModel)]="searchQuery"
+              (ngModelChange)="onSearch()"
+            />
+            <span
+              class="input-group-text bg-light border-0"
+              *ngIf="searchQuery"
+              style="cursor: pointer"
+              (click)="searchQuery = ''; onSearch()"
+            >
               <i class="bi bi-x-circle-fill text-muted"></i>
             </span>
           </div>
@@ -81,8 +93,12 @@
           <label class="form-label text-muted small fw-semibold mb-1">
             <i class="bi bi-calendar me-1"></i>Fallecimiento desde
           </label>
-          <input type="date" class="form-control form-control-sm bg-light" [(ngModel)]="fechaInicio"
-            (change)="onSearch()" />
+          <input
+            type="date"
+            class="form-control form-control-sm bg-light"
+            [(ngModel)]="fechaInicio"
+            (change)="onSearch()"
+          />
         </div>
 
         <!-- Fecha fin -->
@@ -90,14 +106,21 @@
           <label class="form-label text-muted small fw-semibold mb-1">
             <i class="bi bi-calendar me-1"></i>Fallecimiento hasta
           </label>
-          <input type="date" class="form-control form-control-sm bg-light" [(ngModel)]="fechaFin"
-            (change)="onSearch()" />
+          <input
+            type="date"
+            class="form-control form-control-sm bg-light"
+            [(ngModel)]="fechaFin"
+            (change)="onSearch()"
+          />
         </div>
 
         <!-- Limpiar filtros -->
         <div class="col-md-4 d-flex align-items-end">
-          <button class="btn btn-limpiar btn-sm w-100" (click)="limpiarFiltros()"
-            *ngIf="searchQuery || fechaInicio || fechaFin">
+          <button
+            class="btn btn-limpiar btn-sm w-100"
+            (click)="limpiarFiltros()"
+            *ngIf="searchQuery || fechaInicio || fechaFin"
+          >
             <i class="bi bi-x-circle me-1"></i>Limpiar filtros
           </button>
         </div>
@@ -107,16 +130,23 @@
 
   <!-- Tabla de difuntos -->
   <div class="card card-tabla border-0 shadow-sm">
-    <div class="card-header bg-white border-0 py-3 d-flex flex-wrap justify-content-between align-items-center gap-2">
+    <div
+      class="card-header bg-white border-0 py-3 d-flex flex-wrap justify-content-between align-items-center gap-2"
+    >
       <div class="d-flex align-items-center">
         <i class="bi bi-table me-2 text-muted"></i>
         <h6 class="fw-semibold text-dark mb-0">Listado de Fallecidos</h6>
       </div>
       <div class="d-flex align-items-center gap-2">
-        <span class="badge bg-light text-dark px-3 py-2 rounded-pill d-none d-sm-block">
-          <i class="bi bi-list-ol me-2"></i>{{ difuntos.length }} de {{ totalFallecidos }} registros
+        <span
+          class="badge bg-light text-dark px-3 py-2 rounded-pill d-none d-sm-block"
+        >
+          <i class="bi bi-list-ol me-2"></i>{{ difuntos.length }} de
+          {{ totalFallecidos }} registros
         </span>
-        <span class="badge bg-success text-white px-2 py-1 rounded-pill d-sm-none">
+        <span
+          class="badge bg-success text-white px-2 py-1 rounded-pill d-sm-none"
+        >
           {{ difuntos.length }}/{{ totalFallecidos }}
         </span>
       </div>
@@ -126,17 +156,30 @@
       <!-- Vista para móviles (cards) -->
       <div class="d-block d-md-none">
         <div class="p-3">
-          <div *ngFor="let fallecido of difuntos" class="card card-mobile mb-3 border-0 shadow-sm">
+          <div
+            *ngFor="let fallecido of difuntos"
+            class="card card-mobile mb-3 border-0 shadow-sm"
+          >
             <div class="card-body">
-              <div class="d-flex justify-content-between align-items-start mb-2">
-                <span class="badge badge-codigo px-3 py-2 rounded-3 fw-semibold">
+              <div
+                class="d-flex justify-content-between align-items-start mb-2"
+              >
+                <span
+                  class="badge badge-codigo px-3 py-2 rounded-3 fw-semibold"
+                >
                   {{ fallecido.codigo_bloque }}
                 </span>
                 <div class="d-flex gap-2">
-                  <button class="btn btn-editar btn-sm" (click)="abrirModalEditarDifunto(fallecido)">
+                  <button
+                    class="btn btn-editar btn-sm"
+                    (click)="abrirModalEditarDifunto(fallecido)"
+                  >
                     <i class="bi bi-pencil"></i>
                   </button>
-                  <button class="btn btn-eliminar btn-sm" (click)="eliminarFallecido(fallecido.id_fallecido)">
+                  <button
+                    class="btn btn-eliminar btn-sm"
+                    (click)="eliminarFallecido(fallecido.id_fallecido)"
+                  >
                     <i class="bi bi-trash"></i>
                   </button>
                 </div>
@@ -148,25 +191,42 @@
                 <div class="col-6">
                   <small class="text-muted d-block">F. Fallecimiento</small>
                   <span class="fw-medium small">
-                    {{ fallecido.fecha_fallecimiento ? (fallecido.fecha_fallecimiento | date: "dd/MM/yyyy":"UTC") : "--"
+                    {{
+                      fallecido.fecha_fallecimiento
+                        ? (fallecido.fecha_fallecimiento
+                          | date: "dd/MM/yyyy" : "UTC")
+                        : "--"
                     }}
                   </span>
                 </div>
                 <div class="col-6">
                   <small class="text-muted d-block">F. Inhumación</small>
                   <span class="fw-medium small">
-                    {{ fallecido.fecha_inhumacion ? (fallecido.fecha_inhumacion | date: "dd MMM yyyy":"UTC") : "--" }}
+                    {{
+                      fallecido.fecha_inhumacion
+                        ? (fallecido.fecha_inhumacion
+                          | date: "dd MMM yyyy" : "UTC")
+                        : "--"
+                    }}
                   </span>
                 </div>
                 <div class="col-6">
                   <small class="text-muted d-block">F. Exhumación</small>
                   <span class="fw-medium small">
-                    {{ fallecido.fecha_exhumacion ? (fallecido.fecha_exhumacion | date: "dd/MM/yyyy":"UTC") : "--" }}
+                    {{
+                      fallecido.fecha_exhumacion
+                        ? (fallecido.fecha_exhumacion
+                          | date: "dd/MM/yyyy" : "UTC")
+                        : "--"
+                    }}
                   </span>
                 </div>
                 <div class="col-6">
                   <small class="text-muted d-block">Observaciones</small>
-                  <span class="fw-medium small text-truncate d-block" [title]="fallecido.observaciones">
+                  <span
+                    class="fw-medium small text-truncate d-block"
+                    [title]="fallecido.observaciones"
+                  >
                     {{ fallecido.observaciones || "--" }}
                   </span>
                 </div>
@@ -177,7 +237,11 @@
           <div *ngIf="!difuntos.length && !loading" class="text-center py-5">
             <i class="bi bi-inbox fs-1 text-muted"></i>
             <p class="text-muted mb-0 mt-3">No se encontraron resultados</p>
-            <button *ngIf="searchQuery" class="btn btn-link text-success mt-2" (click)="searchQuery = ''; onSearch()">
+            <button
+              *ngIf="searchQuery"
+              class="btn btn-link text-success mt-2"
+              (click)="searchQuery = ''; onSearch()"
+            >
               <i class="bi bi-x-circle me-1"></i>Limpiar búsqueda
             </button>
           </div>
@@ -201,7 +265,9 @@
               <th class="py-3 text-muted small fw-bold">F. Inhumación</th>
               <th class="py-3 text-muted small fw-bold">F. Exhumación</th>
               <th class="py-3 text-muted small fw-bold">Observaciones</th>
-              <th class="px-4 py-3 text-muted small fw-semibold text-end">Acciones</th>
+              <th class="px-4 py-3 text-muted small fw-semibold text-end">
+                Acciones
+              </th>
             </tr>
           </thead>
 
@@ -215,32 +281,57 @@
               <td class="fw-medium">{{ fallecido.nombre_completo }}</td>
               <td>
                 <span [class.text-muted]="!fallecido.fecha_fallecimiento">
-                  {{ fallecido.fecha_fallecimiento ? (fallecido.fecha_fallecimiento | date: "dd MMM yyyy": "UTC") : "--"
+                  {{
+                    fallecido.fecha_fallecimiento
+                      ? (fallecido.fecha_fallecimiento
+                        | date: "dd MMM yyyy" : "UTC")
+                      : "--"
                   }}
                 </span>
               </td>
               <td>
                 <span [class.text-muted]="!fallecido.fecha_inhumacion">
-                  {{ fallecido.fecha_inhumacion ? (fallecido.fecha_inhumacion | date: "dd MMM yyyy": "UTC") : "--" }}
+                  {{
+                    fallecido.fecha_inhumacion
+                      ? (fallecido.fecha_inhumacion
+                        | date: "dd MMM yyyy" : "UTC")
+                      : "--"
+                  }}
                 </span>
               </td>
               <td>
                 <span [class.text-muted]="!fallecido.fecha_exhumacion">
-                  {{ fallecido.fecha_exhumacion ? (fallecido.fecha_exhumacion | date: "dd MMM yyyy": "UTC") : "--" }}
+                  {{
+                    fallecido.fecha_exhumacion
+                      ? (fallecido.fecha_exhumacion
+                        | date: "dd MMM yyyy" : "UTC")
+                      : "--"
+                  }}
                 </span>
               </td>
               <td>
-                <span class="text-truncate d-inline-block" style="max-width: 150px" [title]="fallecido.observaciones">
+                <span
+                  class="text-truncate d-inline-block"
+                  style="max-width: 150px"
+                  [title]="fallecido.observaciones"
+                >
                   {{ fallecido.observaciones || "--" }}
                 </span>
               </td>
               <td class="px-4">
                 <div class="d-flex gap-2 justify-content-end">
-                  <button class="btn btn-editar btn-sm" (click)="abrirModalEditarDifunto(fallecido)" title="Editar">
+                  <button
+                    class="btn btn-editar btn-sm"
+                    (click)="abrirModalEditarDifunto(fallecido)"
+                    title="Editar"
+                  >
                     <i class="bi bi-pencil"></i>
                   </button>
-                  <button class="btn btn-eliminar btn-sm" (click)="eliminarFallecido(fallecido.id_fallecido)"
-                    title="Eliminar">
+                  <button
+                    class="btn btn-eliminar btn-sm"
+                    (click)="eliminarFallecido(fallecido.id_fallecido)"
+                    title="Eliminar"
+                  >
                     <i class="bi bi-trash"></i>
                   </button>
                 </div>
@@ -251,9 +342,14 @@
               <td colspan="7" class="text-center py-5">
                 <div class="py-4">
                   <i class="bi bi-inbox fs-1 text-muted"></i>
-                  <p class="text-muted mb-0 mt-3">No se encontraron resultados</p>
-                  <button *ngIf="searchQuery" class="btn btn-link text-success mt-2"
-                    (click)="searchQuery = ''; onSearch()">
+                  <p class="text-muted mb-0 mt-3">
+                    No se encontraron resultados
+                  </p>
+                  <button
+                    *ngIf="searchQuery"
+                    class="btn btn-link text-success mt-2"
+                    (click)="searchQuery = ''; onSearch()"
+                  >
                     <i class="bi bi-x-circle me-1"></i>Limpiar búsqueda
                   </button>
                 </div>
@@ -274,18 +370,27 @@
   </div>
 
   <!-- Paginación -->
-  <div class="d-flex flex-column flex-sm-row justify-content-between align-items-center mt-4 gap-3">
+  <div
+    class="d-flex flex-column flex-sm-row justify-content-between align-items-center mt-4 gap-3"
+  >
     <div class="text-muted small order-2 order-sm-1">
       Mostrando <span class="fw-semibold">{{ difuntos.length }}</span> de
       <span class="fw-semibold">{{ totalFallecidos }}</span> registros
-      <span *ngIf="searchQuery" class="text-muted"> · Filtrado por: "{{ searchQuery }}"</span>
+      <span *ngIf="searchQuery" class="text-muted">
+        · Filtrado por: "{{ searchQuery }}"</span
+      >
     </div>
 
     <nav aria-label="Navegación de páginas" class="order-1 order-sm-2">
-      <ul class="pagination pagination-sm flex-wrap justify-content-center mb-0">
+      <ul
+        class="pagination pagination-sm flex-wrap justify-content-center mb-0"
+      >
         <li class="page-item" [class.disabled]="currentPage === 1">
-          <button class="page-link border-0 bg-light text-dark" (click)="onPageChange(currentPage - 1)"
-            [disabled]="currentPage === 1">
+          <button
+            class="page-link border-0 bg-light text-dark"
+            (click)="onPageChange(currentPage - 1)"
+            [disabled]="currentPage === 1"
+          >
             <i class="bi bi-chevron-left"></i>
             <span class="ms-1 d-none d-sm-inline">Anterior</span>
           </button>
@@ -298,8 +403,11 @@
         </li>
 
         <li class="page-item" [class.disabled]="currentPage === totalPages">
-          <button class="page-link border-0 bg-light text-dark" (click)="onPageChange(currentPage + 1)"
-            [disabled]="currentPage === totalPages">
+          <button
+            class="page-link border-0 bg-light text-dark"
+            (click)="onPageChange(currentPage + 1)"
+            [disabled]="currentPage === totalPages"
+          >
             <span class="me-1 d-none d-sm-inline">Siguiente</span>
             <i class="bi bi-chevron-right"></i>
           </button>
@@ -308,10 +416,17 @@
     </nav>
   </div>
 
-  <div *ngIf="!difuntos.length && !loading && totalFallecidos > 0" class="text-center text-muted mt-3 small">
+  <div
+    *ngIf="!difuntos.length && !loading && totalFallecidos > 0"
+    class="text-center text-muted mt-3 small"
+  >
     <i class="bi bi-info-circle me-1"></i>
     No hay resultados en esta página.
-    <a href="javascript:void(0)" (click)="currentPage = 1; cargarDifuntos()" class="text-success text-decoration-none">
+    <a
+      href="javascript:void(0)"
+      (click)="currentPage = 1; cargarDifuntos()"
+      class="text-success text-decoration-none"
+    >
       Ir a la primera página
     </a>
   </div>

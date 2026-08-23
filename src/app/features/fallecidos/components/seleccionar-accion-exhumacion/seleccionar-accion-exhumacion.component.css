@@ -1,0 +1,25 @@
+.accion-card {
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  padding: 1.25rem;
+  cursor: pointer;
+  transition: border-color .2s, transform .15s, box-shadow .2s;
+  height: 100%;
+}
+
+.accion-card:hover {
+  border-color: #2d5a27;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+}
+
+.accion-icono {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: .75rem;
+  font-size: 20px;
+}

@@ -115,11 +115,13 @@ export class ReportesComponent {
       case 'CREAR':
         return 'bg-success bg-opacity-10 text-success';
       case 'EDITAR':
-        return 'bg-warning bg-opacity-35 text-dark';
+        return 'bg-warning bg-opacity-90 text-warning ';
       case 'ELIMINAR':
         return 'bg-danger bg-opacity-10 text-danger';
       case 'CAMBIAR_ESTADO':
         return 'bg-info bg-opacity-10 text-info';
+      case 'TRASLADO':
+        return 'bg-secondary bg-opacity-10 text-secondary';
       default:
         return 'bg-secondary bg-opacity-10 text-secondary';
     }

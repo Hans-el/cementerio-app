@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
-import { Cementerio } from '../models/cementerio.model';
+import { Cementerio } from '../../../features/publico/models/cementerio.model';
 
 @Injectable({
   providedIn: 'root',

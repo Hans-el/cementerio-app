@@ -1,11 +1,16 @@
 <!-- Botón hamburguesa para móviles -->
-<button class="btn btn-toggle-sidebar d-md-none position-fixed top-0 start-0 m-3 z-index-1050"
-  (click)="toggleSidebar()">
+<button
+  class="btn btn-toggle-sidebar d-md-none position-fixed top-0 start-0 m-3 z-index-1050"
+  (click)="toggleSidebar()"
+>
   <i class="bi bi-list fs-4"></i>
 </button>
 
 <!-- Sidebar -->
-<div class="sidebar bg-custom-dark text-white" [class.sidebar-collapsed]="isCollapsed && isMobile" style="
+<div
+  class="sidebar bg-custom-dark text-white"
+  [class.sidebar-collapsed]="isCollapsed && isMobile"
+  style="
     width: 280px;
     height: 100vh;
     position: fixed;
@@ -13,15 +18,20 @@
     top: 0;
     z-index: 1000;
     transition: transform 0.3s ease;
-  ">
-  <div class="sidebar-header p-3 ">
+  "
+>
+  <div class="sidebar-header p-3">
     <div class="d-flex align-items-center">
       <div class="logo me-3">
-        <img [src]="cementerioActivo?.logo_url || 'assets/faviconblanco.png'"
-          [alt]="cementerioActivo?.nombre || 'Cementerio'" class="d-inline-block align-top" width="70" />
+        <img
+          [src]="cementerioActivo?.logo_url || 'assets/faviconblanco.png'"
+          [alt]="cementerioActivo?.nombre || 'Cementerio'"
+          class="d-inline-block align-top"
+          width="70"
+        />
       </div>
       <div class="logo-text">
-        <h4 class="mb-0">{{ cementerioActivo?.nombre || 'Cementerio' }}</h4>
+        <h4 class="mb-0">{{ cementerioActivo?.nombre || "Cementerio" }}</h4>
         <small class="text-white">Servicios y Gestión</small>
       </div>
     </div>
@@ -34,34 +44,52 @@
       <p class="nav-title px-3 text-uppercase text-white small">Navegación</p>
       <ul class="nav-list list-unstyled mb-0">
         <li class="nav-item">
-          <a routerLink="/mapa" routerLinkActive="active" class="nav-link d-flex align-items-center px-3 py-2"
-            (click)="cerrarEnMovil()">
+          <a
+            routerLink="/mapa"
+            routerLinkActive="active"
+            class="nav-link d-flex align-items-center px-3 py-2"
+            (click)="cerrarEnMovil()"
+          >
             <i class="bi bi-map-fill nav-icon"></i>
             <span class="nav-text ms-3 fw-semibold">Mapa</span>
           </a>
         </li>
         <li class="nav-item">
-          <a (click)="openLocalizarModal()" class="nav-link d-flex align-items-center px-3 py-2">
+          <a
+            (click)="openLocalizarModal()"
+            class="nav-link d-flex align-items-center px-3 py-2"
+          >
             <i class="bi bi-pin-map-fill nav-icon"></i>
             <span class="nav-text ms-3 fw-semibold">Localizar</span>
           </a>
         </li>
         <li class="nav-item">
-          <a (click)="openDisponibilidadModal()" class="nav-link d-flex align-items-center px-3 py-2">
+          <a
+            (click)="openDisponibilidadModal()"
+            class="nav-link d-flex align-items-center px-3 py-2"
+          >
             <i class="bi bi-cart-dash-fill nav-icon"></i>
             <span class="nav-text ms-3 fw-semibold">Adquisición</span>
           </a>
         </li>
         <li class="nav-item">
-          <a routerLink="/tramites" routerLinkActive="active" class="nav-link d-flex align-items-center px-3 py-2"
-            (click)="cerrarEnMovil()">
+          <a
+            routerLink="/tramites"
+            routerLinkActive="active"
+            class="nav-link d-flex align-items-center px-3 py-2"
+            (click)="cerrarEnMovil()"
+          >
             <i class="bi bi-file-earmark-text nav-icon"></i>
             <span class="nav-text ms-3 fw-semibold">Trámites</span>
           </a>
         </li>
         <li class="nav-item">
-          <a routerLink="/contacto" routerLinkActive="active" class="nav-link d-flex align-items-center px-3 py-2"
-            (click)="cerrarEnMovil()">
+          <a
+            routerLink="/contacto"
+            routerLinkActive="active"
+            class="nav-link d-flex align-items-center px-3 py-2"
+            (click)="cerrarEnMovil()"
+          >
             <i class="bi bi-telephone-fill nav-icon"></i>
             <span class="nav-text ms-3 fw-semibold">Contacto</span>
           </a>
@@ -73,11 +101,17 @@
 
     <!-- Menú de superadmin -->
     <div class="sidebar-nav px-2" *ngIf="userRole === 'superadmin'">
-      <p class="nav-title px-3 text-uppercase text-white small">Administración</p>
+      <p class="nav-title px-3 text-uppercase text-white small">
+        Administración
+      </p>
       <ul class="nav-list list-unstyled mb-0">
         <li class="nav-item">
-          <a routerLink="/superadmin" routerLinkActive="active" class="nav-link d-flex align-items-center px-3 py-2"
-            (click)="cerrarEnMovil()">
+          <a
+            routerLink="/superadmin"
+            routerLinkActive="active"
+            class="nav-link d-flex align-items-center px-3 py-2"
+            (click)="cerrarEnMovil()"
+          >
             <i class="bi bi-shield-fill-check nav-icon"></i>
             <span class="nav-text ms-3 fw-semibold">CEMENTERIOS</span>
           </a>
@@ -86,47 +120,71 @@
     </div>
     <br />
     <!-- Menú de administrador -->
-    <div class="sidebar-nav px-2" *ngIf="userRole === 'admin' || userRole === 'superadmin'">
-      <p class="nav-title px-3 text-uppercase text-white small">
-        Gestión
-      </p>
+    <div
+      class="sidebar-nav px-2"
+      *ngIf="userRole === 'admin' || userRole === 'superadmin'"
+    >
+      <p class="nav-title px-3 text-uppercase text-white small">Gestión</p>
       <ul class="nav-list list-unstyled mb-0">
         <li class="nav-item">
-          <a routerLink="/dashboard" routerLinkActive="active" class="nav-link d-flex align-items-center px-3 py-2"
-            (click)="cerrarEnMovil()">
+          <a
+            routerLink="/dashboard"
+            routerLinkActive="active"
+            class="nav-link d-flex align-items-center px-3 py-2"
+            (click)="cerrarEnMovil()"
+          >
             <i class="bi bi-speedometer2 nav-icon"></i>
             <span class="nav-text ms-3 fw-semibold">DASHBOARD</span>
           </a>
         </li>
         <li class="nav-item">
-          <a routerLink="/inicio" routerLinkActive="active" class="nav-link d-flex align-items-center px-3 py-2"
-            (click)="cerrarEnMovil()">
+          <a
+            routerLink="/bloques"
+            routerLinkActive="active"
+            class="nav-link d-flex align-items-center px-3 py-2"
+            (click)="cerrarEnMovil()"
+          >
             <i class="bi bi-building-add nav-icon"></i>
             <span class="nav-text ms-3 fw-semibold">BLOQUES</span>
           </a>
         </li>
         <li class="nav-item">
-          <a routerLink="/difuntos" routerLinkActive="active" class="nav-link d-flex align-items-center px-3 py-2"
-            (click)="cerrarEnMovil()">
+          <a
+            routerLink="/fallecidos"
+            routerLinkActive="active"
+            class="nav-link d-flex align-items-center px-3 py-2"
+            (click)="cerrarEnMovil()"
+          >
             <i class="bi bi-person-heart nav-icon"></i>
             <span class="nav-text ms-3 fw-semibold">FALLECIDOS</span>
           </a>
         </li>
         <li class="nav-item">
-          <a routerLink="/admin/solicitudes" routerLinkActive="active"
-            class="nav-link d-flex align-items-center px-3 py-2" (click)="cerrarEnMovil()">
+          <a
+            routerLink="/admin/solicitudes"
+            routerLinkActive="active"
+            class="nav-link d-flex align-items-center px-3 py-2"
+            (click)="cerrarEnMovil()"
+          >
             <i class="bi bi-folder2-open nav-icon"></i>
             <span class="nav-text ms-3 fw-semibold">SOLICITUDES</span>
             <!-- para las solicitudes pendientes -->
-            <span *ngIf="solicitudesPendientes > 0" class="ms-auto badge rounded-pill bg-danger"
-              style="font-size: 10px; min-width: 18px">
+            <span
+              *ngIf="solicitudesPendientes > 0"
+              class="ms-auto badge rounded-pill bg-danger"
+              style="font-size: 10px; min-width: 18px"
+            >
               {{ solicitudesPendientes > 99 ? "99+" : solicitudesPendientes }}
             </span>
           </a>
         </li>
         <li class="nav-item">
-          <a routerLink="/reportes" routerLinkActive="active" class="nav-link d-flex align-items-center px-3 py-2"
-            (click)="cerrarEnMovil()">
+          <a
+            routerLink="/reportes"
+            routerLinkActive="active"
+            class="nav-link d-flex align-items-center px-3 py-2"
+            (click)="cerrarEnMovil()"
+          >
             <i class="bi bi-file-earmark-spreadsheet-fill nav-icon"></i>
             <span class="nav-text ms-3 fw-semibold">REPORTES</span>
           </a>
@@ -138,7 +196,11 @@
 
   <!-- Footer del sidebar -->
   <div class="sidebar-footer" ngbDropdown>
-    <div class="sidebar d-flex align-items-center p-3 mx-2" ngbDropdownToggle id="userDropdown">
+    <div
+      class="sidebar d-flex align-items-center p-3 mx-2"
+      ngbDropdownToggle
+      id="userDropdown"
+    >
       <div class="user-avatar me-2">
         <i class="bi bi-person"></i>
       </div>
@@ -151,9 +213,16 @@
     <!-- Inicio del menú desplegable en la parte derecha-->
 
     <div class="sidebar" aria-labelledby="userDropdown" ngbDropdownMenu>
-      <a class="dropdown-item bi-pencil-fill m-2 fw-semibold" href="/perfil"> Editar Perfil</a>
-      <div class="dropdown-divider"></div> <a class="dropdown-item bi-arrow-bar-right m-2 fw-semibold"
-        (click)="logout()"> Cerrar Sesión</a>
+      <a class="dropdown-item bi-pencil-fill m-2 fw-semibold" href="/perfil">
+        Editar Perfil</a
+      >
+      <div class="dropdown-divider"></div>
+      <a
+        class="dropdown-item bi-arrow-bar-right m-2 fw-semibold"
+        (click)="logout()"
+      >
+        Cerrar Sesión</a
+      >
     </div>
     <!-- Fin del menu desplegable -->
   </div>

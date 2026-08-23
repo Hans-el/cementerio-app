@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { CementerioService } from '../../services/cementerio.service';
+import { CementerioService } from '../../../auth/services/cementerio.service';
 import { FallecidoService } from '../../../fallecidos/services/fallecido.service';
 import { Cementerio } from '../../models/cementerio.model';
 

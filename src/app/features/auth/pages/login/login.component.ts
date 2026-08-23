@@ -9,7 +9,7 @@ import { Router, RouterModule } from '@angular/router';
 import Swal from 'sweetalert2';
 import { NgbAlertModule } from '@ng-bootstrap/ng-bootstrap';
 import { CommonModule } from '@angular/common';
-import { CementerioService } from '../../../../features/publico/services/cementerio.service';
+import { CementerioService } from '../../services/cementerio.service';
 import { Cementerio } from '../../../publico/models/cementerio.model';
 import { AuthService } from '../../services/auth.service';
 

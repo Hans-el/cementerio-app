@@ -4,7 +4,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AuthService } from '../../auth/services/auth.service';
 import { environment } from '../../../../environments/environment';
-import { CementerioService } from '../../../features/publico/services/cementerio.service';
+import { CementerioService } from '../../../features/auth/services/cementerio.service';
 import { Router } from '@angular/router';
 
 @Injectable({
@@ -68,7 +68,6 @@ export class FallecidoService {
     });
   }
 
-  //este es usado en el modal de localizar exclusivamente, para buscar unicamente por nombre.
   buscarBovedaPorNombre(nombre: string): Observable<any[]> {
     const slug = this.cementerioService.getSlugActivo();
 
@@ -76,7 +75,7 @@ export class FallecidoService {
       params: { nombre, cementerio: slug || '' },
     });
   }
-  //nuevo metodo para autocompletado de nombres en el modal de localizar. ESTA FUNCION ES MUY IMPORTANTE PARA FACILITAR LA BUSQUEDA EXACTA Y NO METER VALORES ERRONEOS.
+
   obtenerSugerenciasNombres(term: string): Observable<string[]> {
     const cementerio = this.cementerioService.getCementerioActivoSnapshot();
     let params: any = { term };
@@ -87,22 +86,25 @@ export class FallecidoService {
       params,
     });
   }
-  //crear un nuevo fallecido, usado en el modal de añadir difunto
+
   crearFallecido(data: any): Observable<any> {
     return this.http.post(this.apiUrl, data);
   }
-  // Método para actualizar un fallecido por su ID, como nombres y fechas
+
   actualizarFallecido(id: number, data: any): Observable<any> {
     return this.http.put(`${this.apiUrl}/${id}`, data);
   }
-  // Método para editar el espacio de un fallecido, usado para cambios de ubicaciones
+
   editarEspacioFallecido(data: any): Observable<any> {
     return this.http.put<any>(
       `${this.apiUrl}/cambiar-espacio/:id_fallecido`,
       data,
     );
   }
-  // Método para eliminar un fallecido por su ID
+  registrarTraslado(id_fallecido: number, destino: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/traslado`, { id_fallecido, destino });
+  }
+
   eliminarFallecido(id_fallecido: number): Observable<any> {
     return this.http.delete<any>(`${this.apiUrl}/${id_fallecido}`);
   }

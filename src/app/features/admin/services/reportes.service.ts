@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
-import { CementerioService } from '../../../features/publico/services/cementerio.service';
+import { CementerioService } from '../../../features/auth/services/cementerio.service';
 
 @Injectable({
   providedIn: 'root',
