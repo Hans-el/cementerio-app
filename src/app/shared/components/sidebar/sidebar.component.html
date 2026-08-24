@@ -22,17 +22,28 @@
 >
   <div class="sidebar-header p-3">
     <div class="d-flex align-items-center">
-      <div class="logo me-3">
+      <div class="logo me-2">
         <img
-          [src]="cementerioActivo?.logo_url || 'assets/faviconblanco.png'"
-          [alt]="cementerioActivo?.nombre || 'Cementerio'"
-          class="d-inline-block align-top"
-          width="70"
+          src="assets/faviconblanco.png"
+          alt="Logo"
+          class="img-fluid"
+          style="max-height: 50px"
         />
       </div>
-      <div class="logo-text">
-        <h4 class="mb-0">{{ cementerioActivo?.nombre || "Cementerio" }}</h4>
-        <small class="text-white">Servicios y Gestión</small>
+      <div class="logo-text mt-2 mx-2">
+        <h5 class="mb-2 fw-bold">
+          {{ cementerioActivo?.nombre || "Cementerio" }}
+        </h5>
+        <!-- mostrarmos unas palabras para admins y otras para usuarios -->
+        <p class="text-white small mb-2" *ngIf="userRole === 'admin'">
+          Administración
+        </p>
+        <p class="text-white small mb-2" *ngIf="userRole === 'superadmin'">
+          Gestión Administrativa
+        </p>
+        <p class="text-white small mb-2" *ngIf="userRole === 'usuario'">
+          Consultas y Servicios
+        </p>
       </div>
     </div>
   </div>

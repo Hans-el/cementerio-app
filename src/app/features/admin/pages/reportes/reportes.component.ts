@@ -115,13 +115,13 @@ export class ReportesComponent {
       case 'CREAR':
         return 'bg-success bg-opacity-10 text-success';
       case 'EDITAR':
-        return 'bg-warning bg-opacity-90 text-warning ';
+        return 'bg-warning bg-opacity-10 text-warning';
       case 'ELIMINAR':
         return 'bg-danger bg-opacity-10 text-danger';
       case 'CAMBIAR_ESTADO':
-        return 'bg-info bg-opacity-10 text-info';
+        return 'bg-warning bg-opacity-10 text-warning';
       case 'TRASLADO':
-        return 'bg-secondary bg-opacity-10 text-secondary';
+        return 'bg-danger bg-opacity-10 text-danger';
       default:
         return 'bg-secondary bg-opacity-10 text-secondary';
     }
@@ -130,17 +130,17 @@ export class ReportesComponent {
   badgeEntidad(entidad: string): string {
     switch (entidad) {
       case 'FALLECIDO':
-        return 'bg-danger bg-opacity-10 text-danger';
+        return 'bg-secondary bg-opacity-10 text-secondary';
       case 'BLOQUE':
-        return 'bg-success bg-opacity-10 text-success';
+        return 'bg-secondary bg-opacity-10 text-secondary';
       case 'ESPACIO':
-        return 'bg-warning bg-opacity-10 text-warning';
+        return 'bg-secondary bg-opacity-10 text-secondary';
       case 'SOLICITUD_INHUMACION':
-        return 'bg-info bg-opacity-10 text-info';
+        return 'bg-secondary bg-opacity-10 text-secondary';
       case 'SOLICITUD_EXHUMACION':
         return 'bg-secondary bg-opacity-10 text-secondary';
       default:
-        return 'bg-light text-dark';
+        return 'bg-secondary bg-opacity-10 text-secondary';
     }
   }
 
