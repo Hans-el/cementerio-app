@@ -23,6 +23,7 @@ export class MapaBovedasComponent implements OnInit, AfterViewInit {
   readonly ALTO_IMG = 2760;
 
   manzanaActiva: ManzanaMapa | null = null;
+  caminoActivo = false;
   vistaLista = false; // flag para saber si la vista ya está renderizada
 
   // Guarda si venimos de una localización — para hacer scroll automático
@@ -103,6 +104,79 @@ export class MapaBovedasComponent implements OnInit, AfterViewInit {
     { alt: '02.18', coords: '1300,1492,1300,1529,1395,1527,1391,1494' },
     { alt: '02.19', coords: '2269,1886,2307,1863,1946,1230,1462,1467,1489,1513,1925,1301' },
   ];
+  readonly caminoCoords: [number, number][] = [
+    [912, 78],
+    [881, 106],
+    [866, 150],
+    [858, 196],
+    [854, 233],
+    [812, 256],
+    [816, 319],
+    [822, 369],
+    [831, 419],
+    [845, 474],
+    [860, 533],
+    [873, 583],
+    [885, 635],
+    [904, 677],
+    [917, 719],
+    [938, 755],
+    [940, 805],
+    [938, 853],
+    [940, 899],
+    [950, 937],
+    [963, 972],
+    [986, 995],
+    [992, 1035],
+    [1001, 1079],
+    [1005, 1117],
+    [1011, 1165],
+    [1015, 1207],
+    [1019, 1245],
+    [1019, 1276],
+    [1024, 1305],
+    [1070, 1305],
+    [1143, 1307],
+    [1221, 1307],
+    [1288, 1305],
+    [1368, 1305],
+    [1435, 1307],
+    [1449, 1349],
+    [1451, 1400],
+    [1449, 1460],
+    [1445, 1498],
+    [1447, 1536],
+    [1449, 1563],
+    [1495, 1540],
+    [1550, 1508],
+    [1600, 1490],
+    [1638, 1464],
+    [1676, 1443],
+    [1720, 1422],
+    [1770, 1406],
+    [1810, 1389],
+    [1858, 1355],
+    [1913, 1337],
+    [1942, 1387],
+    [1963, 1420],
+    [1993, 1462],
+    [2022, 1504],
+    [2049, 1552],
+    [2068, 1588],
+    [2097, 1630],
+    [2118, 1676],
+    [2131, 1714],
+    [2152, 1754],
+    [2177, 1795],
+    [2202, 1827],
+    [2217, 1852],
+    [2236, 1883],
+    [2250, 1915],
+  ];
+
+  readonly caminoPoints = this.caminoCoords
+    .map(([x, y]) => `${x},${y}`)
+    .join(' ');
 
   manzanas: ManzanaMapa[] = this.coordsRaw.map(item => {
     const [sectorStr, manzanaStr] = item.alt.split('.');
@@ -155,12 +229,19 @@ export class MapaBovedasComponent implements OnInit, AfterViewInit {
       }
     }, 150);
   }
+  seleccionarCamino(): void {
+    this.manzanaActiva = null;
+    this.caminoActivo = true;
+  }
   seleccionarManzana(manzana: ManzanaMapa): void {
     this.manzanaActiva = manzana;
+    this.caminoActivo = false;
   }
 
   cerrarPopup(): void {
     this.manzanaActiva = null;
+    this.caminoActivo = false;
+
   }
 
   irABloques(): void {
@@ -176,9 +257,6 @@ export class MapaBovedasComponent implements OnInit, AfterViewInit {
   nombreSector(sector: number): string {
     return sector === 1 ? 'Cementerio Viejo' : 'Cementerio Nuevo';
   }
-
-  // Coordenadas crudas tal cual las generó image-map.net: "x1,y1,x2,y2,..."
-
 
   isAdminOrSuperAdmin(): boolean {
     return this.role === 'admin' || this.role === 'superadmin';

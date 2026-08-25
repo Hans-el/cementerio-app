@@ -1,37 +1,79 @@
 <div class="mapa-wrapper" (click)="cerrarPopup()">
-
   <div class="mapa-scroll">
-
     <div class="mapa-contenedor">
-
       <img [src]="urlMapa" alt="Mapa del cementerio" class="mapa-imagen" />
 
-      <!-- SVG overlay — escala automáticamente junto con la imagen -->
-      <svg class="mapa-svg" [attr.viewBox]="'0 0 ' + ANCHO_IMG + ' ' + ALTO_IMG" preserveAspectRatio="xMidYMid meet">
+      <!-- SVG overlay -->
+      <svg
+        class="mapa-svg"
+        [attr.viewBox]="'0 0 ' + ANCHO_IMG + ' ' + ALTO_IMG"
+        preserveAspectRatio="xMidYMid meet"
+      >
+        <!-- mapeo camino -->
+        <polyline
+          [attr.points]="caminoPoints"
+          class="camino-borde"
+          pointer-events="none"
+        />
 
-        <polygon *ngFor="let m of manzanas" [attr.points]="m.points" [attr.data-codigo]="m.codigo"
-          class="manzana-poligono" [class.activa]="manzanaActiva?.codigo === m.codigo"
-          (click)="$event.stopPropagation(); seleccionarManzana(m)">
+        <!-- Superficie del camino -->
+        <polyline
+          [attr.points]="caminoPoints"
+          class="camino"
+          (click)="$event.stopPropagation(); seleccionarCamino()"
+        >
+          <title>Camino del cementerio</title>
+        </polyline>
+        <!-- mapeo manzanas -->
+        <polygon
+          *ngFor="let m of manzanas"
+          [attr.points]="m.points"
+          [attr.data-codigo]="m.codigo"
+          class="manzana-poligono"
+          [class.activa]="manzanaActiva?.codigo === m.codigo"
+          (click)="$event.stopPropagation(); seleccionarManzana(m)"
+        >
           <title>Manzana {{ m.codigo }}</title>
         </polygon>
-
       </svg>
-
     </div>
   </div>
 
-
-
-  <!-- Popup de info -->
-  <div class="popup-manzana" *ngIf="manzanaActiva" (click)="$event.stopPropagation()">
-    <button class="popup-cerrar" (click)="cerrarPopup()">
+  <!-- Popup de manzana -->
+  <div
+    class="popup-manzana"
+    *ngIf="manzanaActiva || caminoActivo"
+    (click)="$event.stopPropagation()"
+  >
+    <!-- Botón cerrar -->
+    <button class="popup-cerrar" (click)="cerrarPopup()" aria-label="Cerrar">
       <i class="bi bi-x"></i>
     </button>
-    <div class="popup-titulo">Manzana {{ manzanaActiva.codigo }}</div>
-    <div class="popup-sub">{{ nombreSector(manzanaActiva.sector) }}</div>
-    <!-- solo ver bloques si tienes rol admin o superadmin (luego implementamos bien) -->
 
-    <div class="popup-bloques" *ngIf="role === 'admin' || role === 'superadmin'">
-      <button class="btn btn-primary" (click)="irABloques()">Ver bloques</button>
-    </div>
+    <ng-container *ngIf="manzanaActiva">
+      <div class="popup-titulo">
+        Manzana {{ manzanaActiva.manzana }} del
+        {{ nombreSector(manzanaActiva.sector) }}
+      </div>
+
+      <div class="popup-sub">
+        {{ nombreSector(manzanaActiva.sector) }}
+      </div>
+
+      <!-- Solo administradores -->
+      <div
+        class="popup-bloques"
+        *ngIf="role === 'admin' || role === 'superadmin'"
+      >
+        <button class="btn btn-primary" (click)="irABloques()">
+          Ver bloques
+        </button>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="caminoActivo">
+      <div class="popup-titulo">Camino Principal del cementerio</div>
+
+      <div class="popup-sub fw-bold">Se conectan las 2 entradas</div>
+    </ng-container>
   </div>
+</div>
