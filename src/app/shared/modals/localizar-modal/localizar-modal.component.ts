@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -43,7 +44,8 @@ export class LocalizarModalComponent implements OnInit {
     private modalService: NgbModal, // Servicio para abrir modales
     private fallecidoService: FallecidoService,
     private bloquesService: BloquesService,
-  ) {}
+    private router: Router,
+  ) { }
 
   ngOnInit(): void {
     this.searchTerms
@@ -164,43 +166,15 @@ export class LocalizarModalComponent implements OnInit {
   }
   //La siguiente funcion es para localizar la busqeuda pero en el mapa. Por ahora solo es un mensaje de consola y una alerta
   //pero queremos mostrarlo en el mapa
-  localizarEnMapa(boveda: any) {
-    // Cerrar el modal actual
+  localizarEnMapa(boveda: any): void {
     this.activeModal.dismiss();
-    const sector = this.formatoDosDigitos(boveda.sector);
-    const manzana = this.formatoDosDigitos(boveda.manzana);
-    const bloque = this.formatoDosDigitos(boveda.bloque);
-    const codigoBoveda = `${sector}.${manzana}.${bloque}`;
 
-    // Mostramos la ubicación con jerarquía visual clara: código completo, sector y manzana.
-    Swal.fire({
-      title: 'Ubicación encontrada',
-      html: `
-        <div style="text-align:left;">
-          <p style="margin:0 0 1rem 0; color:#6c757d;">El fallecido se encuentra en:</p>
-
-          <div style="display:flex; gap:.75rem; ">
-            <div style="flex:1; background:#f8f9fa; border:1px solid #e9ecef; border-radius:14px; padding:1rem; text-align:center;">
-              <div style="font-size:.75rem; font-weight:700; letter-spacing:.08em; color:#6c757d; text-transform:uppercase;">Sector.Manzana</div>
-              <div style="font-size:2rem; font-weight:800; color:#198754; line-height:1.1;">${sector}.${manzana}</div>
-            </div>            
-          </div>
-          <p style="margin-bottom:1rem; font-size:.92rem; color:#6c757d;">Este código hace referencia a tu lugar en el mapa.</p>
-
-
-          <div style="background:#e9f7ef; border:1px solid #cdebd8; border-radius:14px; padding:.9rem 1rem;">
-            <div style="font-size:.75rem; font-weight:700; letter-spacing:.08em; color:#198754; text-transform:uppercase; margin-bottom:.35rem;">Código completo</div>
-            <div style="font-size:1.25rem; font-weight:800; color:#14532d;">${codigoBoveda}</div>
-          </div>
-
-          <p style="margin:0; font-size:.92rem; color:#6c757d;">El codigo completo corresponde a tu ubicacion precisa.</p>
-        </div>
-      `,
-      icon: 'success',
-      width: '34rem',
-      padding: '1.5rem',
-      confirmButtonText: 'Aceptar',
-      confirmButtonColor: '#28a745',
+    // Navegar al mapa con query params — el mapa se encarga de resaltar la manzana
+    this.router.navigate(['/mapa'], {
+      queryParams: {
+        sector: boveda.sector,
+        manzana: boveda.manzana,
+      },
     });
   }
 }

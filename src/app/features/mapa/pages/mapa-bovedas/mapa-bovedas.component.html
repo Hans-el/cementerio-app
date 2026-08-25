@@ -1,31 +1,37 @@
-<!-- Controles del mapa -->
-<div class="mapa-wrapper">
-  <div class="mapa-controles">
-    <button class="btn-zoom bi bi-plus" (click)="zoomIn()"></button>
-    <span class="zoom-nivel">{{ zoomLevel }}%</span>
-    <button class="btn-zoom bi bi-dash" (click)="zoomOut()"></button>
-    <button
-      class="btn-zoom bi bi-arrow-clockwise"
-      (click)="resetZoom()"
-      title="Restablecer"
-    ></button>
-  </div>
+<div class="mapa-wrapper" (click)="cerrarPopup()">
 
-  <!-- En este div tenemos las herramientas de control del mapa 
-   Por ejemplo, botones de zoom y reset. La logica está en el componente -->
-  <div
-    class="mapa-viewport"
-    (mousedown)="onMouseDown($event)"
-    (mousemove)="onMouseMove($event)"
-    (mouseup)="onMouseUp()"
-    (mouseleave)="onMouseUp()"
-    (touchstart)="onTouchStart($event)"
-    (touchmove)="onTouchMove($event)"
-    (touchend)="onTouchEnd()"
-  >
-    <!-- En este div tenemos la imagen del mapa. -->
-    <div class="mapa-canvas" [style.transform]="transform">
-      <img [src]="mapaUrl" alt="Croquis del cementerio" draggable="false" />
+  <div class="mapa-scroll">
+
+    <div class="mapa-contenedor">
+
+      <img [src]="urlMapa" alt="Mapa del cementerio" class="mapa-imagen" />
+
+      <!-- SVG overlay — escala automáticamente junto con la imagen -->
+      <svg class="mapa-svg" [attr.viewBox]="'0 0 ' + ANCHO_IMG + ' ' + ALTO_IMG" preserveAspectRatio="xMidYMid meet">
+
+        <polygon *ngFor="let m of manzanas" [attr.points]="m.points" [attr.data-codigo]="m.codigo"
+          class="manzana-poligono" [class.activa]="manzanaActiva?.codigo === m.codigo"
+          (click)="$event.stopPropagation(); seleccionarManzana(m)">
+          <title>Manzana {{ m.codigo }}</title>
+        </polygon>
+
+      </svg>
+
     </div>
   </div>
-</div>
+
+
+
+  <!-- Popup de info -->
+  <div class="popup-manzana" *ngIf="manzanaActiva" (click)="$event.stopPropagation()">
+    <button class="popup-cerrar" (click)="cerrarPopup()">
+      <i class="bi bi-x"></i>
+    </button>
+    <div class="popup-titulo">Manzana {{ manzanaActiva.codigo }}</div>
+    <div class="popup-sub">{{ nombreSector(manzanaActiva.sector) }}</div>
+    <!-- solo ver bloques si tienes rol admin o superadmin (luego implementamos bien) -->
+
+    <div class="popup-bloques" *ngIf="role === 'admin' || role === 'superadmin'">
+      <button class="btn btn-primary" (click)="irABloques()">Ver bloques</button>
+    </div>
+  </div>
