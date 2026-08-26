@@ -1,21 +1,30 @@
 <div class="mapa-wrapper" (click)="cerrarPopup()">
-  <div class="mapa-scroll">
+  <div *ngIf="cargando" class="mapa-loading">
+    <div class="spinner-border text-success"></div>
+  </div>
+
+  <div *ngIf="errorCarga" class="mapa-error">
+    <i class="bi bi-exclamation-triangle fs-2 text-warning d-block mb-2"></i>
+    <p class="text-muted small">
+      No se pudo cargar el mapa de este cementerio.
+    </p>
+  </div>
+
+  <div class="mapa-scroll" *ngIf="!cargando && !errorCarga">
     <div class="mapa-contenedor">
       <img [src]="urlMapa" alt="Mapa del cementerio" class="mapa-imagen" />
 
-      <!-- SVG overlay -->
       <svg
         class="mapa-svg"
-        [attr.viewBox]="'0 0 ' + ANCHO_IMG + ' ' + ALTO_IMG"
+        [attr.viewBox]="'0 0 ' + anchoImg + ' ' + altoImg"
         preserveAspectRatio="xMidYMid meet"
       >
-        <!-- mapeo camino -->
+        <!-- Borde exterior del camino -->
         <polyline
           [attr.points]="caminoPoints"
           class="camino-borde"
           pointer-events="none"
         />
-
         <!-- Superficie del camino -->
         <polyline
           [attr.points]="caminoPoints"
@@ -24,13 +33,15 @@
         >
           <title>Camino del cementerio</title>
         </polyline>
-        <!-- mapeo manzanas -->
         <polygon
           *ngFor="let m of manzanas"
           [attr.points]="m.points"
           [attr.data-codigo]="m.codigo"
           class="manzana-poligono"
           [class.activa]="manzanaActiva?.codigo === m.codigo"
+          [class.pulsando]="
+            manzanaActiva?.codigo === m.codigo && manzanaPulsando
+          "
           (click)="$event.stopPropagation(); seleccionarManzana(m)"
         >
           <title>Manzana {{ m.codigo }}</title>
@@ -39,17 +50,16 @@
     </div>
   </div>
 
-  <!-- Popup de manzana -->
   <div
     class="popup-manzana"
     *ngIf="manzanaActiva || caminoActivo"
     (click)="$event.stopPropagation()"
   >
-    <!-- Botón cerrar -->
-    <button class="popup-cerrar" (click)="cerrarPopup()" aria-label="Cerrar">
+    <button class="popup-cerrar" (click)="cerrarPopup()">
       <i class="bi bi-x"></i>
     </button>
 
+    <!-- POPUP MANZANA -->
     <ng-container *ngIf="manzanaActiva">
       <div class="popup-titulo">
         Manzana {{ manzanaActiva.manzana }} del
@@ -59,21 +69,13 @@
       <div class="popup-sub">
         {{ nombreSector(manzanaActiva.sector) }}
       </div>
-
-      <!-- Solo administradores -->
-      <div
-        class="popup-bloques"
-        *ngIf="role === 'admin' || role === 'superadmin'"
-      >
-        <button class="btn btn-primary" (click)="irABloques()">
-          Ver bloques
-        </button>
-      </div>
     </ng-container>
-    <ng-container *ngIf="caminoActivo">
-      <div class="popup-titulo">Camino Principal del cementerio</div>
 
-      <div class="popup-sub fw-bold">Se conectan las 2 entradas</div>
+    <!-- POPUP CAMINO -->
+    <ng-container *ngIf="caminoActivo">
+      <div class="popup-titulo">Camino del cementerio</div>
+
+      <div class="popup-sub">Vía de circulación peatonal</div>
     </ng-container>
   </div>
 </div>

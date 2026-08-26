@@ -45,6 +45,16 @@
   width: 100%;
   height: 100%;
 }
+.mapa-error {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── Pulso — se activa solo cuando llega desde el localizador ──────── */
 
 .manzana-poligono {
   fill: rgba(15, 39, 68, 0.10);
@@ -66,17 +76,10 @@
   stroke: #dc7226;
   stroke-width: 6;
 }
-
-.camino-borde {
-  fill: none;
-  stroke: rgba(60, 60, 60, 0.65);
-  stroke-width: 15;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  pointer-events: none;
-  vector-effect: non-scaling-stroke;
+.manzana-poligono.pulsando {
+  animation: pulsoManzana 1s ease-in-out 3;
 }
-
+  
 .camino {
   fill: none;
   stroke: rgba(194, 187, 163, 0.92);
@@ -89,12 +92,21 @@
   transition: stroke 0.15s, stroke-width 0.15s;
 }
 
+.camino-borde {
+  fill: none;
+  stroke: rgba(60, 60, 60, 0.65);
+  stroke-width: 15;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  pointer-events: none;
+  vector-effect: non-scaling-stroke;
+}
+
 .camino:hover {
   stroke: rgba(220, 210, 180, 1);
   stroke-width: 10;
 }
 
-/* ── Popup ─────────────────────────────────────────────── */
 .popup-manzana {
   position: absolute;
   bottom: 20px;
@@ -107,6 +119,13 @@
   min-width: 230px;
   z-index: 200;
   animation: popupUp .2s ease;
+}
+
+
+@keyframes pulsoManzana {
+  0%   { fill: rgba(220, 38, 38, 0.28); stroke-width: 6; }
+  50%  { fill: rgba(220, 38, 38, 0.55); stroke-width: 10; }
+  100% { fill: rgba(220, 38, 38, 0.28); stroke-width: 6; }
 }
 
 @keyframes popupUp {
