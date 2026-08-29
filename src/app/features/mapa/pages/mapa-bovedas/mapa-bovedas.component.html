@@ -61,6 +61,21 @@
 
     <!-- POPUP MANZANA -->
     <ng-container *ngIf="manzanaActiva">
+      <!-- Info extra del fallecido — solo si viene del localizador -->
+      <div class="popup-fallecido" *ngIf="fallecidoLocalizado">
+        <div class="popup-fallecido-icono">
+          <i class="bi bi-person-check-fill"></i>
+        </div>
+        <div>
+          <div class="popup-fallecido-nombre">
+            {{ fallecidoLocalizado.nombre }}
+          </div>
+          <div class="popup-fallecido-codigo">
+            Código: <strong>{{ fallecidoLocalizado.codigo }}</strong>
+          </div>
+        </div>
+      </div>
+
       <div class="popup-titulo">
         Manzana {{ manzanaActiva.manzana }} del
         {{ nombreSector(manzanaActiva.sector) }}

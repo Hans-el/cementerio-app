@@ -30,6 +30,12 @@ export class MapaBovedasComponent implements OnInit {
   manzanaActiva: ManzanaMapa | null = null;
   manzanaPulsando: boolean = false; // controla la animación de pulso
 
+  fallecidoLocalizado: {
+    nombre: string;
+    codigo: string;
+    espacio: string | null;
+  } | null = null;
+
   constructor(
     private http: HttpClient,
     private router: Router,
@@ -42,17 +48,29 @@ export class MapaBovedasComponent implements OnInit {
     this.cargarMapaDelCementerio();
 
     this.route.queryParams.subscribe((params) => {
-      if (params['sector'] && params['manzana'] && !this.cargando) {
-        this.resaltarYScrollear(
-          parseInt(params['sector'], 10),
-          parseInt(params['manzana'], 10),
-        );
-      } else if (params['sector'] && params['manzana']) {
-        // Si aún está cargando el JSON, guardamos el pendiente
-        this.pendienteResaltar = {
-          sector: parseInt(params['sector'], 10),
-          manzana: parseInt(params['manzana'], 10),
-        };
+      if (params['sector'] && params['manzana']) {
+        // Guardar datos del fallecido si vienen en la URL
+        if (params['nombre'] && params['codigo']) {
+          this.fallecidoLocalizado = {
+            nombre: params['nombre'],
+            codigo: params['codigo'],
+            espacio: params['espacio'] ?? null,
+          };
+        } else {
+          this.fallecidoLocalizado = null;
+        }
+
+        if (!this.cargando) {
+          this.resaltarYScrollear(
+            parseInt(params['sector'], 10),
+            parseInt(params['manzana'], 10),
+          );
+        } else {
+          this.pendienteResaltar = {
+            sector: parseInt(params['sector'], 10),
+            manzana: parseInt(params['manzana'], 10),
+          };
+        }
       }
     });
   }
@@ -142,16 +160,19 @@ export class MapaBovedasComponent implements OnInit {
     this.manzanaActiva = manzana;
     this.manzanaPulsando = false; // click manual no necesita pulso
     this.caminoActivo = false;
+    this.fallecidoLocalizado = null; // click manual limpia la info de localización
   }
   seleccionarCamino(): void {
     this.manzanaActiva = null;
     this.manzanaPulsando = false;
     this.caminoActivo = true;
+    this.fallecidoLocalizado = null;
   }
 
   cerrarPopup(): void {
     this.manzanaActiva = null;
     this.caminoActivo = false;
+    this.fallecidoLocalizado = null;
   }
 
   irABloques(): void {

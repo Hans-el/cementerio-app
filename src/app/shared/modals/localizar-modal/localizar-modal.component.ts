@@ -45,7 +45,7 @@ export class LocalizarModalComponent implements OnInit {
     private fallecidoService: FallecidoService,
     private bloquesService: BloquesService,
     private router: Router,
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.searchTerms
@@ -169,11 +169,19 @@ export class LocalizarModalComponent implements OnInit {
   localizarEnMapa(boveda: any): void {
     this.activeModal.dismiss();
 
-    // Navegar al mapa con query params — el mapa se encarga de resaltar la manzana
+    const sector = this.formatoDosDigitos(boveda.sector);
+    const manzana = this.formatoDosDigitos(boveda.manzana);
+    const bloque = this.formatoDosDigitos(boveda.bloque);
+    const codigoCompleto = `${sector}.${manzana}.${bloque}`;
+
     this.router.navigate(['/mapa'], {
       queryParams: {
         sector: boveda.sector,
         manzana: boveda.manzana,
+        // Datos extra del fallecido localizado para mostrar en el popup del mapa
+        nombre: this.nombreFallecido,
+        codigo: codigoCompleto,
+        espacio: boveda.espacio ?? null,
       },
     });
   }
