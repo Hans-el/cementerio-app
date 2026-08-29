@@ -1,0 +1,49 @@
+name: Deploy Frontend
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      - name: Instalar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Compilar Angular (producción)
+        run: npx ng build --configuration production
+
+      - name: Copiar build al servidor
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          source: "dist/cementerio-app/browser/*"
+          target: "/tmp/frontend-build"
+          strip_components: 3
+
+      - name: Desplegar en Nginx
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            sudo rm -rf /var/www/cementerio-frontend/*
+            sudo cp -r /tmp/frontend-build/* /var/www/cementerio-frontend/
+            sudo chown -R www-data:www-data /var/www/cementerio-frontend
+            sudo systemctl restart nginx
+            rm -rf /tmp/frontend-build
+            echo "✅ FRONTEND DESPLEGADO"
