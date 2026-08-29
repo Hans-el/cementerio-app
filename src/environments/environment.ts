@@ -2,6 +2,6 @@
 export const environment = {
   production: true,
 
-  apiUrl: 'https://cementerio-app-backend.onrender.com/api', //prod => descomentar antes de desplegar en producciónnn
+  apiUrl: 'https://cementerios-portoviejo.duckdns.org/api', //prod => usando oracle (usando duckdns)
   // apiUrl: 'http://localhost:3000/api', //para desarrollo
 };
