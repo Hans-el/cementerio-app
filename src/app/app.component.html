@@ -1,44 +1,50 @@
 <!-- Loader entre navegaciones -->
 <div class="nav-loader" *ngIf="cargando">
-    <div class="nav-loader-backdrop"></div>
-    <div class="nav-loader-box">
-        <img src="assets/faviconblanco.gif" alt="Cargando..." class="nav-loader-gif" />
-        <p class="nav-loader-texto">Cargando...</p>
-    </div>
+  <div class="nav-loader-backdrop"></div>
+  <div class="nav-loader-box">
+    <img
+      src="assets/logo-cementerios.png"
+      alt="Cargando..."
+      class="nav-loader-gif"
+    />
+    <p class="nav-loader-texto">Cargando...</p>
+  </div>
 </div>
 
 <!-- Banner de instalación PWA -->
 <div class="pwa-banner instalar" *ngIf="mostrarBannerInstalar">
-    <div class="pwa-banner-contenido">
-        <img src="assets/faviconnegro.png" alt="Logo" class="pwa-banner-logo" />
-        <div class="pwa-banner-texto">
-            <strong>Instalar la app</strong>
-            <span>Accede más rápido desde tu pantalla de inicio.</span>
-        </div>
+  <div class="pwa-banner-contenido">
+    <img src="assets/logo-cementerios.png" alt="Logo" class="pwa-banner-logo" />
+    <div class="pwa-banner-texto">
+      <strong>Instalar la app</strong>
+      <span>Accede más rápido desde tu pantalla de inicio.</span>
     </div>
-    <div class="pwa-banner-acciones">
-        <button class="pwa-btn-instalar" (click)="instalarApp()">Instalar</button>
-        <button class="pwa-btn-cerrar" (click)="cerrarBannerInstalar()">
-            <i class="bi bi-x"></i>
-        </button>
-    </div>
+  </div>
+  <div class="pwa-banner-acciones">
+    <button class="pwa-btn-instalar" (click)="instalarApp()">Instalar</button>
+    <button class="pwa-btn-cerrar" (click)="cerrarBannerInstalar()">
+      <i class="bi bi-x"></i>
+    </button>
+  </div>
 </div>
 
 <!-- Banner de actualización -->
 <div class="pwa-banner actualizar" *ngIf="mostrarBannerUpdate">
-    <div class="pwa-banner-contenido">
-        <i class="bi bi-arrow-clockwise pwa-banner-icon"></i>
-        <div class="pwa-banner-texto">
-            <strong>Nueva versión disponible</strong>
-            <span>Actualiza para obtener las últimas mejoras.</span>
-        </div>
+  <div class="pwa-banner-contenido">
+    <i class="bi bi-arrow-clockwise pwa-banner-icon"></i>
+    <div class="pwa-banner-texto">
+      <strong>Nueva versión disponible</strong>
+      <span>Actualiza para obtener las últimas mejoras.</span>
     </div>
-    <div class="pwa-banner-acciones">
-        <button class="pwa-btn-instalar" (click)="actualizarApp()">Actualizar</button>
-        <button class="pwa-btn-cerrar" (click)="cerrarBannerUpdate()">
-            <i class="bi bi-x"></i>
-        </button>
-    </div>
+  </div>
+  <div class="pwa-banner-acciones">
+    <button class="pwa-btn-instalar" (click)="actualizarApp()">
+      Actualizar
+    </button>
+    <button class="pwa-btn-cerrar" (click)="cerrarBannerUpdate()">
+      <i class="bi bi-x"></i>
+    </button>
+  </div>
 </div>
 
 <router-outlet></router-outlet>
