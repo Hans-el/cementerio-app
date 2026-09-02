@@ -10,6 +10,7 @@ export interface CaminoMapaJson {
 
 export interface MapaConfigJson {
   urlMapa: string;
+  urlMapaNatural: string;
   anchoImg: number;
   altoImg: number;
   camino: CaminoMapaJson;

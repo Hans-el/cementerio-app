@@ -10,22 +10,41 @@
     </p>
   </div>
 
+  <!-- Botón de capas — estilo Google Maps -->
+  <button
+    class="btn-toggle-capa btn btn-light shadow-sm"
+    *ngIf="!cargando && !errorCarga"
+    (click)="$event.stopPropagation(); toggleVista()"
+    [title]="
+      vistaNatural ? 'Ver mapa con manzanas' : 'Ver imagen real del cementerio'
+    "
+  >
+    <i class="bi" [class]="vistaNatural ? 'bi-map' : 'bi-image'"></i>
+    <span>{{ vistaNatural ? "Ver manzanas" : "Vista real" }}</span>
+  </button>
+
   <div class="mapa-scroll" *ngIf="!cargando && !errorCarga">
     <div class="mapa-contenedor">
-      <img [src]="urlMapa" alt="Mapa del cementerio" class="mapa-imagen" />
+      <!-- Imagen — cambia según la capa activa -->
+      <img
+        [src]="vistaNatural ? urlMapaNatural : urlMapa"
+        alt="Mapa del cementerio real"
+        class="mapa-imagen"
+      />
 
+      <!-- SVG con polígonos — solo visible en la vista mapeada -->
       <svg
+        *ngIf="!vistaNatural"
         class="mapa-svg"
         [attr.viewBox]="'0 0 ' + anchoImg + ' ' + altoImg"
         preserveAspectRatio="xMidYMid meet"
       >
-        <!-- Borde exterior del camino -->
         <polyline
           [attr.points]="caminoPoints"
           class="camino-borde"
           pointer-events="none"
         />
-        <!-- Superficie del camino -->
+
         <polyline
           [attr.points]="caminoPoints"
           class="camino"
@@ -33,6 +52,7 @@
         >
           <title>Camino del cementerio</title>
         </polyline>
+
         <polygon
           *ngFor="let m of manzanas"
           [attr.points]="m.points"
@@ -52,16 +72,14 @@
 
   <div
     class="popup-manzana"
-    *ngIf="manzanaActiva || caminoActivo"
+    *ngIf="(manzanaActiva || caminoActivo) && !vistaNatural"
     (click)="$event.stopPropagation()"
   >
     <button class="popup-cerrar" (click)="cerrarPopup()">
       <i class="bi bi-x"></i>
     </button>
 
-    <!-- POPUP MANZANA -->
     <ng-container *ngIf="manzanaActiva">
-      <!-- Info extra del fallecido — solo si viene del localizador -->
       <div class="popup-fallecido" *ngIf="fallecidoLocalizado">
         <div class="popup-fallecido-icono">
           <i class="bi bi-person-check-fill"></i>
@@ -80,16 +98,11 @@
         Manzana {{ manzanaActiva.manzana }} del
         {{ nombreSector(manzanaActiva.sector) }}
       </div>
-
-      <div class="popup-sub">
-        {{ nombreSector(manzanaActiva.sector) }}
-      </div>
+      <div class="popup-sub">{{ nombreSector(manzanaActiva.sector) }}</div>
     </ng-container>
 
-    <!-- POPUP CAMINO -->
     <ng-container *ngIf="caminoActivo">
       <div class="popup-titulo">Camino del cementerio</div>
-
       <div class="popup-sub">Vía de circulación peatonal</div>
     </ng-container>
   </div>

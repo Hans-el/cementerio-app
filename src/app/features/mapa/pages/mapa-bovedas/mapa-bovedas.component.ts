@@ -21,6 +21,7 @@ export class MapaBovedasComponent implements OnInit {
   errorCarga = false;
 
   urlMapa = '';
+  urlMapaNatural = '';
   anchoImg = 0;
   altoImg = 0;
   manzanas: ManzanaMapa[] = [];
@@ -35,6 +36,9 @@ export class MapaBovedasComponent implements OnInit {
     codigo: string;
     espacio: string | null;
   } | null = null;
+
+  //Controla qué capa se muestra. Inicialmente se miuestra la capa con las coordenadas.
+  vistaNatural = false;
 
   constructor(
     private http: HttpClient,
@@ -84,6 +88,7 @@ export class MapaBovedasComponent implements OnInit {
     this.http.get<MapaConfigJson>(`assets/mapas/${slug}.json`).subscribe({
       next: (config) => {
         this.urlMapa = config.urlMapa;
+        this.urlMapaNatural = config.urlMapaNatural;
         this.anchoImg = config.anchoImg;
         this.altoImg = config.altoImg;
         this.caminoPoints = this.convertirCoords(config.camino.coords);
@@ -115,6 +120,14 @@ export class MapaBovedasComponent implements OnInit {
         this.cargando = false;
       },
     });
+  }
+  //alternar entre la imagen del mapa con coordenadas y la imagen del mapa natural
+  toggleVista(): void {
+    this.vistaNatural = !this.vistaNatural;
+    // Al pasar a vista natural, cerramos cualquier popup activo
+    if (this.vistaNatural) {
+      this.cerrarPopup();
+    }
   }
 
   // Convierte "x1,y1,x2,y2,..." → "x1,y1 x2,y2 x3,y3"
