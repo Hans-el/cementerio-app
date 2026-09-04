@@ -1,4 +1,10 @@
-import { Component, HostListener, ElementRef } from '@angular/core';
+import {
+  Component,
+  HostListener,
+  ElementRef,
+  OnInit,
+  OnDestroy,
+} from '@angular/core';
 import {
   NavigationEnd,
   Router,
@@ -6,7 +12,6 @@ import {
   RouterLinkActive,
 } from '@angular/router';
 import Swal from 'sweetalert2';
-import { OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -27,7 +32,7 @@ import { TramiteService } from '../../../features/tramites/services/tramite.serv
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.css'],
 })
-export class SidebarComponent implements OnInit {
+export class SidebarComponent implements OnInit, OnDestroy {
   solicitudesPendientes = 0;
   userRole: string = 'Invitado'; // Valor por defecto si no inicia sesión
   userName: string = ''; // Nombre del usuario para mostrar en el sidebar
@@ -35,6 +40,8 @@ export class SidebarComponent implements OnInit {
   isMobile = false; // Estado para dispositivos móviles
   hover: boolean = false;
   cementerioActivo: Cementerio | null = null;
+
+  private intervaloPendientes: any = null;
 
   constructor(
     private authService: AuthService,
@@ -90,9 +97,9 @@ export class SidebarComponent implements OnInit {
     if (this.userRole === 'admin' || this.userRole === 'superadmin') {
       setTimeout(() => {
         this.cargarPendientes();
-        // Refrescar cada 60 segundos para mantener el badge actualizado
-        setInterval(() => this.cargarPendientes(), 60000);
+        this.iniciarPolling();
       }, 500);
+      document.addEventListener('visibilitychange', this.onVisibilityChange);
     }
     if (this.userRole !== 'Invitado') {
       this.pushService.estasSuscrito().then((suscrito) => {
@@ -101,6 +108,36 @@ export class SidebarComponent implements OnInit {
           setTimeout(() => this.pushService.suscribir(), 3000);
         }
       });
+    }
+  }
+  ngOnDestroy(): void {
+    this.detenerPolling();
+    document.removeEventListener('visibilitychange', this.onVisibilityChange);
+  }
+
+  private onVisibilityChange = (): void => {
+    if (document.hidden) {
+      // Pestaña en background — detener el polling, ahorra recursos
+      this.detenerPolling();
+    } else {
+      // Pestaña activa de nuevo — recargar inmediatamente y reanudar
+      this.cargarPendientes();
+      this.iniciarPolling();
+    }
+  };
+
+  private iniciarPolling(): void {
+    this.detenerPolling(); // evita duplicados si ya había uno corriendo
+    this.intervaloPendientes = setInterval(
+      () => this.cargarPendientes(),
+      60000,
+    );
+  }
+
+  private detenerPolling(): void {
+    if (this.intervaloPendientes) {
+      clearInterval(this.intervaloPendientes);
+      this.intervaloPendientes = null;
     }
   }
 
