@@ -16,7 +16,7 @@ jobs:
       - name: Instalar Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: "20"
 
       - name: Instalar dependencias
         run: npm ci
@@ -41,9 +41,9 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            sudo rm -rf /var/www/cementerio-frontend/*
-            sudo cp -r /tmp/frontend-build/* /var/www/cementerio-frontend/
-            sudo chown -R www-data:www-data /var/www/cementerio-frontend
+            sudo rm -rf /var/www/cementerio-app-frontend/*
+            sudo cp -r /tmp/frontend-build/* /var/www/cementerio-app-frontend/
+            sudo chown -R www-data:www-data /var/www/cementerio-app-frontend
             sudo systemctl restart nginx
             rm -rf /tmp/frontend-build
             echo "✅ FRONTEND DESPLEGADO"
