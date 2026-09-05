@@ -1,0 +1,207 @@
+.adquisicion-wrapper {
+  padding: 1.75rem 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* ── Header ────────────────────────────────────────────── */
+.adq-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+/* ── Buscador ──────────────────────────────────────────── */
+.adq-search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 10px 16px;
+  max-width: 420px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+}
+
+.adq-search i { color: #9ca3af; }
+
+.adq-search input {
+  border: none;
+  outline: none;
+  font-size: 14px;
+  width: 100%;
+  background: transparent;
+}
+
+/* ── Empty state ───────────────────────────────────────── */
+.adq-empty {
+  text-align: center;
+  padding: 4rem 1rem;
+}
+
+/* ── Grid de cards — estilo tipo imagen de referencia ──── */
+.adq-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.25rem;
+}
+
+.adq-card {
+  background: white;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+  border: 1px solid #f1f5f9;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.adq-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(0,0,0,0.10);
+}
+
+/* Imagen */
+.adq-card-img-wrap {
+  position: relative;
+  height: 180px;
+  background: #f3f4f6;
+}
+
+.adq-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  cursor: pointer;
+  display: block;
+}
+
+.adq-img-loading,
+.adq-img-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #9ca3af;
+  gap: 6px;
+  font-size: 12px;
+}
+
+.adq-img-placeholder i {
+  font-size: 28px;
+}
+
+.adq-badge-codigo {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background:
+    radial-gradient(at 67% 70%, #30422e 0%, transparent 50%),
+    radial-gradient(at 62% 11%, #0b170b 0%, transparent 55%),
+    radial-gradient(at 50% 84%, #0b170b 0%, transparent 55%),
+    radial-gradient(at 1% 25%, #163212 0%, transparent 55%),
+    radial-gradient(at 4% 97%, #071007 0%, transparent 55%),
+    radial-gradient(at 1% 72%, #071007 0%, transparent 55%),
+    radial-gradient(at 87% 25%, #30422e 0%, transparent 50%),
+    radial-gradient(at 62% 3%, #0b170b 0%, transparent 55%),
+    radial-gradient(at 43% 67%, #071007 0%, transparent 55%),
+    radial-gradient(at 78% 96%, #163212 0%, transparent 55%),
+    radial-gradient(at 85% 46%, #0b170b 0%, transparent 55%),
+    #16470f;  color: white;
+  font-family: monospace;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 8px;
+  backdrop-filter: blur(4px);
+}
+
+/* Body */
+.adq-card-body {
+  padding: 1.1rem 1.15rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.adq-card-titulo {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #16470f;
+  margin-bottom: 6px;
+}
+
+.adq-card-desc {
+  font-size: 12.5px;
+  color: #6b7280;
+  line-height: 1.5;
+  margin-bottom: 1rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  flex: 1;
+}
+
+/* Botones */
+.adq-card-acciones {
+  display: flex;
+  gap: 6px;
+}
+
+.adq-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  border: none;
+  border-radius: 9px;
+  padding: 7px 8px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.adq-btn-outline {
+  background: #f9fafb;
+  color: #374151;
+  border: 1px solid #e5e7eb;
+}
+.adq-btn-outline:hover {
+  background: #f0fdf4;
+  border-color: #2d5a27;
+  color: #2d5a27;
+}
+
+.adq-btn-primary {
+  background: #16470f;
+  color: white;
+}
+.adq-btn-primary:hover { background: #072d02; }
+
+.adq-btn-danger {
+  background: #fef2f2;
+  color: #991b1b;
+  border: 1px solid #fecaca;
+}
+.adq-btn-danger:hover { background: #fee2e2; }
+
+/* ── Responsivo ────────────────────────────────────────── */
+@media (max-width: 576px) {
+  .adquisicion-wrapper { padding: 1.25rem 1rem; }
+  .adq-header { flex-direction: column; align-items: stretch; }
+  .adq-header button { width: 100%; }
+  .adq-grid { grid-template-columns: 1fr; }
+  .adq-search { max-width: 100%; }
+}

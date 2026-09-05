@@ -1,0 +1,186 @@
+<div class="adquisicion-wrapper">
+  <!-- Header -->
+  <div class="adq-header">
+    <div>
+      <h4 class="fw-semibold text-secondary mb-1">
+        <i class="bi bi-columns-gap me-2 text-success"></i>Adquisición
+      </h4>
+      <p class="text-muted small mb-0">
+        Explora los espacios disponibles para la compra en el cementerio.
+      </p>
+    </div>
+
+    <button
+      *ngIf="esAdmin"
+      class="btn btn-success fw-semibold"
+      (click)="toggleFormAdmin()"
+    >
+      <i class="bi" [class]="mostrarFormAdmin ? 'bi-x-lg' : 'bi-plus-lg'"></i>
+      {{ mostrarFormAdmin ? "Cancelar" : "Poner bloque en venta" }}
+    </button>
+  </div>
+
+  <!-- ══ FORMULARIO ADMIN ══════════════════════════════════ -->
+  <div class="card border-0 shadow-sm mb-4" *ngIf="esAdmin && mostrarFormAdmin">
+    <div class="card-body p-4">
+      <h6 class="fw-semibold text-secondary mb-3">
+        <i class="bi bi-tag me-2"></i>Seleccionar bloque para poner en venta
+      </h6>
+
+      <div class="row g-3">
+        <div class="col-md-4">
+          <label class="form-label small fw-semibold text-muted">Sector</label>
+          <select
+            class="form-select bg-light"
+            [(ngModel)]="selectedSector"
+            (change)="onSectorChange()"
+          >
+            <option [ngValue]="null">Seleccione un sector</option>
+            <option *ngFor="let s of sectores" [ngValue]="s.id_sector">
+              {{ s.codigo }}
+            </option>
+          </select>
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label small fw-semibold text-muted">Manzana</label>
+          <select
+            class="form-select bg-light"
+            [(ngModel)]="selectedManzana"
+            (change)="onManzanaChange()"
+            [disabled]="!selectedSector"
+          >
+            <option [ngValue]="null">Seleccione una manzana</option>
+            <option *ngFor="let m of manzanas" [ngValue]="m.id_manzana">
+              {{ m.numero_manzana }}
+            </option>
+          </select>
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label small fw-semibold text-muted">Bloque</label>
+          <select
+            class="form-select bg-light"
+            [(ngModel)]="selectedBloque"
+            [disabled]="!selectedManzana"
+          >
+            <option [ngValue]="null">Seleccione un bloque</option>
+            <option *ngFor="let b of bloques" [ngValue]="b.id_bloque">
+              {{ b.numero_bloque }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-end mt-3" *ngIf="selectedBloque">
+        <button class="btn btn-success fw-semibold" (click)="ponerEnVenta()">
+          <i class="bi bi-check-lg me-1"></i>Confirmar y poner en venta
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ BUSCADOR ══════════════════════════════════════════ -->
+  <div class="mb-4" *ngIf="!cargando && espaciosDisponibles.length">
+    <div class="adq-search">
+      <i class="bi bi-search"></i>
+      <input
+        type="text"
+        [(ngModel)]="filtroTexto"
+        placeholder="Buscar por código o descripción..."
+      />
+    </div>
+  </div>
+
+  <!-- Cargando -->
+  <div *ngIf="cargando" class="text-center py-5">
+    <div class="spinner-border text-success"></div>
+  </div>
+
+  <!-- Sin resultados -->
+  <div *ngIf="!cargando && !espaciosDisponibles.length" class="adq-empty">
+    <i class="bi bi-inbox fs-1 text-muted d-block mb-3"></i>
+    <p class="text-muted mb-0">
+      No hay espacios disponibles para la venta en este momento.
+    </p>
+  </div>
+
+  <!-- ══ GRID DE CARDS ═════════════════════════════════════ -->
+  <div class="adq-grid" *ngIf="!cargando && espaciosFiltrados.length">
+    <div class="adq-card" *ngFor="let espacio of espaciosFiltrados">
+      <!-- Imagen -->
+      <div class="adq-card-img-wrap">
+        <div *ngIf="espacio.cargandoImg" class="adq-img-loading">
+          <div class="spinner-border spinner-border-sm text-success"></div>
+        </div>
+        <img
+          *ngIf="!espacio.cargandoImg && espacio.imagenUrl"
+          [src]="espacio.imagenUrl"
+          [alt]="'Bloque ' + espacio.codigo"
+          class="adq-card-img"
+          (click)="visualizarImagen(espacio.imagenUrl)"
+        />
+        <div
+          *ngIf="!espacio.cargandoImg && !espacio.imagenUrl"
+          class="adq-img-placeholder"
+        >
+          <i class="bi bi-image"></i>
+          <span>Sin imagen disponible</span>
+        </div>
+        <span class="adq-badge-codigo">{{ espacio.codigo }}</span>
+      </div>
+
+      <!-- Info -->
+      <div class="adq-card-body">
+        <h6 class="adq-card-titulo">Bloque {{ espacio.codigo }}</h6>
+        <p class="adq-card-desc">{{ espacio.descripcion }}</p>
+
+        <div class="adq-card-acciones">
+          <button
+            class="adq-btn adq-btn-outline"
+            (click)="localizarEnMapa(espacio)"
+            title="Localizar en el mapa"
+          >
+            <i class="bi bi-geo-alt"></i> Localizar
+          </button>
+          <button
+            class="adq-btn adq-btn-outline"
+            (click)="visualizarImagen(espacio.imagenUrl)"
+            title="Ver imagen completa"
+          >
+            <i class="bi bi-image"></i> Visualizar
+          </button>
+        </div>
+
+        <div class="adq-card-acciones mt-2">
+          <button
+            class="adq-btn adq-btn-primary"
+            (click)="contactarDueno(espacio)"
+            title="Enviar correo a la administración"
+          >
+            <i class="bi bi-envelope"></i> Contactar / Solicitar revisión
+          </button>
+        </div>
+
+        <button
+          *ngIf="esAdmin"
+          class="adq-btn adq-btn-danger mt-2 w-100"
+          (click)="borrarBloqueEnVenta(espacio.id_bloque_venta)"
+        >
+          <i class="bi bi-trash"></i> Retirar de venta
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sin resultados por filtro -->
+  <div
+    *ngIf="!cargando && espaciosDisponibles.length && !espaciosFiltrados.length"
+    class="adq-empty"
+  >
+    <i class="bi bi-search fs-1 text-muted d-block mb-3"></i>
+    <p class="text-muted mb-0">
+      No hay espacios que coincidan con tu búsqueda.
+    </p>
+  </div>
+</div>
