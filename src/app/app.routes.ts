@@ -93,6 +93,13 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'adquisicion',
+        loadComponent: () =>
+          import('./features/espacios/pages/adquisicion/adquisicion.component').then(
+            (m) => m.AdquisicionComponent,
+          ),
+      },
+      {
         path: 'perfil',
         loadComponent: () =>
           import('./features/publico/pages/perfil/perfil.component').then(
