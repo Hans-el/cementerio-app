@@ -20,16 +20,18 @@ import Swal from 'sweetalert2';
   styleUrl: './solicitud-tramite.component.css',
 })
 export class SolicitudTramiteComponent implements OnInit, PuedeSalir {
-  // Tipo de trámite actual
   tipoTramite: TipoTramite | null = null;
   documentosTipo: DocumentoTipo[] = [];
 
-  // Estado de la solicitud
   solicitudActiva: Solicitud | null = null;
   documentosActivos: DocumentoSolicitud[] = [];
-  urlRespuesta: string | null = null;
+  //Ahora solo indica si existe, no guardamos URL
+  tieneDocumentoRespuesta = false;
 
-  // Archivos seleccionados por el usuario
+  // Estados de carga de visualización de documentos
+  cargandoDocumento: { [id: number]: boolean } = {};
+  cargandoRespuesta = false;
+
   archivos: (File | null)[] = [];
 
   // Flags de estado
@@ -44,7 +46,6 @@ export class SolicitudTramiteComponent implements OnInit, PuedeSalir {
   ) {}
 
   ngOnInit(): void {
-    // Obtener el id_tipo_tramite desde la URL — /tramites/:id_tipo
     this.route.params.subscribe((params) => {
       const id_tipo = parseInt(params['id_tipo']);
       if (isNaN(id_tipo)) {
@@ -58,7 +59,6 @@ export class SolicitudTramiteComponent implements OnInit, PuedeSalir {
   cargarTipo(id_tipo: number): void {
     this.cargando = true;
 
-    // Cargar tipo de trámite
     this.tramiteService.getTipos().subscribe({
       next: (tipos) => {
         this.tipoTramite =
@@ -68,7 +68,6 @@ export class SolicitudTramiteComponent implements OnInit, PuedeSalir {
           return;
         }
 
-        // Cargar documentos requeridos
         this.tramiteService.getDocumentosTipo(id_tipo).subscribe({
           next: (docs) => {
             this.documentosTipo = docs;
@@ -84,11 +83,10 @@ export class SolicitudTramiteComponent implements OnInit, PuedeSalir {
     this.tramiteService.getSolicitudActiva(id_tipo).subscribe({
       next: (solicitud) => {
         this.solicitudActiva = solicitud;
+        this.tieneDocumentoRespuesta = !!solicitud?.documento_respuesta;
+
         if (solicitud) {
           this.cargarDocumentosActivos(solicitud.id_solicitud);
-          if (solicitud.documento_respuesta) {
-            this.cargarUrlRespuesta(solicitud.id_solicitud);
-          }
         } else {
           this.cargando = false;
         }
@@ -111,19 +109,43 @@ export class SolicitudTramiteComponent implements OnInit, PuedeSalir {
     });
   }
 
-  cargarUrlRespuesta(id_solicitud: number): void {
-    this.tramiteService.getUrlRespuesta(id_solicitud).subscribe({
-      next: (res) => {
-        this.urlRespuesta = res.url;
+  verDocumento(doc: DocumentoSolicitud): void {
+    this.cargandoDocumento[doc.id_documento] = true;
+    this.tramiteService.verDocumento(doc.id_documento).subscribe({
+      next: (blob) => {
+        this.cargandoDocumento[doc.id_documento] = false;
+        const url = window.URL.createObjectURL(blob);
+        window.open(url, '_blank');
       },
       error: () => {
-        this.urlRespuesta = null;
+        this.cargandoDocumento[doc.id_documento] = false;
+        Swal.fire('Error', 'No se pudo abrir el documento.', 'error');
       },
     });
   }
+  verDocumentoRespuesta(): void {
+    if (!this.solicitudActiva) return;
+    this.cargandoRespuesta = true;
+    this.tramiteService
+      .verRespuesta(this.solicitudActiva.id_solicitud)
+      .subscribe({
+        next: (blob) => {
+          this.cargandoRespuesta = false;
+          const url = window.URL.createObjectURL(blob);
+          window.open(url, '_blank');
+        },
+        error: () => {
+          this.cargandoRespuesta = false;
+          Swal.fire(
+            'Error',
+            'No se pudo abrir el documento de respuesta.',
+            'error',
+          );
+        },
+      });
+  }
 
-  // ── Selección de archivos ─────────────────────────────────
-
+  // --- Selección de archivos
   onArchivoSeleccionado(event: Event, index: number): void {
     const input = event.target as HTMLInputElement;
     if (!input.files?.[0]) return;
@@ -205,7 +227,7 @@ export class SolicitudTramiteComponent implements OnInit, PuedeSalir {
     });
   }
 
-  // ── Envío ─────────────────────────────────────────────────
+  // --- Envío ---
 
   get obligatoriosSubidos(): boolean {
     return this.documentosTipo.every(
@@ -272,7 +294,7 @@ export class SolicitudTramiteComponent implements OnInit, PuedeSalir {
     });
   }
 
-  // ── Nueva solicitud ───────────────────────────────────────
+  // --- Nueva solicitud ---
 
   get puedeEnviarNueva(): boolean {
     return (

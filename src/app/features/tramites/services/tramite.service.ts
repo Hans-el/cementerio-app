@@ -16,6 +16,7 @@ export class TramiteService {
   private apiUrl = environment.apiUrl + '/tramites';
 
   constructor(private http: HttpClient) {}
+
   // Tipos
   getTipos(): Observable<TipoTramite[]> {
     return this.http.get<TipoTramite[]>(`${this.apiUrl}/tipos`);
@@ -51,6 +52,7 @@ export class TramiteService {
       `${this.apiUrl}/${id_solicitud}/documentos`,
     );
   }
+
   getHistorial(id_tipo: number): Observable<Solicitud[]> {
     return this.http.get<Solicitud[]>(`${this.apiUrl}/historial/${id_tipo}`);
   }
@@ -77,6 +79,7 @@ export class TramiteService {
       formData,
     );
   }
+
   getMisSolicitudes(
     estado?: string,
     id_tipo_tramite?: number,
@@ -90,10 +93,18 @@ export class TramiteService {
     });
   }
 
-  getUrlRespuesta(id_solicitud: number): Observable<{ url: string }> {
-    return this.http.get<{ url: string }>(
-      `${this.apiUrl}/${id_solicitud}/respuesta-url`,
-    );
+  //Nuevo- descarga el blob del documento de un fallecido/solicitud
+  verDocumento(id_documento: number): Observable<Blob> {
+    return this.http.get(`${this.apiUrl}/documentos/${id_documento}/ver`, {
+      responseType: 'blob',
+    });
+  }
+
+  //Nuevo — descarga el blob del documento de respuesta del admin
+  verRespuesta(id_solicitud: number): Observable<Blob> {
+    return this.http.get(`${this.apiUrl}/${id_solicitud}/respuesta/ver`, {
+      responseType: 'blob',
+    });
   }
 
   reemplazarDocumento(id_documento: number, archivo: File): Observable<any> {

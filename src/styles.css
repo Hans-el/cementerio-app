@@ -1,2 +1,160 @@
 @import "bootstrap/dist/css/bootstrap.min.css";
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* 
+   PALETA GLOBAL DEL SISTEMA (ajustar según la institución)
+*/
+
+:root {
+  /* Verde principal — basado en el sidebar */
+  --color-primary: #16470f;
+  --color-primary-hover: #1d5a14;
+  --color-primary-dark: #0b170b;
+
+  /* Verdes secundarios */
+  --color-secondary: #163212;
+  --color-secondary-hover: #30422e;
+
+  /* Estados */
+  --color-danger: #dc2626;
+  --color-danger-bg: #fef2f2;
+
+  /* Bordes y fondos */
+  --color-border: #e5e7eb;
+  --color-border-strong: #d1d5db;
+  --color-bg-hover: #f3f4f6;
+
+  /* Acento */
+  --color-accent: #30422e;
+  --color-accent-hover: #3d5639;
+
+  /* Bordes redondeados */
+  --radius-md: 8px;
+}
+
+/* 
+   SISTEMA DE BOTONES GLOBAL
+ */
+
+.btn-app {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: none;
+  border-radius: var(--radius-md);
+  padding: 9px 18px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    transform 0.1s ease,
+    box-shadow 0.15s ease;
+  white-space: nowrap;
+  text-decoration: none;
+  line-height: 1.4;
+}
+.btn-app:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+
+/* 
+   PRIMARY
+   Acción principal
+*/
+.btn-app-primary {
+  background: var(--color-primary);
+  color: white;
+}
+.btn-app-primary:hover:not(:disabled) {
+  background: var(--color-primary-hover);
+  transform: translateY(-1px);
+}
+
+
+/* 
+   SECONDARY
+   Acción alternativa
+ */
+.btn-app-secondary {
+  background: #f9fafb;
+  color: var(--color-primary);
+  border: 1px solid var(--color-border);
+}
+.btn-app-secondary:hover:not(:disabled) {
+  background: #f0f5ef;
+  border-color: var(--color-primary);
+}
+
+
+/* 
+   OUTLINE
+*/
+.btn-app-outline {
+  background: transparent;
+  color: var(--color-primary);
+  border: 1px solid var(--color-primary);
+}
+.btn-app-outline:hover:not(:disabled) {
+  background: var(--color-primary);
+  color: white;
+}
+
+
+/* 
+   DANGER
+*/
+.btn-app-danger {
+  background: var(--color-danger-bg);
+  color: var(--color-danger);
+  border: 1px solid #fecaca;
+}
+.btn-app-danger:hover:not(:disabled) {
+  background: #fee2e2;
+}
+.btn-app-danger-solid {
+  background: #dc2626;
+  color: white;
+}
+.btn-app-danger-solid:hover:not(:disabled) {
+  background: #b91c1c;
+}
+
+
+/* 
+   ACCENT
+   Verde secundario del sidebar
+*/
+.btn-app-accent {
+  background: var(--color-secondary);
+  color: white;
+}
+.btn-app-accent:hover:not(:disabled) {
+  background: var(--color-secondary-hover);
+}
+
+
+/* 
+   TAMAÑOS
+*/
+
+.btn-app-sm {
+  padding: 6px 12px;
+  font-size: 12.5px;
+}
+.btn-app-lg {
+  padding: 12px 24px;
+  font-size: 15px;
+}
+
+
+/* 
+   ANCHO COMPLETO
+ */
+.btn-app-block {
+  width: 100%;
+}

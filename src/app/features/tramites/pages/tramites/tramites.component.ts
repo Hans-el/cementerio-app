@@ -8,6 +8,7 @@ import {
   Solicitud,
   DocumentoSolicitud,
 } from '../../models/tramite.model';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-tramites',
@@ -28,7 +29,6 @@ export class TramitesComponent implements OnInit {
 
   solicitudExpandida: number | null = null;
   documentosCache: { [id: number]: DocumentoSolicitud[] } = {};
-  urlsRespuestaCache: { [id: number]: string | null } = {};
   cargandoDocumentos: { [id: number]: boolean } = {};
 
   constructor(
@@ -90,14 +90,17 @@ export class TramitesComponent implements OnInit {
 
   toggleDetalle(solicitud: Solicitud): void {
     const id = solicitud.id_solicitud;
+
     if (this.solicitudExpandida === id) {
       this.solicitudExpandida = null;
       return;
     }
+
     this.solicitudExpandida = id;
 
     if (!this.documentosCache[id]) {
       this.cargandoDocumentos[id] = true;
+
       this.tramiteService.getDocumentos(id).subscribe({
         next: (docs) => {
           this.documentosCache[id] = docs;
@@ -109,35 +112,38 @@ export class TramitesComponent implements OnInit {
         },
       });
     }
-
-    if (
-      solicitud.documento_respuesta &&
-      this.urlsRespuestaCache[id] === undefined
-    ) {
-      this.urlsRespuestaCache[id] = null;
-      this.tramiteService.getUrlRespuesta(id).subscribe({
-        next: (res) => {
-          this.urlsRespuestaCache[id] = res.url;
-        },
-        error: () => {
-          this.urlsRespuestaCache[id] = null;
-        },
-      });
-    }
   }
+  cargandoRespuesta: { [id: number]: boolean } = {};
 
-  // ── Navegación
+  verDocumentoRespuesta(solicitud: Solicitud): void {
+    const id = solicitud.id_solicitud;
+    this.cargandoRespuesta[id] = true;
+    this.tramiteService.verRespuesta(id).subscribe({
+      next: (blob) => {
+        this.cargandoRespuesta[id] = false;
+
+        const url = window.URL.createObjectURL(blob);
+        window.open(url, '_blank');
+      },
+      error: () => {
+        this.cargandoRespuesta[id] = false;
+        Swal.fire(
+          'Error',
+          'No se pudo abrir el documento de respuesta.',
+          'error',
+        );
+      },
+    });
+  }
 
   irATramite(id_tipo: number): void {
     this.router.navigate(['/tramites', id_tipo]);
   }
 
   // ── Helpers
-
   get hayFiltros(): boolean {
     return this.filtroEstado !== 'TODOS' || this.filtroTipo !== null;
   }
-
   badgeClass(estado: string): string {
     switch (estado) {
       case 'APROBADA':
@@ -148,7 +154,6 @@ export class TramitesComponent implements OnInit {
         return 'bg-warning bg-opacity-10 text-warning';
     }
   }
-
   badgeIcon(estado: string): string {
     switch (estado) {
       case 'APROBADA':
@@ -159,7 +164,6 @@ export class TramitesComponent implements OnInit {
         return 'bi-clock-fill text-warning';
     }
   }
-
   iconoPorTipo(nombre: string): string {
     const n = nombre.toLowerCase();
     if (n.includes('inhumación') || n.includes('inhumacion'))
@@ -171,7 +175,6 @@ export class TramitesComponent implements OnInit {
     if (n.includes('mejora')) return 'bi-tools';
     return 'bi-file-earmark-text';
   }
-
   colorPorTipo(nombre: string): string {
     const n = nombre.toLowerCase();
     if (n.includes('inhumación') || n.includes('inhumacion')) return 'success';

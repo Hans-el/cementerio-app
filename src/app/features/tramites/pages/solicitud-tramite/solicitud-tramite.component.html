@@ -5,7 +5,7 @@
   </div>
 
   <ng-container *ngIf="!cargando && tipoTramite">
-    <!-- ══ SOLICITUD ACTIVA ══════════════════════════════════ -->
+    <!-- SOLICITUD ACTIVA -->
     <ng-container
       *ngIf="solicitudActiva && !modoNuevaSolicitud; else formulario"
     >
@@ -61,15 +61,31 @@
               }}.
             </span>
             <!-- Documento de respuesta del admin -->
-            <div class="mt-2" *ngIf="urlRespuesta">
-              <a
-                [href]="urlRespuesta"
-                target="_blank"
+
+            <!-- Documento de respuesta del admin -->
+            <div class="mt-2" *ngIf="tieneDocumentoRespuesta">
+              <button
+                type="button"
                 class="btn btn-sm btn-outline-success mt-1"
+                (click)="verDocumentoRespuesta()"
+                [disabled]="cargandoRespuesta"
               >
-                <i class="bi bi-file-earmark-pdf me-1"></i>Ver documento de
-                aprobación
-              </a>
+                <span
+                  *ngIf="cargandoRespuesta"
+                  class="spinner-border spinner-border-sm me-1"
+                ></span>
+
+                <i
+                  *ngIf="!cargandoRespuesta"
+                  class="bi bi-file-earmark-pdf me-1"
+                ></i>
+
+                {{
+                  cargandoRespuesta
+                    ? "Abriendo..."
+                    : "Ver documento de aprobación"
+                }}
+              </button>
             </div>
           </div>
 
@@ -94,6 +110,7 @@
             <i class="bi bi-paperclip me-2"></i>Documentos enviados
           </h6>
         </div>
+
         <div class="card-body p-0">
           <div
             *ngFor="let doc of documentosActivos"
@@ -101,28 +118,50 @@
           >
             <div class="d-flex align-items-center gap-3">
               <i class="bi bi-file-earmark-pdf text-danger fs-5"></i>
+
               <div>
-                <div class="fw-medium small">{{ doc.nombre_documento }}</div>
+                <div class="fw-medium small">
+                  {{ doc.nombre_documento }}
+                </div>
+
                 <div class="text-muted" style="font-size: 11px">
                   {{ doc.fecha_subida | date: "dd/MM/yyyy HH:mm" : "UTC" }}
                 </div>
               </div>
             </div>
+
             <div class="d-flex gap-2">
-              <a
-                [href]="doc.url_firmada"
-                target="_blank"
+              <!-- Ver documento -->
+              <button
+                type="button"
                 class="btn btn-outline-secondary btn-sm"
-                [class.disabled]="!doc.url_firmada"
+                (click)="verDocumento(doc)"
+                [disabled]="cargandoDocumento[doc.id_documento]"
               >
-                <i class="bi bi-eye me-1"></i>Ver
-              </a>
+                <span
+                  *ngIf="cargandoDocumento[doc.id_documento]"
+                  class="spinner-border spinner-border-sm me-1"
+                ></span>
+
+                <i
+                  *ngIf="!cargandoDocumento[doc.id_documento]"
+                  class="bi bi-eye me-1"
+                ></i>
+
+                {{
+                  cargandoDocumento[doc.id_documento] ? "Abriendo..." : "Ver"
+                }}
+              </button>
+
+              <!-- Editar documento -->
               <label
                 *ngIf="solicitudActiva.estado === 'PENDIENTE'"
                 class="btn btn-outline-warning btn-sm mb-0"
                 style="cursor: pointer"
               >
-                <i class="bi bi-arrow-repeat me-1"></i>Editar
+                <i class="bi bi-arrow-repeat me-1"></i>
+                Editar
+
                 <input
                   type="file"
                   accept="application/pdf"
