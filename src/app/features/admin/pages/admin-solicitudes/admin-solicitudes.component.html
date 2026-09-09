@@ -182,10 +182,13 @@
                   </div>
                   <span class="small fw-medium">{{ doc.nombre_documento }}</span>
                 </div>
-                <a [href]="doc.url_firmada" target="_blank" class="btn btn-ver-documento btn-sm"
-                  [class.disabled]="!doc.url_firmada">
-                  <i class="bi bi-eye me-1"></i>Ver
-                </a>
+                <button type="button" class="btn btn-ver-documento btn-sm" (click)="verDocumento(doc)"
+                  [disabled]="cargandoDocumento[doc.id_documento]">
+                  <span *ngIf="cargandoDocumento[doc.id_documento]"
+                    class="spinner-border spinner-border-sm me-1"></span>
+                  <i *ngIf="!cargandoDocumento[doc.id_documento]" class="bi bi-eye me-1"></i>
+                  {{ cargandoDocumento[doc.id_documento] ? 'Abriendo...' : 'Ver' }}
+                </button>
               </div>
             </div>
           </div>

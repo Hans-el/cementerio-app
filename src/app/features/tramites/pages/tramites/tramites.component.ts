@@ -29,7 +29,7 @@ export class TramitesComponent implements OnInit {
 
   solicitudExpandida: number | null = null;
   documentosCache: { [id: number]: DocumentoSolicitud[] } = {};
-  cargandoDocumentos: { [id: number]: boolean } = {};
+  cargandoDocumento: { [id: number]: boolean } = {};
 
   constructor(
     private tramiteService: TramiteService,
@@ -99,22 +99,37 @@ export class TramitesComponent implements OnInit {
     this.solicitudExpandida = id;
 
     if (!this.documentosCache[id]) {
-      this.cargandoDocumentos[id] = true;
+      this.cargandoDocumento[id] = true;
 
       this.tramiteService.getDocumentos(id).subscribe({
         next: (docs) => {
           this.documentosCache[id] = docs;
-          this.cargandoDocumentos[id] = false;
+          this.cargandoDocumento[id] = false;
         },
         error: () => {
           this.documentosCache[id] = [];
-          this.cargandoDocumentos[id] = false;
+          this.cargandoDocumento[id] = false;
         },
       });
     }
   }
   cargandoRespuesta: { [id: number]: boolean } = {};
 
+  verDocumento(doc: DocumentoSolicitud): void {
+    const id = doc.id_documento;
+    this.cargandoDocumento[id] = true;
+    this.tramiteService.verDocumento(id).subscribe({
+      next: (blob) => {
+        this.cargandoDocumento[id] = false;
+        const url = window.URL.createObjectURL(blob);
+        window.open(url, '_blank');
+      },
+      error: () => {
+        this.cargandoDocumento[id] = false;
+        Swal.fire('Error', 'No se pudo abrir el documento.', 'error');
+      },
+    });
+  }
   verDocumentoRespuesta(solicitud: Solicitud): void {
     const id = solicitud.id_solicitud;
     this.cargandoRespuesta[id] = true;

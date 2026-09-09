@@ -25,6 +25,7 @@ export class AdminSolicitudesComponent implements OnInit {
   solicitudes: Solicitud[] = [];
   documentosSolicitudActual: DocumentoSolicitud[] = [];
   solicitudSeleccionada: Solicitud | null = null;
+  cargandoDocumento: { [id: number]: boolean } = {};
 
   // Conteo de pendientes por tipo
   pendientesPorTipo: Map<number, number> = new Map();
@@ -137,6 +138,21 @@ export class AdminSolicitudesComponent implements OnInit {
   }
 
   // ── Detalle
+  verDocumento(doc: DocumentoSolicitud): void {
+    const id = doc.id_documento;
+    this.cargandoDocumento[id] = true;
+    this.tramiteService.verDocumento(id).subscribe({
+      next: (blob) => {
+        this.cargandoDocumento[id] = false;
+        const url = window.URL.createObjectURL(blob);
+        window.open(url, '_blank');
+      },
+      error: () => {
+        this.cargandoDocumento[id] = false;
+        Swal.fire('Error', 'No se pudo abrir el documento.', 'error');
+      },
+    });
+  }
 
   verDocumentos(solicitud: Solicitud): void {
     this.solicitudSeleccionada = solicitud;
