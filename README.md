@@ -1,4 +1,4 @@
-# CementerioApp - TESIS
+# CementerioApp 
 
 Angular 18 application for cemetery management.
 
