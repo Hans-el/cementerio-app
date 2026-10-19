@@ -1,15 +1,20 @@
 <section class="login-wrapper">
+  <!-- Botón para regresar a la selección de cementerio -->
+  <div class="back-button-wrapper text-start">
+    <a [routerLink]="['/cementerios']" class="back-button">
+      <i class="bi bi-arrow-left"></i>
+      Regresar
+    </a>
+  </div>
   <div class="card border border-white shadow-lg rounded-4 login-card">
     <div class="card-body p-4 p-md-5">
       <div class="text-center">
         <!-- Logo -->
-        <img src="assets/favicon.png" alt="Logo-cementerio" class="logo mb-4" />
+        <img src="assets/favicon.png" alt="Logo-cementerio" class="logo mb-2" />
       </div>
-      <h3 class="mb-3 text-center fw-bold">
-        <a routerLink="/cementerios" class="cementerio-link">
-          {{ cementerioActivo?.nombre }}
-        </a>
-      </h3>
+      <h4 class="mb-3 text-center fw-bold">
+        {{ cementerioActivo?.nombre }}
+      </h4>
 
       <p class="text-white text-center small mb-3" *ngIf="cementerioActivo">
         {{ cementerioActivo.direccion }}
@@ -75,11 +80,6 @@
     </div>
     <!-- div para regresar a seleccion de cementerio -->
   </div>
-  <!-- Botón para regresar a la selección de cementerio -->
-  <div class="back-button-wrapper">
-    <a [routerLink]="['/cementerios']" class="back-button">
-      <i class="bi bi-arrow-left"></i>
-      Regresar
-    </a>
-  </div>
+
+
 </section>
