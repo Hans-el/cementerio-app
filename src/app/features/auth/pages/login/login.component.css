@@ -3,6 +3,7 @@
   background-size: cover;
   min-height: 100vh;
   display: flex;
+  flex-direction: column; /* Elementos uno debajo del otro */
   align-items: center;
   justify-content: center;
   padding: 1rem;
@@ -126,6 +127,46 @@
 
 .login-card a:hover {
   color: white;
+}
+/* Contenedor del botón Regresar */
+.back-button-wrapper {
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+/* Botón glassmorphism */
+.back-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.5rem;
+  color: white;
+  text-decoration: none;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 12px;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  transition: all 0.25s ease;
+}
+
+.back-button:hover {
+  background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.5);
+  color: white;
+  transform: translateY(-2px);
+}
+
+.back-button:active {
+  transform: translateY(0);
 }
 
 
